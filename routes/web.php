@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+Route::group(['namespace' => 'Main'],function (){
+    Route::get('/', 'IndexController')->name('main.index');
 });
+
+Route::group(['namespace' => 'Course'],function (){
+    Route::get('/course', 'IndexController')->name('course.index');
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
