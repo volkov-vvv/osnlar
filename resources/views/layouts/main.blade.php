@@ -18,7 +18,7 @@
 <header class="edica-header edica-landing-header">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="#"><img src="{{asset('assets/images/logo-main.png')}}" width="220"  alt="Основание"></a>
+            <a class="navbar-brand" href="#"><img src="{{asset('assets/images/logo-main.png')}}" width="260"  alt="Основание"></a>
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -62,7 +62,7 @@
                                 <h1 >Федеральный проект «Содействие занятости»</h1>
                                 <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам дополнительного профессионального образования отдельных категорий граждан в рамках реализации федерального <a href="https://trudvsem.ru/information-pages/support-employment/">проекта «Содействие занятости»</a> национального проекта «Демография».</p>
                                 <div class="carousel-content-btns">
-                                    <a href="#!" class="btn btn-success"><i class="fab fa-apple mr-2"></i> Записаться</a>
+                                    <a href="#" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i> Записаться</a>
                                 </div>
                             </div>
                             <div class="col-md-6 carousel-img-wrapper">
@@ -73,10 +73,10 @@
                     <div class="carousel-item">
                         <div class="row">
                             <div class="col-md-6 carousel-content-wrapper">
-                                <h1 >Федеральный проект «Содействие занятости»</h1>
-                                <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам дополнительного профессионального образования отдельных категорий граждан в рамках реализации федерального <a href="https://trudvsem.ru/information-pages/support-employment/">проекта «Содействие занятости»</a> национального проекта «Демография».</p>
+                                <h1 >Национальная программа «Кадры для цифровой экономики»</h1>
+                                <p>Учебный центр «Основание» участвует в отборе поставщиков цифровых образовательных сервисов, включающих цифровые образовательные ресурсы.</p>
                                 <div class="carousel-content-btns">
-                                    <a href="#!" class="btn btn-success"><i class="fab fa-apple mr-2"></i> Записаться</a>
+                                    <a href="#!" class="btn btn-primary"><i class="fas fa-exclamation-circle mr-2"></i> Подробнее</a>
                                 </div>
                             </div>
                             <div class="col-md-6 carousel-img-wrapper">
@@ -110,7 +110,7 @@
         <div class="row footer-widget-area">
             <div class="col-md-3">
                 <a href="index.html" class="footer-brand-wrapper">
-                    <img src="assets/images/logo.svg" alt="edica logo">
+                    <img src="{{asset('assets/images/logo-main.png')}}" alt="edica logo">
                 </a>
                 <p class="contact-details">hello@edica.com</p>
                 <p class="contact-details">+23 3000 000 00</p>
