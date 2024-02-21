@@ -109,50 +109,49 @@
     <div class="container">
         <div class="row footer-widget-area">
             <div class="col-md-3">
-                <a href="index.html" class="footer-brand-wrapper">
-                    <img src="{{asset('assets/images/logo-main.png')}}" alt="edica logo">
-                </a>
-                <p class="contact-details">hello@edica.com</p>
-                <p class="contact-details">+23 3000 000 00</p>
+                <nav class="footer-nav">
+                <p class="contact-details">ОСНОВАНИЕ</p>
+                <p class="contact-details">edu@partnerdpo.ru</p>
+                <p class="contact-details">+7 (499) 609-60-20</p>
                 <nav class="footer-social-links">
-                    <a href="#!"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#!"><i class="fab fa-twitter"></i></a>
-                    <a href="#!"><i class="fab fa-behance"></i></a>
-                    <a href="#!"><i class="fab fa-dribbble"></i></a>
+                    <a href="#!"><i class="fab fa-vk"></i></a>
+                    <a href="#!"><i class="fab fa-youtube-square"></i></a>
+                    <a href="#!"><i class="fab fa-yandex"></i></a>
+                </nav>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <a href="#!" class="nav-link">Company</a>
-                    <a href="#!" class="nav-link">Android App</a>
-                    <a href="#!" class="nav-link">ios App</a>
-                    <a href="#!" class="nav-link">Blog</a>
-                    <a href="#!" class="nav-link">Partners</a>
-                    <a href="#!" class="nav-link">Careers</a>
+                    <a href="#!" class="nav-link">Реквизиты</a>
+                    <a href="#!" class="nav-link">Android приложение</a>
+                    <a href="#!" class="nav-link">ios приложение</a>
+                    <a href="#!" class="nav-link">Блог</a>
+                    <a href="#!" class="nav-link">Партнеры</a>
+                    <a href="#!" class="nav-link">Вакансии</a>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
                     <a href="#!" class="nav-link">FAQ</a>
-                    <a href="#!" class="nav-link">Reporting</a>
-                    <a href="#!" class="nav-link">Block Storage</a>
-                    <a href="#!" class="nav-link">Tools & Integrations</a>
+                    <a href="#!" class="nav-link">Цены и услуги</a>
+                    <a href="#!" class="nav-link">Условия сотрудничества</a>
+                    <a href="#!" class="nav-link">Интеграция</a>
                     <a href="#!" class="nav-link">API</a>
-                    <a href="#!" class="nav-link">Pricing</a>
+                    <a href="#!" class="nav-link">Комментарии</a>
                 </nav>
             </div>
             <div class="col-md-3">
                 <div class="dropdown footer-country-dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="footerCountryDropdown" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                        <span class="flag-icon flag-icon-gb flag-icon-squared"></span> United Kingdom <i class="fas fa-chevron-down ml-2"></i>
+                        <span class="flag-icon flag-icon-ru flag-icon-squared"></span> Русский <i class="fas fa-chevron-down ml-2"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="footerCountryDropdown">
                         <button class="dropdown-item" href="#">
-                            <span class="flag-icon flag-icon-us flag-icon-squared"></span> United States
+                            <span class="flag-icon flag-icon-gb flag-icon-squared"></span> Английский
                         </button>
                         <button class="dropdown-item" href="#">
-                            <span class="flag-icon flag-icon-au flag-icon-squared"></span> Australia
+                            <span class="flag-icon flag-icon-сhn flag-icon-squared"></span> Китайский
                         </button>
                     </div>
                 </div>
@@ -160,11 +159,10 @@
         </div>
         <div class="footer-bottom-content">
             <nav class="nav footer-bottom-nav">
-                <a href="#!">Privacy & Policy</a>
-                <a href="#!">Terms</a>
-                <a href="#!">Site Map</a>
+                <a href="#!">Образовательная лицензия № 041203 от 25.12.2020</a>
+                <a href="#!">Карта сайта</a>
             </nav>
-            <p class="mb-0">© Edica. 2020 <a href="https://www.bootstrapdash.com" target="_blank" rel="noopener noreferrer" class="text-reset">bootstrapdash</a> . All rights reserved.</p>
+            <p class="mb-0">© Все права защищены</p>
         </div>
     </div>
 </footer>
