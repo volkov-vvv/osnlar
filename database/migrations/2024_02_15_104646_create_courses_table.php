@@ -25,9 +25,6 @@ class CreateCoursesTable extends Migration
 
             $table->softDeletes();
 
-            $table->index('category_id','course_category_idx');
-            $table->foreign('category_id', 'course_category_fk')->on('categories')->references('id');
-
 
 
         });
