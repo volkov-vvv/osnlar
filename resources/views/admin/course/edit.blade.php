@@ -32,6 +32,15 @@
                         <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label>Описание курса</label>
+                        <textarea id="summernote" name="description">
+                            {{$course->description}}
+                        </textarea>
+                        @error('description')
+                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                        @enderror
+                    </div>
                     <button type="submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
                 </form>
