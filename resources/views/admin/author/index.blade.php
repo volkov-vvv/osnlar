@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Категории курсов</h1>
+                    <h1>Авторы</h1>
                 </div>
                 <div class="col">
                     <ol class="breadcrumb float-right">
@@ -24,7 +24,7 @@
 
             <div class="row mb-3">
                 <div class="col-1">
-                    <a href="{{route('admin.category.create')}}" type="button" class="btn btn-block btn-primary">Создать</a>
+                    <a href="{{route('admin.author.create')}}" type="button" class="btn btn-block btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
                 </div>
             </div>
 
@@ -37,21 +37,21 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Название</th>
+                                    <th>ФИО</th>
                                     <th>Дата создания</th>
                                     <th colspan="3">Действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categories as $category)
+                                @foreach($authors as $author)
                                     <tr>
-                                        <td>{{$category->id}}</td>
-                                        <td>{{$category->title}}</td>
-                                        <td>{{$category->created_at}}</td>
-                                        <td><a  href="{{route('admin.category.show', $category->id)}}"><i class="far fa-eye"></i></a></td>
-                                        <td><a  href="{{route('admin.category.edit', $category->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
+                                        <td>{{$author->id}}</td>
+                                        <td>{{$author->name}}</td>
+                                        <td>{{$author->created_at}}</td>
+                                        <td><a  href="{{route('admin.author.show', $author->id)}}"><i class="far fa-eye"></i></a></td>
+                                        <td><a  href="{{route('admin.author.edit', $author->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.category.delete', $category->id)}}">
+                                            <form method="post" action="{{route('admin.author.delete', $author->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

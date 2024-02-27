@@ -33,7 +33,16 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'],function (){
     Route::group(['namespace' => 'Main'],function (){
         Route::get('/', 'IndexController')->name('admin.main.index');
     });
-    Route::group(['namespace' => 'Category', 'prefix' => 'categories'],function (){
+    Route::group(['namespace' => 'Course', 'prefix' => 'course'],function (){
+        Route::get('/', 'IndexController')->name('admin.course.index');
+        Route::get('/create', 'CreateController')->name('admin.course.create');
+        Route::post('/', 'StoreController')->name('admin.course.store');
+        Route::get('/{course}', 'ShowController')->name('admin.course.show');
+        Route::get('/{course}/edit', 'EditController')->name('admin.course.edit');
+        Route::patch('/{course}', 'UpdateController')->name('admin.course.update');
+        Route::delete('/{course}', 'DeleteController')->name('admin.course.delete');
+    });
+    Route::group(['namespace' => 'Category', 'prefix' => 'category'],function (){
         Route::get('/', 'IndexController')->name('admin.category.index');
         Route::get('/create', 'CreateController')->name('admin.category.create');
         Route::post('/', 'StoreController')->name('admin.category.store');
@@ -41,6 +50,15 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin'],function (){
         Route::get('/{category}/edit', 'EditController')->name('admin.category.edit');
         Route::patch('/{category}', 'UpdateController')->name('admin.category.update');
         Route::delete('/{category}', 'DeleteController')->name('admin.category.delete');
+    });
+    Route::group(['namespace' => 'Author', 'prefix' => 'author'],function (){
+        Route::get('/', 'IndexController')->name('admin.author.index');
+        Route::get('/create', 'CreateController')->name('admin.author.create');
+        Route::post('/', 'StoreController')->name('admin.author.store');
+        Route::get('/{author}', 'ShowController')->name('admin.author.show');
+        Route::get('/{author}/edit', 'EditController')->name('admin.author.edit');
+        Route::patch('/{author}', 'UpdateController')->name('admin.author.update');
+        Route::delete('/{author}', 'DeleteController')->name('admin.author.delete');
     });
 
 });
