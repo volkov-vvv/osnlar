@@ -69,7 +69,7 @@
 <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
 <!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
@@ -86,6 +86,8 @@
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 
 <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+
+<script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
 <script src="https://kit.fontawesome.com/068a35c10e.js" crossorigin="anonymous"></script>
 
@@ -104,6 +106,9 @@
                 ]
             }
         );
+    });
+    $(function () {
+        bsCustomFileInput.init();
     });
 
 </script>

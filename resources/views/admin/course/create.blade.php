@@ -22,7 +22,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div  class="col-6">
-                <form action="{{route('admin.course.store')}}" method="post">
+                <form action="{{route('admin.course.store')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label>Название курса</label>
@@ -40,6 +40,30 @@
                         @error('description')
                         <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
                         @enderror
+                    </div>
+                    <div class="mb-3 form-group">
+                        <label for="exampleInputFile">Добавить заставку курса</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="prev_img">
+                                <label class="custom-file-label">Выберите файл</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">Загрузить</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 form-group">
+                        <label for="exampleInputFile">Добавить основное изображение курса</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="image">
+                                <label class="custom-file-label">Выберите файл</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">Загрузить</span>
+                            </div>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Создать</button>
