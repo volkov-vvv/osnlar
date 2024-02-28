@@ -38,6 +38,26 @@
                                     <td>{{$course->title}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Описание</td>
+                                    <td>{{$course->description}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Категория</td>
+                                    <td>
+                                        @foreach($categories as $category)
+                                            {{ $category->id == $course->category_id ? $category->title : '' }}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Авторы</td>
+                                    <td>
+                                        @foreach($authors as $author)
+                                            {{ is_array($course->authors->pluck('id')->toArray()) && in_array($author->id, $course->authors->pluck('id')->toArray()) ? $author->name . ',' : ''  }}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$course->created_at}}</td>
                                 </tr>
