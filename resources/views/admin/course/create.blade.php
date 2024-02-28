@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
 @section('content')
     <div class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluid mb-4">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Создание курса</h1>

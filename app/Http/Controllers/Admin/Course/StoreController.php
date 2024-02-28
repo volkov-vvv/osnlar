@@ -17,8 +17,8 @@ class StoreController extends Controller
             $authorIds = $data['author_ids'];
             unset($data['author_ids']);
 
-            $data['prev_img'] = Storage::put('/images', $data['prev_img']);
-            $data['image'] = Storage::put('/images', $data['image']);
+            $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
+            $data['image'] = Storage::disk('public')->put('/images', $data['image']);
             $course = Course::firstOrCreate($data);
             $course->authors()->attach($authorIds);
         }
