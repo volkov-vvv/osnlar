@@ -29,7 +29,7 @@
                         <input name="title" type="text" class="form-control" aria-describedby="Название"
                         value="{{old('title')}}">
                         @error('title')
-                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                        <div class="text-danger">Это поле необходимо для заполнения!</div>
                         @enderror
                     </div>
                     <div class="mb-3">
@@ -38,7 +38,7 @@
                             {{old('description')}}
                         </textarea>
                         @error('description')
-                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                        <div class="text-danger">Это поле необходимо для заполнения!</div>
                         @enderror
                     </div>
                     <div class="mb-3 form-group">
@@ -52,6 +52,9 @@
                                 <span class="input-group-text">Загрузить</span>
                             </div>
                         </div>
+                        @error('prev_img')
+                        <div class="text-danger">Это поле необходимо для заполнения!</div>
+                        @enderror
                     </div>
                     <div class="mb-3 form-group">
                         <label for="exampleInputFile">Добавить основное изображение курса</label>
@@ -64,6 +67,19 @@
                                 <span class="input-group-text">Загрузить</span>
                             </div>
                         </div>
+                        @error('image')
+                        <div class="text-danger">Это поле необходимо для заполнения!</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3 form-group">
+                        <label>Выберите категорию</label>
+                        <select name="category_id" class="form-control">
+                            @foreach($categories as $category)
+                            <option value="{{$category->id}}"
+                            {{ $category->id == old('category_id') ? ' selected' : '' }}
+                            >{{$category->title}}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Создать</button>
