@@ -14,4 +14,8 @@ class Course extends Model
     protected $table = 'courses';
     protected $guarded = false;
 
+    public function authors(){
+        return $this->belongsToMany(Author::class, 'course_authors', 'course_id', 'author_id');
+    }
+
 }

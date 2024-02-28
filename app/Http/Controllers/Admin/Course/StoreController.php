@@ -12,10 +12,20 @@ class StoreController extends Controller
 {
     public function __invoke(StoreRequest $request)
     {
-        $data = $request->validated();
-        $data['prev_img'] = Storage::put('/images', $data['prev_img']);
-        $data['image'] = Storage::put('/images', $data['image']);
-        Course::firstOrCreate($data);
+        try {
+            $data = $request->validated();
+            $authorIds = $data['author_ids'];
+            unset($data['author_ids']);
+
+            $data['prev_img'] = Storage::put('/images', $data['prev_img']);
+            $data['image'] = Storage::put('/images', $data['image']);
+            $course = Course::firstOrCreate($data);
+            $course->authors()->attach($authorIds);
+        }
+        catch (\Exception $exception){
+            abort(404);
+        };
+
         return redirect()->route('admin.course.index');
 
     }

@@ -81,6 +81,16 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="mb-3 form-group">
+                        <label>Выберите автора/ов:</label>
+                        <select name="author_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">
+                            @foreach($authors as $author)
+                            <option
+                                {{ is_array(old('author_ids')) && in_array($author->id, old('author_ids')) ? ' selected' : ''  }}
+                                value="{{$author->id}}">{{$author->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <button type="submit" class="btn btn-primary">Создать</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
