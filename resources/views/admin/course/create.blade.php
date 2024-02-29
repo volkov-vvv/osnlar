@@ -29,7 +29,7 @@
                         <input name="title" type="text" class="form-control" aria-describedby="Название"
                         value="{{old('title')}}">
                         @error('title')
-                        <div class="text-danger">Это поле необходимо для заполнения!</div>
+                        <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
@@ -38,7 +38,7 @@
                             {{old('description')}}
                         </textarea>
                         @error('description')
-                        <div class="text-danger">Это поле необходимо для заполнения!</div>
+                        <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="mb-3 form-group">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         @error('prev_img')
-                        <div class="text-danger">Это поле необходимо для заполнения!</div>
+                        <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="mb-3 form-group">
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         @error('image')
-                        <div class="text-danger">Это поле необходимо для заполнения!</div>
+                        <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="mb-3 form-group">
@@ -80,6 +80,9 @@
                             >{{$category->title}}</option>
                             @endforeach
                         </select>
+                        @error('category_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
                     <div class="mb-3 form-group">
                         <label>Выберите автора/ов:</label>
@@ -90,6 +93,9 @@
                                 value="{{$author->id}}">{{$author->name}}</option>
                             @endforeach
                         </select>
+                        @error('author_ids')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
                     </div>
 
                     <button type="submit" class="btn btn-primary">Создать</button>

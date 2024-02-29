@@ -8,18 +8,14 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class UpdateController extends Controller
+class UpdateController extends BaseController
 {
     public function __invoke(UpdateRequest $request, Course $course)
     {
         $data = $request->validated();
-        $authorIds = $data['author_ids'];
-        unset($data['author_ids']);
 
-        $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
-        $data['image'] = Storage::disk('public')->put('/images', $data['image']);
-        $course->update($data);
-        $course->authors()->sync($authorIds);
+        $course = $this->service->update($data, $course);
+
         return redirect()->route('admin.course.show', compact('course'));
 
     }

@@ -8,25 +8,15 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class StoreController extends Controller
+class StoreController extends BaseController
 {
     public function __invoke(StoreRequest $request)
     {
-        try {
             $data = $request->validated();
-            $authorIds = $data['author_ids'];
-            unset($data['author_ids']);
 
-            $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
-            $data['image'] = Storage::disk('public')->put('/images', $data['image']);
-            $course = Course::firstOrCreate($data);
-            $course->authors()->attach($authorIds);
-        }
-        catch (\Exception $exception){
-            abort(404);
-        };
+            $this->service->store($data);
 
-        return redirect()->route('admin.course.index');
+            return redirect()->route('admin.course.index');
 
     }
 }

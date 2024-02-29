@@ -7,7 +7,7 @@ use App\Models\Author;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CreateController extends Controller
+class CreateController extends BaseController
 {
     public function __invoke()
     {
