@@ -6,11 +6,6 @@
                 <div class="col-sm-6">
                     <h1>Пользователи</h1>
                 </div>
-                <div class="col">
-                    <ol class="breadcrumb float-right">
-                        <button class="btn btn-outline-primary">Выход</button>
-                    </ol>
-                </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -22,8 +17,8 @@
             <!-- Small boxes (Stat box) -->
 
             <div class="row mb-3">
-                <div class="col-2">
-                    <a href="{{route('admin.user.create')}}" type="button" class="btn btn-block btn-primary"><i class="fa-solid fa-plus"></i> Создать пользователя</a>
+                <div class="col">
+                    <a href="{{route('admin.user.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
                 </div>
             </div>
 

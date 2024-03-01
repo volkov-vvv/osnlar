@@ -6,12 +6,6 @@
                 <div class="col-sm-6">
                     <h1>Каталог курсов</h1>
                 </div>
-                <div class="col">
-                    <ol class="breadcrumb float-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard v1</li>
-                    </ol>
-                </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -23,13 +17,13 @@
             <!-- Small boxes (Stat box) -->
 
             <div class="row mb-3">
-                <div class="col-1">
-                    <a href="{{route('admin.course.create')}}" type="button" class="btn btn-block btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
+                <div class="col">
+                    <a href="{{route('admin.course.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-6">
+                <div class="col">
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">

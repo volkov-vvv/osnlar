@@ -6,11 +6,7 @@
                 <div class="col-sm-6">
                     <h1>Редактирование пользователя: "{{$user->name}}"</h1>
                 </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-right">
-                        <button class="btn btn-outline-primary">Выход</button>
-                    </ol>
-                </div><!-- /.col -->
+
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
