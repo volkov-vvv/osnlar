@@ -55,7 +55,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                            <a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a>
+                            <a class="dropdown-item" href="#">Актуальные курсы</a>
                             <a class="dropdown-item" href="#">Архив</a>
                         </div>
                     </li>
@@ -92,20 +92,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-6 carousel-content-wrapper">
-                                <h1 >Национальная программа «Кадры для цифровой экономики»</h1>
-                                <p>Учебный центр «Основание» участвует в отборе поставщиков цифровых образовательных сервисов, включающих цифровые образовательные ресурсы.</p>
-                                <div class="carousel-content-btns">
-                                    <a href="#!" class="btn btn-primary"><i class="fas fa-exclamation-circle mr-2"></i> Подробнее</a>
-                                </div>
-                            </div>
-                            <div class="col-md-6 carousel-img-wrapper">
-                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid" width="350px">
-                            </div>
-                        </div>
-                    </div>
+{{--                    <div class="carousel-item">--}}
+{{--                        <div class="row">--}}
+{{--                            <div class="col-md-6 carousel-content-wrapper">--}}
+{{--                                <h1 >Национальная программа «Кадры для цифровой экономики»</h1>--}}
+{{--                                <p>Учебный центр «Основание» участвует в отборе поставщиков цифровых образовательных сервисов, включающих цифровые образовательные ресурсы.</p>--}}
+{{--                                <div class="carousel-content-btns">--}}
+{{--                                    <a href="#!" class="btn btn-primary"><i class="fas fa-exclamation-circle mr-2"></i> Подробнее</a>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-6 carousel-img-wrapper">--}}
+{{--                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid" width="350px">--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
                 </div>
             </div>

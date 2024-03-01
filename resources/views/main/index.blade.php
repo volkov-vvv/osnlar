@@ -39,7 +39,7 @@
             <h2 class="edica-landing-section-title" data-aos="fade-up">Выберите понравившийся курс</h2>
             <div class="row">
                 <div class="col-md-4 landing-blog-post" data-aos="fade-right">
-                    <img src="{{asset('assets/images/rectangle.png')}}" alt="blog post" class="blog-post-thumbnail">
+                    <img src="{{asset('assets/images/bugfinder.png')}}" alt="blog post" class="blog-post-thumbnail">
                     <p class="blog-post-category">Азбука цифры</p>
                     <h4 class="blog-post-title">Специалист по тестированию программного обучения</h4>
                     <a href="#!" class="blog-post-link">Перейти</a>
@@ -51,7 +51,7 @@
                     <a href="#!" class="blog-post-link">Перейти</a>
                 </div>
                 <div class="col-md-4 landing-blog-post" data-aos="fade-left">
-                    <img src="{{asset('assets/images/rectangle-copy-2.png')}}" alt="blog post" class="blog-post-thumbnail">
+                    <img src="{{asset('assets/images/neiro.jpg')}}" alt="blog post" class="blog-post-thumbnail">
                     <p class="blog-post-category">Азбука цифры</p>
                     <h4 class="blog-post-title">Нейросети в SMM-маркетинге</h4>
                     <a href="#!" class="blog-post-link">Перейти</a>
@@ -63,52 +63,52 @@
         <div class="container">
             <div id="edicaLandingTestimonialCarousel" class="carousel slide landing-testimonial-carousel" data-ride="carousel">
                 <div class="text-center py-4">
-                    <img src="assets/images/quote.svg" alt="quote">
+                    <img src="{{asset('assets/images/quote.svg')}}" alt="quote">
                 </div>
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item">
                         <blockquote class="testimonial">
-                            <p>“My mission in life is not merely to survive, but to thrive; and to do so with some passion, some compassion, some humor, and some style.” </p>
+                            <p>“Открой свой потенциал с нами - образование, которое вдохновляет!” </p>
                         </blockquote>
                     </div>
                     <div class="carousel-item">
                         <blockquote class="testimonial">
-                            <p>“My mission in life is not merely to survive, but to thrive; and to do so with some passion, some compassion, some humor, and some style.” </p>
+                            <p>“Мы предлагаем студентам не просто обучение, а целостный опыт, включающий в себя интерактивные уроки, практические занятия и менторскую поддержку.” </p>
                         </blockquote>
                     </div>
                     <div class="carousel-item active">
                         <blockquote class="testimonial">
-                            <p>“My mission in life is not merely to survive, but to thrive; and to do so with some passion, some compassion, some humor, and some style.” </p>
+                            <p>“Наша образовательная организация - это место, где знания преображаются в возможности, а учебные пути ведут к успеху. Мы предлагаем индивидуальный подход к каждому студенту, высококвалифицированных преподавателей и современные образовательные программы, способствующие широкому и глубокому пониманию предметов.” </p>
                         </blockquote>
                     </div>
                     <div class="carousel-item">
                         <blockquote class="testimonial">
-                            <p>“My mission in life is not merely to survive, but to thrive; and to do so with some passion, some compassion, some humor, and some style.” </p>
+                            <p>“Мы гарантируем вам высокое качество знаний, практические навыки и поддержку на каждом этапе вашего образовательного пути. И не забывайте, что образование - это инвестиция в ваше будущее.” </p>
                         </blockquote>
                     </div>
                     <div class="carousel-item">
                         <blockquote class="testimonial">
-                            <p>“My mission in life is not merely to survive, but to thrive; and to do so with some passion, some compassion, some humor, and some style.” </p>
+                            <p>“Образование - ключ к вашему будущему успеху!” </p>
                         </blockquote>
                     </div>
                 </div>
                 <ol class="carousel-indicators">
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="0">
-                        <img src="{{ asset('assets/images/oval-copy-3.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/LN.png')}}" alt="avatar">
                         <div class="user-details">
                             <h6>Людмила Никитченко</h6>
                             <p>Руководитель УМЦ</p>
                         </div>
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="1">
-                        <img src="{{ asset('assets/images/oval-copy-4.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/PAV.png')}}" alt="avatar">
                         <div class="user-details">
                             <h6>Дмитрий Павлов</h6>
                             <p>Преподаватель</p>
                         </div>
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="2" class="active">
-                        <img src="{{ asset('assets/images/oval.png') }}" alt="avatar">
+                        <img src="{{ asset('assets/images/AI.png')}}" alt="avatar">
                         <div class="user-details">
                             <h6>Скуратов Александр</h6>
                             <p>Директор</p>
@@ -116,14 +116,14 @@
 
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="3">
-                        <img src="{{ asset('assets/images/oval-copy.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/SON.png')}}" alt="avatar">
                         <div class="user-details">
                             <h6>Соня </h6>
                             <p>Методист</p>
                         </div>
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="4">
-                        <img src="{{ asset('assets/images/oval-copy-2.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/VVV.png')}}" alt="avatar">
                         <div class="user-details">
                             <h6>Вячеслав Волков</h6>
                             <p>Академический директор</p>

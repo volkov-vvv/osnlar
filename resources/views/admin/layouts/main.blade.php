@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">
-    
+
     <title>Основание CRM</title>
 
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
@@ -85,6 +85,10 @@
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
+<!-- InputMask -->
+<script src="{{ 'plugins/moment/moment.min.js' }} "></script>
+<script src="{{ 'plugins/inputmask/jquery.inputmask.min.js' }} "></script>
+
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
@@ -128,6 +132,7 @@
         bsCustomFileInput.init();
     });
     $('.select2').select2()
+    $('[data-mask]').inputmask()
 
 </script>
 <style>
