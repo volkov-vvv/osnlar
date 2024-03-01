@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">
+    
     <title>Основание CRM</title>
 
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
