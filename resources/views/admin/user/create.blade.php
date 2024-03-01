@@ -30,6 +30,33 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input name="email" type="email" class="form-control">
+                        @error('email')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Пароль</label>
+                        <input name="password" type="password" class="form-control">
+                        @error('password')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3 form-group">
+                        <label>Роль пользователя</label>
+                        <select name="role" class="form-control">
+                            @foreach($roles as $id => $role)
+                                <option value="{{$id}}"
+                                    {{ $id == old('role') ? ' selected' : '' }}
+                                >{{$role}}</option>
+                            @endforeach
+                        </select>
+                        @error('role')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <button type="submit" class="btn btn-primary">Создать</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.user.index')}}">Назад</a>
                 </form>

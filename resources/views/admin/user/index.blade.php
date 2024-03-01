@@ -22,13 +22,13 @@
             <!-- Small boxes (Stat box) -->
 
             <div class="row mb-3">
-                <div class="col-1">
+                <div class="col-2">
                     <a href="{{route('admin.user.create')}}" type="button" class="btn btn-block btn-primary"><i class="fa-solid fa-plus"></i> Создать пользователя</a>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-6">
+                <div class="col">
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
@@ -37,6 +37,8 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Имя</th>
+                                    <th>Email</th>
+                                    <th>Роль</th>
                                     <th>Дата создания</th>
                                     <th colspan="3">Действия</th>
                                 </tr>
@@ -46,6 +48,12 @@
                                     <tr>
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
+                                        <td>{{$user->email}}</td>
+                                        <td>
+                                            @foreach($roles as $id => $role)
+                                                {{ $id == $user->role ? $role : '' }}
+                                            @endforeach
+                                        </td>
                                         <td>{{$user->created_at}}</td>
                                         <td><a  href="{{route('admin.user.show', $user->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.user.edit', $user->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>

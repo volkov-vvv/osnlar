@@ -40,6 +40,14 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
         </ul>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <form action="{{route('logout')}}" method="post">
+                @csrf
+{{--                <label><i class="fa-solid fa-right-from-bracket"></i></label>--}}
+                <input class="btn btn-outline-primary" type="submit" value="Выйти">
+            </form>
+        </ul>
 
 
     </nav>

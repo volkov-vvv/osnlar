@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{$author->name}}</h1>
+                    <h1>{{$user->name}}</h1>
                 </div>
                 <div class="col">
                     <ol class="breadcrumb float-right">
@@ -33,8 +33,20 @@
                                     <td>{{$user->id}}</td>
                                 </tr>
                                 <tr>
-                                    <td>ФИО</td>
+                                    <td>Имя</td>
                                     <td>{{$user->name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>{{$user->email}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Роль</td>
+                                    <td>
+                                        @foreach($roles as $id => $role)
+                                            {{ $id == $user->role ? $role : '' }}
+                                        @endforeach
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Дата создания</td>

@@ -29,7 +29,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['namespace' => 'Admin', 'prefix' => 'admin'],function (){
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']],function (){
     Route::group(['namespace' => 'Main'],function (){
         Route::get('/', 'IndexController')->name('admin.main.index');
     });
