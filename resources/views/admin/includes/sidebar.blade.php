@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{route('admin.main.index')}}" class="brand-link">
+    <a href="{{route('main.index')}}" class="brand-link">
         <img src="{{asset('dist/img/logoCRM.png')}}" alt="Logo" class="brand-image"
              >
         <span class="brand-text font-weight-light">ОСНОВАНИЕ CRM</span>

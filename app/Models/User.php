@@ -13,9 +13,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    const ROLE_ADMIN = 0;
-    const ROLE_AGENT = 1;
-    const ROLE_CONTACT = 2;
+    const ROLE_ADMIN = 1;
+    const ROLE_AGENT = 2;
+    const ROLE_CONTACT = 3;
 
     public function getRoles()
     {

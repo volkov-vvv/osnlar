@@ -63,11 +63,34 @@
                         <a class="nav-link" href="#">Контакты</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav mt-2 mt-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.main.index')}}">Войти</a>
+                @if( isset(auth()->user()->id) )
+                    <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
+                        <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                            <a class="dropdown-item btn btn-link" href="#">
+                                Настройки
+                            </a>
+                            <a class="dropdown-item btn btn-link" href="{{route('admin.main.index')}}">
+                                Административная панель
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <form action="{{route('logout')}}" method="post">
+                                    @csrf
+                                    <input class="btn btn-link" type="submit" value="Выйти">
+                                </form>
+                            </a>
+                        </div>
                     </li>
-                </ul>
+                    </ul>
+                @else
+                    <ul class="navbar-nav mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('admin.main.index')}}">Войти</a>
+                        </li>
+                    </ul>
+                @endif
+
             </div>
         </nav>
         <div class="edica-landing-header-content">
