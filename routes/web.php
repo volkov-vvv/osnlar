@@ -69,5 +69,33 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{author}', 'UpdateController')->name('admin.author.update');
         Route::delete('/{author}', 'DeleteController')->name('admin.author.delete');
     });
+    Route::group(['namespace' => 'LevelEdu', 'prefix' => 'leveledu'],function (){
+        Route::get('/', 'IndexController')->name('admin.leveledu.index');
+        Route::get('/create', 'CreateController')->name('admin.leveledu.create');
+        Route::post('/', 'StoreController')->name('admin.leveledu.store');
+        Route::get('/{leveledu}', 'ShowController')->name('admin.leveledu.show');
+        Route::get('/{leveledu}/edit', 'EditController')->name('admin.leveledu.edit');
+        Route::patch('/{leveledu}', 'UpdateController')->name('admin.leveledu.update');
+        Route::delete('/{leveledu}', 'DeleteController')->name('admin.leveledu.delete');
+    });
+    Route::group(['namespace' => 'Region', 'prefix' => 'region'],function (){
+        Route::get('/', 'IndexController')->name('admin.region.index');
+        Route::get('/create', 'CreateController')->name('admin.region.create');
+        Route::post('/', 'StoreController')->name('admin.region.store');
+        Route::get('/{region}', 'ShowController')->name('admin.region.show');
+        Route::get('/{region}/edit', 'EditController')->name('admin.region.edit');
+        Route::patch('/{region}', 'UpdateController')->name('admin.region.update');
+        Route::delete('/{region}', 'DeleteController')->name('admin.region.delete');
+    });
+    Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
+        Route::get('/', 'IndexController')->name('admin.lid.index');
+        Route::get('/create', 'CreateController')->name('admin.lid.create');
+        Route::post('/', 'StoreController')->name('admin.lid.store');
+        Route::get('/{lid}', 'ShowController')->name('admin.lid.show');
+        Route::get('/{lid}/edit', 'EditController')->name('admin.lid.edit');
+        Route::patch('/{lid}', 'UpdateController')->name('admin.lid.update');
+        Route::delete('/{lid}', 'DeleteController')->name('admin.lid.delete');
+    });
+
 
 });

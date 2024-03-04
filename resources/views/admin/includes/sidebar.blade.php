@@ -41,6 +41,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.author.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-people-group"></i>
+                        <p>
+                            Авторы
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.category.index')}}" class="nav-link">
                         <i class="nav-icon fa fa-list"></i>
                         <p>
@@ -49,10 +57,26 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('admin.author.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-people-group"></i>
+                    <a href="{{route('admin.leveledu.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-user-graduate"></i>
                         <p>
-                            Авторы
+                            Уровни образования
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('admin.region.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-map-location-dot"></i>
+                        <p>
+                            Регионы
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('admin.lid.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-map-location-dot"></i>
+                        <p>
+                            Заявки
                         </p>
                     </a>
                 </li>
