@@ -74,7 +74,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.lid.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-map-location-dot"></i>
+                        <i class="nav-icon fa-regular fa-bell"></i>
                         <p>
                             Заявки
                         </p>

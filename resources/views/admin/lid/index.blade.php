@@ -34,7 +34,10 @@
                                     <th>ID</th>
                                     <th>Фамилия</th>
                                     <th>Имя</th>
+                                    <th>Отчество</th>
+                                    <th>Дата рождения</th>
                                     <th>Email</th>
+                                    <th>Телефон</th>
                                     <th>Дата создания</th>
                                     <th colspan="3">Действия</th>
                                 </tr>
@@ -45,7 +48,10 @@
                                         <td>{{$lid->id}}</td>
                                         <td>{{$lid->lastname}}</td>
                                         <td>{{$lid->firstname}}</td>
+                                        <td>{{$lid->middlename}}</td>
+                                        <td>{{$lid->data}}</td>
                                         <td>{{$lid->email}}</td>
+                                        <td>{{$lid->phone}}</td>
                                         <td>{{$lid->created_at}}</td>
                                         <td><a  href="{{route('admin.lid.show', $lid->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.lid.edit', $lid->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>

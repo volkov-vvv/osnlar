@@ -107,7 +107,7 @@
                                 <h1 >Федеральный проект «Содействие занятости»</h1>
                                 <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам дополнительного профессионального образования отдельных категорий граждан в рамках реализации федерального <a href="https://trudvsem.ru/information-pages/support-employment/">проекта «Содействие занятости»</a> национального проекта «Демография».</p>
                                 <div class="carousel-content-btns">
-                                    <a href="#" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i> Записаться</a>
                                 </div>
                             </div>
                             <div class="col-md-6 carousel-img-wrapper">
@@ -144,9 +144,10 @@
         <div class="footer-banner" data-aos="fade-up">
             <h1 class="banner-title">Подать заявку!</h1>
             <div class="banner-btns-wrapper">
-                <button class="btn btn-success">Перейти</button>
+                <div class="carousel-content-btns">
+                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                </div>
             </div>
-            <p class="banner-text">Мы поможем Вам быстро и без труда <br> поучаствовать в одном из наших проектов!</p>
         </div>
     </div>
 </section>

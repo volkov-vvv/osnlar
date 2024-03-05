@@ -93,37 +93,18 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <div class="form-group">
-                        <label>US phone mask:</label>
 
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                            </div>
-                            <input type="text" class="form-control"
-                                   data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="data-mask"
-                                   inputmode="text">
-                        </div>
-                        <!-- /.input group -->
-                    </div>
+
+
+
                 </div>
+            </div>
                 <!-- /.row -->
 
 
             </div><!-- /.container-fluid -->
     </section>
-
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col">
-                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                        <option selected>---</option>
-                        @include('admin.includes.regions')
-                    </select>
-                </div>
-            </div>
-    </section>
+    
 
 @endsection
 

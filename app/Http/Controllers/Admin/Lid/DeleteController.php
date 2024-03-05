@@ -10,7 +10,7 @@ class DeleteController extends Controller
 {
     public function __invoke(Lid $lid)
     {
-        $lid>delete();
+        $lid->delete();
         return redirect()->route('admin.lid.index');
 
     }

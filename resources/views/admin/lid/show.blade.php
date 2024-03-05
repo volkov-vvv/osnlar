@@ -33,8 +33,29 @@
                                     <td>{{$lid->lastname}}</td>
                                 </tr>
                                 <tr>
-                                    <td>email</td>
+                                    <td>Имя</td>
+                                    <td>{{$lid->firstname}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Отчество</td>
+                                    <td>{{$lid->middlename}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Курс</td>
+                                    <td>
+                                        @foreach($courses as $course)
+                                            {{ $course->id == $lid->course_id ? $course->title : '' }}
+                                        @endforeach
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
                                     <td>{{$lid->email}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Телефон</td>
+                                    <td>{{$lid->phone}}</td>
                                 </tr>
                                 <tr>
                                     <td>Дата создания</td>

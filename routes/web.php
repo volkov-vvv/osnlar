@@ -96,6 +96,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{lid}', 'UpdateController')->name('admin.lid.update');
         Route::delete('/{lid}', 'DeleteController')->name('admin.lid.delete');
     });
+});
 
-
+Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
+    Route::get('/create', 'CreateController')->name('lid.create');
+    Route::post('/', 'StoreController')->name('lid.store');
 });

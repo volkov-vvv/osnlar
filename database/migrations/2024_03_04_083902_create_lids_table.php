@@ -18,7 +18,7 @@ class CreateLidsTable extends Migration
             $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename')->nullable();
-            $table->date('data')->nullable();
+            $table->string('data')->nullable();
             $table->unsignedBigInteger('lid_level_edu_id')->nullable();
 
             $table->unsignedBigInteger('region_id')->nullable();
@@ -27,7 +27,7 @@ class CreateLidsTable extends Migration
             $table->unsignedBigInteger('category_id')->nullable();
 
             $table->string('email')->unique();
-            $table->unsignedBigInteger('phone')->nullable();;
+            $table->string('phone')->nullable();
             $table->boolean('politic')->default(0);
             $table->boolean('in_project')->default(0);
 

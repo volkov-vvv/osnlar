@@ -86,8 +86,8 @@
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 <!-- InputMask -->
-<script src="{{ 'plugins/moment/moment.min.js' }} "></script>
-<script src="{{ 'plugins/inputmask/jquery.inputmask.min.js' }} "></script>
+<script src="{{ asset('plugins/moment/moment.min.js') }} "></script>
+<script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js') }} "></script>
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>

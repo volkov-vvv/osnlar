@@ -26,7 +26,12 @@ class StoreRequest extends FormRequest
         return [
             'lastname' => 'required|string',
             'firstname' => 'required|string',
-            'email' => 'required|string|email',
+            'middlename' => '',
+            'data' => 'required|string',
+            'phone' => 'required|string',
+            'email' => 'required|string|email|unique:lids',
+            'course_id' => 'required|string',
+            'lid_level_edu_id' => 'required|string',
         ];
     }
 }
