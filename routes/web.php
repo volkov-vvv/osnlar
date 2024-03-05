@@ -69,7 +69,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{author}', 'UpdateController')->name('admin.author.update');
         Route::delete('/{author}', 'DeleteController')->name('admin.author.delete');
     });
-    Route::group(['namespace' => 'LevelEdu', 'prefix' => 'leveledu'],function (){
+    Route::group(['namespace' => 'Leveledu', 'prefix' => 'leveledu'],function (){
         Route::get('/', 'IndexController')->name('admin.leveledu.index');
         Route::get('/create', 'CreateController')->name('admin.leveledu.create');
         Route::post('/', 'StoreController')->name('admin.leveledu.store');
