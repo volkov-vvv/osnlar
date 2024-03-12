@@ -55,7 +55,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                            <a class="dropdown-item" href="#">Актуальные курсы</a>
+                            <a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a>
                             <a class="dropdown-item" href="#">Архив</a>
                         </div>
                     </li>

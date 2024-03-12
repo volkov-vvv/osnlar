@@ -69,6 +69,15 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{author}', 'UpdateController')->name('admin.author.update');
         Route::delete('/{author}', 'DeleteController')->name('admin.author.delete');
     });
+    Route::group(['namespace' => 'Agent', 'prefix' => 'agent'],function (){
+        Route::get('/', 'IndexController')->name('admin.agent.index');
+        Route::get('/create', 'CreateController')->name('admin.agent.create');
+        Route::post('/', 'StoreController')->name('admin.agent.store');
+        Route::get('/{agent}', 'ShowController')->name('admin.agent.show');
+        Route::get('/{agent}/edit', 'EditController')->name('admin.agent.edit');
+        Route::patch('/{agent}', 'UpdateController')->name('admin.agent.update');
+        Route::delete('/{agent}', 'DeleteController')->name('admin.agent.delete');
+    });
     Route::group(['namespace' => 'Leveledu', 'prefix' => 'leveledu'],function (){
         Route::get('/', 'IndexController')->name('admin.leveledu.index');
         Route::get('/create', 'CreateController')->name('admin.leveledu.create');
@@ -101,4 +110,5 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
     Route::get('/create', 'CreateController')->name('lid.create');
     Route::post('/', 'StoreController')->name('lid.store');
+    Route::get('/thank', 'IndexController')->name('lid.index');
 });

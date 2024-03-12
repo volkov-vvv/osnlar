@@ -14,7 +14,7 @@ class StoreController extends Controller
         $data = $request->validated();
         Lid::firstOrCreate($data);
 
-        return redirect()->route('main.index');
+        return redirect()->route('lid.index');
 
     }
 }

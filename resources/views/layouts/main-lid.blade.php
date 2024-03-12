@@ -21,7 +21,13 @@
 </head>
 <body>
 
-
+<header>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}" width="260"  alt="Основание"></a>
+        </nav>
+    </div>
+</header>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content">

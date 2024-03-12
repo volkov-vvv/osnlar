@@ -73,6 +73,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.agent.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-magnet"></i>
+                        <p>
+                            Агенты
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.lid.index')}}" class="nav-link">
                         <i class="nav-icon fa-regular fa-bell"></i>
                         <p>
