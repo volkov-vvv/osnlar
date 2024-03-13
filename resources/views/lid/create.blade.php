@@ -45,7 +45,7 @@
                     <div class="col">
                         <label><span class="text-danger">* </span>Текущий уровень вашего образования</label>
                         <div class="form-group">
-                            <select name="lid_level_edu_id" class="form-control">
+                            <select name="lid_level_edu_id" class="form-control select2">
                                 @foreach($levelsedu as $leveledu)
                                     <option value="{{$leveledu->id}}"
                                         {{ $leveledu->id == old('lid_level_edu_id') ? ' selected' : '' }}
@@ -109,7 +109,7 @@
                     <div class="col">
                         <label><span class="text-danger">* </span>Выберите Ваш регион</label>
                         <div class="form-group">
-                            <select name="region_id" class="form-control">
+                            <select name="region_id" class="form-control select2">
                                 @foreach($regions as $region)
                                     <option value="{{$region->id}}"
                                         {{ $region->id == old('region_id') ? ' selected' : '' }}
@@ -129,7 +129,7 @@
                 <div class="col">
                     <label><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
                     <div class="form-group">
-                        <select name="course_id" class="form-control">
+                        <select name="course_id" class="form-control select2">
                             @foreach($courses as $course)
                                 <option value="{{$course->id}}"
                                     {{ $course->id == old('course_id') ? ' selected' : '' }}
@@ -151,7 +151,7 @@
                 <div class="col">
                     <label><span class="text-danger">* </span>Выберите подходящую для Вас категорию</label>
                     <div class="form-group">
-                        <select name="category_id" class="form-control">
+                        <select name="category_id" class="form-control select2">
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}"
                                     {{ $category->id == old('category_id') ? ' selected' : '' }}
@@ -169,7 +169,7 @@
                 <div class="col">
                     <label>Ваш персональный агент</label>
                     <div class="form-group">
-                        <select name="agent_id" class="form-control">
+                        <select name="agent_id" class="form-control select2">
                             @foreach($agents as $agent)
                                 <option value="{{$agent->id}}"
                                     {{ $agent->id == old('agent_id') ? ' selected' : '' }}

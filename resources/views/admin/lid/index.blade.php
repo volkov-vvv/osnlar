@@ -17,12 +17,12 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
 
-            <div class="row mb-3">
-                <div class="col">
-                    <a href="{{route('admin.lid.create')}}" type="button" class="btn btn-primary"><i
-                            class="fa-solid fa-plus"></i> Создать</a>
-                </div>
-            </div>
+{{--            <div class="row mb-3">--}}
+{{--                <div class="col">--}}
+{{--                    <a href="{{route('admin.lid.create')}}" type="button" class="btn btn-primary"><i--}}
+{{--                            class="fa-solid fa-plus"></i> Создать</a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             <div class="row">
                 <div class="col">
@@ -32,28 +32,46 @@
                                 <table id="example1" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>№</th>
+                                        <th>Курс</th>
                                         <th>Фамилия</th>
                                         <th>Имя</th>
-                                        <th>Отчество</th>
-                                        <th>Дата рождения</th>
                                         <th>Email</th>
                                         <th>Телефон</th>
+                                        <th>Статус</th>
                                         <th>Дата создания</th>
                                         <th>Действия</th>
-                                        <th>Удаление</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach($lids as $lid)
                                         <tr>
                                             <td>{{$lid->id}}</td>
+                                            <td>
+                                                @foreach($courses as $course)
+                                                    {{ $course->id == $lid->course_id ? $course->title : '' }}
+                                                @endforeach
+                                            </td>
                                             <td>{{$lid->lastname}}</td>
                                             <td>{{$lid->firstname}}</td>
-                                            <td>{{$lid->middlename}}</td>
-                                            <td>{{$lid->data}}</td>
                                             <td>{{$lid->email}}</td>
                                             <td>{{$lid->phone}}</td>
+                                            <td>
+                                                <span class="badge rounded-pill
+                                                @switch($lid->status_id)
+                                                @case(1) {{$lid->status_id == 1 ? 'bg-danger' : ''}}
+                                                @break
+                                                @case(2) {{$lid->status_id == 2 ? 'bg-warning text-dark' : ''}}
+                                                @break
+                                                @case(3) {{$lid->status_id == 3 ? 'bg-info' : ''}}
+                                                @break
+                                                @case(4) {{$lid->status_id == 4 ? 'bg-success' : ''}}
+                                                @endswitch">
+                                                    @foreach($statuses as $status)
+                                                        {{$status->id == $lid->status_id ? $status->title : '' }}
+                                                    @endforeach
+                                                </span>
+                                            </td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
                                                 <a href="{{route('admin.lid.show', $lid->id)}}"><i
@@ -65,15 +83,6 @@
                                                 {{--                                                    @method('DELETE')--}}
                                                 {{--                                                    <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>--}}
                                                 {{--                                                </form>--}}
-                                            </td>
-                                            <td>
-
-                                                <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="bg-transparent border-0" type="submit"><i
-                                                            class="fas fa-trash text-danger" role="button"></i></button>
-                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

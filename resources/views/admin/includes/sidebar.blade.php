@@ -81,6 +81,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.status.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-circle-exclamation"></i>
+                        <p>
+                            Статусы
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.lid.index')}}" class="nav-link">
                         <i class="nav-icon fa-regular fa-bell"></i>
                         <p>

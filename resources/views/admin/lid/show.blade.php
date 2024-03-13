@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{$lid->lastname}}</h1>
+                    <h1>{{$lid->lastname . ' ' . $lid->firstname . ' ' . $lid->middlename}}</h1>
                 </div>
 
             </div><!-- /.row -->
@@ -19,26 +19,30 @@
 
             <div class="row">
                 <div class="col-6">
+{{--                    <div class="alert alert-{{ $lid->status_id == 1 ? 'danger' : 'warning' }}" role="alert">--}}
+{{--                        @foreach($statuses as $status)--}}
+{{--                            {{ $status->id == $lid->status_id ? $status->title : '' }}--}}
+{{--                        @endforeach--}}
+{{--                    </div>--}}
+
+                    <div class="alert @switch($lid->status_id) @case(1) {{$lid->status_id == 1 ? 'alert-danger' : ''}} @break @case(2) {{$lid->status_id == 2 ? 'alert-warning' : ''}} @break @case(3) {{$lid->status_id == 3 ? 'alert-info' : ''}}@endswitch" role="alert">
+                        @foreach($statuses as $status)
+                            {{$status->id == $lid->status_id ? $status->title : '' }}
+                        @endforeach
+                    </div>
+
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-nowrap">
                                 <tbody>
                                 <tr>
-                                    <td>ID</td>
+                                    <td>Номер заявки</td>
                                     <td>{{$lid->id}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Фамилия</td>
-                                    <td>{{$lid->lastname}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Имя</td>
-                                    <td>{{$lid->firstname}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Отчество</td>
-                                    <td>{{$lid->middlename}}</td>
+                                    <td>Дата рождения</td>
+                                    <td>{{$lid->data}}</td>
                                 </tr>
                                 <tr>
                                     <td>Курс</td>
@@ -71,29 +75,25 @@
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
 
             <!-- /.row -->
             <div class="row">
-                <div class="col-3">
-                    <a class="btn btn-outline-primary mr-2" href="{{route('admin.lid.edit', $lid->id)}}">Редактировать</a>
+
+                {{--                    <div class="col-1">--}}
+                {{--                        <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">--}}
+                {{--                            @csrf--}}
+                {{--                            @method('DELETE')--}}
+                {{--                            <button class="btn btn-danger float-end" type="submit" disabled>Удалить</button>--}}
+                {{--                        </form>--}}
+                {{--                    </div>--}}
+                <div class="col-2">
+                    <a class="btn btn-outline-primary mr-2"
+                       href="{{route('admin.lid.edit', $lid->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.lid.index')}}">Назад</a>
                 </div>
-                <div class="col-3">
-                    <div class="d-flex justify-content-end">
-                        <div>
-                            <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger float-end" type="submit">Удалить</button>
-                            </form>
-                        </div>
-                    </div>
 
-                </div>
-                <div class="col-6"></div>
 
             </div>
 

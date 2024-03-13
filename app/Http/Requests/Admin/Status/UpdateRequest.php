@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Lid;
+namespace App\Http\Requests\Admin\Status;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,10 +24,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'lastname' => 'required|string',
-            'firstname' => 'required|string',
-            'email' => '',
-            'status_id' => 'required|string',
+            'title' => 'required|string'
         ];
     }
 }

@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Категории</h1>
+                    <h1>Статусы</h1>
                 </div>
 
             </div><!-- /.row -->
@@ -19,7 +19,7 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <a href="{{route('admin.category.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
+                    <a href="{{route('admin.status.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
                 </div>
             </div>
 
@@ -38,15 +38,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categories as $category)
+                                @foreach($statuses as $status)
                                     <tr>
-                                        <td>{{$category->id}}</td>
-                                        <td>{{$category->title}}</td>
-                                        <td>{{$category->created_at}}</td>
-                                        <td><a  href="{{route('admin.category.show', $category->id)}}"><i class="far fa-eye"></i></a></td>
-                                        <td><a  href="{{route('admin.category.edit', $category->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
+                                        <td>{{$status->id}}</td>
+                                        <td>{{$status->title}}</td>
+                                        <td>{{$status->created_at}}</td>
+                                        <td><a  href="{{route('admin.status.show', $status->id)}}"><i class="far fa-eye"></i></a></td>
+                                        <td><a  href="{{route('admin.status.edit', $status->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.category.delete', $category->id)}}">
+                                            <form method="post" action="{{route('admin.status.delete', $status->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

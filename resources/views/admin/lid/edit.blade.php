@@ -36,8 +36,21 @@
                     </div>
                     <div class="mb-3">
                         <label>Email</label>
-                        <input name="email" type="email" class="form-control" value="{{$lid->email}}">
+                        <input name="email" type="email" class="form-control" value="{{$lid->email}}" disabled>
                         @error('email')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3 form-group">
+                        <label>Статус</label>
+                        <select name="status_id" class="form-control">
+                            @foreach($statuses as $status)
+                                <option value="{{$status->id}}"
+                                    {{ $status->id == $lid->status_id ? ' selected' : '' }}
+                                >{{$status->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('status_id')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
