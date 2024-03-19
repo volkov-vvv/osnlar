@@ -25,6 +25,12 @@ Route::group(['namespace' => 'Course'],function (){
     Route::get('/course', 'IndexController')->name('course.index');
 });
 
+Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
+    Route::get('/create', 'CreateController')->name('lid.create');
+    Route::post('/', 'StoreController')->name('lid.store');
+    Route::get('/thank', 'IndexController')->name('lid.index');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -116,8 +122,27 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     });
 });
 
-Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
-    Route::get('/create', 'CreateController')->name('lid.create');
-    Route::post('/', 'StoreController')->name('lid.store');
-    Route::get('/thank', 'IndexController')->name('lid.index');
+Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'cc']],function (){
+    Route::group(['namespace' => 'Main', 'prefix' => 'main'],function (){
+        Route::get('/', 'IndexController')->name('cc.main.index');
+    });
+    Route::group(['namespace' => 'Status', 'prefix' => 'status'],function (){
+        Route::get('/', 'IndexController')->name('cc.status.index');
+        Route::get('/create', 'CreateController')->name('cc.status.create');
+        Route::post('/', 'StoreController')->name('cc.status.store');
+        Route::get('/{status}', 'ShowController')->name('cc.status.show');
+        Route::get('/{status}/edit', 'EditController')->name('cc.status.edit');
+        Route::patch('/{status}', 'UpdateController')->name('cc.status.update');
+        Route::delete('/{status}', 'DeleteController')->name('cc.status.delete');
+    });
+    Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
+        Route::get('/', 'IndexController')->name('cc.lid.index');
+        Route::get('/create', 'CreateController')->name('cc.lid.create');
+        Route::post('/', 'StoreController')->name('cc.lid.store');
+        Route::get('/{lid}', 'ShowController')->name('cc.lid.show');
+        Route::get('/{lid}/edit', 'EditController')->name('cc.lid.edit');
+        Route::patch('/{lid}', 'UpdateController')->name('cc.lid.update');
+        Route::delete('/{lid}', 'DeleteController')->name('cc.lid.delete');
+    });
+
 });

@@ -17,20 +17,30 @@
     <script src="{{asset('assets/js/loader.js')}}"></script>
 
     <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) {
+                if (document.scripts[j].src === r) {
+                    return;
+                }
+            }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
         (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
         ym(96624355, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true
         });
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/96624355" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/96624355" style="position:absolute; left:-9999px;" alt=""/></div>
+    </noscript>
     <!-- /Yandex.Metrika counter -->
 
 
@@ -40,20 +50,24 @@
 <header class="edica-header edica-landing-header">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}" width="260"  alt="Основание"></a>
-            <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}"
+                                                                        width="260" alt="Основание"></a>
+            <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav"
+                    aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="edicaMainNav">
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{route('main.index')}}">Главная <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{route('main.index')}}">Главная <span
+                                class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">О нас</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
                             <a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a>
                             <a class="dropdown-item" href="#">Архив</a>
@@ -65,28 +79,38 @@
                 </ul>
                 @if( isset(auth()->user()->id) )
                     <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
-                        <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                            <a class="dropdown-item btn btn-link" href="#">
-                                Настройки
-                            </a>
-                            <a class="dropdown-item btn btn-link" href="{{route('admin.main.index')}}">
-                                Административная панель
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <form action="{{route('logout')}}" method="post">
-                                    @csrf
-                                    <input class="btn btn-link" type="submit" value="Выйти">
-                                </form>
-                            </a>
-                        </div>
-                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
+                            <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                                <a class="dropdown-item btn btn-link" href="#">
+                                    Настройки
+                                </a>
+                                <a class="dropdown-item btn btn-link" href="
+                            @switch(auth()->user()->role)
+                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
+                            @break
+                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
+                            @break
+                            @default
+                                    {{route('cc.main.index')}}
+@endswitch
+                            ">
+                                    Административная панель
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <form action="{{route('logout')}}" method="post">
+                                        @csrf
+                                        <input class="btn btn-link" type="submit" value="Выйти">
+                                    </form>
+                                </a>
+                            </div>
+                        </li>
                     </ul>
                 @else
                     <ul class="navbar-nav mt-2 mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('admin.main.index')}}">Войти</a>
+                            <a class="nav-link" href="{{route('login')}}">Войти</a>
                         </li>
                     </ul>
                 @endif
@@ -104,31 +128,37 @@
                     <div class="carousel-item active">
                         <div class="row">
                             <div class="col-md-6 carousel-content-wrapper">
-                                <h1 >Федеральный проект «Содействие занятости»</h1>
-                                <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам дополнительного профессионального образования отдельных категорий граждан в рамках реализации федерального <a href="https://trudvsem.ru/information-pages/support-employment/">проекта «Содействие занятости»</a> национального проекта «Демография».</p>
+                                <h1>Федеральный проект «Содействие занятости»</h1>
+                                <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
+                                    дополнительного профессионального образования отдельных категорий граждан в рамках
+                                    реализации федерального <a
+                                        href="https://trudvsem.ru/information-pages/support-employment/">проекта
+                                        «Содействие занятости»</a> национального проекта «Демография».</p>
                                 <div class="carousel-content-btns">
-                                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i
+                                            class="fas fa-arrow-right mr-2"></i> Записаться</a>
                                 </div>
                             </div>
                             <div class="col-md-6 carousel-img-wrapper">
-                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid" width="350px">
+                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
+                                     width="350px">
                             </div>
                         </div>
                     </div>
-{{--                    <div class="carousel-item">--}}
-{{--                        <div class="row">--}}
-{{--                            <div class="col-md-6 carousel-content-wrapper">--}}
-{{--                                <h1 >Национальная программа «Кадры для цифровой экономики»</h1>--}}
-{{--                                <p>Учебный центр «Основание» участвует в отборе поставщиков цифровых образовательных сервисов, включающих цифровые образовательные ресурсы.</p>--}}
-{{--                                <div class="carousel-content-btns">--}}
-{{--                                    <a href="#!" class="btn btn-primary"><i class="fas fa-exclamation-circle mr-2"></i> Подробнее</a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-6 carousel-img-wrapper">--}}
-{{--                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid" width="350px">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="carousel-item">--}}
+                    {{--                        <div class="row">--}}
+                    {{--                            <div class="col-md-6 carousel-content-wrapper">--}}
+                    {{--                                <h1 >Национальная программа «Кадры для цифровой экономики»</h1>--}}
+                    {{--                                <p>Учебный центр «Основание» участвует в отборе поставщиков цифровых образовательных сервисов, включающих цифровые образовательные ресурсы.</p>--}}
+                    {{--                                <div class="carousel-content-btns">--}}
+                    {{--                                    <a href="#!" class="btn btn-primary"><i class="fas fa-exclamation-circle mr-2"></i> Подробнее</a>--}}
+                    {{--                                </div>--}}
+                    {{--                            </div>--}}
+                    {{--                            <div class="col-md-6 carousel-img-wrapper">--}}
+                    {{--                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid" width="350px">--}}
+                    {{--                            </div>--}}
+                    {{--                        </div>--}}
+                    {{--                    </div>--}}
 
                 </div>
             </div>
@@ -145,7 +175,8 @@
             <h1 class="banner-title">Подать заявку!</h1>
             <div class="banner-btns-wrapper">
                 <div class="carousel-content-btns">
-                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i>
+                        Записаться</a>
                 </div>
             </div>
         </div>
@@ -156,14 +187,14 @@
         <div class="row footer-widget-area">
             <div class="col-md-3">
                 <nav class="footer-nav">
-                <p class="contact-details">ОСНОВАНИЕ</p>
-                <p class="contact-details">edu@partnerdpo.ru</p>
-                <p class="contact-details">+7 (499) 609-60-20</p>
-                <nav class="footer-social-links">
-                    <a href="#!"><i class="fab fa-vk"></i></a>
-                    <a href="#!"><i class="fab fa-youtube-square"></i></a>
-                    <a href="#!"><i class="fab fa-yandex"></i></a>
-                </nav>
+                    <p class="contact-details">ОСНОВАНИЕ</p>
+                    <p class="contact-details">edu@partnerdpo.ru</p>
+                    <p class="contact-details">+7 (499) 609-60-20</p>
+                    <nav class="footer-social-links">
+                        <a href="#!"><i class="fab fa-vk"></i></a>
+                        <a href="#!"><i class="fab fa-youtube-square"></i></a>
+                        <a href="#!"><i class="fab fa-yandex"></i></a>
+                    </nav>
                 </nav>
             </div>
             <div class="col-md-3">
@@ -188,9 +219,11 @@
             </div>
             <div class="col-md-3">
                 <div class="dropdown footer-country-dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="footerCountryDropdown" data-toggle="dropdown" aria-haspopup="true"
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="footerCountryDropdown"
+                            data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                        <span class="flag-icon flag-icon-ru flag-icon-squared"></span> Русский <i class="fas fa-chevron-down ml-2"></i>
+                        <span class="flag-icon flag-icon-ru flag-icon-squared"></span> Русский <i
+                            class="fas fa-chevron-down ml-2"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="footerCountryDropdown">
                         <button class="dropdown-item" href="#">

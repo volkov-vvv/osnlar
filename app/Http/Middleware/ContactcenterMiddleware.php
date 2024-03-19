@@ -6,7 +6,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
-class AdminMiddleware
+class ContactcenterMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if ((int) auth()->user()->role !== User::ROLE_ADMIN) {
+        if ((int) auth()->user()->role !== User::ROLE_CONTACT) {
             abort(404);
         }
 

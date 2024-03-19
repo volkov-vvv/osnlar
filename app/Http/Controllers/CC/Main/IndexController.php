@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Main;
+namespace App\Http\Controllers\CC\Main;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
@@ -17,6 +17,6 @@ class IndexController extends Controller
         $data['coursesCount'] = Course::all()->count();
         $data['lidsCount'] = Lid::all()->count();
 
-        return view('admin.main.index',compact('data'));
+        return view('cc.main.index',compact('data'));
     }
 }
