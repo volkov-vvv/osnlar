@@ -76,6 +76,12 @@
                         <!-- /.card-body -->
                     </div>
                 </div>
+                <div class="col-6" style="background-color: #f6b0d0">
+                    <p>{{$act['action']}}</p>
+                    <p>Дата: {{$act['date']}}</p>
+                    <p>Пользователь: {{$act['user']}}</p>
+                    <p>Новый статус: {{$act['new_val']}}</p>
+                </div>
             </div>
 
             <!-- /.row -->

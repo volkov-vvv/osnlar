@@ -13,8 +13,7 @@ class UpdateController extends Controller
     {
         $data = $request->validated();
         $lid->update($data);
-
+        activity()->performedOn($lid)->withProperties(['status_id' => $data['status_id']])->log('updated');
         return redirect()->route('admin.lid.show', compact('lid'));
-
     }
 }

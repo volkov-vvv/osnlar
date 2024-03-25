@@ -14,6 +14,7 @@ class UpdateController extends Controller
         $data = $request->validated();
         $lid->update($data);
 
+
         return redirect()->route('cc.lid.show', compact('lid'));
 
     }
