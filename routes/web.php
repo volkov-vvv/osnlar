@@ -21,8 +21,9 @@ Route::group(['namespace' => 'Main'],function (){
     Route::get('/', 'IndexController')->name('main.index');
 });
 
-Route::group(['namespace' => 'Course'],function (){
-    Route::get('/course', 'IndexController')->name('course.index');
+Route::group(['namespace' => 'Course', 'prefix' => 'course'],function (){
+    Route::get('/', 'IndexController')->name('course.index');
+    Route::get('/{course}', 'ShowController')->name('course.show');
 });
 
 Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){

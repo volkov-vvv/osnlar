@@ -38,24 +38,14 @@
             <h4 class="edica-landing-section-subtitle" data-aos="fade-up">Наши курсы</h4>
             <h2 class="edica-landing-section-title" data-aos="fade-up">Выберите понравившийся курс</h2>
             <div class="row">
+                @foreach($randomCourses as $course)
                 <div class="col-md-4 landing-blog-post" data-aos="fade-right">
-                    <img src="{{asset('assets/images/bugfinder.png')}}" alt="blog post" class="blog-post-thumbnail">
-                    <p class="blog-post-category">Азбука цифры</p>
-                    <h4 class="blog-post-title">Специалист по тестированию программного обучения</h4>
-                    <a href="#!" class="blog-post-link">Перейти</a>
+                    <img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail">
+                    <p class="blog-post-category"></p>
+                    <h4 class="blog-post-title">{{$course->title}}</h4>
+                    <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>
                 </div>
-                <div class="col-md-4 landing-blog-post" data-aos="fade-up">
-                    <img src="{{asset('assets/images/rectangle-copy.png')}}" alt="blog post" class="blog-post-thumbnail">
-                    <p class="blog-post-category">Азбука цифры</p>
-                    <h4 class="blog-post-title">Аналитик цифровых торговых площадок (Wildberries, Ozon, Яндекс Маркет)</h4>
-                    <a href="#!" class="blog-post-link">Перейти</a>
-                </div>
-                <div class="col-md-4 landing-blog-post" data-aos="fade-left">
-                    <img src="{{asset('assets/images/neiro.jpg')}}" alt="blog post" class="blog-post-thumbnail">
-                    <p class="blog-post-category">Азбука цифры</p>
-                    <h4 class="blog-post-title">Нейросети в SMM-маркетинге</h4>
-                    <a href="#!" class="blog-post-link">Перейти</a>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
