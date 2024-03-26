@@ -50,7 +50,16 @@
                                 <a class="dropdown-item btn btn-link" href="#">
                                     Настройки
                                 </a>
-                                <a class="dropdown-item btn btn-link" href="{{route('admin.main.index')}}">
+                                <a class="dropdown-item btn btn-link" href="
+                            @switch(auth()->user()->role)
+                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
+                            @break
+                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
+                            @break
+                            @default
+                                    {{route('cc.main.index')}}
+                            @endswitch
+                            ">
                                     Административная панель
                                 </a>
                                 <a class="dropdown-item" href="#">
@@ -65,7 +74,7 @@
                 @else
                     <ul class="navbar-nav mt-2 mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('admin.main.index')}}">Войти</a>
+                            <a class="nav-link" href="{{route('login')}}">Войти</a>
                         </li>
                     </ul>
                 @endif

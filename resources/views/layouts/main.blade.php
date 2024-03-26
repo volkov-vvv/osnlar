@@ -94,7 +94,7 @@
                             @break
                             @default
                                     {{route('cc.main.index')}}
-@endswitch
+                            @endswitch
                             ">
                                     Административная панель
                                 </a>
