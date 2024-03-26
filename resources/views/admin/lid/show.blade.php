@@ -76,7 +76,7 @@
                         <!-- /.card-body -->
                     </div>
                 </div>
-                @if(!empty($act))
+
                 <div class="col-6">
                     <div class="alert">История изменений</div>
                     <div class="card" style="background-color: #f6b0d0">
@@ -88,17 +88,23 @@
                                     <th>Что изменилось</th>
                                     <th>Изменение</th>
                                 </tr>
-                                <tr>
-                                    <td>{{$act['date']}}</td>
-                                    <td>{{$act['user']}}</td>
-                                    <td>{{$act['action']}}</td>
-                                    <td>{{$act['old_val']}} --> {{$act['new_val']}}</td>
-                                </tr>
+                                @forelse ($activites as $activity)
+                                    <tr>
+                                        <td>{{$activity->updated_at}}</td>
+                                        <td>{{$activity->user}}</td>
+                                        <td>{{$activity->description}}</td>
+                                        <td>{{$activity->status_old}} --> {{$activity->status_new}}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td rowspan="3">Нет изменений</td>
+                                    </tr>
+                                @endforelse
                             </table>
                         </div>
                     </div>
                 </div>
-                @endif
+
             </div>
 
             <!-- /.row -->
