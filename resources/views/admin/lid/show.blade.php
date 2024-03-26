@@ -81,13 +81,13 @@
             <!-- /.row -->
             <div class="row">
 
-                {{--                    <div class="col-1">--}}
-                {{--                        <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">--}}
-                {{--                            @csrf--}}
-                {{--                            @method('DELETE')--}}
-                {{--                            <button class="btn btn-danger float-end" type="submit" disabled>Удалить</button>--}}
-                {{--                        </form>--}}
-                {{--                    </div>--}}
+                                    <div class="col-1">
+                                        <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger float-end" type="submit" >Удалить</button>
+                                        </form>
+                                    </div>
                 <div class="col-2">
                     <a class="btn btn-outline-primary mr-2"
                        href="{{route('admin.lid.edit', $lid->id)}}">Редактировать</a>
