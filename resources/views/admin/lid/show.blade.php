@@ -76,12 +76,29 @@
                         <!-- /.card-body -->
                     </div>
                 </div>
-                <div class="col-6" style="background-color: #f6b0d0">
-                    <p>{{$act['action']}}</p>
-                    <p>Дата: {{$act['date']}}</p>
-                    <p>Пользователь: {{$act['user']}}</p>
-                    <p>Новый статус: {{$act['new_val']}}</p>
+                @if(!empty($act))
+                <div class="col-6">
+                    <div class="alert">История изменений</div>
+                    <div class="card" style="background-color: #f6b0d0">
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover text-nowrap">
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Автор</th>
+                                    <th>Что изменилось</th>
+                                    <th>Изменение</th>
+                                </tr>
+                                <tr>
+                                    <td>{{$act['date']}}</td>
+                                    <td>{{$act['user']}}</td>
+                                    <td>{{$act['action']}}</td>
+                                    <td>{{$act['old_val']}} --> {{$act['new_val']}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+                @endif
             </div>
 
             <!-- /.row -->

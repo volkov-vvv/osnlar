@@ -17,15 +17,18 @@ class ShowController extends Controller
     {
         $statuses = Status::all();
         $courses = Course::all();
-        $activites = Activity::all()->where('subject_id', '=', $lid['id'])->last();
-        $properties = $activites->properties;
+        $act = array();
+        if($activites = Activity::all()->where('subject_id', '=', $lid['id'])->last()){
+            $properties = $activites->properties;
+            $activitesStatusNew = $statuses->where('id',  $properties['status_id'])->first();
+            $activitesStatusOld = $statuses->where('id',  $properties['status_id_old'])->first();
+            $act['user'] = User::findOrFail($activites->causer_id)->name;
+            $act['action'] = 'изменение статуса';
+            $act['new_val'] = $activitesStatusNew->title;
+            $act['old_val'] = $activitesStatusOld->title;
+            $act['date'] =  Carbon::parse($activites->updated_at)->format('M d Y');
+        }
 
-        $activitesStatus = Status::all()->where('id', '=', $properties['status_id'])->first();
-
-        $act['user'] = User::findOrFail($activites->causer_id)->name;
-        $act['action'] = 'изменение статуса';
-        $act['new_val'] = $activitesStatus->title;
-        $act['date'] =  Carbon::parse($activites->updated_at)->format('M d Y');
 
         return view('admin.lid.show', compact('lid','courses','statuses', 'act'));
     }
