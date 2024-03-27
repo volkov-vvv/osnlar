@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class Lid extends Model
 {
     use HasFactory;
@@ -13,6 +14,5 @@ class Lid extends Model
 
     protected $table = 'lids';
     protected $guarded = false;
-
 
 }
