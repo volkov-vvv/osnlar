@@ -33,7 +33,9 @@
                                 </tr>
                                 <tr>
                                     <td>Описание</td>
-                                    <td>{{$course->description}}</td>
+                                    <td>
+                                        <p>{!! $course->description !!}</p>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Категория</td>

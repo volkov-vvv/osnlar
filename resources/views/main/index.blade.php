@@ -40,7 +40,7 @@
             <div class="row">
                 @foreach($randomCourses as $course)
                 <div class="col-md-4 landing-blog-post" data-aos="fade-right">
-                    <img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail">
+                    <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>
                     <p class="blog-post-category"></p>
                     <h4 class="blog-post-title">{{$course->title}}</h4>
                     <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>

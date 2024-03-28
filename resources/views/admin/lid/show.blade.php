@@ -78,13 +78,13 @@
                 </div>
 
                 <div class="col-6">
-                    <div class="alert">История изменений</div>
-                    <div class="card" style="background-color: #f6b0d0">
+                    <div class="alert"><b>История изменений</b></div>
+                    <div class="card">
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-nowrap">
                                 <tr>
                                     <th>Дата</th>
-                                    <th>Автор</th>
+                                    <th>Сотрудник</th>
                                     <th>Что изменилось</th>
                                     <th>Изменение</th>
                                 </tr>
@@ -93,7 +93,7 @@
                                         <td>{{$activity->updated_at}}</td>
                                         <td>{{$activity->user}}</td>
                                         <td>{{$activity->description}}</td>
-                                        <td>{{$activity->status_old}} --> {{$activity->status_new}}</td>
+                                        <td>{{$activity->status_old}}  <i class="fa-solid fa-arrow-right"></i>  {{$activity->status_new}}</td>
                                     </tr>
                                 @empty
                                     <tr>
