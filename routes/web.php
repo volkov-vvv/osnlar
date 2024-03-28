@@ -111,6 +111,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{lid}', 'UpdateController')->name('admin.lid.update');
         Route::delete('/{lid}', 'DeleteController')->name('admin.lid.delete');
     });
+
+//    Route::get('/lid', );
+
     Route::group(['namespace' => 'Status', 'prefix' => 'status'],function (){
         Route::get('/', 'IndexController')->name('admin.status.index');
         Route::get('/create', 'CreateController')->name('admin.status.create');
@@ -120,6 +123,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{status}', 'UpdateController')->name('admin.status.update');
         Route::delete('/{status}', 'DeleteController')->name('admin.status.delete');
     });
+
 });
 
 Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'cc']],function (){
@@ -144,5 +148,4 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::patch('/{lid}', 'UpdateController')->name('cc.lid.update');
         Route::delete('/{lid}', 'DeleteController')->name('cc.lid.delete');
     });
-
 });
