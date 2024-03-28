@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div  class="col-4">
-                <form action="{{route('admin.lid.store')}}" method="post">
+                <form action="{{route('lid.store')}}" method="post">
                     @csrf
                     <div class="mb-3">
                         <label>Фамилия</label>
@@ -40,7 +40,7 @@
                         @enderror
                     </div>
                     <button type="submit" class="btn btn-primary">Создать</button>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.lid.index')}}">Назад</a>
+                    <a class="btn btn-outline-secondary" href="{{route('lid.index')}}">Назад</a>
                 </form>
             </div>
 

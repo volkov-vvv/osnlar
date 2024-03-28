@@ -103,17 +103,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{region}', 'UpdateController')->name('admin.region.update');
         Route::delete('/{region}', 'DeleteController')->name('admin.region.delete');
     });
-    Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
-        Route::get('/', 'IndexController')->name('admin.lid.index');
-        Route::get('/create', 'CreateController')->name('admin.lid.create');
-        Route::post('/', 'StoreController')->name('admin.lid.store');
-        Route::get('/{lid}', 'ShowController')->name('admin.lid.show');
-        Route::get('/{lid}/edit', 'EditController')->name('admin.lid.edit');
-        Route::patch('/{lid}', 'UpdateController')->name('admin.lid.update');
-        Route::delete('/{lid}', 'DeleteController')->name('admin.lid.delete');
-    });
 
-//    Route::get('/lid', );
+    Route::resource('lid', LidController::class);
 
     Route::group(['namespace' => 'Status', 'prefix' => 'status'],function (){
         Route::get('/', 'IndexController')->name('admin.status.index');

@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div  class="col">
-                <form action="{{route('admin.lid.update', $lid->id)}}" method="post">
+                <form action="{{route('lid.update', $lid->id)}}" method="post">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
@@ -55,7 +55,7 @@
                         @enderror
                     </div>
                     <button type="submit" class="btn btn-primary">Обновить</button>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.lid.index')}}">Назад</a>
+                    <a class="btn btn-outline-secondary" href="{{route('lid.index')}}">Назад</a>
                 </form>
             </div>
 
