@@ -192,9 +192,10 @@
                     <p class="contact-details">edu@partnerdpo.ru</p>
                     <p class="contact-details">+7 (499) 609-60-20</p>
                     <nav class="footer-social-links">
-                        <a href="#!"><i class="fab fa-vk"></i></a>
-                        <a href="#!"><i class="fab fa-youtube-square"></i></a>
-                        <a href="#!"><i class="fab fa-yandex"></i></a>
+                        <a href="{{url('https://vk.com/osnovanie_study')}}" target="_blank"><i class="fab fa-vk"></i></a>
+                        <a href="{{url('https://ok.ru/group/70000005562055')}}" target="_blank"><i class="fab fa-odnoklassniki"></i></a>
+                        <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i></a>
+                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>
                     </nav>
                 </nav>
             </div>
@@ -239,7 +240,7 @@
         </div>
         <div class="footer-bottom-content">
             <nav class="nav footer-bottom-nav">
-                <a href="#!">Образовательная лицензия № 041203 от 25.12.2020</a>
+                <a href="{{asset('files/lic.pdf')}}" target="_blank">Образовательная лицензия №Л035-01298-77/00180209 от 29.12.2021</a>
                 <a href="#!">Карта сайта</a>
             </nav>
             <p class="mb-0">© Все права защищены</p>

@@ -4,7 +4,12 @@
     <main class="blog-post">
         <div class="container">
             <h1 class="edica-page-title" data-aos="fade-up">{{$course->title}}</h1>
-            <p class="edica-blog-post-meta" data-aos="fade-up" data-aos-delay="200">Автор курса: • Старт обучения: 15 апреля</p>
+            <p class="edica-blog-post-meta" data-aos="fade-up" data-aos-delay="200">Эксперты курса:
+                @foreach($authors as $author)
+                    {{ is_array($course->authors->pluck('id')->toArray()) && in_array($author->id, $course->authors->pluck('id')->toArray()) ? $author->name . ',' : ''  }}
+                @endforeach
+                старт обучения: май 2024 года
+            </p>
             <section class="blog-post-featured-img" data-aos="fade-up" data-aos-delay="300">
                 <img src="{{url('storage/' . $course->image) }}" alt="featured image" class="w-100">
             </section>

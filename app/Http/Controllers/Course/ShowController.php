@@ -11,6 +11,7 @@ class ShowController extends Controller
 {
     public function __invoke(Course $course)
     {
-        return view('course.show',compact('course'));
+        $authors = Author::all();
+        return view('course.show',compact('course','authors'));
     }
 }
