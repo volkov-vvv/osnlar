@@ -76,8 +76,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
-
                 </ul>
+
                 @if( isset(auth()->user()->id) )
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown">
