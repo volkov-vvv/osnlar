@@ -119,7 +119,7 @@
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <a href="#!" class="nav-link">Реквизиты</a>
+                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Реквизиты</a>
                     <a href="#!" class="nav-link">Android приложение</a>
                     <a href="#!" class="nav-link">ios приложение</a>
                     <a href="#!" class="nav-link">Блог</a>

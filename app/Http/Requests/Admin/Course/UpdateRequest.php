@@ -28,9 +28,10 @@ class UpdateRequest extends FormRequest
             'description' => 'required|string',
             'prev_img' => 'nullable|file',
             'image' => 'nullable|file',
-            'category_id' => 'required|integer|exists:categories,id',
+//            'category_id' => 'required|integer|exists:categories,id',
             'author_ids' => 'nullable|array',
             'author_ids.*' => 'nullable|integer|exists:authors,id',
+            'is_published' => 'nullable',
         ];
     }
 
@@ -45,10 +46,11 @@ class UpdateRequest extends FormRequest
             'prev_img.file' => 'Необходимо выбрать файл',
             'image.required' => 'Это поле необходимо для заполнения',
             'image.file' => 'Необходимо выбрать файл',
-            'category_id.required' => 'Это поле необходимо для заполнения',
-            'category_id.integer' => 'ID категории должно быть числом',
-            'category_id.exists' => 'ID категории должно быть в базе данных',
+//            'category_id.required' => 'Это поле необходимо для заполнения',
+//            'category_id.integer' => 'ID категории должно быть числом',
+//            'category_id.exists' => 'ID категории должно быть в базе данных',
             'author_ids.array' => 'Необходимо отправить массив данных',
+            'is_published.integer' => 'должно быть в базе данных',
 
         ];
     }

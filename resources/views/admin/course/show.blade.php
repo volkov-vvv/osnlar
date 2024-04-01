@@ -37,14 +37,14 @@
                                         <p>{!! $course->description !!}</p>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>Категория</td>
-                                    <td>
-                                        @foreach($categories as $category)
-                                            {{ $category->id == $course->category_id ? $category->title : '' }}
-                                        @endforeach
-                                    </td>
-                                </tr>
+{{--                                <tr>--}}
+{{--                                    <td>Категория</td>--}}
+{{--                                    <td>--}}
+{{--                                        @foreach($categories as $category)--}}
+{{--                                            {{ $category->id == $course->category_id ? $category->title : '' }}--}}
+{{--                                        @endforeach--}}
+{{--                                    </td>--}}
+{{--                                </tr>--}}
                                 <tr>
                                     <td>Авторы</td>
                                     <td>

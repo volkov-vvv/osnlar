@@ -12,9 +12,9 @@ class ShowController extends BaseController
 {
     public function __invoke(Course $course)
     {
-        $categories = Category::all();
+
         $authors = Author::all();
 
-        return view('admin.course.show', compact('course', 'categories', 'authors'));
+        return view('admin.course.show', compact('course', 'authors'));
     }
 }

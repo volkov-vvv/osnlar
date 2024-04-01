@@ -32,6 +32,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Название</th>
+                                    <th>Публикация</th>
                                     <th>Дата создания</th>
                                     <th colspan="3">Действия</th>
                                 </tr>
@@ -41,6 +42,9 @@
                                     <tr>
                                         <td>{{$course->id}}</td>
                                         <td>{{$course->title}}</td>
+                                        <td>
+                                            {{$course->is_published == 1 ? 'Опубликован' : 'Архив' }}
+                                        </td>
                                         <td>{{$course->created_at}}</td>
                                         <td><a  href="{{route('admin.course.show', $course->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.course.edit', $course->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>

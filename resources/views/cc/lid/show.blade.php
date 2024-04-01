@@ -62,6 +62,22 @@
                                     <td>{{$lid->phone}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Регион</td>
+                                    <td>
+                                        @foreach($regions as $region)
+                                            {{ $region->id == $lid->region_id ? $region->title : '' }}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Категория</td>
+                                    <td>
+                                        @foreach($categories as $category)
+                                            {{ $category->id == $lid->category_id ? $category->title : '' }}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$lid->created_at}}</td>
                                 </tr>

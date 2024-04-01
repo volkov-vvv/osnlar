@@ -71,19 +71,19 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="mb-3 form-group">
-                        <label>Выберите категорию</label>
-                        <select name="category_id" class="form-control">
-                            @foreach($categories as $category)
-                            <option value="{{$category->id}}"
-                            {{ $category->id == old('category_id') ? ' selected' : '' }}
-                            >{{$category->title}}</option>
-                            @endforeach
-                        </select>
-                        @error('category_id')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
+{{--                    <div class="mb-3 form-group">--}}
+{{--                        <label>Выберите категорию</label>--}}
+{{--                        <select name="category_id" class="form-control">--}}
+{{--                            @foreach($categories as $category)--}}
+{{--                            <option value="{{$category->id}}"--}}
+{{--                            {{ $category->id == old('category_id') ? ' selected' : '' }}--}}
+{{--                            >{{$category->title}}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+{{--                        @error('category_id')--}}
+{{--                        <div class="text-danger">{{$message}}</div>--}}
+{{--                        @enderror--}}
+{{--                    </div>--}}
                     <div class="mb-3 form-group">
                         <label>Выберите автора/ов:</label>
                         <select name="author_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">

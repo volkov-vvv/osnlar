@@ -11,8 +11,8 @@ class CreateController extends BaseController
 {
     public function __invoke()
     {
-        $categories = Category::all();
+
         $authors = Author::all();
-        return view('admin.course.create', compact('categories', 'authors'));
+        return view('admin.course.create', compact('authors'));
     }
 }

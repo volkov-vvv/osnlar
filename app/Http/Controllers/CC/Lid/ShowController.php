@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\CC\Lid;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Course;
 use App\Models\Lid;
+use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
 use Spatie\Activitylog\Models\Activity;
@@ -16,6 +18,8 @@ class ShowController extends Controller
     {
         $statuses = Status::all();
         $courses = Course::all();
+        $regions = Region::all();
+        $categories = Category::all();
 
         // Формирование коллекции активности
         $activites = Activity::all()->where('subject_id', '=', $lid['id']);
@@ -28,6 +32,6 @@ class ShowController extends Controller
             $item->user = User::findOrFail($item->causer_id)->name;
         });
 
-        return view('cc.lid.show', compact('lid','courses','statuses','activites'));
+        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories'));
     }
 }
