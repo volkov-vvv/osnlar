@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Admin\Lid\StoreRequest;
 use App\Http\Requests\Admin\Lid\UpdateRequest;
+use App\Models\Category;
+use App\Models\Region;
 use App\Models\Course;
 use App\Models\Lid;
 use App\Models\Status;
@@ -63,6 +65,8 @@ class lidController extends Controller
     {
         $statuses = Status::all();
         $courses = Course::all();
+        $regions = Region::all();
+        $categories = Category::all();
 
         // Формирование коллекции активности
         $activites = Activity::all()->where('subject_id', '=', $lid['id']);

@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="col-6">
-                    <div class="alert">История изменений</div>
+                    <div class="alert"><b>История изменений</b></div>
                     <div class="card">
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-nowrap">
@@ -87,9 +87,8 @@
                                     <th>Автор</th>
                                     <th>Что изменилось</th>
                                     <th>Изменение</th>
-                                    <th></th>
                                 </tr>
-                                @forelse ($activites as $key => $activity)
+                                @forelse ($activites as $activity)
                                     <tr>
                                         <td>{{$activity->updated_at}}</td>
                                         <td>{{$activity->user}}</td>
@@ -105,6 +104,7 @@
                                         <td colspan="5">
                                             <b>Комментарий: </b>{{$activity->comment}}
                                         </td>
+                                        <td>{{$activity->status_old}}  <i class="fa-solid fa-arrow-right"></i>  {{$activity->status_new}}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -122,7 +122,7 @@
             <div class="row">
 
                                     <div class="col-1">
-                                        <form method="post" action="{{route('lid.destroy', $lid->id)}}">
+                                        <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger float-end" type="submit" >Удалить</button>
@@ -130,8 +130,8 @@
                                     </div>
                 <div class="col-2">
                     <a class="btn btn-outline-primary mr-2"
-                       href="{{route('lid.edit', $lid->id)}}">Редактировать</a>
-                    <a class="btn btn-outline-secondary" href="{{route('lid.index')}}">Назад</a>
+                       href="{{route('admin.lid.edit', $lid->id)}}">Редактировать</a>
+                    <a class="btn btn-outline-secondary" href="{{route('admin.lid.index')}}">Назад</a>
                 </div>
 
 
@@ -139,13 +139,5 @@
 
         </div><!-- /.container-fluid -->
     </section>
-
-    <div class="modal fade" id="table-comment-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-body"></div>
-            </div>
-        </div>
-    </div>
 
 @endsection

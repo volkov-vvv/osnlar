@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Course;
+namespace App\Http\Controllers\Archive;
 
 use App\Http\Controllers\Controller;
 use App\Models\Author;
-use App\Models\Category;
 use App\Models\Course;
 use Illuminate\Http\Request;
 
-class ShowController extends BaseController
+class ShowController extends Controller
 {
     public function __invoke(Course $course)
     {
-
         $authors = Author::all();
-
-        return view('admin.course.show', compact('course', 'authors'));
+        return view('archive.show',compact('course','authors'));
     }
 }

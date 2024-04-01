@@ -13,7 +13,9 @@ class UpdateController extends Controller
     {
         $data = $request->validated();
         $lid->update($data);
-
+        $oldStatus = $lid->status_id;
+        $lid->update($data);
+        activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id']])->log('Изменение статуса');
 
         return redirect()->route('cc.lid.show', compact('lid'));
 

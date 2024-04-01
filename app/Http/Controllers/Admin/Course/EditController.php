@@ -12,8 +12,8 @@ class EditController extends BaseController
 {
     public function __invoke(Course $course)
     {
-        $categories = Category::all();
+
         $authors = Author::all();
-        return view('admin.course.edit', compact('course', 'categories','authors'));
+        return view('admin.course.edit', compact('course', 'authors'));
     }
 }

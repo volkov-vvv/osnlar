@@ -73,19 +73,19 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="mb-3 form-group">
-                        <label>Выберите категорию</label>
-                        <select name="category_id" class="form-control">
-                            @foreach($categories as $category)
-                                <option value="{{$category->id}}"
-                                    {{ $category->id == $course->category_id ? ' selected' : '' }}
-                                >{{$category->title}}</option>
-                            @endforeach
-                        </select>
-                        @error('category_id')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
+{{--                    <div class="mb-3 form-group">--}}
+{{--                        <label>Выберите категорию</label>--}}
+{{--                        <select name="category_id" class="form-control">--}}
+{{--                            @foreach($categories as $category)--}}
+{{--                                <option value="{{$category->id}}"--}}
+{{--                                    {{ $category->id == $course->category_id ? ' selected' : '' }}--}}
+{{--                                >{{$category->title}}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+{{--                        @error('category_id')--}}
+{{--                        <div class="text-danger">{{$message}}</div>--}}
+{{--                        @enderror--}}
+{{--                    </div>--}}
                     <div class="mb-3 form-group">
                         <label>Выберите автора/ов:</label>
                         <select name="author_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">
@@ -100,8 +100,44 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Обновить</button>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
+{{--                    <div class="mb-3">--}}
+{{--                    <div class="form-group">--}}
+{{--                        @if(empty($course->is_published) && $course->is_published == 0)--}}
+{{--                            <div class="custom-control custom-switch">--}}
+{{--                                <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch1" value="1">--}}
+{{--                                <label class="custom-control-label" for="customSwitch1">Публикация</label>--}}
+{{--                            </div>--}}
+{{--                        @else--}}
+{{--                            <div class="custom-control custom-switch">--}}
+{{--                                <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch2" value="1" checked>--}}
+{{--                                <label class="custom-control-label" for="customSwitch2">Публикация</label>--}}
+{{--                            </div>--}}
+{{--                        @endif--}}
+{{--                        @error('is_published')--}}
+{{--                        <div class="text-danger">{{$message}}</div>--}}
+{{--                        @enderror--}}
+{{--                    </div>--}}
+{{--                    </div>--}}
+
+                    <div class="mb-3">
+                        <div class="form-group">
+                                <div class="custom-control custom-switch">
+                                    <input type="hidden" name="is_published" value="0">
+                                    <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch2" value="1"
+                                        {{ $course->is_published == 1 ? ' checked' : '' }}
+                                    >
+                                    <label class="custom-control-label" for="customSwitch2">Публикация</label>
+                                </div>
+                            @error('is_published')
+                            <div class="text-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="mb-3 mt-5">
+                        <button type="submit" class="btn btn-primary">Обновить</button>
+                        <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
+                    </div>
+
                 </form>
             </div>
 

@@ -34,11 +34,11 @@
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
                             <a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a>
-                            <a class="dropdown-item" href="#">Архив</a>
+                            <a class="dropdown-item" href="{{route('archive.index')}}">Архив</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Контакты</a>
+                        <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
                 </ul>
 
@@ -110,15 +110,16 @@
                     <p class="contact-details">edu@partnerdpo.ru</p>
                     <p class="contact-details">+7 (499) 609-60-20</p>
                     <nav class="footer-social-links">
-                        <a href="#!"><i class="fab fa-vk"></i></a>
-                        <a href="#!"><i class="fab fa-youtube-square"></i></a>
-                        <a href="#!"><i class="fab fa-yandex"></i></a>
+                        <a href="{{url('https://vk.com/osnovanie_study')}}" target="_blank"><i class="fab fa-vk"></i></a>
+                        <a href="{{url('https://ok.ru/group/70000005562055')}}" target="_blank"><i class="fab fa-odnoklassniki"></i></a>
+                        <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i></a>
+                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>
                     </nav>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <a href="#!" class="nav-link">Реквизиты</a>
+                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Реквизиты</a>
                     <a href="#!" class="nav-link">Android приложение</a>
                     <a href="#!" class="nav-link">ios приложение</a>
                     <a href="#!" class="nav-link">Блог</a>
@@ -155,7 +156,7 @@
         </div>
         <div class="footer-bottom-content">
             <nav class="nav footer-bottom-nav">
-                <a href="#!">Образовательная лицензия № 041203 от 25.12.2020</a>
+                <a href="{{asset('files/lic.pdf')}}" target="_blank">Образовательная лицензия №Л035-01298-77/00180209 от 29.12.2021</a>
                 <a href="#!">Карта сайта</a>
             </nav>
             <p class="mb-0">© Все права защищены</p>

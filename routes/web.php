@@ -26,6 +26,11 @@ Route::group(['namespace' => 'Course', 'prefix' => 'course'],function (){
     Route::get('/{course}', 'ShowController')->name('course.show');
 });
 
+Route::group(['namespace' => 'Archive', 'prefix' => 'archive'],function (){
+    Route::get('/', 'IndexController')->name('archive.index');
+    Route::get('/{archive}', 'ShowController')->name('archive.show');
+});
+
 Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
     Route::get('/create', 'CreateController')->name('lid.create');
     Route::post('/', 'StoreController')->name('lid.store');

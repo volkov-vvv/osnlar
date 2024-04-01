@@ -9,7 +9,9 @@
                     @foreach($courses as $course)
                     <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
                         <div class="blog-post-thumbnail-wrapper">
-                            <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
+                            <a href="{{route('course.show', $course->id)}}">
+                                <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
+                            </a>
                         </div>
                         <p class="blog-post-category"></p>
                         <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
