@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Course;
+namespace App\Http\Controllers\Archive;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $courses = Course::where('is_published', 1)->get();
-        return view('course.index',compact('courses'));
+        $courses = Course::where('is_published', 0)->get();
+        return view('archive.index',compact('courses'));
     }
 }

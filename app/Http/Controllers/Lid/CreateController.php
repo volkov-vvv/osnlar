@@ -20,7 +20,7 @@ class CreateController extends Controller
         $regions = Region::all();
         $authors = Author::all();
         $levelsedu = Leveledu::all();
-        $courses = Course::all();
+        $courses = Course::where('is_published', 1)->get();
         return view('lid.create', compact('categories', 'authors','levelsedu','courses','regions','agents'));
     }
 }

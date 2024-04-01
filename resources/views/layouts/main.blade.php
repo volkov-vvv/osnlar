@@ -70,7 +70,7 @@
                            aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
                             <a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a>
-                            <a class="dropdown-item" href="#">Архив</a>
+                            <a class="dropdown-item" href="{{route('archive.index')}}">Архив</a>
                         </div>
                     </li>
                     <li class="nav-item">

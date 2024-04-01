@@ -97,9 +97,12 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="mb-3 mt-5">
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                        <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
+                    </div>
 
-                    <button type="submit" class="btn btn-primary">Создать</button>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
+
                 </form>
             </div>
 
