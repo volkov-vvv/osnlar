@@ -54,7 +54,10 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary">Обновить</button>
+
+                    <input type="hidden" name="comment" id="comment">
+
+                    <button type="submit" id="lid-edit-submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('lid.index')}}">Назад</a>
                 </form>
             </div>
@@ -66,8 +69,29 @@
     </section>
 
 
+    <div class="modal fade" id="comment-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Введите комментарий</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
 
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <textarea name="comment-text" class="form-control" style="min-width: 100%"></textarea>
+                    </div>
+                    <div>
+                        <button type="button" id="comment-submit" class="btn btn-primary">Отправить</button>
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

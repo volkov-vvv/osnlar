@@ -79,7 +79,7 @@
 
                 <div class="col-6">
                     <div class="alert">История изменений</div>
-                    <div class="card" style="background-color: #f6b0d0">
+                    <div class="card">
                         <div class="card-body table-responsive p-0">
                             <table class="table table-hover text-nowrap">
                                 <tr>
@@ -87,13 +87,24 @@
                                     <th>Автор</th>
                                     <th>Что изменилось</th>
                                     <th>Изменение</th>
+                                    <th></th>
                                 </tr>
-                                @forelse ($activites as $activity)
+                                @forelse ($activites as $key => $activity)
                                     <tr>
                                         <td>{{$activity->updated_at}}</td>
                                         <td>{{$activity->user}}</td>
                                         <td>{{$activity->description}}</td>
                                         <td>{{$activity->status_old}} --> {{$activity->status_new}}</td>
+                                        <td>
+                                            @if(!empty($activity->comment))
+                                                <div class="card-header collapsed" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true"><span class="accicon"><i class="fas fa-angle-down rotate-icon"></i></span></div>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr class="collapse" id="collapse{{$key}}">
+                                        <td colspan="5">
+                                            <b>Комментарий: </b>{{$activity->comment}}
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -128,5 +139,13 @@
 
         </div><!-- /.container-fluid -->
     </section>
+
+    <div class="modal fade" id="table-comment-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
 
 @endsection

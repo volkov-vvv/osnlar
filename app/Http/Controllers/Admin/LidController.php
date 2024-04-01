@@ -72,8 +72,10 @@ class lidController extends Controller
             $activitesStatusNew = $statuses->where('id',  $activitiesStatuses['status_id'])->first();
             $item->status_old = $activitesStatusOld->title;
             $item->status_new = $activitesStatusNew->title;
+            if(isset($activitiesStatuses['comment']))  $item->comment = $activitiesStatuses['comment']; else $item->comment = '';
             $item->user = User::findOrFail($item->causer_id)->name;
         });
+        dump($activites);
 
         return view('admin.lid.show', compact('lid','courses','statuses', 'activites'));
     }
@@ -102,7 +104,7 @@ class lidController extends Controller
         $data = $request->validated();
         $oldStatus = $lid->status_id;
         $lid->update($data);
-        activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id']])->log('Изменение статуса');
+        activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])->log('Изменение статуса');
         return redirect()->route('lid.show', compact('lid'));
     }
 

@@ -32,6 +32,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- Daterange picker -->
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
+
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -133,6 +138,7 @@
 
 <script src="https://kit.fontawesome.com/068a35c10e.js" crossorigin="anonymous"></script>
 
+
 <script>
     $(document).ready(function() {
         $('#summernote').summernote(
@@ -181,6 +187,17 @@
 
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+
+        $('#lid-edit-submit').click(function() {
+            $('#comment-modal').modal('show');
+            return false;
+        });
+
+        $('#comment-submit').click(function(){
+            var commitText=$('textarea[name=comment-text]').val();
+            $('#comment').val(commitText);
+            $('#lid-edit-submit').parents('form:first').submit();
         });
     });
 
