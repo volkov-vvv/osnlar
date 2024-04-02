@@ -33,6 +33,7 @@
                                     <thead>
                                     <tr>
                                         <th>№</th>
+                                        <th>Ответственный</th>
                                         <th>Курс</th>
                                         <th>Фамилия</th>
                                         <th>Имя</th>
@@ -47,6 +48,11 @@
                                     @foreach($lids as $lid)
                                         <tr>
                                             <td>{{$lid->id}}</td>
+                                            <td>
+                                                @foreach($users as $user)
+                                                    {{ $user->id == $lid->responsible_id ? $user->name : '' }}
+                                                @endforeach
+                                            </td>
                                             <td>
                                                 @foreach($courses as $course)
                                                     {{ $course->id == $lid->course_id ? $course->title : '' }}
