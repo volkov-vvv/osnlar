@@ -88,12 +88,12 @@
                                     <th>Что изменилось</th>
                                     <th>Изменение</th>
                                 </tr>
-                                @forelse ($activites as $activity)
+                                @forelse ($activites as $key => $activity)
                                     <tr>
                                         <td>{{$activity->updated_at}}</td>
                                         <td>{{$activity->user}}</td>
                                         <td>{{$activity->description}}</td>
-                                        <td>{{$activity->status_old}} --> {{$activity->status_new}}</td>
+                                        <td>{{$activity->status_old}} <i class="fa-solid fa-arrow-right"></i> {{$activity->status_new}}</td>
                                         <td>
                                             @if(!empty($activity->comment))
                                                 <div class="card-header collapsed" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true"><span class="accicon"><i class="fas fa-angle-down rotate-icon"></i></span></div>
@@ -104,7 +104,6 @@
                                         <td colspan="5">
                                             <b>Комментарий: </b>{{$activity->comment}}
                                         </td>
-                                        <td>{{$activity->status_old}}  <i class="fa-solid fa-arrow-right"></i>  {{$activity->status_new}}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -122,7 +121,7 @@
             <div class="row">
 
                                     <div class="col-1">
-                                        <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">
+                                        <form method="post" action="{{route('lid.destroy', $lid->id)}}">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger float-end" type="submit" >Удалить</button>
@@ -130,8 +129,8 @@
                                     </div>
                 <div class="col-2">
                     <a class="btn btn-outline-primary mr-2"
-                       href="{{route('admin.lid.edit', $lid->id)}}">Редактировать</a>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.lid.index')}}">Назад</a>
+                       href="{{route('lid.edit', $lid->id)}}">Редактировать</a>
+                    <a class="btn btn-outline-secondary" href="{{route('lid.index')}}">Назад</a>
                 </div>
 
 

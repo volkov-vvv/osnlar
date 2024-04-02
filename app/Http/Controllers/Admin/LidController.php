@@ -79,7 +79,6 @@ class lidController extends Controller
             if(isset($activitiesStatuses['comment']))  $item->comment = $activitiesStatuses['comment']; else $item->comment = '';
             $item->user = User::findOrFail($item->causer_id)->name;
         });
-        dump($activites);
 
         return view('admin.lid.show', compact('lid','courses','statuses', 'activites'));
     }
