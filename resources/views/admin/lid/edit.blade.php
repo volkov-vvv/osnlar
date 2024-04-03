@@ -42,6 +42,19 @@
                         @enderror
                     </div>
                     <div class="mb-3 form-group">
+                        <label>Ответственный</label>
+                        <select name="responsible_id" class="form-control">
+                            @foreach($users as $user)
+                                <option value="{{$user->id}}"
+                                    {{ $user->id == $lid->responsible_id ? ' selected' : '' }}
+                                >{{$user->name}}</option>
+                            @endforeach
+                        </select>
+                        @error('responsible_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3 form-group">
                         <label>Статус</label>
                         <select name="status_id" class="form-control">
                             @foreach($statuses as $status)

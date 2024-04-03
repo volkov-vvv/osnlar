@@ -28,6 +28,7 @@ class UpdateRequest extends FormRequest
             'firstname' => '',
             'email' => '',
             'status_id' => 'required|string',
+            'responsible_id' => '',
         ];
     }
 }
