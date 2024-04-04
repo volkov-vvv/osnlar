@@ -28,7 +28,7 @@ class lidController extends Controller
         $courses = Course::all();
         $lids = Lid::all();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.index', compact('lids','courses','statuses'));
+        return view('admin.lid.index', compact('lids','courses','statuses','users'));
     }
 
     /**
@@ -94,7 +94,7 @@ class lidController extends Controller
     {
         $statuses = Status::all();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.edit', compact('lid','statuses'));
+        return view('admin.lid.edit', compact('lid','statuses','users'));
     }
 
     /**
