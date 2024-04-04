@@ -31,11 +31,7 @@ Route::group(['namespace' => 'Archive', 'prefix' => 'archive'],function (){
     Route::get('/{archive}', 'ShowController')->name('archive.show');
 });
 
-Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
-    Route::get('/create', 'CreateController')->name('lid.create');
-    Route::post('/', 'StoreController')->name('lid.store');
-    Route::get('/thank', 'IndexController')->name('lid.index');
-});
+
 
 Auth::routes();
 
@@ -123,6 +119,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 
 });
 
+
+
 Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'cc']],function (){
     Route::group(['namespace' => 'Main', 'prefix' => 'main'],function (){
         Route::get('/', 'IndexController')->name('cc.main.index');
@@ -145,4 +143,11 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::patch('/{lid}', 'UpdateController')->name('cc.lid.update');
         Route::delete('/{lid}', 'DeleteController')->name('cc.lid.delete');
     });
+});
+
+
+Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
+    Route::get('/create', 'CreateController')->name('lid.create');
+    Route::post('/', 'StoreController')->name('lid.store');
+    Route::get('/thank', 'IndexController')->name('lid.index');
 });
