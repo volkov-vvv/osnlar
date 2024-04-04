@@ -80,9 +80,9 @@
                                             </td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
-                                                <a href="{{route('lid.show', $lid->id)}}"><i
+                                                <a href="{{route('admin.lid.show', $lid->id)}}"><i
                                                         class="far fa-eye"></i></a> &nbsp; &nbsp;
-                                                <a href="{{route('lid.edit', $lid->id)}}" class="text-success"><i
+                                                <a href="{{route('admin.lid.edit', $lid->id)}}" class="text-success"><i
                                                         class="fas fa-pen"></i></a>
                                                 {{--                                                <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">--}}
                                                 {{--                                                    @csrf--}}

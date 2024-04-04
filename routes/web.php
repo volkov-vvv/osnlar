@@ -109,7 +109,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::delete('/{region}', 'DeleteController')->name('admin.region.delete');
     });
 
-    Route::resource('lid', LidController::class);
+    Route::group(['as' => 'admin.'], function() {
+        Route::resource('lid', LidController::class);
+    });
 
     Route::group(['namespace' => 'Status', 'prefix' => 'status'],function (){
         Route::get('/', 'IndexController')->name('admin.status.index');

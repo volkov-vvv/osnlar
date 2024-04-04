@@ -110,7 +110,7 @@ class lidController extends Controller
         $oldStatus = $lid->status_id;
         $lid->update($data);
         activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])->log('Изменение статуса');
-        return redirect()->route('lid.show', compact('lid'));
+        return redirect()->route('admin.lid.show', compact('lid'));
     }
 
     /**
@@ -122,6 +122,6 @@ class lidController extends Controller
     public function destroy(Lid $lid)
     {
         $lid->delete();
-        return redirect()->route('lid.index');
+        return redirect()->route('admin.lid.index');
     }
 }
