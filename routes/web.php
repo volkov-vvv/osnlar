@@ -155,3 +155,14 @@ Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
     Route::post('/', 'StoreController')->name('lid.store');
     Route::get('/thank', 'IndexController')->name('lid.index');
 });
+
+Route::get('send-mail', function () {
+
+    $details = [
+        'name' => 'Mitin',
+    ];
+
+    \Mail::to('mitin_a@mail.ru')->send(new \App\Mail\SendEmail($details));
+
+    dd("Email is Sent.");
+});
