@@ -36,11 +36,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.beget.com'),
-            'port' => env('MAIL_PORT', 25),
+            'host' => env('MAIL_HOST', 'smtp.mail.ru'),
+            'port' => env('MAIL_PORT', 465),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('cc@osnovanie.info'),
-            'password' => env('&O6xMblX'),
+            'username' => env('mitin_a@mail.ru'),
+            'password' => env('MzsJRnvgBvfPR5MFLUqv'),
             'timeout' => null,
             'auth_mode' => null,
         ],
