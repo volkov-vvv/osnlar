@@ -13,6 +13,8 @@ class StoreController extends Controller
     {
         $data = $request->validated();
         Lid::firstOrCreate($data);
+//        dd($data['email']);
+        \Mail::to($data['email'])->send(new \App\Mail\SendEmail($data));
 
         return redirect()->route('lid.index');
 
