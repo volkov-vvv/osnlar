@@ -158,7 +158,9 @@ Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
 
 Route::get('send-mail', function () {
 
-    $details->name = 'Mitin';
+    $details = [
+        'name' => 'Mitin',
+    ];
 
     \Mail::to('mitin_a@mail.ru')->send(new \App\Mail\SendEmail($details));
 
