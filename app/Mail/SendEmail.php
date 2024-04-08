@@ -30,7 +30,7 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('noreplay@volkovm3.beget.tech')
+        return $this->from('cc@osnovanie.info')
             ->view('mails.template', ['data' => $this->data]);
     }
 }
