@@ -162,7 +162,7 @@ Route::get('send-mail', function () {
         'name' => 'Mitin',
     ];
 
-    \Mail::to('mitin_a@mail.ru')->send(new \App\Mail\SendEmail($details));
+    \Mail::to('mitin2000@yandex.ru.ru')->send(new \App\Mail\SendEmail($details));
 
     dd("Email is Sent.");
 });
