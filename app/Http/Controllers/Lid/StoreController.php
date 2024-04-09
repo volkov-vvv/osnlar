@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Lid\StoreRequest;
 use App\Models\Lid;
 use Illuminate\Http\Request;
+use App\Mail;
 
 class StoreController extends Controller
 {
@@ -13,8 +14,11 @@ class StoreController extends Controller
     {
         $data = $request->validated();
         Lid::firstOrCreate($data);
-//        dd($data['email']);
-        \Mail::to($data['email'])->send(new \App\Mail\SendEmail($data));
+
+        $mailData = collect($data);
+        $mailData->subject = 'Ваша заявка на обучение принята';
+        $mailData->template = 'mails.template';
+        \Mail::to($data['email'])->send(new SendEmail($mailData));
 
         return redirect()->route('lid.index');
 

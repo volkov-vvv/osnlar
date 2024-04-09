@@ -30,7 +30,7 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('cc@osnovanie.info')->subject('Ваша заявка на обучение принята')
-            ->view('mails.template', ['data' => $this->data]);
+        return $this->from('cc@osnovanie.info')->subject($this->data->subject)
+            ->view($this->data->template, ['data' => $this->data]);
     }
 }
