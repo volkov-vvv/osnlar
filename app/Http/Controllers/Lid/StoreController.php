@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Lid\StoreRequest;
 use App\Models\Lid;
 use Illuminate\Http\Request;
-use App\Mail;
+use App\Mail\SendEmail;
 
 class StoreController extends Controller
 {
