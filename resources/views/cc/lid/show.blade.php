@@ -41,6 +41,10 @@
                                     <td>{{$lid->id}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Время первой реакции</td>
+                                    <td>{{$activites->interval}}</td>
+                                </tr>
+                                <tr>
                                     <td>Дата рождения</td>
                                     <td>{{$lid->data}}</td>
                                 </tr>

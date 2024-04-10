@@ -138,6 +138,7 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::patch('/{status}', 'UpdateController')->name('cc.status.update');
         Route::delete('/{status}', 'DeleteController')->name('cc.status.delete');
     });
+    /*
     Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
         Route::get('/', 'IndexController')->name('cc.lid.index');
         Route::get('/create', 'CreateController')->name('cc.lid.create');
@@ -147,6 +148,10 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::patch('/{lid}', 'UpdateController')->name('cc.lid.update');
         Route::delete('/{lid}', 'DeleteController')->name('cc.lid.delete');
     });
+    */
+    Route::group(['as' => 'cc.'], function() {
+        Route::resource('lid', LidController::class);
+    });
 });
 
 
@@ -154,15 +159,4 @@ Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
     Route::get('/create', 'CreateController')->name('lid.create');
     Route::post('/', 'StoreController')->name('lid.store');
     Route::get('/thank', 'IndexController')->name('lid.index');
-});
-
-Route::get('send-mail', function () {
-
-    $details = [
-        'name' => 'Mitin',
-    ];
-
-    \Mail::to('mitin2000@yandex.ru')->send(new \App\Mail\SendEmail($details));
-
-    dd("Email is Sent.");
 });

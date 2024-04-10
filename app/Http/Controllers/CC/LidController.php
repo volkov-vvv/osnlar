@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\CC;
 
 use App\Http\Controllers\Controller;
-
-use App\Http\Requests\Admin\Lid\StoreRequest;
-use App\Http\Requests\Admin\Lid\UpdateRequest;
+use App\Http\Requests\CC\Lid\StoreRequest;
+use App\Http\Requests\CC\Lid\UpdateRequest;
 use App\Models\Category;
-use App\Models\Region;
 use App\Models\Course;
 use App\Models\Lid;
+use App\Models\Region;
 use App\Models\Status;
-use Spatie\Activitylog\Models\Activity;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
-
-class lidController extends Controller
+class LidController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,7 +27,7 @@ class lidController extends Controller
         $courses = Course::all();
         $lids = Lid::all();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.index', compact('lids','courses','statuses','users'));
+        return view('cc.lid.index', compact('lids','courses','statuses','users'));
     }
 
     /**
@@ -38,7 +37,7 @@ class lidController extends Controller
      */
     public function create()
     {
-        return view('admin.lid.create');
+        return view('cc.lid.create');
     }
 
     /**
@@ -49,17 +48,15 @@ class lidController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        dd('store');
         $data = $request->validated();
         Lid::firstOrCreate($data);
 
-        return redirect()->route('admin.lid.index');
+        return redirect()->route('cc.lid.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show(Lid $lid)
@@ -77,7 +74,6 @@ class lidController extends Controller
             $activitesStatusNew = $statuses->where('id',  $activitiesStatuses['status_id'])->first();
             $item->status_old = $activitesStatusOld->title;
             $item->status_new = $activitesStatusNew->title;
-            if(isset($activitiesStatuses['comment']))  $item->comment = $activitiesStatuses['comment']; else $item->comment = '';
             $item->user = User::findOrFail($item->causer_id)->name;
         });
 
@@ -94,20 +90,20 @@ class lidController extends Controller
             $activites->interval = '---';
         }
 
-        return view('admin.lid.show', compact('lid','courses','statuses', 'activites'));
+
+        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Lid $lid)
     {
         $statuses = Status::all();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.edit', compact('lid','statuses','users'));
+        return view('cc.lid.edit', compact('lid','statuses','users'));
     }
 
     /**
@@ -120,21 +116,25 @@ class lidController extends Controller
     public function update(UpdateRequest $request, Lid $lid)
     {
         $data = $request->validated();
+//        dump($request);
+//        dd($lid);
         $oldStatus = $lid->status_id;
         $lid->update($data);
-        activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])->log('Изменение статуса');
-        return redirect()->route('admin.lid.show', compact('lid'));
+        $actionDescription = 'Изменение информации';
+        if ($oldStatus != $data['status_id']) $actionDescription = 'Изменение статуса';
+        activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])->log($actionDescription);
+
+        return redirect()->route('cc.lid.show', compact('lid'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Lid $lid)
     {
         $lid->delete();
-        return redirect()->route('admin.lid.index');
+        return redirect()->route('cc.lid.index');
     }
 }
