@@ -41,6 +41,29 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>
+                            О нас
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <a href="{{route('admin.about.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Основные сведения</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('admin.document.index')}}" class="nav-link">
+                                <i class="fa-regular fa-folder-open nav-icon"></i>
+                                <p>Документы</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.course.index')}}" class="nav-link">
                         <i class="nav-icon fa-solid fa-book-open"></i>
                         <p>

@@ -31,10 +31,8 @@ Route::group(['namespace' => 'Archive', 'prefix' => 'archive'],function (){
     Route::get('/{archive}', 'ShowController')->name('archive.show');
 });
 
-Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
-    Route::get('/create', 'CreateController')->name('lid.create');
-    Route::post('/', 'StoreController')->name('lid.store');
-    Route::get('/thank', 'IndexController')->name('lid.index');
+Route::group(['namespace' => 'About', 'prefix' => 'about'],function (){
+    Route::get('/', 'IndexController')->name('about.index');
 });
 
 Auth::routes();
@@ -53,6 +51,24 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::get('/{user}/edit', 'EditController')->name('admin.user.edit');
         Route::patch('/{user}', 'UpdateController')->name('admin.user.update');
         Route::delete('/{user}', 'DeleteController')->name('admin.user.delete');
+    });
+    Route::group(['namespace' => 'About', 'prefix' => 'about'],function (){
+        Route::get('/', 'IndexController')->name('admin.about.index');
+        Route::get('/create', 'CreateController')->name('admin.about.create');
+        Route::post('/', 'StoreController')->name('admin.about.store');
+        Route::get('/{about}', 'ShowController')->name('admin.about.show');
+        Route::get('/{about}/edit', 'EditController')->name('admin.about.edit');
+        Route::patch('/{about}', 'UpdateController')->name('admin.about.update');
+        Route::delete('/{about}', 'DeleteController')->name('admin.about.delete');
+    });
+    Route::group(['namespace' => 'Document', 'prefix' => 'document'],function (){
+        Route::get('/', 'IndexController')->name('admin.document.index');
+        Route::get('/create', 'CreateController')->name('admin.document.create');
+        Route::post('/', 'StoreController')->name('admin.document.store');
+        Route::get('/{document}', 'ShowController')->name('admin.document.show');
+        Route::get('/{document}/edit', 'EditController')->name('admin.document.edit');
+        Route::patch('/{document}', 'UpdateController')->name('admin.document.update');
+        Route::delete('/{document}', 'DeleteController')->name('admin.document.delete');
     });
     Route::group(['namespace' => 'Course', 'prefix' => 'course'],function (){
         Route::get('/', 'IndexController')->name('admin.course.index');
