@@ -47,6 +47,12 @@
                 </div>
                 @endforeach
             </div>
+
+            <div class="row mt-5">
+                <div class="carousel-content-btns mx-auto">
+                    <a href="{{route('course.index')}}" class="btn btn-primary">Все актуальные курсы</a>
+                </div>
+            </div>
         </div>
     </section>
     <section class="edica-landing-section edica-landing-testimonials" data-aos="fade-up">
