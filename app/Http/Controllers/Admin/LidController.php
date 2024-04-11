@@ -82,7 +82,7 @@ class lidController extends Controller
         });
 
         // Определение времени первой реакции
-        $firstActivity = Activity::all()->where('subject_id', '=', $lid['id'])->first();
+        $firstActivity = Activity::all()->where('subject_id', '=', $lid['id'])->where('description', '=', 'Изменение статуса')->first();
         if($firstActivity){
             $interval = date_diff($firstActivity->created_at, $lid->created_at);
             $formatStr = '%hч %iмин';
@@ -122,7 +122,10 @@ class lidController extends Controller
         $data = $request->validated();
         $oldStatus = $lid->status_id;
         $lid->update($data);
-        activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])->log('Изменение статуса');
+        $actionDescription = 'Изменение информации';
+        if ($oldStatus != $data['status_id']) $actionDescription = 'Изменение статуса';
+        activity()->performedOn($lid)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])->log($actionDescription);
+
         return redirect()->route('admin.lid.show', compact('lid'));
     }
 

@@ -78,7 +78,7 @@ class LidController extends Controller
         });
 
         // Определение времени первой реакции
-        $firstActivity = Activity::all()->where('subject_id', '=', $lid['id'])->first();
+        $firstActivity = Activity::all()->where('subject_id', '=', $lid['id'])->where('description', '=', 'Изменение статуса')->first();
         if($firstActivity){
             $interval = date_diff($firstActivity->created_at, $lid->created_at);
             $formatStr = '%hч %iмин';
