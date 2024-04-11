@@ -141,7 +141,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#summernote').summernote(
+        $('.summernote').summernote(
             {
                 toolbar: [
                     // [groupName, [list of button]]
