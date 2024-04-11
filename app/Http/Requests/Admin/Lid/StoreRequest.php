@@ -37,6 +37,11 @@ class StoreRequest extends FormRequest
             'agent_id' => 'required|string',
             'politic' => 'required',
             'in_project' => '',
+            'utm_source' => '',
+            'utm_medium' => '',
+            'utm_campaign' => '',
+            'utm_term' => '',
+            'utm_content' => '',
         ];
     }
 }
