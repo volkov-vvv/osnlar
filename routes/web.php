@@ -43,6 +43,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     Route::group(['namespace' => 'Main'],function (){
         Route::get('/', 'IndexController')->name('admin.main.index');
     });
+    Route::group(['namespace' => 'Report', 'prefix' => 'report'],function (){
+        Route::get('/', 'IndexController')->name('admin.report.index');
+    });
     Route::group(['namespace' => 'User', 'prefix' => 'user'],function (){
         Route::get('/', 'IndexController')->name('admin.user.index');
         Route::get('/create', 'CreateController')->name('admin.user.create');
