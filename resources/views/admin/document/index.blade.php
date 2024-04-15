@@ -42,7 +42,7 @@
                                 @foreach($documents as $document)
                                     <tr>
                                         <td>{{$document->id}}</td>
-                                        <td><a href="{{url('storage/' . $document->file)}}">{{$document->title}}</a></td>
+                                        <td><a href="{{url('storage/' . $document->file)}}" target="_blank">{{$document->title}}</a></td>
                                         <td>{{$document->created_at}}</td>
                                         <td>{{$document->updated_at}}</td>
                                         <td><a  href="{{route('admin.document.show', $document->id)}}"><i class="far fa-eye"></i></a></td>

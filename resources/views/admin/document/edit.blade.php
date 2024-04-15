@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div  class="col">
-                <form action="{{route('admin.document.update', $document->id)}}" method="post">
+                <form action="{{route('admin.document.update', $document->id)}}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
