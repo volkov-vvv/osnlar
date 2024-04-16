@@ -34,7 +34,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Описание курса</label>
-                        <textarea id="summernote" name="description">
+                        <textarea class="summernote" name="description">
                             {{old('description')}}
                         </textarea>
                         @error('description')
