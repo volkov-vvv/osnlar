@@ -13,11 +13,13 @@ class StoreController extends Controller
     public function __invoke(StoreRequest $request)
     {
         $data = $request->validated();
+        dump($data);
 
-        $data['file'] = Storage::disk('public')->put('/documents', $data['file']);
+//        $data['file'] = Storage::disk('public')->putFile('/documents/'.$data['file'], $request->file('file'));
+        $data['file'] = Storage::disk('public')->putFile('/documents/', $data['file']);
 
         Document::firstOrCreate($data);
-
+dd('!!!');
         return redirect()->route('admin.document.index');
 
     }

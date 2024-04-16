@@ -23,6 +23,9 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
 
+    <!-- Phone input -->
+    <link rel="stylesheet" href="{{ asset('css/intlTelInput.min.css') }}">
+
 </head>
 <body>
 
@@ -61,6 +64,12 @@
 <script src="{{ asset('plugins/moment/moment.min.js')  }} "></script>
 <script src="{{ asset('plugins/inputmask/jquery.inputmask.min.js')}} "></script>
 
+<!-- Phone input -->
+<script src="{{ asset('js/intlTelInput/intlTelInput.min.js')}} "></script>
+<script src="{{ asset('js/intlTelInput/data.min.js')}} "></script>
+
+
+
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button)
@@ -74,6 +83,26 @@
 <script>
     $(document).ready(function() {
         $('[data-mask]').inputmask();
+
+        var input = document.querySelector("#phone");
+        const iti = window.intlTelInput(input, {
+            strictMode: true,
+            showSelectedDialCode: true,
+            nationalMode: false,
+            initialCountry:"ru",
+            onlyCountries: ["ru", "by"],
+            i18n: {
+                // Country names
+                ru: "Россия",
+                by: "Беларусь",
+            },
+            hiddenInput: () => ({ phone: "phone"}),
+            utilsScript: "{{ asset('js/intlTelInput/utils.js')}}?1712939239769"
+        });
+
+        input.addEventListener('countrychange', () => {
+            $('#phone_prefix').val(iti.getSelectedCountryData().dialCode);
+        });
     });
     $(function () {
         //Initialize Select2 Elements

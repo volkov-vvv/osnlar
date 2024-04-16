@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div  class="col-4">
-                <form action="{{route('admin.document.store')}}" method="post">
+                <form action="{{route('admin.document.store')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label>Название документа</label>

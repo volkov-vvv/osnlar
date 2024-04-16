@@ -83,12 +83,11 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                 </div>
-                                <input name="phone" type="tel" class="form-control"
-                                       data-inputmask="&quot;mask&quot;: &quot;+7 (999) 999-9999&quot;"
-                                       data-mask="data-mask"
-                                       inputmode="text"
+                                <input id="phone" type="tel" class="form-control"
+
                                        value="{{old('phone')}}"
                                 >
+                                <input type="hidden" name="phone_prefix" id="phone_prefix" value="7">
                             </div>
                         </div>
                     </div>

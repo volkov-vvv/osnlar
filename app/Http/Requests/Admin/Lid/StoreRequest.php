@@ -28,6 +28,7 @@ class StoreRequest extends FormRequest
             'firstname' => 'required|string',
             'middlename' => '',
             'data' => 'required|string',
+            'phone_prefix' => 'required|string',
             'phone' => 'required|string',
             'email' => 'required|string|email|unique:lids',
             'course_id' => 'required|string',
@@ -38,5 +39,12 @@ class StoreRequest extends FormRequest
             'politic' => 'required',
             'in_project' => '',
         ];
+    }
+
+    protected function prepareForValidation() {
+        $this->merge([
+            // Удаляем из номера телефона код страны
+            'phone' => explode('+' . $this->phone_prefix, $this->phone)[1],
+        ]);
     }
 }
