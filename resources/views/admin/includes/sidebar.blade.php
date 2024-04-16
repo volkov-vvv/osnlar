@@ -127,6 +127,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('admin.report.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-chart-line"></i>
+                        <p>
+                            Отчеты
+                        </p>
+                    </a>
+                </li>
             </ul>
 
         </nav>

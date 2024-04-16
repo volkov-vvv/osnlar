@@ -202,6 +202,18 @@
 
             </div>
 
+            @if(isset($_GET['utm_source']))
+            <div class="mb-3">
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="utm_source" value="{{$_GET['utm_source']}}">
+                        <input type="hidden" name="utm_medium" value="{{$_GET['utm_medium']}}">
+                        <input type="hidden" name="utm_campaign" value="{{$_GET['utm_campaign']}}">
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <button type="submit" class="btn btn-primary">Отправить</button>
             <a class="btn btn-outline-secondary" href="{{route('main.index')}}">Назад</a>
         </form>

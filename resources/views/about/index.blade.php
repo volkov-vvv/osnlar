@@ -55,9 +55,24 @@
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-profile" role="tabpanel"
                          aria-labelledby="v-pills-profile-tab">
                         <h4 class="font-italic mb-4">Документы</h4>
-                        <p class="font-italic text-muted mb-2">
-                            ----
-                        </p>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">№</th>
+                                    <th scope="col">Название документа</th>
+                                    <th scope="col">Дата обновления</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($documents as $document)
+                                <tr>
+                                    <th scope="row">{{$document->id}}</th>
+                                    <td><a href="{{url('storage/' . $document->file)}}" target="_blank">{{$document->title}}</a></td>
+                                    <td>{{$document->updated_at}}</td>
+                                </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                     </div>
 
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-messages" role="tabpanel"
