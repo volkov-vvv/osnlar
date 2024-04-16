@@ -61,7 +61,7 @@
                                             <td>{{$lid->lastname}}</td>
                                             <td>{{$lid->firstname}}</td>
                                             <td>{{$lid->email}}</td>
-                                            <td>{{$lid->phone}}</td>
+                                            <td>{{$lid->phone_prefix == '7' ? '8'.$lid->phone : $lid->phone_prefix.$lid->phone}}</td>
                                             <td>
                                                 <span class="badge rounded-pill
                                                 @switch($lid->status_id)
