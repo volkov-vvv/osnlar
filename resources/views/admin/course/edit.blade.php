@@ -100,24 +100,26 @@
                         @enderror
                     </div>
 
-{{--                    <div class="mb-3">--}}
-{{--                    <div class="form-group">--}}
-{{--                        @if(empty($course->is_published) && $course->is_published == 0)--}}
-{{--                            <div class="custom-control custom-switch">--}}
-{{--                                <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch1" value="1">--}}
-{{--                                <label class="custom-control-label" for="customSwitch1">Публикация</label>--}}
-{{--                            </div>--}}
-{{--                        @else--}}
-{{--                            <div class="custom-control custom-switch">--}}
-{{--                                <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch2" value="1" checked>--}}
-{{--                                <label class="custom-control-label" for="customSwitch2">Публикация</label>--}}
-{{--                            </div>--}}
-{{--                        @endif--}}
-{{--                        @error('is_published')--}}
-{{--                        <div class="text-danger">{{$message}}</div>--}}
-{{--                        @enderror--}}
-{{--                    </div>--}}
-{{--                    </div>--}}
+                    <div class="mb-3 form-group">
+                        <label for="exampleInputFile">Обновить УТП</label>
+                        <div class="mb-2">
+                            <a href="{{ url('storage/' . $course->utp) }}">
+                                УТП
+                            </a>
+                        </div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="utp">
+                                <label class="custom-file-label">Выберите файл</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">Загрузить</span>
+                            </div>
+                        </div>
+                        @error('image')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
 
                     <div class="mb-3">
                         <div class="form-group">

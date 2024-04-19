@@ -3,7 +3,7 @@
 
     <main class="blog-post">
         <div class="container">
-            <h1 class="edica-page-title" data-aos="fade-up">{{$course->title}}</h1>
+            <h1 class="edica-page-title" data-aos="fade-up" style="color: #094ca1">{{$course->title}}</h1>
             <p class="edica-blog-post-meta" data-aos="fade-up" data-aos-delay="200">Эксперты курса:
                 @foreach($authors as $author)
                     {{ is_array($course->authors->pluck('id')->toArray()) && in_array($author->id, $course->authors->pluck('id')->toArray()) ? $author->name . ',' : ''  }}
@@ -17,6 +17,26 @@
                 <div class="row">
                     <div class="col-lg-9 mx-auto" data-aos="fade-up">
                        <p>{!! $course->description !!}</p>
+                    </div>
+                </div>
+                <div class="row pb-5">
+                    <div class="col-lg-9 mx-auto" data-aos="fade-up">
+                        <div class="alert alert-secondary" role="alert">
+                            <p class="text-center" style="margin-bottom: 0;">
+                            <a href="{{ url('storage/' . $course->utp) }}" style="color: darkblue"  target="_blank">
+                                Учебно-тематический план</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="blog-post-featured-img" data-aos="fade-up">
+                        <img src="{{asset('assets/images/graf_edu.png')}}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="blog-post-featured-img" data-aos="fade-up">
+                        <img src="{{asset('assets/images/tools.png')}}">
                     </div>
                 </div>
 
