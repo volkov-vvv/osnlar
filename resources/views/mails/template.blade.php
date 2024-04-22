@@ -6,3 +6,5 @@
     Центр повышения квалификации и профессиональной подготовки "Основание".</p>
 <p>https://osnovanie.info</p>
 <p>https://t.me/osnovanie_study</p>
+<img src="{{asset('assets/images/logo-main.png')}}"
+     width="260" alt="Основание">

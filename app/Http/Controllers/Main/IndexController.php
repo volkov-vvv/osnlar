@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $randomCourses = Course::get()->random(3);
+        $randomCourses = Course::get()->random(6);
         return view('main.index', compact('randomCourses'));
     }
 }

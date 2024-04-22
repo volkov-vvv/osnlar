@@ -27,6 +27,8 @@ class UpdateRequest extends FormRequest
             'lastname' => 'required|string',
             'firstname' => 'required|string',
             'email' => '',
+            'category_id' => '',
+            'region_id' => '',
             'status_id' => 'required|string',
             'responsible_id' => '',
         ];

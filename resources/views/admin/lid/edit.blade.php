@@ -16,10 +16,17 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
-            <div  class="col">
+            <div  class="col-xl-4">
                 <form action="{{route('admin.lid.update', $lid->id)}}" method="post">
                     @csrf
                     @method('PATCH')
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input name="email" type="email" class="form-control" value="{{$lid->email}}" disabled>
+                        @error('email')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label>Фамилия</label>
                         <input name="lastname" type="text" class="form-control" aria-describedby="Название" value="{{$lid->lastname}}">
@@ -35,15 +42,35 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label>Email</label>
-                        <input name="email" type="email" class="form-control" value="{{$lid->email}}" disabled>
-                        @error('email')
+                        <label>Категория</label>
+                        <select name="category_id" class="form-control select2">
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}"
+                                    {{ $category->id == $lid->category_id ? ' selected' : '' }}
+                                >{{$category->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="mb-3 form-group">
+                    <div class="mb-3">
+                        <label>Регион</label>
+                        <select name="region_id" class="form-control select2">
+                            @foreach($regions as $region)
+                                <option value="{{$region->id}}"
+                                    {{ $region->id == $lid->region_id ? ' selected' : '' }}
+                                >{{$region->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('region_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 form-group alert alert-secondary">
                         <label>Ответственный</label>
-                        <select name="responsible_id" class="form-control">
+                        <select name="responsible_id" class="form-control select2">
                             @foreach($users as $user)
                                 <option value="{{$user->id}}"
                                     {{ $user->id == $lid->responsible_id ? ' selected' : '' }}
@@ -54,9 +81,9 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="mb-3 form-group">
+                    <div class="mb-3 form-group alert alert-secondary">
                         <label>Статус</label>
-                        <select name="status_id" class="form-control">
+                        <select name="status_id" class="form-control select2">
                             @foreach($statuses as $status)
                                 <option value="{{$status->id}}"
                                     {{ $status->id == $lid->status_id ? ' selected' : '' }}
