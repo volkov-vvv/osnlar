@@ -3,10 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Подать заявку на обучение по проекту Содействие занятости"/>
+
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">
 
-    <title>Основание CRM</title>
+    <title>Заявка на обучение</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"

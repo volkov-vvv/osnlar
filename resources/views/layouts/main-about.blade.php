@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">
+    <meta name="description" content="Основные сведения об образовательной организации"/>
     <title>О нас</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
