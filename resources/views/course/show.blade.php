@@ -13,7 +13,7 @@
             <section class="blog-post-featured-img" data-aos="fade-up" data-aos-delay="300">
                 <img src="{{url('storage/' . $course->image) }}" alt="featured image" class="w-100">
             </section>
-            <section class="post-content">
+            <section>
                 <div class="row">
                     <div class="col-lg-9 mx-auto" data-aos="fade-up">
                        <p>{!! $course->description !!}</p>
