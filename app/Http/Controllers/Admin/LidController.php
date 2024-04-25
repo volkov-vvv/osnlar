@@ -49,7 +49,6 @@ class lidController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        dd('store');
         $data = $request->validated();
         Lid::firstOrCreate($data);
 

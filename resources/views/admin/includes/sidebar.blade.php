@@ -104,6 +104,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.link.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-link"></i>
+                        <p>
+                            Ссылки
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.agent.index')}}" class="nav-link">
                         <i class="nav-icon fa-solid fa-magnet"></i>
                         <p>

@@ -132,6 +132,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::resource('lid', LidController::class);
     });
 
+    Route::group(['as' => 'admin.'], function() {
+        Route::resource('link', LinkController::class);
+    });
+
     Route::group(['namespace' => 'Status', 'prefix' => 'status'],function (){
         Route::get('/', 'IndexController')->name('admin.status.index');
         Route::get('/create', 'CreateController')->name('admin.status.create');
