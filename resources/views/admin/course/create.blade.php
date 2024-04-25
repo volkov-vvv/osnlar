@@ -34,7 +34,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Описание курса</label>
-                        <textarea id="summernote" name="description">
+                        <textarea class="summernote" name="description">
                             {{old('description')}}
                         </textarea>
                         @error('description')
@@ -97,6 +97,23 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="mb-3 form-group">
+                        <label for="exampleInputFile">Добавить учебно-тематический план</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="utp">
+                                <label class="custom-file-label">Выберите файл</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">Загрузить</span>
+                            </div>
+                        </div>
+                        @error('image')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+
                     <div class="mb-3 mt-5">
                         <button type="submit" class="btn btn-primary">Создать</button>
                         <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>

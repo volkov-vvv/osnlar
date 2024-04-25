@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNewColumnsLids extends Migration
+class AddColumnUtpToCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddNewColumnsLids extends Migration
      */
     public function up()
     {
-        Schema::table('lids', function(Blueprint $table)
-        {
-            $table->string('phone_prefix', 10)->nullable()->after('email');
+        Schema::table('courses', function (Blueprint $table) {
+            $table->string('utp')->nullable()->after('image');
         });
     }
 
@@ -26,8 +25,8 @@ class AddNewColumnsLids extends Migration
      */
     public function down()
     {
-        Schema::table('lids', function (Blueprint $table) {
-            $table->dropColumn('phone_prefix');
+        Schema::table('courses', function (Blueprint $table) {
+            $table->dropColumn('utp');
         });
     }
 }

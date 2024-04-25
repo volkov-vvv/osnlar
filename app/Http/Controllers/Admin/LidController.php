@@ -93,7 +93,7 @@ class lidController extends Controller
             $activites->interval = '---';
         }
 
-        return view('admin.lid.show', compact('lid','courses','statuses', 'activites'));
+        return view('admin.lid.show', compact('lid','courses','statuses', 'activites','regions','categories'));
     }
 
     /**
@@ -105,8 +105,10 @@ class lidController extends Controller
     public function edit(Lid $lid)
     {
         $statuses = Status::all();
+        $regions = Region::all();
+        $categories = Category::all();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.edit', compact('lid','statuses','users'));
+        return view('admin.lid.edit', compact('lid','statuses','users','regions','categories'));
     }
 
     /**

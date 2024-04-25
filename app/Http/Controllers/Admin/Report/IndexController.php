@@ -11,6 +11,7 @@ use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
@@ -21,8 +22,9 @@ class IndexController extends Controller
         $regions = Region::all();
         $statuses = Status::all();
         $courses = Course::all();
-        $lids = Lid::all();
         $users = User::where('role', 3)->get();
+        $lids = Lid::all();
+//      $lids = Lid::where('agent_id', Auth::user()->id)->get();
         return view('admin.report.index', compact('lids','courses','statuses','users','regions','agents','categories'));
     }
 }

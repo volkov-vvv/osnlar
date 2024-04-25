@@ -102,8 +102,10 @@ class LidController extends Controller
     public function edit(Lid $lid)
     {
         $statuses = Status::all();
+        $regions = Region::all();
+        $categories = Category::all();
         $users = User::where('role', 3)->get();
-        return view('cc.lid.edit', compact('lid','statuses','users'));
+        return view('cc.lid.edit', compact('lid','statuses','users','categories','regions'));
     }
 
     /**

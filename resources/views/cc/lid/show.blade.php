@@ -18,7 +18,7 @@
             <!-- Small boxes (Stat box) -->
 
             <div class="row">
-                <div class="col-6">
+                <div class="col-xl-6">
 {{--                    <div class="alert alert-{{ $lid->status_id == 1 ? 'danger' : 'warning' }}" role="alert">--}}
 {{--                        @foreach($statuses as $status)--}}
 {{--                            {{ $status->id == $lid->status_id ? $status->title : '' }}--}}
@@ -96,7 +96,7 @@
                         <!-- /.card-body -->
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-xl-6">
                     <div class="alert"><b>История изменений</b></div>
                     <div class="card">
                         <div class="card-body table-responsive p-0">

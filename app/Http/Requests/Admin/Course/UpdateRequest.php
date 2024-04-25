@@ -28,6 +28,7 @@ class UpdateRequest extends FormRequest
             'description' => 'required|string',
             'prev_img' => 'nullable|file',
             'image' => 'nullable|file',
+            'utp' => '',
 //            'category_id' => 'required|integer|exists:categories,id',
             'author_ids' => 'nullable|array',
             'author_ids.*' => 'nullable|integer|exists:authors,id',

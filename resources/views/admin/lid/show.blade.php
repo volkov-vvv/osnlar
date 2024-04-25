@@ -18,7 +18,7 @@
             <!-- Small boxes (Stat box) -->
 
             <div class="row">
-                <div class="col-6">
+                <div class="col-xl-6">
 {{--                    <div class="alert alert-{{ $lid->status_id == 1 ? 'danger' : 'warning' }}" role="alert">--}}
 {{--                        @foreach($statuses as $status)--}}
 {{--                            {{ $status->id == $lid->status_id ? $status->title : '' }}--}}
@@ -66,6 +66,22 @@
                                     <td>{{$lid->phone}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Регион</td>
+                                    <td>
+                                        @foreach($regions as $region)
+                                            {{ $region->id == $lid->region_id ? $region->title : '' }}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Категория</td>
+                                    <td>
+                                        @foreach($categories as $category)
+                                            {{ $category->id == $lid->category_id ? $category->title : '' }}
+                                        @endforeach
+                                        {{$lid->category_id}}</td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$lid->created_at}}</td>
                                 </tr>
@@ -81,7 +97,7 @@
                     </div>
                 </div>
 
-                <div class="col-6">
+                <div class="col-xl-6">
                     <div class="alert"><b>История изменений</b></div>
                     <div class="card">
                         <div class="card-body table-responsive p-0">

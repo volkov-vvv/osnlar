@@ -19,6 +19,7 @@ class CourseService
 
             $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
             $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+            $data['utp'] = Storage::disk('public')->put('/utps', $data['utp']);
 
             $course = Course::firstOrCreate($data);
             if (isset($authorIds)){
@@ -47,6 +48,9 @@ class CourseService
             }
             if (isset($data['image'])){
                 $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+            }
+            if (isset($data['utp'])){
+                $data['utp'] = Storage::disk('public')->put('/utps', $data['utp']);
             }
 
             $course->update($data);

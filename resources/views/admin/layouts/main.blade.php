@@ -142,17 +142,17 @@
 <script>
     $(document).ready(function() {
         $('.summernote').summernote(
-            {
-                toolbar: [
-                    // [groupName, [list of button]]
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough', 'superscript', 'subscript']],
-                    ['fontsize', ['fontsize']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height']]
-                ]
-            }
+            // {
+            //     toolbar: [
+            //         // [groupName, [list of button]]
+            //         ['style', ['bold', 'italic', 'underline', 'clear']],
+            //         ['font', ['strikethrough', 'superscript', 'subscript']],
+            //         ['fontsize', ['fontsize']],
+            //         ['color', ['color']],
+            //         ['para', ['ul', 'ol', 'paragraph']],
+            //         ['height', ['height']]
+            //     ]
+            // }
         );
     });
     $(function () {
@@ -162,6 +162,35 @@
     $('[data-mask]').inputmask();
     $(document).ready(function() {
         $(function () {
+
+            $("#report1").DataTable({
+                order: [[0, 'desc']],
+                columnDefs: [
+                    { targets: [ 4], visible: false }
+                ],
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                buttons: ["excel", "pdf", "colvis"],
+                // "language": {
+                //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
+                // },
+                "language": {
+                    info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    paginate: {
+                        "first": "Первая",
+                        "previous": "Предыдущая",
+                        "next": "Следующая",
+                        "last": "Последняя"
+                    },
+                    search: "Поиск:",
+                    buttons: {
+                        colvis: 'Выбрать колонки',
+                        search: 'Поиск'
+                    },
+                }
+            }).buttons().container().appendTo('#report1_wrapper .col-md-6:eq(0)');
+
             $("#example1").DataTable({
                 order: [[0, 'desc']],
                 "responsive": true,
@@ -184,10 +213,11 @@
                         colvis: 'Выбрать колонки',
                         search: 'Поиск'
                     },
-
-
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+
         });
 
         $('#lid-edit-submit').click(function() {
