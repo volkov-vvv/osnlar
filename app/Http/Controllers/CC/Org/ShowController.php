@@ -28,6 +28,7 @@ class ShowController extends Controller
             $activitesStatusNew = $statuses->where('id',  $activitiesStatuses['status_id'])->first();
             $item->status_old = $activitesStatusOld->title;
             $item->status_new = $activitesStatusNew->title;
+            if(isset($activitiesStatuses['comment']))  $item->comment = $activitiesStatuses['comment']; else $item->comment = '';
             $item->user = User::findOrFail($item->causer_id)->name;
         });
 
@@ -43,7 +44,6 @@ class ShowController extends Controller
         }else{
             $activites->interval = '---';
         }
-
         return view('cc.org.show', compact('org','courses','statuses','activites','regions'));
     }
 }
