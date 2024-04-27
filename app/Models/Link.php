@@ -16,12 +16,12 @@ class Link extends Model
 
     public function region()
     {
-        return Region::find($this->region_id);
+        return $this->belongsTo(Region::class);
     }
 
     public function course()
     {
-        return Course::find($this->course_id);
+        return $this->belongsTo(Course::class);
     }
 
 }

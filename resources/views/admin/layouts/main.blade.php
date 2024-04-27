@@ -216,6 +216,31 @@
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+            $("#link_table").DataTable({
+                order: [[0, 'desc']],
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["excel", "pdf", "colvis"],
+                // "language": {
+                //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
+                // },
+                "language": {
+                    info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    paginate: {
+                        "first": "Первая",
+                        "previous": "Предыдущая",
+                        "next": "Следующая",
+                        "last": "Последняя"
+                    },
+                    search: "Поиск:",
+                    buttons: {
+                        colvis: 'Выбрать колонки',
+                        search: 'Поиск'
+                    },
+                }
+            }).buttons().container().appendTo('#link_table_wrapper .col-md-6:eq(0)');
+
 
 
         });

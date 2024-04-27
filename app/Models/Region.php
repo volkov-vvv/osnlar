@@ -14,5 +14,9 @@ class Region extends Model
     protected $table = 'regions';
     protected $guarded = false;
 
+    public function links(){
+        return $this->hasMany(Link::class );
+    }
+
 
 }

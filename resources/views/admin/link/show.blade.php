@@ -31,11 +31,11 @@
                                 </tr>
                                 <tr>
                                     <td>Регион</td>
-                                    <td>{{$link->region()->title}}</td>
+                                    <td>{{$link->region->title}}</td>
                                 </tr>
                                 <tr>
                                     <td>Курс</td>
-                                    <td>{{$link->course()->title}}</td>
+                                    <td>{{$link->course->title}}</td>
                                 </tr>
                                 <tr>
                                     <td>Дата создания</td>

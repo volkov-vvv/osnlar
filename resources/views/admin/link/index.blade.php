@@ -27,8 +27,8 @@
                 <div class="col">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+                        <div class="card-body">
+                            <table id="link_table" class="table table-bordered table-striped hover">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -36,7 +36,7 @@
                                     <th>Регион</th>
                                     <th>Курс</th>
                                     <th>Дата создания</th>
-                                    <th colspan="3">Действия</th>
+                                    <th>Действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -44,13 +44,14 @@
                                     <tr>
                                         <td>{{$link->id}}</td>
                                         <td>{{$link->link}}</td>
-                                        <td>{{$link->region()->title}}</td>
-                                        <td>{{$link->course()->title}}</td>
+                                        <td>{{$link->region->title}}</td>
+                                        <td>{{$link->course->title}}</td>
                                         <td>{{$link->created_at}}</td>
-                                        <td><a  href="{{route('admin.link.show', $link->id)}}"><i class="far fa-eye"></i></a></td>
-                                        <td><a  href="{{route('admin.link.edit', $link->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.link.destroy', $link->id)}}">
+                                            <a  href="{{route('admin.link.show', $link->id)}}"><i class="far fa-eye"></i></a>
+                                            <a  href="{{route('admin.link.edit', $link->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
+
+                                            <form method="post" action="{{route('admin.link.destroy', $link->id)}}" class="d-inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

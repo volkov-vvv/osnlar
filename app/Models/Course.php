@@ -17,5 +17,8 @@ class Course extends Model
     public function authors(){
         return $this->belongsToMany(Author::class, 'course_authors', 'course_id', 'author_id');
     }
+    public function links(){
+        return $this->hasMany(Link::class );
+    }
 
 }
