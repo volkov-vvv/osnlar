@@ -35,6 +35,7 @@ class UpdateRequest extends FormRequest
             'agent_id' => '',
             'status_id' => '',
             'politic' => '',
+            'responsible_id' => ''
         ];
     }
 }
