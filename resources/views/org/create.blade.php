@@ -154,7 +154,7 @@
 
 
             <button type="submit" class="btn btn-primary">Отправить</button>
-            <a class="btn btn-outline-secondary" href="{{route('main.index')}}">Назад</a>
+            <a class="btn btn-outline-secondary" href="https://corporations-osnovanie.ru/">Назад</a>
         </form>
 
 
