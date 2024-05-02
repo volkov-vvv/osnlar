@@ -44,7 +44,15 @@
                     <a href="{{route('cc.lid.index')}}" class="nav-link">
                         <i class="nav-icon fa-regular fa-bell"></i>
                         <p>
-                            Заявки
+                            Заявки (слушатели)
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('cc.org.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-building-columns"></i>
+                        <p>
+                            Заявки организации
                         </p>
                     </a>
                 </li>

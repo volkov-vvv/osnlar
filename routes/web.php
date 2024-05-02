@@ -161,6 +161,13 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::patch('/{status}', 'UpdateController')->name('cc.status.update');
         Route::delete('/{status}', 'DeleteController')->name('cc.status.delete');
     });
+    Route::group(['namespace' => 'Org', 'prefix' => 'org'],function (){
+        Route::get('/', 'IndexController')->name('cc.org.index');
+        Route::get('/{org}', 'ShowController')->name('cc.org.show');
+        Route::get('/{org}/edit', 'EditController')->name('cc.org.edit');
+        Route::patch('/{org}', 'UpdateController')->name('cc.org.update');
+        Route::delete('/{org}', 'DeleteController')->name('cc.org.delete');
+    });
     /*
     Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
         Route::get('/', 'IndexController')->name('cc.lid.index');
@@ -182,4 +189,10 @@ Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
     Route::get('/create', 'CreateController')->name('lid.create');
     Route::post('/', 'StoreController')->name('lid.store');
     Route::get('/thank', 'IndexController')->name('lid.index');
+});
+
+Route::group(['namespace' => 'Org', 'prefix' => 'org'],function (){
+    Route::get('/create', 'CreateController')->name('org.create');
+    Route::post('/', 'StoreController')->name('org.store');
+    Route::get('/thank', 'IndexController')->name('org.index');
 });
