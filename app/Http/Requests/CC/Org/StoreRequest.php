@@ -31,9 +31,9 @@ class StoreRequest extends FormRequest
             'phone' => 'required|string',
             'phone_prefix' => 'required|string',
             'email' => 'required|string|email|unique:lids',
-            'course_id' => 'required|string',
-            'region_id' => 'required|string',
-            'agent_id' => 'required|string',
+            'course_id' => '',
+            'region_id' => '',
+            'agent_id' => '',
             'status_id' => '',
             'politic' => 'required',
         ];
