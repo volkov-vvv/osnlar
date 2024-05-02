@@ -56,7 +56,14 @@
                         </p>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{{route('cc.link.index')}}" class="nav-link">
+                        <i class="nav-icon fa-solid fa-link"></i>
+                        <p>
+                            Ссылки
+                        </p>
+                    </a>
+                </li>
             </ul>
 
         </nav>

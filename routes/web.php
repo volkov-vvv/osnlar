@@ -168,19 +168,13 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::patch('/{org}', 'UpdateController')->name('cc.org.update');
         Route::delete('/{org}', 'DeleteController')->name('cc.org.delete');
     });
-    /*
-    Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
-        Route::get('/', 'IndexController')->name('cc.lid.index');
-        Route::get('/create', 'CreateController')->name('cc.lid.create');
-        Route::post('/', 'StoreController')->name('cc.lid.store');
-        Route::get('/{lid}', 'ShowController')->name('cc.lid.show');
-        Route::get('/{lid}/edit', 'EditController')->name('cc.lid.edit');
-        Route::patch('/{lid}', 'UpdateController')->name('cc.lid.update');
-        Route::delete('/{lid}', 'DeleteController')->name('cc.lid.delete');
-    });
-    */
+
     Route::group(['as' => 'cc.'], function() {
         Route::resource('lid', LidController::class);
+    });
+
+    Route::group(['as' => 'cc.'], function() {
+        Route::resource('link', LinkController::class);
     });
 });
 
