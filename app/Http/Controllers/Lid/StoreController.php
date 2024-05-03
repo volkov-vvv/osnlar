@@ -16,8 +16,6 @@ class StoreController extends Controller
     {
         $data = $request->validated();
         $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
-
-
         if($links){
             $link = $links->link;
         }else{
@@ -25,12 +23,9 @@ class StoreController extends Controller
             $status = Status::all()->where('code', 'not-in-region')->first();
             $data['status_id'] =  $status->id;
         }
-//        dump($data);
-//        dd($link);
-
         Lid::firstOrCreate($data);
-
-        $mailData = collect($data, $link);
+        $data['link'] = $link;
+        $mailData = collect($data);
         $mailData->subject = 'Ваша заявка на обучение принята';
         $mailData->template = 'mails.template';
         \Mail::to($data['email'])->send(new SendEmail($mailData));
