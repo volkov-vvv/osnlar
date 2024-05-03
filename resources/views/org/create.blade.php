@@ -24,7 +24,7 @@
             </div>
 
             <div class="row mt mb-2">
-                <div class="col-6">
+                <div class="col-md-6">
                     <div class="col">
                         <label><span class="text-danger">* </span>Фамилия:</label>
                         <div class="input-group mb-3">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="col-6">
+                <div class="col-md-6">
                     <div class="col">
                         <div class="form-group">
                             <label><span class="text-danger">* </span>Телефон:</label>
@@ -86,7 +86,7 @@
                         @enderror
                     </div>
                     <div class="col">
-                        <label><span class="text-danger">* </span>Выберите Ваш регион</label>
+                        <label>Выберите Ваш регион</label>
                         <div class="form-group">
                             <select name="region_id" class="form-control select2">
                                 @foreach($regions as $region)
@@ -106,7 +106,7 @@
 
             <div class="row mt-1">
                 <div class="col">
-                    <label><span class="text-danger">* </span>Выберите курс, который Вас заинтересовал</label>
+                    <label>Выберите курс, который Вас заинтересовал</label>
                     <div class="form-group">
                         <select name="course_id" class="form-control select2">
                             @foreach($courses as $course)
@@ -154,7 +154,7 @@
 
 
             <button type="submit" class="btn btn-primary">Отправить</button>
-            <a class="btn btn-outline-secondary" href="{{route('main.index')}}">Назад</a>
+            <a class="btn btn-outline-secondary" href="https://corporations-osnovanie.ru/">Назад</a>
         </form>
 
 
