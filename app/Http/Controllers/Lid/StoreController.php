@@ -23,8 +23,9 @@ class StoreController extends Controller
             $status = Status::all()->where('code', 'not-in-region')->first();
             $data['status_id'] =  $status->id;
         }
-        Lid::firstOrCreate($data);
+        $lid = Lid::firstOrCreate($data);
         $data['link'] = $link;
+        $data['id'] = $lid->id;
         $mailData = collect($data);
         $mailData->subject = 'Ваша заявка на обучение принята';
         $mailData->template = 'mails.template';
