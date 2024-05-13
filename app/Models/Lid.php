@@ -15,4 +15,9 @@ class Lid extends Model
     protected $table = 'lids';
     protected $guarded = false;
 
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
+
 }

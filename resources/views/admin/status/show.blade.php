@@ -33,6 +33,12 @@
                                     <td>{{$status->title}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Цвет</td>
+                                    <td>
+                                        <div class="status-color" style="background-color: {{$status->color}}"></div>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$status->created_at}}</td>
                                 </tr>

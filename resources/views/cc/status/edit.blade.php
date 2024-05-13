@@ -27,6 +27,14 @@
                         <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label>Цвет</label>
+                        <input name="color" type="color" list="colorList" aria-describedby="Цвет" value="{{$status->color}}">
+                        @include('layouts.colorlist')
+                        @error('color')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <button type="submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('cc.status.index')}}">Назад</a>
                 </form>

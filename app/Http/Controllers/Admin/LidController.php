@@ -24,11 +24,10 @@ class lidController extends Controller
      */
     public function index()
     {
-        $statuses = Status::all();
         $courses = Course::all();
-        $lids = Lid::all();
+        $lids = Lid::get();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.index', compact('lids','courses','statuses','users'));
+        return view('admin.lid.index', compact('lids','courses','users'));
     }
 
     /**
@@ -93,7 +92,7 @@ class lidController extends Controller
             $activites->interval = '---';
         }
 
-        return view('admin.lid.show', compact('lid','courses','statuses', 'activites','regions','categories'));
+        return view('admin.lid.show', compact('lid','courses', 'activites','regions','categories'));
     }
 
     /**

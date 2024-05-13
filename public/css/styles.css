@@ -43,6 +43,11 @@
     background: #fff;
 }
 
+.status-color{
+    width: 20px; 
+    height: 20px;
+}
+
 
 /* Add indicator arrow for the active tab */
 @media (min-width: 992px) {

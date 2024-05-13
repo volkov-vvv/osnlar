@@ -27,7 +27,7 @@ class LidController extends Controller
         $courses = Course::all();
         $lids = Lid::all();
         $users = User::where('role', 3)->get();
-        return view('cc.lid.index', compact('lids','courses','statuses','users'));
+        return view('cc.lid.index', compact('lids','courses', 'users'));
     }
 
     /**
@@ -118,8 +118,6 @@ class LidController extends Controller
     public function update(UpdateRequest $request, Lid $lid)
     {
         $data = $request->validated();
-//        dump($request);
-//        dd($lid);
         $oldStatus = $lid->status_id;
         $lid->update($data);
         $actionDescription = 'Изменение информации';

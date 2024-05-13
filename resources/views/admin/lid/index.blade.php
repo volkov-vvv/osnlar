@@ -63,19 +63,9 @@
                                             <td>{{$lid->email}}</td>
                                             <td>{{$lid->phone_prefix == '7' ? '8'.$lid->phone : $lid->phone_prefix.$lid->phone}}</td>
                                             <td>
-                                                <span class="badge rounded-pill
-                                                @switch($lid->status_id)
-                                                @case(1) {{$lid->status_id == 1 ? 'bg-danger' : ''}}
-                                                @break
-                                                @case(2) {{$lid->status_id == 2 ? 'bg-warning text-dark' : ''}}
-                                                @break
-                                                @case(3) {{$lid->status_id == 3 ? 'bg-info' : ''}}
-                                                @break
-                                                @case(4) {{$lid->status_id == 4 ? 'bg-success' : ''}}
-                                                @endswitch">
-                                                    @foreach($statuses as $status)
-                                                        {{$status->id == $lid->status_id ? $status->title : '' }}
-                                                    @endforeach
+                                                <span class="badge rounded-pill"
+                                                      style="background-color: {{$lid->status->color}} !important">
+                                                    {{$lid->status->title}}
                                                 </span>
                                             </td>
                                             <td>{{$lid->created_at}}</td>

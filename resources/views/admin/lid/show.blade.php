@@ -19,16 +19,9 @@
 
             <div class="row">
                 <div class="col-xl-6">
-{{--                    <div class="alert alert-{{ $lid->status_id == 1 ? 'danger' : 'warning' }}" role="alert">--}}
-{{--                        @foreach($statuses as $status)--}}
-{{--                            {{ $status->id == $lid->status_id ? $status->title : '' }}--}}
-{{--                        @endforeach--}}
-{{--                    </div>--}}
 
-                    <div class="alert @switch($lid->status_id) @case(1) {{$lid->status_id == 1 ? 'alert-danger' : ''}} @break @case(2) {{$lid->status_id == 2 ? 'alert-warning' : ''}} @break @case(3) {{$lid->status_id == 3 ? 'alert-info' : ''}}@endswitch" role="alert">
-                        @foreach($statuses as $status)
-                            {{$status->id == $lid->status_id ? $status->title : '' }}
-                        @endforeach
+                    <div class="alert" style="background-color: {{$lid->status->color}} !important">
+                        {{$lid->status->title}}
                     </div>
 
                     <div class="card">
