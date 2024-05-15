@@ -63,12 +63,10 @@
                                             <td>{{$lid->email}}</td>
                                             <td>{{$lid->phone_prefix == '7' ? '8'.$lid->phone : $lid->phone_prefix.$lid->phone}}</td>
                                             <td>
-                                            <td>
                                                 <span class="badge rounded-pill"
                                                       style="background-color: {{$lid->status->color}} !important">
                                                     {{$lid->status->title}}
                                                 </span>
-                                            </td>
                                             </td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
