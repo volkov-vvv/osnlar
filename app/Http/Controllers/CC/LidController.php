@@ -74,6 +74,7 @@ class LidController extends Controller
             $activitesStatusNew = $statuses->where('id',  $activitiesStatuses['status_id'])->first();
             $item->status_old = $activitesStatusOld->title;
             $item->status_new = $activitesStatusNew->title;
+            if(isset($activitiesStatuses['comment']))  $item->comment = $activitiesStatuses['comment']; else $item->comment = '';
             $item->user = User::findOrFail($item->causer_id)->name;
         });
 

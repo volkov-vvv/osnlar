@@ -93,6 +93,7 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <input type="hidden" name="comment" id="comment">
 
                     <button type="submit" id="lid-edit-submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('cc.lid.index')}}">Назад</a>
