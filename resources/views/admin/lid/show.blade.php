@@ -75,6 +75,14 @@
                                         {{$lid->category_id}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Образование</td>
+                                    <td>
+                                        @foreach($levels_edu as $level_edu)
+                                            {{ $level_edu->id == $lid->lid_level_edu_id ? $level_edu->title : '' }}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$lid->created_at}}</td>
                                 </tr>

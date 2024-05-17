@@ -7,6 +7,7 @@ use App\Http\Requests\CC\Lid\StoreRequest;
 use App\Http\Requests\CC\Lid\UpdateRequest;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Leveledu;
 use App\Models\Lid;
 use App\Models\Region;
 use App\Models\Status;
@@ -26,8 +27,9 @@ class LidController extends Controller
         $statuses = Status::all();
         $courses = Course::all();
         $lids = Lid::all();
+        $regions = Region::all();
         $users = User::where('role', 3)->get();
-        return view('cc.lid.index', compact('lids','courses', 'users'));
+        return view('cc.lid.index', compact('lids','courses', 'users','regions'));
     }
 
     /**
@@ -65,6 +67,7 @@ class LidController extends Controller
         $courses = Course::all();
         $regions = Region::all();
         $categories = Category::all();
+        $levels_edu = Leveledu::all();
 
         // Формирование коллекции активности
         $activites = Activity::all()->where('subject_id', '=', $lid['id']);
@@ -92,7 +95,7 @@ class LidController extends Controller
         }
 
 
-        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories'));
+        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories','levels_edu'));
     }
 
     /**

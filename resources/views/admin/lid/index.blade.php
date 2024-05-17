@@ -35,6 +35,7 @@
                                         <th>№</th>
                                         <th>Ответственный</th>
                                         <th>Курс</th>
+                                        <th>Регион</th>
                                         <th>Фамилия</th>
                                         <th>Имя</th>
                                         <th>Email</th>
@@ -56,6 +57,11 @@
                                             <td>
                                                 @foreach($courses as $course)
                                                     {{ $course->id == $lid->course_id ? $course->title : '' }}
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($regions as $region)
+                                                    {{ $region->id == $lid->region_id ? $region->title : '' }}
                                                 @endforeach
                                             </td>
                                             <td>{{$lid->lastname}}</td>

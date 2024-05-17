@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Lid\StoreRequest;
 use App\Http\Requests\Admin\Lid\UpdateRequest;
 use App\Models\Category;
+use App\Models\Leveledu;
 use App\Models\Region;
 use App\Models\Course;
 use App\Models\Lid;
@@ -27,7 +28,8 @@ class lidController extends Controller
         $courses = Course::all();
         $lids = Lid::get();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.index', compact('lids','courses','users'));
+        $regions = Region::all();
+        return view('admin.lid.index', compact('lids','courses','users','regions'));
     }
 
     /**
@@ -66,6 +68,7 @@ class lidController extends Controller
         $courses = Course::all();
         $regions = Region::all();
         $categories = Category::all();
+        $levels_edu = Leveledu::all();
 
         // Формирование коллекции активности
         $activites = Activity::all()->where('subject_id', '=', $lid['id']);
@@ -92,7 +95,7 @@ class lidController extends Controller
             $activites->interval = '---';
         }
 
-        return view('admin.lid.show', compact('lid','courses', 'activites','regions','categories'));
+        return view('admin.lid.show', compact('lid','courses', 'activites','regions','categories','levels_edu'));
     }
 
     /**

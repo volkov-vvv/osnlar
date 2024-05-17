@@ -18,7 +18,7 @@
             <!-- Small boxes (Stat box) -->
 
             <div class="row">
-                <div class="col-6">
+                <div class="col">
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
@@ -37,6 +37,10 @@
                                     <td>
                                         <div class="status-color" style="background-color: {{$status->color}}"></div>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td>Описание</td>
+                                    <td>{{$status->description}}</td>
                                 </tr>
                                 <tr>
                                     <td>Дата создания</td>
@@ -58,11 +62,11 @@
 
             <!-- /.row -->
             <div class="row">
-                <div class="col-3">
+                <div class="col">
                     <a class="btn btn-outline-primary mr-2" href="{{route('admin.status.edit', $status->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.status.index')}}">Назад</a>
                 </div>
-                <div class="col-3">
+                <div class="col">
                     <div class="d-flex justify-content-end">
                         <div>
                             <form method="post" action="{{route('admin.status.delete', $status->id)}}">
@@ -74,7 +78,7 @@
                     </div>
 
                 </div>
-                <div class="col-6"></div>
+
 
             </div>
 
