@@ -29,6 +29,19 @@
                         <div class="card">
 
                             <div class="card-body">
+                                <table class="inputs">
+                                    <tbody><tr>
+                                        <td>Отвественный:</td>
+                                        <td>
+                                            <select id="responsible" name="responsible">
+                                                <option>Все</option>
+                                                @foreach($users as $user)
+                                                    <option value="{{$user->name}}">{{$user->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody></table>
                                 <table id="example1" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
