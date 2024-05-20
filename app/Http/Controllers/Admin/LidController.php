@@ -17,6 +17,16 @@ use App\Models\User;
 
 class lidController extends Controller
 {
+
+    private function dateDiff($dateFirst, $dateSecond){
+        $interval = date_diff($dateFirst, $dateSecond);
+        $formatStr = '%hч %iмин';
+        if ($interval->d > 0) $formatStr = '%dд ' . $formatStr;
+        if ($interval->m > 0) $formatStr = '%mм ' . $formatStr;
+        if ($interval->y > 0) $formatStr = '%yг ' . $formatStr;
+        return $interval->format($formatStr);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,6 +37,15 @@ class lidController extends Controller
         $courses = Course::all();
         $lids = Lid::get();
         $users = User::where('role', 3)->get();
+
+        $lids->each(function ($item, $key){
+            if($item->activity){
+                $item->interval = $this->dateDiff($item->activity->created_at, $item->created_at);
+            }else{
+                $item->interval = '---';
+            }
+        });
+
         return view('admin.lid.index', compact('lids','courses','users'));
     }
 
@@ -82,12 +101,7 @@ class lidController extends Controller
         // Определение времени первой реакции
         $firstActivity = Activity::all()->where('subject_id', '=', $lid['id'])->where('description', '=', 'Изменение статуса')->first();
         if($firstActivity){
-            $interval = date_diff($firstActivity->created_at, $lid->created_at);
-            $formatStr = '%hч %iмин';
-            if ($interval->d > 0) $formatStr = '%dд ' . $formatStr;
-            if ($interval->m > 0) $formatStr = '%mм ' . $formatStr;
-            if ($interval->y > 0) $formatStr = '%yг ' . $formatStr;
-            $activites->interval = $interval->format($formatStr);
+            $activites->interval = $this->dateDiff($firstActivity->created_at, $lid->created_at);
         }else{
             $activites->interval = '---';
         }

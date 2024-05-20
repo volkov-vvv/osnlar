@@ -204,7 +204,7 @@
         content: "...";
     }
 </style>
-
+@yield('javascript')
 
 </body>
 </html>

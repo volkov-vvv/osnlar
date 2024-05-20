@@ -40,6 +40,7 @@
                                         <th>Email</th>
                                         <th>Телефон</th>
                                         <th>Статус</th>
+                                        <th>Реакция</th>
                                         <th>Дата создания</th>
                                         <th>Действия</th>
                                     </tr>
@@ -68,6 +69,7 @@
                                                     {{$lid->status->title}}
                                                 </span>
                                             </td>
+                                            <td>{{$lid->interval}}</td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
                                                 <a href="{{route('admin.lid.show', $lid->id)}}"><i
