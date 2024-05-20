@@ -33,7 +33,6 @@ class LidController extends Controller
      */
     public function index()
     {
-        $statuses = Status::all();
         $courses = Course::all();
         $lids = Lid::all();
         $regions = Region::all();
@@ -47,7 +46,7 @@ class LidController extends Controller
             }
         });
 
-        return view('cc.lid.index', compact('lids','courses', 'users'));
+        return view('cc.lid.index', compact('lids','courses', 'users','regions'));
     }
 
     /**
@@ -85,7 +84,6 @@ class LidController extends Controller
         $courses = Course::all();
         $regions = Region::all();
         $categories = Category::all();
-        $levels_edu = Leveledu::all();
 
         // Формирование коллекции активности
         $activites = Activity::all()->where('subject_id', '=', $lid['id']);
