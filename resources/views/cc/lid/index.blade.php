@@ -29,6 +29,21 @@
                         <div class="card">
 
                             <div class="card-body">
+                                <!--
+                                <table class="inputs">
+                                    <tbody><tr>
+                                        <td>Отвественный:</td>
+                                        <td>
+                                            <select id="responsible" name="responsible">
+                                                <option>Все</option>
+                                                @foreach($users as $user)
+                                                    <option value="{{$user->name}}">{{$user->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody></table>
+                                -->
                                 <table id="example1" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
@@ -41,6 +56,7 @@
                                         <th>Email</th>
                                         <th>Телефон</th>
                                         <th>Статус</th>
+                                        <th>Реакция</th>
                                         <th>Дата создания</th>
                                         <th>Действия</th>
                                     </tr>
@@ -74,6 +90,7 @@
                                                     {{$lid->status->title}}
                                                 </span>
                                             </td>
+                                            <td>{{$lid->interval}}</td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
                                                 <a href="{{route('cc.lid.show', $lid->id)}}"><i
@@ -102,5 +119,37 @@
 
         </div><!-- /.container-fluid -->
     </section>
+@endsection
+@section('javascript1')
+    <script>
+        const responsible = document.querySelector('#responsible');
+//        const maxEl = document.querySelector('#max');
 
+        const table = new DataTable('#example1');
+
+        // Custom range filtering function
+        table.search.fixed('range', function (searchStr, data, index) {
+            var min = parseInt(minEl.value, 10);
+            var max = parseInt(maxEl.value, 10);
+            var age = parseFloat(data[3]) || 0; // use data for the age column
+
+            if (
+                (isNaN(min) && isNaN(max)) ||
+                (isNaN(min) && age <= max) ||
+                (min <= age && isNaN(max)) ||
+                (min <= age && age <= max)
+            ) {
+                return true;
+            }
+
+            return false;
+        });
+
+        // Changes to the inputs will trigger a redraw to update the table
+        responsible.addEventListener('change', function () {
+//            alert('!!!');
+            //table.draw();
+        });
+
+    </script>
 @endsection

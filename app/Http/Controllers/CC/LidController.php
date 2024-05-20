@@ -17,6 +17,15 @@ use Spatie\Activitylog\Models\Activity;
 
 class LidController extends Controller
 {
+    private function dateDiff($dateFirst, $dateSecond){
+        $interval = date_diff($dateFirst, $dateSecond);
+        $formatStr = '%hч %iмин';
+        if ($interval->d > 0) $formatStr = '%dд ' . $formatStr;
+        if ($interval->m > 0) $formatStr = '%mм ' . $formatStr;
+        if ($interval->y > 0) $formatStr = '%yг ' . $formatStr;
+        return $interval->format($formatStr);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +38,16 @@ class LidController extends Controller
         $lids = Lid::all();
         $regions = Region::all();
         $users = User::where('role', 3)->get();
-        return view('cc.lid.index', compact('lids','courses', 'users','regions'));
+
+        $lids->each(function ($item, $key){
+            if($item->activity){
+                $item->interval = $this->dateDiff($item->activity->created_at, $item->created_at);
+            }else{
+                $item->interval = '---';
+            }
+        });
+
+        return view('cc.lid.index', compact('lids','courses', 'users'));
     }
 
     /**
@@ -95,7 +113,7 @@ class LidController extends Controller
         }
 
 
-        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories','levels_edu'));
+        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories'));
     }
 
     /**
