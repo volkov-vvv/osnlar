@@ -114,7 +114,7 @@ class lidController extends Controller
             $activites->interval = '---';
         }
 
-        return view('admin.lid.show', compact('lid','courses', 'activites','regions','categories'));
+        return view('admin.lid.show', compact('lid','courses', 'activites','regions','categories','levels_edu'));
     }
 
     /**

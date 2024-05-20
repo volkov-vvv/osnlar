@@ -84,6 +84,7 @@ class LidController extends Controller
         $courses = Course::all();
         $regions = Region::all();
         $categories = Category::all();
+        $levels_edu = Leveledu::all();
 
         // Формирование коллекции активности
         $activites = Activity::all()->where('subject_id', '=', $lid['id']);
@@ -111,7 +112,7 @@ class LidController extends Controller
         }
 
 
-        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories'));
+        return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories','levels_edu'));
     }
 
     /**
