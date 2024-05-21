@@ -22,7 +22,7 @@
                     @method('PATCH')
                     <div class="mb-3">
                         <label>Email</label>
-                        <input name="email" type="email" class="form-control" value="{{$lid->email}}" disabled>
+                        <input name="email" type="email" class="form-control" value="{{$lid->email}}">
                         @error('email')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
