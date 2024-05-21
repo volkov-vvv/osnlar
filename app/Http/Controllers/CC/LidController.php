@@ -126,7 +126,8 @@ class LidController extends Controller
         $regions = Region::all();
         $categories = Category::all();
         $users = User::where('role', 3)->get();
-        return view('cc.lid.edit', compact('lid','statuses','users','categories','regions'));
+        $courses = Course::all();
+        return view('cc.lid.edit', compact('lid','statuses','users','categories','regions','courses'));
     }
 
     /**
