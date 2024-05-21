@@ -158,7 +158,7 @@
     $('[data-mask]').inputmask();
     $(document).ready(function() {
         $(function () {
-            $("#example1").DataTable({
+            $("#example22").DataTable({
                 order: [[0, 'desc']],
                 "responsive": true,
                 "lengthChange": false,

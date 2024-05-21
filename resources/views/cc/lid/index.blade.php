@@ -29,21 +29,7 @@
                         <div class="card">
 
                             <div class="card-body">
-                                <!--
-                                <table class="inputs">
-                                    <tbody><tr>
-                                        <td>Отвественный:</td>
-                                        <td>
-                                            <select id="responsible" name="responsible">
-                                                <option>Все</option>
-                                                @foreach($users as $user)
-                                                    <option value="{{$user->name}}">{{$user->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    </tbody></table>
-                                -->
+
                                 <table id="example1" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
@@ -84,12 +70,7 @@
                                             <td>{{$lid->firstname}}</td>
                                             <td>{{$lid->email}}</td>
                                             <td>{{$lid->phone_prefix == '7' ? '8'.$lid->phone : $lid->phone_prefix.$lid->phone}}</td>
-                                            <td>
-                                                <span class="badge rounded-pill"
-                                                      style="background-color: {{$lid->status->color}} !important">
-                                                    {{$lid->status->title}}
-                                                </span>
-                                            </td>
+                                            <td><span class="badge rounded-pill" style="background-color: {{$lid->status->color}} !important">{{$lid->status->title}}</span></td>
                                             <td>{{$lid->interval}}</td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
@@ -106,7 +87,22 @@
                                         </tr>
                                     @endforeach
                                     </tbody>
-
+                                    <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                             <!-- /.card-body -->
@@ -120,36 +116,63 @@
         </div><!-- /.container-fluid -->
     </section>
 @endsection
-@section('javascript1')
+
+
+@section('javascript')
     <script>
-        const responsible = document.querySelector('#responsible');
-//        const maxEl = document.querySelector('#max');
+        new DataTable('#example1', {
+            order: [[0, 'desc']],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "pdf", "colvis"],
+            "language": {
+                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                paginate: {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                search: "Поиск:",
+                buttons: {
+                    colvis: 'Выбрать колонки',
+                    search: 'Поиск'
+                },
 
-        const table = new DataTable('#example1');
+            },
+            initComplete: function () {
+                this.api()
+                    .columns([1, 2, 3, 8])
+                    .every(function () {
+                        let column = this;
 
-        // Custom range filtering function
-        table.search.fixed('range', function (searchStr, data, index) {
-            var min = parseInt(minEl.value, 10);
-            var max = parseInt(maxEl.value, 10);
-            var age = parseFloat(data[3]) || 0; // use data for the age column
+                        // Create select element
+                        let select = document.createElement('select');
+                        select.add(new Option(''));
+                        column.footer().replaceChildren(select);
 
-            if (
-                (isNaN(min) && isNaN(max)) ||
-                (isNaN(min) && age <= max) ||
-                (min <= age && isNaN(max)) ||
-                (min <= age && age <= max)
-            ) {
-                return true;
+                        // Apply listener for user change in value
+                        select.addEventListener('change', function () {
+                            column
+                                .search(select.value, {exact: true})
+                                .draw();
+                        });
+
+                        // Add list of options
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                var val = $('<div/>').html(d).text();
+                                //console.log(d);
+                                //console.log(val);
+                                select.add(new Option(val.substr(0,40)));
+
+                            });
+                    });
             }
-
-            return false;
-        });
-
-        // Changes to the inputs will trigger a redraw to update the table
-        responsible.addEventListener('change', function () {
-//            alert('!!!');
-            //table.draw();
-        });
-
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     </script>
 @endsection
