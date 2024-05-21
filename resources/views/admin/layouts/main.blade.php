@@ -191,7 +191,7 @@
                 }
             }).buttons().container().appendTo('#report1_wrapper .col-md-6:eq(0)');
 
-            $("#example1").DataTable({
+            $("#example111").DataTable({
                 order: [[0, 'desc']],
                 "responsive": true,
                 "lengthChange": false,

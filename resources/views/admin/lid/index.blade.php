@@ -69,12 +69,7 @@
                                             <td>{{$lid->firstname}}</td>
                                             <td>{{$lid->email}}</td>
                                             <td>{{$lid->phone_prefix == '7' ? '8'.$lid->phone : $lid->phone_prefix.$lid->phone}}</td>
-                                            <td>
-                                                <span class="badge rounded-pill"
-                                                      style="background-color: {{$lid->status->color}} !important">
-                                                    {{$lid->status->title}}
-                                                </span>
-                                            </td>
+                                            <td><span class="badge rounded-pill" style="background-color: {{$lid->status->color}} !important">{{$lid->status->title}}</span></td>
                                             <td>{{$lid->interval}}</td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
@@ -91,7 +86,23 @@
                                         </tr>
                                     @endforeach
                                     </tbody>
-
+                                    <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                                 </table>
                             </div>
                             <!-- /.card-body -->
@@ -105,4 +116,63 @@
         </div><!-- /.container-fluid -->
     </section>
 
+@endsection
+
+@section('javascript')
+    <script>
+        new DataTable('#example1', {
+            order: [[0, 'desc']],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "pdf", "colvis"],
+            "language": {
+                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                paginate: {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                search: "Поиск:",
+                buttons: {
+                    colvis: 'Выбрать колонки',
+                    search: 'Поиск'
+                },
+
+            },
+            initComplete: function () {
+                this.api()
+                    .columns([1, 2, 3, 8])
+                    .every(function () {
+                        let column = this;
+
+                        // Create select element
+                        let select = document.createElement('select');
+                        select.add(new Option(''));
+                        column.footer().replaceChildren(select);
+
+                        // Apply listener for user change in value
+                        select.addEventListener('change', function () {
+                            column
+                                .search(select.value, {exact: true})
+                                .draw();
+                        });
+
+                        // Add list of options
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                var val = $('<div/>').html(d).text();
+                                //console.log(d);
+                                //console.log(val);
+                                select.add(new Option(val.substr(0,40)));
+
+                            });
+                    });
+            }
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    </script>
 @endsection
