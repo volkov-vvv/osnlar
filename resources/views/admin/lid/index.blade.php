@@ -29,6 +29,49 @@
                         <div class="card">
 
                             <div class="card-body">
+                                <table class="table table-striped mb-2">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            Ответсвенный:
+                                            <select id="responsible" name="responsible">
+                                                <option></option>
+                                                @foreach($users as $user)
+                                                    <option value="{{$user->name}}">{{$user->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            Курс:
+                                            <select id="course" name="course">
+                                                <option></option>
+                                                @foreach($courses as $course)
+                                                    <option value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            Регион:
+                                            <select id="region" name="region">
+                                                <option></option>
+                                                @foreach($regions as $region)
+                                                    <option value="{{$region->title}}">{{$region->title}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            Статус:
+                                            <select id="status" name="status">
+                                                <option></option>
+                                                @foreach($statuses as $status)
+                                                    <option value="{{$status->title}}">{{$status->title}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
                                 <table id="example1" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
@@ -120,7 +163,8 @@
 
 @section('javascript')
     <script>
-        new DataTable('#example1', {
+
+        var table= new DataTable('#example1', {
             order: [[0, 'desc']],
             "responsive": true,
             "lengthChange": false,
@@ -141,38 +185,44 @@
                 },
 
             },
-            initComplete: function () {
-                this.api()
-                    .columns([1, 2, 3, 8])
-                    .every(function () {
-                        let column = this;
 
-                        // Create select element
-                        let select = document.createElement('select');
-                        select.add(new Option(''));
-                        column.footer().replaceChildren(select);
+        })
 
-                        // Apply listener for user change in value
-                        select.addEventListener('change', function () {
-                            column
-                                .search(select.value, {exact: true})
-                                .draw();
-                        });
+        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-                        // Add list of options
-                        column
-                            .data()
-                            .unique()
-                            .sort()
-                            .each(function (d, j) {
-                                var val = $('<div/>').html(d).text();
-                                //console.log(d);
-                                //console.log(val);
-                                select.add(new Option(val.substr(0,40)));
 
-                            });
-                    });
-            }
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#responsible').on('change', function (e){
+
+            table
+                .column(1)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#course').on('change', function (e){
+
+            table
+                .column(2)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#region').on('change', function (e){
+
+            table
+                .column(3)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#status').on('change', function (e){
+
+            table
+                .column(8)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
     </script>
 @endsection

@@ -37,6 +37,7 @@ class lidController extends Controller
     {
         $courses = Course::all();
         $regions = Region::all();
+        $statuses = Status::all();
         $lids = Lid::get();
         $users = User::where('role', 3)->get();
 
@@ -48,7 +49,7 @@ class lidController extends Controller
             }
         });
 
-        return view('admin.lid.index', compact('lids','courses','users','regions'));
+        return view('admin.lid.index', compact('lids','courses','users','regions','statuses'));
     }
 
     /**
