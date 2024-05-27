@@ -22,21 +22,21 @@
                     @method('PATCH')
                     <div class="mb-3">
                         <label>Email</label>
-                        <input name="email" type="email" class="form-control" value="{{$lid->email}}" disabled>
+                        <input name="email" type="email" class="form-control" value="{{$lid->email}}">
                         @error('email')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label>Фамилия</label>
-                        <input name="lastname" type="text" class="form-control" aria-describedby="Название" value="{{$lid->lastname}}" disabled>
+                        <input name="lastname" type="text" class="form-control" aria-describedby="Название" value="{{$lid->lastname}}">
                         @error('lastname')
                         <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label>Имя</label>
-                        <input name="firstname" type="text" class="form-control" aria-describedby="Название" value="{{$lid->firstname}}" disabled>
+                        <input name="firstname" type="text" class="form-control" aria-describedby="Название" value="{{$lid->firstname}}">
                         @error('firstname')
                         <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
                         @enderror
@@ -67,6 +67,20 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label>Курс</label>
+                        <select name="course_id" class="form-control select2">
+                            @foreach($courses as $course)
+                                <option value="{{$course->id}}"
+                                    {{ $course->id == $lid->course_id ? ' selected' : '' }}
+                                >{{$course->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('course_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3 form-group alert alert-secondary">
                         <label>Ответственный</label>
                         <select name="responsible_id" class="form-control select2">
