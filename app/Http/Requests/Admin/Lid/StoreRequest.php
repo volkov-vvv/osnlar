@@ -49,11 +49,12 @@ class StoreRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation() {
-        $this->merge([
-            // Удаляем из номера телефона код страны
-            'phone' => explode('+' . $this->phone_prefix, $this->phone)[1],
-            'created_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $this->created_at)->toDateTimeString(),
-        ]);
+    protected function passedValidation() {
+        $data = $this->validator->getData();
+
+        $this->validator->setData( [
+            'phone' => explode('+' . $data['phone_prefix'], $data['phone'])[1],
+            'created_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $data['created_at'])->toDateTimeString()
+            ]+ $data);
     }
 }

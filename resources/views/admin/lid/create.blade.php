@@ -50,8 +50,11 @@
                     </div>
                     <div class="mb-3">
                         <label><span class="text-danger">* </span>Телефон</label>
-                        <input id="phone" type="tel" class="form-control" value="{{old('phone')}}">
+                        <input id="phone" name="phone" type="tel" class="form-control" value="{{old('phone')}}">
                         <input type="hidden" name="phone_prefix" id="phone_prefix" value="7">
+                        @error('data')
+                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label><span class="text-danger">* </span>Email</label>
@@ -174,7 +177,11 @@
                         <select name="status_id" class="form-control select2">
                             @foreach($statuses as $status)
                                 <option value="{{$status->id}}"
-                                    {{ $status->id == old('status_id') ? ' selected' : '' }}
+                                        @if(old('status_id'))
+                                            {{ $status->id == old('status_id') ? ' selected' : '' }}
+                                        @else
+                                            {{ $status->title == 'FLOW' ? ' selected' : '' }}
+                                        @endif
                                 >{{$status->title}}</option>
                             @endforeach
                         </select>
