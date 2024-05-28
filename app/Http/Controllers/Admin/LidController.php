@@ -82,8 +82,8 @@ class lidController extends Controller
     {
         $data = $request->validated();
 
-        dump($request);
-        dd($data);
+//        dump($request);
+//        dd($data);
 
         $lid = Lid::firstOrCreate($data);
 
