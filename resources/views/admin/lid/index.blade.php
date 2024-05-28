@@ -15,6 +15,11 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{{route('admin.lid.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
+                </div>
+            </div>
             <!-- Small boxes (Stat box) -->
 
 {{--            <div class="row mb-3">--}}

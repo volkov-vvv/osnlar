@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Lid;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 
 class StoreRequest extends FormRequest
 {
@@ -43,6 +44,8 @@ class StoreRequest extends FormRequest
             'utm_campaign' => '',
             'utm_term' => '',
             'utm_content' => '',
+            'created_at' => 'nullable|string',
+            'responsible_id' => 'nullable',
         ];
     }
 
@@ -50,6 +53,7 @@ class StoreRequest extends FormRequest
         $this->merge([
             // Удаляем из номера телефона код страны
             'phone' => explode('+' . $this->phone_prefix, $this->phone)[1],
+            'created_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $this->created_at)->toDateTimeString(),
         ]);
     }
 }

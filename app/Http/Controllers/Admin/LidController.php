@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Admin\Lid\StoreRequest;
 use App\Http\Requests\Admin\Lid\UpdateRequest;
+use App\Mail\SendEmail;
+use App\Models\Agent;
 use App\Models\Category;
 use App\Models\Leveledu;
+use App\Models\Link;
 use App\Models\Region;
 use App\Models\Course;
 use App\Models\Lid;
@@ -59,7 +62,14 @@ class lidController extends Controller
      */
     public function create()
     {
-        return view('admin.lid.create');
+        $courses = Course::all();
+        $regions = Region::all();
+        $levelsedu = Leveledu::all();
+        $categories = Category::all();
+        $agents = Agent::all();
+        $statuses = Status::all();
+        $users = User::where('role', 3)->get();
+        return view('admin.lid.create',  compact('levelsedu','regions','courses','categories','agents','statuses','users'));
     }
 
     /**
@@ -71,7 +81,30 @@ class lidController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        Lid::firstOrCreate($data);
+
+        dump($request);
+        dd($data);
+
+        $lid = Lid::firstOrCreate($data);
+
+        //Отправка письма
+        if($request->send_mail){
+            $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
+            if($links){
+                $link = $links->link;
+            }else{
+                $link = '';
+                $status = Status::all()->where('code', 'not-in-region')->first();
+                $data['status_id'] =  $status->id;
+            }
+            $data['link'] = $link;
+            $data['id'] = $lid->id;
+            $mailData = collect($data);
+            $mailData->subject = 'Ваша заявка на обучение принята';
+            $mailData->template = 'mails.template';
+            \Mail::to($data['email'])->send(new SendEmail($mailData));
+        }
+
 
         return redirect()->route('admin.lid.index');
     }
