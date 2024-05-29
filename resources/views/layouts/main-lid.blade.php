@@ -162,6 +162,7 @@
 
 </script>
 
+@yield('javascript')
 
 
 </body>
