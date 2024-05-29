@@ -153,8 +153,8 @@
                         @foreach($categoriesMain as $categoryMain)
                             <p><input name="category_main" type="radio" value="{{$categoryMain->id}}"> {{$categoryMain->title}}</p>
                         @endforeach
-                        <p><input name="category_main" type="radio" value="all"> Другое</p>
-                        <div id="category_all" style="display:none">
+                        <p>Не нашли подходящую?</p>
+                        <div id="category_all">
                             <select name="category_all" class="form-control select2">
                                 @foreach($categories as $category)
                                     <option value="{{$category->id}}"
@@ -234,14 +234,11 @@
     <script>
         $('input[name="category_main"]').on('change', function (e){
             var cat = $(this).val();
-            if(cat == 'all'){
-                $('#category_all').show();
-            }else{
-                $('input[name="category_id"]').val(cat);
-            }
+            $('input[name="category_id"]').val(cat);
         })
 
         $('select[name="category_all"]').on('change', function (e){
+            $('input[name="category_main"]').prop('checked', false);
             var cat = $(this).val();
             $('input[name="category_id"]').val(cat);
         })
