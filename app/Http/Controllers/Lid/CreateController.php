@@ -15,8 +15,8 @@ class CreateController extends Controller
 {
     public function __invoke()
     {
-        $categories = Category::whereNotIn('id',[4,9])->get();
-        $categoriesMain = Category::find([4,9]);
+        $categories = Category::whereNotIn('id',[4,9])->get()->sortBy('order');
+        $categoriesMain = Category::find([4,9])->sortBy('order');
         $agents = Agent::all();
         $regions = Region::all();
         $authors = Author::all();
