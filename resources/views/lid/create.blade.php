@@ -150,14 +150,26 @@
                 <div class="col">
                     <label><span class="text-danger">* </span>Выберите подходящую для Вас категорию</label>
                     <div class="form-group">
-                        <select name="category_id" class="form-control select2">
-                            @foreach($categories as $category)
-                                <option value="{{$category->id}}"
-                                    {{ $category->id == old('category_id') ? ' selected' : '' }}
-                                >{{$category->title}}</option>
-                            @endforeach
-                        </select>
+                        @foreach($categoriesMain as $categoryMain)
+                            <p>
+                                <input name="category_main" type="radio" id="category_main_{{$categoryMain->id}}" value="{{$categoryMain->id}}">
+                                <label for="category_main_{{$categoryMain->id}}" class="category-label">{{$categoryMain->title}}</label>
+                            </p>
+
+                        @endforeach
+
+                        <div id="category_all" class="ml-3">
+                            <p>Не нашли подходящую?</p>
+                            <select name="category_all" class="form-control select2">
+                                @foreach($categories as $category)
+                                    <option value="{{$category->id}}"
+                                        {{ $category->id == old('category_id') ? ' selected' : '' }}
+                                    >{{$category->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+                    <input type="hidden" name="category_id" value="old('category_id')">
                     @error('category_id')
                     <div class="text-danger">{{$message}}</div>
                     @enderror
@@ -221,4 +233,20 @@
 
     </div>
 
+@endsection
+
+@section('javascript')
+    <script>
+        $('input[name="category_main"]').on('change', function (e){
+            var cat = $(this).val();
+            $('input[name="category_id"]').val(cat);
+        })
+
+        $('select[name="category_all"]').on('change', function (e){
+            $('input[name="category_main"]').prop('checked', false);
+            var cat = $(this).val();
+            $('input[name="category_id"]').val(cat);
+        })
+
+    </script>
 @endsection
