@@ -28,6 +28,8 @@
     <!-- Phone input -->
     <link rel="stylesheet" href="{{ asset('css/intlTelInput.min.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
 </head>
 <body>
 

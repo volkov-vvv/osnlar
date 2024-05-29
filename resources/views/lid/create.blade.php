@@ -151,7 +151,11 @@
                     <label><span class="text-danger">* </span>Выберите подходящую для Вас категорию</label>
                     <div class="form-group">
                         @foreach($categoriesMain as $categoryMain)
-                            <p><input name="category_main" type="radio" value="{{$categoryMain->id}}"> {{$categoryMain->title}}</p>
+                            <p>
+                                <input name="category_main" type="radio" id="category_main_{{$categoryMain->id}}" value="{{$categoryMain->id}}">
+                                <label for="category_main_{{$categoryMain->id}}" class="category-label">{{$categoryMain->title}}</label>
+                            </p>
+
                         @endforeach
 
                         <div id="category_all" class="ml-3">
