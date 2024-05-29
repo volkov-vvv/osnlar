@@ -169,7 +169,7 @@
                             </select>
                         </div>
                     </div>
-                    <input type="hidden" name="category_id" value="{{old('category_id'}})">
+                    <input type="hidden" name="category_id" value="{{old('category_id')}}">
                     @error('category_id')
                     <div class="text-danger">{{$message}}</div>
                     @enderror
