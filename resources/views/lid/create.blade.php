@@ -153,8 +153,9 @@
                         @foreach($categoriesMain as $categoryMain)
                             <p><input name="category_main" type="radio" value="{{$categoryMain->id}}"> {{$categoryMain->title}}</p>
                         @endforeach
-                        <p>Не нашли подходящую?</p>
-                        <div id="category_all">
+
+                        <div id="category_all" class="ml-3">
+                            <p>Не нашли подходящую?</p>
                             <select name="category_all" class="form-control select2">
                                 @foreach($categories as $category)
                                     <option value="{{$category->id}}"
