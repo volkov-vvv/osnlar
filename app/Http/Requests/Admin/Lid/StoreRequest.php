@@ -45,7 +45,7 @@ class StoreRequest extends FormRequest
             'utm_term' => '',
             'utm_content' => '',
 //            'created_at' => 'nullable|string',
-            'responsible_id' => 'nullable',
+//            'responsible_id' => 'nullable',
         ];
     }
 
