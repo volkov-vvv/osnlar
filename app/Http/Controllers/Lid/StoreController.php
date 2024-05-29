@@ -15,7 +15,6 @@ class StoreController extends Controller
     public function __invoke(StoreRequest $request)
     {
         $data = $request->validated();
-        dd($data);
         $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
         if($links){
             $link = $links->link;
