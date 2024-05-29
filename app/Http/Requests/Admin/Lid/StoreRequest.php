@@ -44,8 +44,8 @@ class StoreRequest extends FormRequest
             'utm_campaign' => '',
             'utm_term' => '',
             'utm_content' => '',
-//            'created_at' => 'nullable|string',
-//            'responsible_id' => 'nullable',
+            'created_at' => 'nullable|string',
+            'responsible_id' => 'nullable',
         ];
     }
 
@@ -54,7 +54,11 @@ class StoreRequest extends FormRequest
 
         $this->validator->setData( [
             'phone' => explode('+' . $data['phone_prefix'], $data['phone'])[1],
-//            'created_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $data['created_at'])->toDateTimeString()
             ]+ $data);
+        if(isset($data['created_at'])){
+            $this->validator->setData( [
+                    'created_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $data['created_at'])->toDateTimeString()
+                ]+ $data);
+        }
     }
 }
