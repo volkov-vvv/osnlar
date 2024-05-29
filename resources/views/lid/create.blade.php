@@ -150,14 +150,21 @@
                 <div class="col">
                     <label><span class="text-danger">* </span>Выберите подходящую для Вас категорию</label>
                     <div class="form-group">
-                        <select name="category_id" class="form-control select2">
-                            @foreach($categories as $category)
-                                <option value="{{$category->id}}"
-                                    {{ $category->id == old('category_id') ? ' selected' : '' }}
-                                >{{$category->title}}</option>
-                            @endforeach
-                        </select>
+                        @foreach($categoriesMain as $categoryMain)
+                            <p><input name="category_main" type="radio" value="{{$categoryMain->id}}"> {{$categoryMain->title}}</p>
+                        @endforeach
+                        <p><input name="category_main" type="radio" value="all"> Другое</p>
+                        <div id="category_all" style="display:none">
+                            <select name="category_all" class="form-control select2">
+                                @foreach($categories as $category)
+                                    <option value="{{$category->id}}"
+                                        {{ $category->id == old('category_id') ? ' selected' : '' }}
+                                    >{{$category->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+                    <input type="hidden" name="category_id" value="old('category_id')">
                     @error('category_id')
                     <div class="text-danger">{{$message}}</div>
                     @enderror
@@ -221,4 +228,23 @@
 
     </div>
 
+@endsection
+
+@section('javascript')
+    <script>
+        $('input[name="category_main"]').on('change', function (e){
+            var cat = $(this).val();
+            if(cat == 'all'){
+                $('#category_all').show();
+            }else{
+                $('input[name="category_id"]').val(cat);
+            }
+        })
+
+        $('select[name="category_all"]').on('change', function (e){
+            var cat = $(this).val();
+            $('input[name="category_id"]').val(cat);
+        })
+
+    </script>
 @endsection

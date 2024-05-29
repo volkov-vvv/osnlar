@@ -16,11 +16,12 @@ class CreateController extends Controller
     public function __invoke()
     {
         $categories = Category::all();
+        $categoriesMain = Category::find([4,9]);
         $agents = Agent::all();
         $regions = Region::all();
         $authors = Author::all();
         $levelsedu = Leveledu::all();
         $courses = Course::where('is_published', 1)->get();
-        return view('lid.create', compact('categories', 'authors','levelsedu','courses','regions','agents'));
+        return view('lid.create', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain'));
     }
 }
