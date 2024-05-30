@@ -128,7 +128,7 @@
                 <div class="col">
                     <label><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
                     <div class="form-group">
-                        <select name="course_id" class="form-control select2">
+                        <select name="course_id" id="course_id" class="form-control select2">
                             <option></option>
                             @foreach($courses as $course)
                                 <option value="{{$course->id}}"
@@ -248,6 +248,14 @@
             var cat = $(this).val();
             $('input[name="category_id"]').val(cat);
         })
+
+        $(document).ready(function() {
+            $('#course_id').select2({
+                placeholder: "Выберите курс"
+            });
+        });
+
+
 
     </script>
 @endsection
