@@ -159,7 +159,7 @@
                         @endforeach
 
                         <div id="category_all" class="ml-3">
-                            <p> Выбрать другую категорию:</p>
+                            <p> Все категории:</p>
                             <select name="category_all" class="form-control select2">
                                 @foreach($categories as $category)
                                     <option value="{{$category->id}}"
