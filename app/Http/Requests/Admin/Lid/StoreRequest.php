@@ -53,12 +53,15 @@ class StoreRequest extends FormRequest
         $data = $this->validator->getData();
 
         $this->validator->setData( [
-            'phone' => explode('+' . $data['phone_prefix'], $data['phone'])[1],
-            ]+ $data);
+                'phone' => explode('+' . $data['phone_prefix'], $data['phone'])[1],
+            ] + $data);
+
         if(isset($data['created_at'])){
+            $data = $this->validator->getData();
             $this->validator->setData( [
                     'created_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $data['created_at'])->toDateTimeString()
-                ]+ $data);
+                ] + $data);
         }
+
     }
 }

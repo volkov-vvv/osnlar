@@ -64,7 +64,7 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label><span class="text-danger">* </span>Текущий уровень бразования</label>
+                        <label><span class="text-danger">* </span>Текущий уровень образования</label>
 
                             <select name="lid_level_edu_id" class="form-control select2">
                                 @foreach($levelsedu as $leveledu)
@@ -221,7 +221,7 @@
             const iti = window.intlTelInput(input, {
                 strictMode: true,
                 showSelectedDialCode: true,
-                nationalMode: false,
+                nationalMode: true,
                 initialCountry:"ru",
                 onlyCountries: ["ru", "by"],
                 i18n: {
