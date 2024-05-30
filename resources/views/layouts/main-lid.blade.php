@@ -78,10 +78,10 @@
 <body>
 
 <header>
-    <div class="container">
-        <nav class="navbar navbar-expand-lg">
+    <div class="container ">
+        <header class="d-flex justify-content-center pt-3">
             <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}" width="260"  alt="Основание"></a>
-        </nav>
+        </header>
     </div>
 </header>
 
