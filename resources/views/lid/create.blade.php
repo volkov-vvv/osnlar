@@ -1,7 +1,7 @@
 @extends('layouts.main-lid')
 @section('content')
 
-    <div class="container">
+    <div class="container mb-5">
         <div class="row mb-3">
             <div class="col">
                 <h2 class="text-center">Заявка на обучение</h2>
@@ -129,6 +129,7 @@
                     <label><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
                     <div class="form-group">
                         <select name="course_id" class="form-control select2">
+                            <option></option>
                             @foreach($courses as $course)
                                 <option value="{{$course->id}}"
                                     {{ $course->id == old('course_id') ? ' selected' : '' }}
