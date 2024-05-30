@@ -13,7 +13,7 @@
             @csrf
 
             <div class="row mt mb-2">
-                <div class="col-6">
+                <div class="col-lg-6">
                     <div class="col">
                         <label><span class="text-danger">* </span>Фамилия:</label>
                         <div class="input-group mb-3">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <div class="col-6">
+                <div class="col-lg-6">
                     <div class="col">
                         <label><span class="text-danger">* </span>Дата рождения:</label>
                         <div class="form-group">
