@@ -221,7 +221,7 @@
             const iti = window.intlTelInput(input, {
                 strictMode: true,
                 showSelectedDialCode: true,
-                nationalMode: true,
+                nationalMode: false,
                 initialCountry:"ru",
                 onlyCountries: ["ru", "by"],
                 i18n: {
