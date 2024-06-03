@@ -8,10 +8,15 @@
                 @foreach($authors as $author)
                     {{ is_array($course->authors->pluck('id')->toArray()) && in_array($author->id, $course->authors->pluck('id')->toArray()) ? $author->name . ',' : ''  }}
                 @endforeach
-                
+
             </p>
             <section class="blog-post-featured-img" data-aos="fade-up" data-aos-delay="300">
                 <img src="{{url('storage/' . $course->image) }}" alt="featured image" class="w-100">
+                <div class="row">
+                <div class="col pt-5 text-center"><a href="{{route('lid.create')}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
+                        Записаться</a></div>
+                </div>
+
             </section>
             <section>
                 <div class="row">
@@ -19,7 +24,7 @@
                        <p>{!! $course->description !!}</p>
                     </div>
                 </div>
-                <div class="row pb-5">
+                <div class="row pb-1">
                     <div class="col-lg-9 mx-auto" data-aos="fade-up">
                         <div class="alert alert-secondary" role="alert">
                             <p class="text-center" style="margin-bottom: 0;">
@@ -28,6 +33,10 @@
                             </p>
                         </div>
                     </div>
+                </div>
+                <div class="row pb-5">
+                    <div class="col pt-5 text-center"><a href="{{route('lid.create')}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
+                            Записаться</a></div>
                 </div>
                 <div class="row">
                     <div class="blog-post-featured-img" data-aos="fade-up">
