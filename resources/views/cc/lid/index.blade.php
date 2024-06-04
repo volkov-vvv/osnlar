@@ -112,7 +112,11 @@
                                             <td>{{$lid->firstname}}</td>
                                             <td>{{$lid->email}}</td>
                                             <td>{{$lid->phone_prefix == '7' ? '8'.$lid->phone : $lid->phone_prefix.$lid->phone}}</td>
-                                            <td><span class="badge rounded-pill" style="background-color: {{$lid->status->color}} !important">{{$lid->status->title}}</span></td>
+                                            <td>
+                                                <span class="badge rounded-pill" style="background-color: {{$lid->status->color}} !important; color:{{contrast_color($lid->status->color)}}">
+                                                    {{$lid->status->title}}
+                                                </span>
+                                            </td>
                                             <td>{{$lid->interval}}</td>
                                             <td>{{$lid->created_at}}</td>
                                             <td>
