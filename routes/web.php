@@ -183,7 +183,7 @@ Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
     Route::get('/create', 'CreateController')->name('lid.create');
     Route::get('/create-new', 'CreateNewController')->name('lid.create_new');
     Route::post('/', 'StoreController')->name('lid.store');
-    Route::post('/', 'StoreNewController')->name('lid.store_new');
+    Route::post('/storu-new', 'StoreNewController')->name('lid.store_new');
     Route::get('/thank', 'IndexController')->name('lid.index');
 });
 

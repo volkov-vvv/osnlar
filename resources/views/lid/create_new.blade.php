@@ -62,7 +62,7 @@
                                     <label><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
                                     @foreach($courses as $course)
                                         @if($course->title != '---')
-                                            <div style="display: flex; align-items: baseline;">
+                                            <div style="display: flex; align-items: baseline;" class="mb-2">
                                                 <input name="course_id" type="radio" id="course_id_{{$course->id}}" value="{{$course->id}}" {{ $course->id == old('course_id') ? ' checked' : '' }}>
                                                 <label for="course_id_{{$course->id}}" class="category-label">&nbsp;{{$course->title}}</label>
                                             </div>
