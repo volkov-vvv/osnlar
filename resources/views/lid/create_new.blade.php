@@ -63,7 +63,7 @@
                                     @foreach($courses as $course)
                                         @if($course->title != '---')
                                             <div style="display: flex; align-items: baseline;" class="mb-2">
-                                                <input name="course_id" type="radio" id="course_id_{{$course->id}}" value="{{$course->id}}" {{ $course->id == old('course_id') ? ' checked' : '' }}>
+                                                <input name="course_id" type="radio" id="course_id_{{$course->id}}" value="{{$course->id}}" {{ $course->id == $selectedCourse ? ' checked' : '' }}>
                                                 <label for="course_id_{{$course->id}}" class="category-label">&nbsp;{{$course->title}}</label>
                                             </div>
                                         @endif
@@ -83,9 +83,7 @@
                                     <div class="input-group mb-3">
                                         <input name="lastname" type="text" class="form-control" value="{{old('lastname')}}">
                                     </div>
-                                    @error('lastname')
-                                    <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="form-group">
@@ -93,18 +91,14 @@
                                     <div class="input-group mb-3">
                                         <input name="firstname" type="text" class="form-control" value="{{old('firstname')}}">
                                     </div>
-                                    @error('firstname')
-                                    <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="form-group">
                                     <label>Отчество:</label>
                                     <div class="input-group mb-3">
                                         <input name="middlename" type="text" class="form-control" value="{{old('middlename')}}">
-                                        @error('middlename')
-                                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
-                                        @enderror
+
                                     </div>
                                 </div>
 
@@ -119,9 +113,7 @@
                                                    data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric">
                                         </div>
                                     </div>
-                                    @error('data')
-                                    <div class="text-danger">{{$message}}</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="form-group">
@@ -135,9 +127,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    @error('region_id')
-                                    <div class="text-danger">{{$message}}</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="mt-4">
@@ -159,9 +149,7 @@
                                             >
                                             <input type="hidden" name="phone_prefix" id="phone_prefix" value="7">
                                         </div>
-                                        @error('phone')
-                                        <div class="text-danger">{{$message}}</div>
-                                        @enderror
+
                                     </div>
                                 </div>
 
@@ -175,9 +163,7 @@
                                         <input name="email" type="email" class="form-control" placeholder=""
                                                value="{{old('email')}}">
                                     </div>
-                                    @error('email')
-                                    <div class="text-danger">{{$message}}</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="form-group mt-4">
@@ -185,9 +171,7 @@
                                         <input name="politic" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1">
                                         <label for="customCheckbox1" class="custom-control-label"><span class="text-danger">* </span>Я соглашаюсь с <a href="{{asset('files/politic.pdf')}}" target="_blank">политикой обработки персональных данных</a> </label>
                                     </div>
-                                    @error('politic')
-                                    <div class="text-danger">{{$message}}</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="form-group">
@@ -216,9 +200,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    @error('lid_level_edu_id')
-                                    <div class="text-danger">{{$message}}</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="form-group">
@@ -243,9 +225,7 @@
                                         </div>
                                     </div>
                                     <input type="hidden" name="category_id" value="{{old('category_id')}}">
-                                    @error('category_id')
-                                    <div class="text-danger">{{$message}}</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="form-group">
@@ -259,9 +239,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    @error('agent_id')
-                                    <div class="text-danger">{{$message}}</div>
-                                    @enderror
+
                                 </div>
 
                                 <div class="mt-4">
@@ -280,31 +258,31 @@
             <ul class="row mt mb-2">
                 <ul>
                     @error('course_id')
-                    <li class="text-danger">Вы не выбрали курс, на который хотите записаться</li>
+                    <li class="text-danger">{{$message}}</li>
                     @enderror
 
                     @error('lastname')
-                    <li class="text-danger">Вы не указали фамилию</li>
+                    <li class="text-danger">{{$message}}</li>
                     @enderror
 
                     @error('firstname')
-                    <li class="text-danger">Вы не указали имя</li>
+                    <li class="text-danger">{{$message}}</li>
                     @enderror
 
                     @error('region_id')
-                    <li class="text-danger">Вы не выбрали регион</li>
+                    <li class="text-danger">{{$message}}</li>
                     @enderror
 
                     @error('email')
-                    <li class="text-danger">Вы не указали email</li>
+                    <li class="text-danger">{{$message}}</li>
                     @enderror
 
                     @error('phone')
-                    <li class="text-danger">Вы не указали телефон</li>
+                    <li class="text-danger">{{$message}}</li>
                     @enderror
 
                     @error('politic')
-                    <li class="text-danger">Вы не подтвердили согласие с политикой обработки персональных данных</li>
+                    <li class="text-danger">{{$message}}</li>
                     @enderror
 
             </ul>

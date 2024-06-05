@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class CreateNewController extends Controller
 {
-    public function __invoke()
+    public function __invoke($selectedCourse = null)
     {
         $categories = Category::whereNotIn('id',[4,5])->get()->sortBy('order');
         $categoriesMain = Category::find([4,5])->sortBy('order');
@@ -23,7 +23,7 @@ class CreateNewController extends Controller
         $authors = Author::all();
         $levelsedu = Leveledu::all();
         $courses = Course::where('is_published', 1)->get();
-        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain'));
+        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse'));
     }
 
 }
