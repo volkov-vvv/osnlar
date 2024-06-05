@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col-xl-6">
 
-                    <div class="alert" style="background-color: {{$lid->status->color}} !important">
+                    <div class="alert" style="background-color: {{$lid->status->color}} !important; color:{{contrast_color($lid->status->color)}}">
                         {{$lid->status->title}}
                     </div>
 

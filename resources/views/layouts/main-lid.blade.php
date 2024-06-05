@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="{{ asset('css/intlTelInput.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
 
     <!-- Top.Mail.Ru counter -->
     <script type="text/javascript">
@@ -116,7 +117,7 @@
 <script src="{{ asset('js/intlTelInput/intlTelInput.min.js')}} "></script>
 <script src="{{ asset('js/intlTelInput/data.min.js')}} "></script>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js"></script>
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
@@ -130,6 +131,9 @@
 
 <script>
     $(document).ready(function() {
+
+
+
         $('[data-mask]').inputmask();
 
         var input = document.querySelector("#phone");
@@ -152,6 +156,11 @@
             $('#phone_prefix').val(iti.getSelectedCountryData().dialCode);
         });
     });
+
+
+        var stepper = new Stepper(document.querySelector('.bs-stepper'));
+
+
     $(function () {
         //Initialize Select2 Elements
         $('.select2').select2({
