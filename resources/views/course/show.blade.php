@@ -13,7 +13,7 @@
             <section class="blog-post-featured-img" data-aos="fade-up" data-aos-delay="300">
                 <img src="{{url('storage/' . $course->image) }}" alt="featured image" class="w-100">
                 <div class="row">
-                <div class="col pt-5 text-center"><a href="{{route('lid.create_new', ['selectedCourse' => $course->id])}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
+                <div class="col pt-5 text-center"><a href="{{route('lid.create', ['selectedCourse' => $course->id])}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
                         Записаться</a></div>
                 </div>
 
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="row pb-5">
-                    <div class="col pt-5 text-center"><a href="{{route('lid.create_new', ['selectedCourse' => $course->id])}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
+                    <div class="col pt-5 text-center"><a href="{{route('lid.create', ['selectedCourse' => $course->id])}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
                             Записаться</a></div>
                 </div>
                 <div class="row">
@@ -67,7 +67,7 @@
                     <h1 class="banner-title">Подать заявку!</h1>
                     <div class="banner-btns-wrapper">
                         <div class="carousel-content-btns">
-                            <a href="{{route('lid.create_new', ['selectedCourse' => $course->id])}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i>
+                            <a href="{{route('lid.create', ['selectedCourse' => $course->id])}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i>
                                 Записаться</a>
                         </div>
                     </div>
