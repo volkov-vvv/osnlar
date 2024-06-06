@@ -272,5 +272,6 @@
         duration: 2000
     });
 </script>
+@include('cookieConsent::index')
 </body>
 </html>
