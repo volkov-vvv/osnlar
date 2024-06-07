@@ -256,7 +256,7 @@
             </div>
 
             <ul class="row mt mb-2">
-                <ul>
+
                     @error('course_id')
                     <li class="text-danger">{{$message}}</li>
                     @enderror
@@ -287,14 +287,18 @@
 
             </ul>
 
-            @if(isset($_GET['utm_source']))
-                <input type="hidden" name="utm_source" value="{{$_GET['utm_source']}}">
-                <input type="hidden" name="utm_medium" value="{{$_GET['utm_medium']}}">
-                <input type="hidden" name="utm_campaign" value="{{$_GET['utm_campaign']}}">
+            @if(isset($cookies['utm_source']))
+                <input type="hidden" name="utm_source" value="{{$cookies['utm_source']}}">
+            @endif
+            @if(isset($cookies['utm_medium']))
+                <input type="hidden" name="utm_medium" value="{{$cookies['utm_medium']}}">
+            @endif
+            @if(isset($cookies['utm_campaign']))
+                <input type="hidden" name="utm_campaign" value="{{$cookies['utm_campaign']}}">
             @endif
 
 
-            <!--<a class="btn btn-outline-secondary" href="{{route('main.index')}}">Назад</a>-->
+
         </form>
 
 

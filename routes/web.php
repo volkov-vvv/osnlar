@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use \App\Http\Middleware\SetUserCookie;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,26 +19,26 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::group(['namespace' => 'Main'],function (){
-    Route::get('/', 'IndexController')->name('main.index');
+    Route::get('/', 'IndexController')->name('main.index')->middleware('cookie');
 });
 
-Route::group(['namespace' => 'Course', 'prefix' => 'course'],function (){
+Route::group(['namespace' => 'Course', 'prefix' => 'course', 'middleware' => ['cookie']],function (){
     Route::get('/', 'IndexController')->name('course.index');
     Route::get('/{course}', 'ShowController')->name('course.show');
 });
 
-Route::group(['namespace' => 'Archive', 'prefix' => 'archive'],function (){
+Route::group(['namespace' => 'Archive', 'prefix' => 'archive', 'middleware' => ['cookie']],function (){
     Route::get('/', 'IndexController')->name('archive.index');
     Route::get('/{archive}', 'ShowController')->name('archive.show');
 });
 
-Route::group(['namespace' => 'About', 'prefix' => 'about'],function (){
+Route::group(['namespace' => 'About', 'prefix' => 'about', 'middleware' => ['cookie']],function (){
     Route::get('/', 'IndexController')->name('about.index');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('cookie');
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']],function (){
     Route::group(['namespace' => 'Main'],function (){
@@ -55,7 +56,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::patch('/{user}', 'UpdateController')->name('admin.user.update');
         Route::delete('/{user}', 'DeleteController')->name('admin.user.delete');
     });
-    Route::group(['namespace' => 'About', 'prefix' => 'about'],function (){
+    Route::group(['namespace' => 'About', 'prefix' => 'about', 'middleware' => ['cookie']],function (){
         Route::get('/', 'IndexController')->name('admin.about.index');
         Route::get('/create', 'CreateController')->name('admin.about.create');
         Route::post('/', 'StoreController')->name('admin.about.store');
@@ -179,7 +180,7 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
 });
 
 
-Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
+Route::group(['namespace' => 'Lid', 'prefix' => 'lid', 'middleware' => ['cookie']],function (){
     Route::get('/create-old', 'CreateController')->name('lid.create_old');
     Route::get('/create/{selectedCourse?}', 'CreateNewController')->name('lid.create');
     Route::post('/store-old', 'StoreController')->name('lid.store');
@@ -187,7 +188,7 @@ Route::group(['namespace' => 'Lid', 'prefix' => 'lid'],function (){
     Route::get('/thank', 'IndexController')->name('lid.index');
 });
 
-Route::group(['namespace' => 'Org', 'prefix' => 'org'],function (){
+Route::group(['namespace' => 'Org', 'prefix' => 'org', 'middleware' => ['cookie']],function (){
     Route::get('/create', 'CreateController')->name('org.create');
     Route::post('/', 'StoreController')->name('org.store');
     Route::get('/thank', 'IndexController')->name('org.index');
