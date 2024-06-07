@@ -17,9 +17,9 @@ class SetUserCookie
      */
     public function handle(Request $request, Closure $next)
     {
-        if(isset($_GET['utm_source'])) Cookie::queue(Cookie::make('utm_source', $_GET['utm_source'], 60));
-        if(isset($_GET['utm_medium'])) Cookie::queue(Cookie::make('utm_medium', $_GET['utm_medium'], 60));
-        if(isset($_GET['utm_campaign'])) Cookie::queue(Cookie::make('utm_campaign', $_GET['utm_campaign'], 60));
+        if(isset($_GET['utm_source'])) Cookie::queue(Cookie::make('utm_source', $_GET['utm_source'], 60*24*30));
+        if(isset($_GET['utm_medium'])) Cookie::queue(Cookie::make('utm_medium', $_GET['utm_medium'], 60*24*30));
+        if(isset($_GET['utm_campaign'])) Cookie::queue(Cookie::make('utm_campaign', $_GET['utm_campaign'], 60*24*30));
 
         return $next($request);
     }

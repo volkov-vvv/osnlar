@@ -287,17 +287,9 @@
 
             </ul>
 
-            @if(isset($cookies['utm_source']))
-                <input type="hidden" name="utm_source" value="{{$cookies['utm_source']}}">
-            @endif
-            @if(isset($cookies['utm_medium']))
-                <input type="hidden" name="utm_medium" value="{{$cookies['utm_medium']}}">
-            @endif
-            @if(isset($cookies['utm_campaign']))
-                <input type="hidden" name="utm_campaign" value="{{$cookies['utm_campaign']}}">
-            @endif
-
-
+            <input type="hidden" name="utm_source" value="{{$utm['utm_source']}}">
+            <input type="hidden" name="utm_medium" value="{{$utm['utm_medium']}}">
+            <input type="hidden" name="utm_campaign" value="{{$utm['utm_campaign']}}">
 
         </form>
 

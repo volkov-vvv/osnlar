@@ -17,6 +17,29 @@ class CreateNewController extends Controller
     public function __invoke(Request $request, $selectedCourse = null)
     {
         $cookies = $request->cookie();
+        $utm = ['utm_source' => '', 'utm_medium' => '', 'utm_campaign' =>''];
+
+        if(isset($_GET['utm_source'])){
+            $utm['utm_source'] = $_GET['utm_source'];
+        }
+        elseif(isset($cookies['utm_source'])){
+            $utm['utm_source'] = $cookies['utm_source'];
+        }
+
+        if(isset($_GET['utm_medium'])){
+            $utm['utm_medium'] = $_GET['utm_medium'];
+        }
+        elseif(isset($cookies['utm_medium'])){
+            $utm['utm_medium'] = $cookies['utm_medium'];
+        }
+
+        if(isset($_GET['utm_campaign'])){
+            $utm['utm_campaign'] = $_GET['utm_campaign'];
+        }
+        elseif(isset($cookies['utm_campaign'])){
+            $utm['utm_campaign'] = $cookies['utm_campaign'];
+        }
+
         $categories = Category::whereNotIn('id',[4,5])->get()->sortBy('order');
         $categoriesMain = Category::find([4,5])->sortBy('order');
         $agents = Agent::all();
@@ -24,7 +47,7 @@ class CreateNewController extends Controller
         $authors = Author::all();
         $levelsedu = Leveledu::all();
         $courses = Course::where('is_published', 1)->get();
-        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'cookies'));
+        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'utm'));
     }
 
 }
