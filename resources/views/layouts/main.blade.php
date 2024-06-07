@@ -272,6 +272,6 @@
         duration: 2000
     });
 </script>
-@include('cookieConsent::index')
+{{-- @include('cookieConsent::index') --}}
 </body>
 </html>
