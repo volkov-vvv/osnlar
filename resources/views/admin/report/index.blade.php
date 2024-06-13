@@ -29,6 +29,41 @@
                         <div class="card">
 
                             <div class="card-body">
+
+                                <table class="table table-striped mb-2">
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            Агент:
+                                            <select id="agent" name="agent">
+                                                <option></option>
+                                                @foreach($agents as $agent)
+                                                    <option value="{{$agent->title}}">{{$agent->title}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            Статус:
+                                            <select id="status" name="status">
+                                                <option></option>
+                                                @foreach($statuses as $status)
+                                                    <option value="{{$status->title}}">{{$status->title}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            utm_source:
+                                            <select id="utm_source" name="utm_source">
+                                                <option></option>
+                                                @foreach($sources as $source)
+                                                    <option value="{{$source->utm_source}}">{{$source->utm_source}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
                                 <table id="report1" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
@@ -110,4 +145,58 @@
 
         </div><!-- /.container-fluid -->
     </section>
+@endsection
+
+@section('javascript')
+    <script>
+        var table= new DataTable('#report1', {
+            order: [[0, 'desc']],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "pdf", "colvis"],
+            "language": {
+                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                paginate: {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                search: "Поиск:",
+                buttons: {
+                    colvis: 'Выбрать колонки',
+                    search: 'Поиск'
+                },
+
+            },
+
+        })
+
+        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#agent').on('change', function (e){
+
+            table
+                .column(1)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#status').on('change', function (e){
+
+            table
+                .column(8)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#utm_source').on('change', function (e){
+
+            table
+                .column(10)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+    </script>
 @endsection

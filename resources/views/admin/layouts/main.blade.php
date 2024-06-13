@@ -162,7 +162,7 @@
     $('[data-mask]').inputmask();
     $(document).ready(function() {
         $(function () {
-
+/*
             $("#report1").DataTable({
                 order: [[0, 'desc']],
                 columnDefs: [
@@ -190,7 +190,7 @@
                     },
                 }
             }).buttons().container().appendTo('#report1_wrapper .col-md-6:eq(0)');
-
+*/
             $("#example111").DataTable({
                 order: [[0, 'desc']],
                 "responsive": true,

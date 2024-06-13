@@ -24,7 +24,9 @@ class IndexController extends Controller
         $courses = Course::all();
         $users = User::where('role', 3)->get();
         $lids = Lid::all();
+        $sources = $lids->unique('utm_source')->values()->all();
+        dump('utm_source');
 //      $lids = Lid::where('agent_id', Auth::user()->id)->get();
-        return view('admin.report.index', compact('lids','courses','statuses','users','regions','agents','categories'));
+        return view('admin.report.index', compact('lids','courses','statuses','users','regions','agents','categories', 'sources'));
     }
 }
