@@ -173,7 +173,7 @@
 
         })
 
-        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        table.buttons().container().appendTo('#report1_wrapper .col-md-6:eq(0)');
 
         $('#agent').on('change', function (e){
 
