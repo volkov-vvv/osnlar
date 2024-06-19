@@ -33,6 +33,16 @@ class UpdateRequest extends FormRequest
         ];
     }
 
+    protected function passedValidation()
+    {
+        $data = $this->validator->getData();
+        if(!isset($data['utm'])){
+            $this->validator->setData( [
+                    'utm' => array(),
+                ] + $data);
+        }
+    }
+
     public function messages()
     {
         return [

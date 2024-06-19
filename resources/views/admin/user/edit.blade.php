@@ -68,11 +68,13 @@
                         </div>
                         <div class="mb-3 form-group">
                             <label>utm_source</label>
-                            <select name="utm[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">
+                            <select name="utm[]" class="select2" multiple="multiple" data-allow-clear="true" data-placeholder="Выберите" style="width: 100%;">
                                 @foreach($utm_sources as $utm_source)
+                                    @if(!empty($utm_source))
                                     <option value="{{$utm_source}}"
                                         {{ is_array($user->utm) && in_array($utm_source, $user->utm) ? ' selected' : ''  }}
                                     >{{$utm_source}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
