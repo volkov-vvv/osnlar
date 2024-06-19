@@ -21,6 +21,11 @@ class Lid extends Model
         return $this->belongsTo(Status::class);
     }
 
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class);
+    }
+
     public function activity()
     {
         return $this->belongsTo(Activity::class, 'id', 'subject_id')->where('description', '=', 'Изменение статуса');

@@ -26,6 +26,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function agents()
+    {
+        return $this->belongsToMany(Agent::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +41,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'utm'
     ];
 
     /**
@@ -55,5 +61,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'utm' => 'array',
     ];
 }

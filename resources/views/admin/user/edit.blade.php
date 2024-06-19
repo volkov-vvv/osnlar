@@ -39,7 +39,7 @@
                     </div>
                     <div class="mb-3 form-group">
                         <label>Роль пользователя</label>
-                        <select name="role" class="form-control">
+                        <select name="role" id="role" class="form-control">
                             @foreach($roles as $id => $role)
                                 <option value="{{$id}}"
                                     {{ $id == $user->role ? ' selected' : '' }}
@@ -50,6 +50,36 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+
+                    <div id="agent-form"
+                        @if($user->role != 2)
+                            style="display: none"
+                        @endif
+                    >
+                        <div class="mb-3 form-group">
+                            <label>Привязка к агенту</label>
+                            <select name="agent_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">
+                                @foreach($agents as $agent)
+                                    <option value="{{$agent->id}}"
+                                        {{ is_array($user->agents->pluck('id')->toArray()) && in_array($agent->id, $user->agents->pluck('id')->toArray()) ? ' selected' : ''  }}
+                                    >{{$agent->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3 form-group">
+                            <label>utm_source</label>
+                            <select name="utm[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">
+                                @foreach($utm_sources as $utm_source)
+                                    <option value="{{$utm_source}}"
+                                        {{ is_array($user->utm) && in_array($utm_source, $user->utm) ? ' selected' : ''  }}
+                                    >{{$utm_source}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+
                     <button type="submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.user.index')}}">Назад</a>
                 </form>
@@ -61,12 +91,16 @@
         </div><!-- /.container-fluid -->
     </section>
 
+@endsection
 
-
-
-
-
-
-
-
+@section('javascript')
+    <script>
+        $('#role').on('change', function (e){
+            if($('#role option:selected').val() == 2){
+                $('#agent-form').show();
+            }else{
+                $('#agent-form').hide();
+            }
+        })
+    </script>
 @endsection

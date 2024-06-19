@@ -179,6 +179,14 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
     });
 });
 
+Route::group(['namespace' => 'Agent', 'prefix' => 'agent', 'middleware' => ['auth', 'agent']],function (){
+    Route::group(['namespace' => 'Main', 'prefix' => 'main'],function (){
+        Route::get('/', 'IndexController')->name('agent.main.index');
+    });
+    Route::group(['namespace' => 'Report', 'prefix' => 'report'],function (){
+        Route::get('/', 'IndexController')->name('agent.report.index');
+    });
+});
 
 Route::group(['namespace' => 'Lid', 'prefix' => 'lid', 'middleware' => ['cookie']],function (){
     Route::get('/create-old', 'CreateController')->name('lid.create_old');

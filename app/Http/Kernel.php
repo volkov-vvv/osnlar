@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\AgentMiddleware;
 use App\Http\Middleware\ContactcenterMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -68,6 +69,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => AdminMiddleware::class,
         'cc' => ContactcenterMiddleware::class,
+        'agent' => AgentMiddleware::class,
         'cookie' => \App\Http\Middleware\SetUserCookie::class,
     ];
 }

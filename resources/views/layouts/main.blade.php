@@ -106,7 +106,9 @@
                             @switch(auth()->user()->role)
                             @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
                             @break
-                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
+                            @case(2) {{auth()->user()->role == 2 ? route('agent.main.index') : ''}}
+                            @break
+                            @case(3) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
                             @break
                             @default
                                     {{route('cc.main.index')}}
