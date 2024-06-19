@@ -24,7 +24,12 @@ class IndexController extends Controller
         $statuses = Status::all();
         $courses = Course::all();
         $users = User::where('role', 3)->get();
-        $lids = Lid::whereIn('agent_id', $agents->pluck('id')->toArray())->orwhereIn('utm_source', $sources)->get();
+        if(is_array($sources)){
+            $lids = Lid::whereIn('agent_id', $agents->pluck('id')->toArray())->orwhereIn('utm_source', $sources)->get();
+        }else{
+            $lids = Lid::whereIn('agent_id', $agents->pluck('id')->toArray())->get();
+        }
+
         $agentsForFilter = $lids->unique('agent_id')->values();
         $sourcesForFilter = $lids->unique('utm_source')->values();
 
