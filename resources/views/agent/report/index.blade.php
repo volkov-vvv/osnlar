@@ -151,6 +151,9 @@
     <script>
         var table= new DataTable('#report1', {
             order: [[0, 'desc']],
+            columnDefs: [
+                { targets: [ 4], visible: false }
+            ],
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,

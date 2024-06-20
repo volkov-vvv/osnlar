@@ -77,6 +77,7 @@
                                     <tr>
                                         <th>№</th>
                                         <th>Ответственный</th>
+                                        <th>Агент</th>
                                         <th>Курс</th>
                                         <th>Регион</th>
                                         <th>Фамилия</th>
@@ -98,6 +99,7 @@
                                                     {{ $user->id == $lid->responsible_id ? $user->name : '' }}
                                                 @endforeach
                                             </td>
+                                            <td>{{isset($lid->agent->title) ? $lid->agent->title : ''}}</td>
                                             <td>
                                                 @foreach($courses as $course)
                                                     {{ $course->id == $lid->course_id ? $course->title : '' }}
@@ -153,6 +155,9 @@
 
         var table= new DataTable('#example1', {
             order: [[0, 'desc']],
+            columnDefs: [
+                { targets: [ 2], visible: false }
+            ],
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
