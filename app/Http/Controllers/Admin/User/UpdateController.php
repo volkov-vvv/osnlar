@@ -14,8 +14,9 @@ class UpdateController extends Controller
         $data = $request->validated();
         $user->update($data);
         if(isset($data['agent_ids'])){
-            $user->agents()->sync($data['agent_ids']);
+            $data['agent_ids'] = array();
         }
+        $user->agents()->sync($data['agent_ids']);
         return redirect()->route('admin.user.show', compact('user'));
 
     }
