@@ -77,7 +77,8 @@
                                     </tbody>
                                 </table>
 
-                                <table id="example1" class="table table-bordered table-striped hover">
+
+                                <table id="example2" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
                                         <th>№</th>
@@ -94,52 +95,8 @@
                                         <th>Действия</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    @foreach($lids as $lid)
-                                        <tr>
-                                            <td>{{$lid->id}}</td>
-                                            <td>
-                                                @foreach($users as $user)
-                                                    {{ $user->id == $lid->responsible_id ? $user->name : '' }}
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                @foreach($courses as $course)
-                                                    {{ $course->id == $lid->course_id ? $course->title : '' }}
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                @foreach($regions as $region)
-                                                    {{ $region->id == $lid->region_id ? $region->title : '' }}
-                                                @endforeach
-                                            </td>
-                                            <td>{{$lid->lastname}}</td>
-                                            <td>{{$lid->firstname}}</td>
-                                            <td>{{$lid->email}}</td>
-                                            <td>{{$lid->phone_prefix == '7' ? '8'.$lid->phone : $lid->phone_prefix.$lid->phone}}</td>
-                                            <td>
-                                                <span class="badge rounded-pill" style="background-color: {{$lid->status->color}} !important; color:{{contrast_color($lid->status->color)}}">
-                                                    {{$lid->status->title}}
-                                                </span>
-                                            </td>
-                                            <td>{{$lid->interval}}</td>
-                                            <td>{{$lid->created_at}}</td>
-                                            <td>
-                                                <a href="{{route('admin.lid.show', $lid->id)}}"><i
-                                                        class="far fa-eye"></i></a> &nbsp; &nbsp;
-                                                <a href="{{route('admin.lid.edit', $lid->id)}}" class="text-success"><i
-                                                        class="fas fa-pen"></i></a>
-                                                {{--                                                <form method="post" action="{{route('admin.lid.delete', $lid->id)}}">--}}
-                                                {{--                                                    @csrf--}}
-                                                {{--                                                    @method('DELETE')--}}
-                                                {{--                                                    <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>--}}
-                                                {{--                                                </form>--}}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
                                 </table>
-                                </table>
+
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -157,12 +114,42 @@
 @section('javascript')
     <script>
 
-        var table= new DataTable('#example1', {
-            order: [[0, 'desc']],
+        var table = new DataTable('#example2', {
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-            "buttons": ["excel", "pdf", "colvis"],
+            "dom": 'Bfrtip',
+            "buttons": ["excel", "colvis", { extend: 'excel',
+                text: 'Excel',              //Export all to CSV file
+                action: function (e, dt, node, config)
+                {
+                    var rowData = dt.rows({ filter: 'applied' }).data();
+                    var rowKeys = Object.keys(rowData[0]);
+                    var OrderData = dt.order();
+                    var columnSortName = rowKeys[OrderData[0][0]];
+                    var columnSortOrder = OrderData[0][1];
+                    var search = dt.search();
+                    $.ajax({
+                        url: "{{route('admin.lid.getLidsExcel')}}",
+                        method: 'get',
+                        dataType: 'html',
+                        data: {
+                            search: search,
+                            columnSortName: columnSortName,
+                            columnSortOrder: columnSortOrder,
+                        },
+                        success: function(data){
+                            console.log(data);
+                            alert('Ok');
+                        }
+                    });
+                }
+            }],
+            order: [[0, 'desc']],
+            'columnDefs': [ {
+                'targets': [9,11], // column index (start from 0)
+                'orderable': false, // set orderable false for selected columns
+            }],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
                 paginate: {
@@ -178,10 +165,26 @@
                 },
 
             },
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('admin.lid.getLids')}}",
+            columns: [
+                { data: 'id' },
+                { data: 'responsible' },
+                { data: 'course' },
+                { data: 'region' },
+                { data: 'lastname' },
+                { data: 'firstname' },
+                { data: 'email' },
+                { data: 'phone' },
+                { data: 'status' },
+                { data: 'interval' },
+                { data: 'created_at' },
+                { data: 'actions' },
+            ]
+        });
 
-        })
-
-        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
 
 
@@ -216,6 +219,8 @@
                 .search(this.value, {exact: true})
                 .draw();
         })
+
+
 
     </script>
 @endsection

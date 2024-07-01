@@ -16,6 +16,21 @@ class Lid extends Model
     protected $table = 'lids';
     protected $guarded = false;
 
+    public function responsible()
+    {
+        return $this->belongsTo(User::class, 'responsible_id');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class);
