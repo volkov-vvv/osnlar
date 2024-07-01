@@ -195,7 +195,7 @@
         $('#course').on('change', function (e){
 
             table
-                .column(2)
+                .column(3)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -203,7 +203,7 @@
         $('#region').on('change', function (e){
 
             table
-                .column(3)
+                .column(4)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -211,7 +211,7 @@
         $('#status').on('change', function (e){
 
             table
-                .column(8)
+                .column(9)
                 .search(this.value, {exact: true})
                 .draw();
         })
