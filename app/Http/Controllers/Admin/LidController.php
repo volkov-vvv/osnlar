@@ -17,7 +17,7 @@ use App\Models\Lid;
 use App\Models\Status;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\User;
-
+use App\Exports\LidsExport;
 
 class lidController extends Controller
 {
@@ -38,21 +38,13 @@ class lidController extends Controller
      */
     public function index()
     {
+
         $courses = Course::all();
         $regions = Region::all();
         $statuses = Status::all();
-        $lids = Lid::get();
         $users = User::where('role', 3)->get();
 
-        $lids->each(function ($item, $key){
-            if($item->activity){
-                $item->interval = $this->dateDiff($item->activity->created_at, $item->created_at);
-            }else{
-                $item->interval = '---';
-            }
-        });
-
-        return view('admin.lid.index', compact('lids','courses','users','regions','statuses'));
+        return view('admin.lid.index', compact('courses','users','regions','statuses'));
     }
 
     /**
@@ -217,38 +209,24 @@ class lidController extends Controller
         $columnSortOrder = $order_arr[0]['dir']; // asc or desc
         $searchValue = $search_arr['value']; // Search value
 
-        // Total records
-        $totalRecords = Lid::select('count(*) as allcount')->count();
-        $totalRecordswithFilter = Lid::select('count(*) as allcount')
-            ->join('courses', 'courses.id', '=', 'lids.course_id')
-            ->join('regions', 'regions.id', '=', 'lids.region_id')
-            ->join('statuses', 'statuses.id', '=', 'lids.status_id')
-            ->leftjoin('users', 'users.id', '=', 'lids.responsible_id')
-            ->where('courses.title', 'like', '%' . $searchValue . '%')
-            ->orwhere('regions.title', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.firstname', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.lastname', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.email', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.phone', 'like', '%' . $searchValue . '%')
-            ->count();
+        $param['search'] = $searchValue;
 
-            // Fetch records
-        $records = Lid::select('lids.*')
-            ->join('courses', 'courses.id', '=', 'lids.course_id')
-            ->join('regions', 'regions.id', '=', 'lids.region_id')
-            ->join('statuses', 'statuses.id', '=', 'lids.status_id')
-            ->leftjoin('users', 'users.id', '=', 'lids.responsible_id')
-            ->where('courses.title', 'like', '%' . $searchValue . '%')
-            ->orwhere('regions.title', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.firstname', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.lastname', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.email', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.phone', 'like', '%' . $searchValue . '%')
-            ->orderBy($columnName,$columnSortOrder)
+        // Фильтры
+        foreach ($columnName_arr as $key => $column) {
+            if(!empty($column['search']['value'])){
+                $param[$column['data']] = $column['search']['value'];
+            }
+        }
+
+        $records = Lid::filter($param);
+
+        $totalRecords = Lid::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = $records->count();
+
+        $records = $records->orderBy($columnName,$columnSortOrder)
             ->skip($start)
             ->take($rowperpage)
             ->get();
-
 
         $data_arr = array();
 
@@ -323,7 +301,7 @@ class lidController extends Controller
      */
     public function getLidsExcel(Request $request)
     {
-        $searchValue = $request->get('search');
+
         $columnSortName = $request->get('columnSortName');
         $columnSortOrder = $request->get('columnSortOrder');
 
@@ -332,19 +310,15 @@ class lidController extends Controller
         if($columnSortName == 'responsible') $columnSortName = 'users.name';
         if($columnSortName == 'status') $columnSortName = 'statuses.title';
 
-        $records = Lid::select('lids.*')
-            ->join('courses', 'courses.id', '=', 'lids.course_id')
-            ->join('regions', 'regions.id', '=', 'lids.region_id')
-            ->join('statuses', 'statuses.id', '=', 'lids.status_id')
-            ->leftjoin('users', 'users.id', '=', 'lids.responsible_id')
-            ->where('courses.title', 'like', '%' . $searchValue . '%')
-            ->orwhere('regions.title', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.firstname', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.lastname', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.email', 'like', '%' . $searchValue . '%')
-            ->orwhere('lids.phone', 'like', '%' . $searchValue . '%')
-            ->orderBy($columnSortName,$columnSortOrder)
-            ->get();
-    }
+        $param['search'] = $request->get('search');
+        $param['responsible'] = $request->get('filterResponsible');
+        $param['course'] = $request->get('filterCourse');
+        $param['region'] = $request->get('filterRegion');
+        $param['status'] = $request->get('filterStatus');
 
+        return (new LidsExport)
+            ->Params($param)
+            ->Order($columnSortName, $columnSortOrder)
+            ->download('lids.xlsx');
+    }
 }

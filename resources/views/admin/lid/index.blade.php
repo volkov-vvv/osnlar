@@ -119,8 +119,8 @@
             "lengthChange": false,
             "autoWidth": false,
             "dom": 'Bfrtip',
-            "buttons": ["excel", "colvis", { extend: 'excel',
-                text: 'Excel',              //Export all to CSV file
+            "buttons": [{ extend: 'excel',
+                text: 'Excel',
                 action: function (e, dt, node, config)
                 {
                     var rowData = dt.rows({ filter: 'applied' }).data();
@@ -132,19 +132,28 @@
                     $.ajax({
                         url: "{{route('admin.lid.getLidsExcel')}}",
                         method: 'get',
-                        dataType: 'html',
                         data: {
                             search: search,
                             columnSortName: columnSortName,
                             columnSortOrder: columnSortOrder,
+                            filterResponsible: $('#responsible').val(),
+                            filterCourse: $('#course').val(),
+                            filterRegion: $('#region').val(),
+                            filterStatus: $('#status').val(),
                         },
-                        success: function(data){
-                            console.log(data);
-                            alert('Ok');
-                        }
+                        xhrFields:{
+                            responseType: 'blob'
+                        },
+                        success: function(data)
+                        {
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(data);
+                            link.download = `Lids_report.xlsx`;
+                            link.click();
+                        },
                     });
                 }
-            }],
+            }, "colvis"],
             order: [[0, 'desc']],
             'columnDefs': [ {
                 'targets': [9,11], // column index (start from 0)
