@@ -22,15 +22,6 @@ use App\Exports\LidsExport;
 class lidController extends Controller
 {
 
-    private function dateDiff($dateFirst, $dateSecond){
-        $interval = date_diff($dateFirst, $dateSecond);
-        $formatStr = '%hч %iмин';
-        if ($interval->d > 0) $formatStr = '%dд ' . $formatStr;
-        if ($interval->m > 0) $formatStr = '%mм ' . $formatStr;
-        if ($interval->y > 0) $formatStr = '%yг ' . $formatStr;
-        return $interval->format($formatStr);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -238,6 +229,7 @@ class lidController extends Controller
                 $responsible = '';
             }
 
+            $agent = $record->agent->title;
             $course = $record->course->title;
             $region = $record->region->title;
             $lastname = $record->lastname;
@@ -255,7 +247,7 @@ class lidController extends Controller
                                                     . $record->status->title .
                                                 '</span>';
             if($record->activity){
-                $interval = $this->dateDiff($record->activity->created_at, $record->created_at);
+                $interval = dateDiff($record->activity->created_at, $record->created_at);
             }else{
                 $interval = '---';
             }
@@ -271,6 +263,7 @@ class lidController extends Controller
             $data_arr[] = array(
                 "id" => $id,
                 "responsible" => $responsible,
+                "agent" => $agent,
                 "course" => $course,
                 "region" => $region,
                 "lastname" => $lastname,

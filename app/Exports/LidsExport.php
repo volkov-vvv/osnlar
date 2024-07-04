@@ -60,6 +60,11 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $responsible = '';
         }
 
+        if(isset($lid->agent)) {
+            $agent = $lid->agent->title;
+        }else{
+            $agent = '';
+        }
         $course = $lid->course->title;
         $region = $lid->region->title;
         $lastname = $lid->lastname;
@@ -75,14 +80,14 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
         $status = $lid->status->title;
         if($lid->activity){
-            $interval = $this->dateDiff($lid->activity->created_at, $lid->created_at);
+            $interval = dateDiff($lid->activity->created_at, $lid->created_at);
         }else{
             $interval = '---';
         }
         return [
             $id,
             $responsible,
-            '',
+            $agent,
             $course,
             $region,
             $lastname,
@@ -93,14 +98,5 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $interval,
             $created_at,
         ];
-    }
-
-    private function dateDiff($dateFirst, $dateSecond){
-        $interval = date_diff($dateFirst, $dateSecond);
-        $formatStr = '%hч %iмин';
-        if ($interval->d > 0) $formatStr = '%dд ' . $formatStr;
-        if ($interval->m > 0) $formatStr = '%mм ' . $formatStr;
-        if ($interval->y > 0) $formatStr = '%yг ' . $formatStr;
-        return $interval->format($formatStr);
     }
 }
