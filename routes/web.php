@@ -176,8 +176,8 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::delete('/{org}', 'DeleteController')->name('cc.org.delete');
     });
 
-    Route::get('/lid/getLids',[App\Http\Controllers\Admin\LidController::class, 'getLids'])->name('cc.lid.getLids');
-    Route::get('/lid/getLidsExcel',[App\Http\Controllers\Admin\LidController::class, 'getLidsExcel'])->name('cc.lid.getLidsExcel');
+    Route::get('/lid/getLids',[App\Http\Controllers\CC\LidController::class, 'getLids'])->name('cc.lid.getLids');
+    Route::get('/lid/getLidsExcel',[App\Http\Controllers\CC\LidController::class, 'getLidsExcel'])->name('cc.lid.getLidsExcel');
     Route::group(['as' => 'cc.'], function() {
         Route::resource('lid', LidController::class);
     });
