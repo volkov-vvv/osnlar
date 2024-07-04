@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Admin\Lid\StoreRequest;
@@ -17,19 +17,10 @@ use App\Models\Lid;
 use App\Models\Status;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\User;
-
+use App\Exports\LidsExport;
 
 class lidController extends Controller
 {
-
-    private function dateDiff($dateFirst, $dateSecond){
-        $interval = date_diff($dateFirst, $dateSecond);
-        $formatStr = '%hч %iмин';
-        if ($interval->d > 0) $formatStr = '%dд ' . $formatStr;
-        if ($interval->m > 0) $formatStr = '%mм ' . $formatStr;
-        if ($interval->y > 0) $formatStr = '%yг ' . $formatStr;
-        return $interval->format($formatStr);
-    }
 
     /**
      * Display a listing of the resource.
@@ -38,21 +29,13 @@ class lidController extends Controller
      */
     public function index()
     {
+
         $courses = Course::all();
         $regions = Region::all();
         $statuses = Status::all();
-        $lids = Lid::get();
         $users = User::where('role', 3)->get();
 
-        $lids->each(function ($item, $key){
-            if($item->activity){
-                $item->interval = $this->dateDiff($item->activity->created_at, $item->created_at);
-            }else{
-                $item->interval = '---';
-            }
-        });
-
-        return view('admin.lid.index', compact('lids','courses','users','regions','statuses'));
+        return view('admin.lid.index', compact('courses','users','regions','statuses'));
     }
 
     /**
@@ -191,5 +174,144 @@ class lidController extends Controller
     {
         $lid->delete();
         return redirect()->route('admin.lid.index');
+    }
+
+    /*
+   AJAX request
+   */
+    public function getLids(Request $request)
+    {
+        ## Read value
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        if($columnName == 'course') $columnName = 'courses.title';
+        if($columnName == 'region') $columnName = 'regions.title';
+        if($columnName == 'responsible') $columnName = 'users.name';
+        if($columnName == 'status') $columnName = 'statuses.title';
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        $param['search'] = $searchValue;
+
+        // Фильтры
+        foreach ($columnName_arr as $key => $column) {
+            if(!empty($column['search']['value'])){
+                $param[$column['data']] = $column['search']['value'];
+            }
+        }
+
+        $records = Lid::filter($param);
+
+        $totalRecords = Lid::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = $records->count();
+
+        $records = $records->orderBy($columnName,$columnSortOrder)
+            ->skip($start)
+            ->take($rowperpage)
+            ->get();
+
+        $data_arr = array();
+
+        foreach($records as $record){
+            $id = $record->id;
+            if(isset($record->responsible)){
+                $responsible = $record->responsible->name;
+            }else{
+                $responsible = '';
+            }
+
+            $agent = $record->agent->title;
+            $course = $record->course->title;
+            $region = $record->region->title;
+            $lastname = $record->lastname;
+            $firstname = $record->firstname;
+            $email = $record->email;
+            $created_at = $record->created_at;
+
+            if($record->phone_prefix == '7'){
+                $phone = '8' . $record->phone;
+            }else{
+                $phone = $record->phone_prefix . $record->phone;
+            }
+
+            $status = '<span class="badge rounded-pill" style="background-color: ' . $record->status->color . ' !important; color: ' . contrast_color($record->status->color) . '">'
+                                                    . $record->status->title .
+                                                '</span>';
+            if($record->activity){
+                $interval = dateDiff($record->activity->created_at, $record->created_at);
+            }else{
+                $interval = '---';
+            }
+
+            $actions = '<a href="' . route('admin.lid.show', $record->id) . '}">
+                            <i class="far fa-eye"></i>
+                        </a> &nbsp; &nbsp;
+                        <a href="' . route('admin.lid.edit', $record->id) . '" class="text-success">
+                            <i class="fas fa-pen"></i>
+                        </a>';
+
+
+            $data_arr[] = array(
+                "id" => $id,
+                "responsible" => $responsible,
+                "agent" => $agent,
+                "course" => $course,
+                "region" => $region,
+                "lastname" => $lastname,
+                "firstname" => $firstname,
+                "email" => $email,
+                "phone" => $phone,
+                "status" => $status,
+                "interval" => $interval,
+                "created_at" => $created_at,
+                "actions" => $actions,
+            );
+        }
+
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordswithFilter,
+            "aaData" => $data_arr
+        );
+
+        echo json_encode($response);
+        exit;
+
+    }
+
+    /*
+     * Выгрузка в Excel
+     */
+    public function getLidsExcel(Request $request)
+    {
+
+        $columnSortName = $request->get('columnSortName');
+        $columnSortOrder = $request->get('columnSortOrder');
+
+        if($columnSortName == 'course') $columnSortName = 'courses.title';
+        if($columnSortName == 'region') $columnSortName = 'regions.title';
+        if($columnSortName == 'responsible') $columnSortName = 'users.name';
+        if($columnSortName == 'status') $columnSortName = 'statuses.title';
+
+        $param['search'] = $request->get('search');
+        $param['responsible'] = $request->get('filterResponsible');
+        $param['course'] = $request->get('filterCourse');
+        $param['region'] = $request->get('filterRegion');
+        $param['status'] = $request->get('filterStatus');
+
+        return (new LidsExport)
+            ->Params($param)
+            ->Order($columnSortName, $columnSortOrder)
+            ->download('lids.xlsx');
     }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Middleware\SetUserCookie;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -129,9 +130,14 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::delete('/{region}', 'DeleteController')->name('admin.region.delete');
     });
 
+    Route::get('/lid/getLids',[App\Http\Controllers\Admin\LidController::class, 'getLids'])->name('admin.lid.getLids');
+    Route::get('/lid/getLidsExcel',[App\Http\Controllers\Admin\LidController::class, 'getLidsExcel'])->name('admin.lid.getLidsExcel');
     Route::group(['as' => 'admin.'], function() {
         Route::resource('lid', LidController::class);
     });
+
+
+
 
     Route::group(['as' => 'admin.'], function() {
         Route::resource('link', LinkController::class);
@@ -170,6 +176,8 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
         Route::delete('/{org}', 'DeleteController')->name('cc.org.delete');
     });
 
+    Route::get('/lid/getLids',[App\Http\Controllers\Admin\LidController::class, 'getLids'])->name('cc.lid.getLids');
+    Route::get('/lid/getLidsExcel',[App\Http\Controllers\Admin\LidController::class, 'getLidsExcel'])->name('cc.lid.getLidsExcel');
     Route::group(['as' => 'cc.'], function() {
         Route::resource('lid', LidController::class);
     });
