@@ -223,7 +223,7 @@ class LidController extends Controller
             $lastname = $record->lastname;
             $firstname = $record->firstname;
             $email = $record->email;
-            $created_at = $record->created_at;
+            $created_at = $record->created_at->toDateTimeString();
 
             if($record->phone_prefix == '7'){
                 $phone = '8' . $record->phone;
