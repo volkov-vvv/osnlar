@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Подать заявку на обучение по проекту Содействие занятости"/>
+    <meta name="description" content="{{$pageDescription}}"/>
 
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">

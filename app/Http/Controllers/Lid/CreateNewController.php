@@ -47,7 +47,12 @@ class CreateNewController extends Controller
         $authors = Author::all();
         $levelsedu = Leveledu::all();
         $courses = Course::where('is_published', 1)->get();
-        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'utm'));
+        if(isset($selectedCourse)){
+            $pageDescription = 'Подать заявку на обучение по курсу ' . $courses->where('id', $selectedCourse)->first()->title . 'в рамках проекта Содействие занятости';
+        }else{
+            $pageDescription = 'Подать заявку на обучение в рамках проекта Содействие занятости';
+        }
+        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'pageDescription', 'utm'));
     }
 
 }
