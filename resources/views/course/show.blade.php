@@ -64,7 +64,7 @@
         <section class="edica-footer-banner-section">
             <div class="container">
                 <div class="footer-banner" data-aos="fade-up">
-                    <h1 class="banner-title">Подать заявку!</h1>
+                    <h2 class="banner-title">Подать заявку!</h2>
                     <div class="banner-btns-wrapper">
                         <div class="carousel-content-btns">
                             <a href="{{route('lid.create', ['selectedCourse' => $course->id])}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i>

@@ -15,10 +15,6 @@ use \App\Http\Middleware\SetUserCookie;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
 Route::group(['namespace' => 'Main'],function (){
     Route::get('/', 'IndexController')->name('main.index')->middleware('cookie');
 });
@@ -36,6 +32,8 @@ Route::group(['namespace' => 'Archive', 'prefix' => 'archive', 'middleware' => [
 Route::group(['namespace' => 'About', 'prefix' => 'about', 'middleware' => ['cookie']],function (){
     Route::get('/', 'IndexController')->name('about.index');
 });
+
+Route::get('/sitemap.xml', 'SitemapController@index');
 
 Auth::routes();
 
