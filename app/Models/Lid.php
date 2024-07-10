@@ -57,14 +57,22 @@ class Lid extends Model
         // Поиск
         if ( isset($params['search']) ) {
             $searchValue = $params['search'];
-            $query->where(function ($query) use ($searchValue) {
-                $query->where('courses.title', 'like', '%' . $searchValue . '%')
-                    ->orwhere('regions.title', 'like', '%' . $searchValue . '%')
-                    ->orwhere('lids.firstname', 'like', '%' . $searchValue . '%')
-                    ->orwhere('lids.lastname', 'like', '%' . $searchValue . '%')
-                    ->orwhere('lids.email', 'like', '%' . $searchValue . '%')
-                    ->orwhere('lids.phone', 'like', '%' . $searchValue . '%');
-            });
+            $firstChar = mb_substr($searchValue,0,1);
+
+            if(($firstChar == '#') || ($firstChar == '№')){
+                $query->where('lids.id', mb_substr($searchValue, 1));
+            }else{
+                $query->where(function ($query) use ($searchValue) {
+                    $query->where('courses.title', 'like', '%' . $searchValue . '%')
+                        ->orwhere('regions.title', 'like', '%' . $searchValue . '%')
+                        ->orwhere('lids.id', $searchValue)
+                        ->orwhere('lids.firstname', 'like', '%' . $searchValue . '%')
+                        ->orwhere('lids.lastname', 'like', '%' . $searchValue . '%')
+                        ->orwhere('lids.email', 'like', '%' . $searchValue . '%')
+                        ->orwhere('lids.phone', 'like', '%' . $searchValue . '%');
+                });
+            }
+
         }
 
         // Фильтры

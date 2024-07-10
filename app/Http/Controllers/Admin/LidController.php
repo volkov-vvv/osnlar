@@ -228,8 +228,12 @@ class lidController extends Controller
             }else{
                 $responsible = '';
             }
+            if($record->agent){
+                $agent = $record->agent->title;
+            }else{
+                $agent = '';
+            }
 
-            $agent = $record->agent->title;
             $course = $record->course->title;
             $region = $record->region->title;
             $lastname = $record->lastname;
