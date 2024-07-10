@@ -36,19 +36,11 @@ class LidController extends Controller
     {
         $courses = Course::all();
         $statuses = Status::all();
-        $lids = Lid::all();
         $regions = Region::all();
         $users = User::where('role', 3)->get();
 
-        $lids->each(function ($item, $key){
-            if($item->activity){
-                $item->interval = $this->dateDiff($item->activity->created_at, $item->created_at);
-            }else{
-                $item->interval = '---';
-            }
-        });
 
-        return view('cc.lid.index', compact('lids','courses', 'users','regions', 'statuses'));
+        return view('cc.lid.index', compact('courses', 'users','regions', 'statuses'));
     }
 
     /**
