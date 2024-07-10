@@ -2,7 +2,7 @@
 @section('content')
     <div class="row pt-5 pb-5">
         <div class="col text-center">
-            <h3>Сведения об образовательной организации</h3>
+            <h1>Сведения об образовательной организации</h1>
         </div>
     </div>
     <div class="row">
