@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Основание :: Главная</title>
+    @if(isset($pageDescription))
+        <meta name="description" content="{{$pageDescription}}"/>
+    @endif
+
+    @if(isset($pageTitle))
+        <title>{{$pageTitle}}</title>
+    @else
+        <title>Основание :: Главная</title>
+    @endif
 
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">

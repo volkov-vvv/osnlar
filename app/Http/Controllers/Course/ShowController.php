@@ -12,6 +12,20 @@ class ShowController extends Controller
     public function __invoke(Course $course)
     {
         $authors = Author::all();
-        return view('course.show',compact('course','authors'));
+
+        // SEO
+        if(isset($course->seo_title)){
+            $pageTitle = $course->seo_title;
+        }else{
+            $pageTitle = $course->title;
+        }
+
+        if(isset($course->seo_description)){
+            $pageDescription = $course->seo_description;
+        }else{
+            $pageDescription = 'Бесплатное обучение по программе "' . $course->title . '"';
+        }
+
+        return view('course.show',compact('course','authors', 'pageTitle', 'pageDescription'));
     }
 }

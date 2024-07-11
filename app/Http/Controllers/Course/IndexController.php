@@ -11,6 +11,8 @@ class IndexController extends Controller
     public function __invoke()
     {
         $courses = Course::where('is_published', 1)->get();
-        return view('course.index',compact('courses'));
+        $pageTitle = "Курсы";
+        $pageDescription = "Бесплатные курсы Учебного центра «Основание» по программам дополнительного профессионального образования в рамках реализации федерального проекта «Содействие занятости»";
+        return view('course.index',compact('courses', 'pageTitle', 'pageDescription'));
     }
 }
