@@ -92,6 +92,10 @@ class Lid extends Model
             $query->where('statuses.title', 'like', $params['status'] );
         }
 
+        if ( isset($params['created_at']) ) {
+            $query->where('lids.created_at', 'like', '%' . $params['created_at'] . '%' );
+        }
+
         return $query;
     }
 

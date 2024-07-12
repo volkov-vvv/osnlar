@@ -33,6 +33,10 @@
                                     <tbody>
                                     <tr>
                                         <td>
+                                            Дата:
+                                            <input id="date" type="date">
+                                        </td>
+                                        <td>
                                             Ответсвенный:
                                             <select id="responsible" name="responsible">
                                                 <option></option>
@@ -107,37 +111,6 @@
 
 @section('javascript')
     <script>
-/*
-        var table= new DataTable('#example1', {
-            order: [[0, 'desc']],
-            columnDefs: [
-                { targets: [ 2], visible: false }
-            ],
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["excel", "pdf", "colvis"],
-            "language": {
-                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
-                paginate: {
-                    "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
-                    "last": "Последняя"
-                },
-                search: "Поиск:",
-                buttons: {
-                    colvis: 'Выбрать колонки',
-                    search: 'Поиск'
-                },
-
-            },
-
-        })
-
-        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-*/
-
         var table = new DataTable('#example2', {
             "responsive": true,
             "lengthChange": false,
@@ -252,6 +225,14 @@
 
             table
                 .column(9)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#date').on('change', function (e){
+
+            table
+                .column(11)
                 .search(this.value, {exact: true})
                 .draw();
         })

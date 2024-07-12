@@ -6,12 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @if(isset($pageDescription))
         <meta name="description" content="{{$pageDescription}}"/>
+        <meta property="og:description" content="{{$pageDescription}}"/>
     @endif
 
     @if(isset($pageTitle))
+        <meta property="og:title" content="{{$pageTitle}}"/>
         <title>{{$pageTitle}}</title>
     @else
         <title>Основание :: Главная</title>
+        <meta property="og:title" content="Основание :: Главная"/>
     @endif
 
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">

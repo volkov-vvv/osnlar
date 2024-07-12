@@ -38,6 +38,10 @@
                                     <tbody>
                                     <tr>
                                         <td>
+                                            Дата:
+                                            <input id="date" type="date">
+                                        </td>
+                                        <td>
                                             Ответсвенный:
                                             <select id="responsible" name="responsible">
                                                 <option></option>
@@ -225,6 +229,14 @@
 
             table
                 .column(8)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#date').on('change', function (e){
+
+            table
+                .column(10)
                 .search(this.value, {exact: true})
                 .draw();
         })
