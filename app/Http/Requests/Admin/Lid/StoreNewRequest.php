@@ -64,6 +64,7 @@ class StoreNewRequest extends FormRequest
         }
 
         if(isset($data['utm_source']) || isset($data['utm_medium']) || isset($data['utm_campaign'])){
+            $data = $this->validator->getData();
             $this->validator->setData([
                 'agent_id' => 1
             ] + $data);
