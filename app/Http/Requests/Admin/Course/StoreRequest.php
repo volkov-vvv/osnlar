@@ -32,6 +32,8 @@ class StoreRequest extends FormRequest
 //            'category_id' => 'required|integer|exists:categories,id',
             'author_ids' => 'nullable|array',
             'author_ids.*' => 'nullable|integer|exists:authors,id',
+            'seo_title' => 'nullable|string',
+            'seo_description' => 'nullable|string',
         ];
     }
     public function messages()
