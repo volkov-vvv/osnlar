@@ -110,16 +110,15 @@
                     var columnSortOrder = OrderData[0][1];
                     var search = dt.search();
                     $.ajax({
-                        url: "{{route('admin.lid.getLidsExcel')}}",
+                        url: "{{route('admin.report.getReportExcel')}}",
                         method: 'get',
                         data: {
                             search: search,
                             columnSortName: columnSortName,
                             columnSortOrder: columnSortOrder,
-                            filterResponsible: $('#responsible').val(),
-                            filterCourse: $('#course').val(),
-                            filterRegion: $('#region').val(),
+                            filterAgent: $('#agent').val(),
                             filterStatus: $('#status').val(),
+                            filterUtm: $('#utm_source').val(),
                         },
                         xhrFields:{
                             responseType: 'blob'
@@ -128,7 +127,7 @@
                         {
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(data);
-                            link.download = `Lids_report.xlsx`;
+                            link.download = `Report.xlsx`;
                             link.click();
                         },
                     });

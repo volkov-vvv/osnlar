@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Report;
 
-use App\Exports\LidsExport;
+use App\Exports\ReportExport;
 use App\Http\Controllers\Controller;
 use App\Models\Agent;
 use App\Models\Category;
@@ -172,16 +172,19 @@ class IndexController extends Controller
         if($columnSortName == 'region') $columnSortName = 'regions.title';
         if($columnSortName == 'responsible') $columnSortName = 'users.name';
         if($columnSortName == 'status') $columnSortName = 'statuses.title';
+        if($columnSortName == 'agent') $columnSortName = 'agents.title';
+        if($columnSortName == 'category') $columnSortName = 'categories.title';
+
 
         $param['search'] = $request->get('search');
-        $param['responsible'] = $request->get('filterResponsible');
-        $param['course'] = $request->get('filterCourse');
-        $param['region'] = $request->get('filterRegion');
+        $param['agent'] = $request->get('filterAgent');
         $param['status'] = $request->get('filterStatus');
+        $param['utm_source'] = $request->get('filterUtm');
 
-        return (new LidsExport)
+
+        return (new ReportExport)
             ->Params($param)
             ->Order($columnSortName, $columnSortOrder)
-            ->download('lids.xlsx');
+            ->download('report.xlsx');
     }
 }
