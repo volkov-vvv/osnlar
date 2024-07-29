@@ -31,6 +31,11 @@ class Lid extends Model
         return $this->belongsTo(Region::class);
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class);
@@ -52,6 +57,8 @@ class Lid extends Model
             ->join('courses', 'courses.id', '=', 'lids.course_id')
             ->join('regions', 'regions.id', '=', 'lids.region_id')
             ->join('statuses', 'statuses.id', '=', 'lids.status_id')
+            ->leftjoin('categories', 'categories.id', '=', 'lids.category_id')
+            ->leftjoin('agents', 'agents.id', '=', 'lids.agent_id')
             ->leftjoin('users', 'users.id', '=', 'lids.responsible_id');
 
         // Поиск
@@ -90,6 +97,14 @@ class Lid extends Model
 
         if ( isset($params['status']) ) {
             $query->where('statuses.title', 'like', $params['status'] );
+        }
+
+        if ( isset($params['agent']) ) {
+            $query->where('agents.title', 'like', $params['agent'] );
+        }
+
+        if ( isset($params['utm_source']) ) {
+            $query->where('lids.utm_source', 'like', $params['utm_source'] );
         }
 
         if ( isset($params['created_at']) ) {

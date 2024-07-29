@@ -15,14 +15,6 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-
-{{--            <div class="row mb-3">--}}
-{{--                <div class="col">--}}
-{{--                    <a href="{{route('admin.lid.create')}}" type="button" class="btn btn-primary"><i--}}
-{{--                            class="fa-solid fa-plus"></i> Создать</a>--}}
-{{--                </div>--}}
-{{--            </div>--}}
 
             <div class="row">
                 <div class="col">
@@ -64,7 +56,7 @@
                                     </tbody>
                                 </table>
 
-                                <table id="report1" class="table table-bordered table-striped hover">
+                                <table id="report" class="table table-bordered table-striped hover">
                                     <thead>
                                     <tr>
                                         <th>№</th>
@@ -82,58 +74,9 @@
                                         <th>utm_campaign</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    @foreach($lids as $lid)
-                                        <tr>
-                                            <td>{{$lid->id}}</td>
-                                            <td>
-                                                @foreach($agents as $agent)
-                                                    {{ $agent->id == $lid->agent_id ? $agent->title : '' }}
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                @foreach($regions as $region)
-                                                    {{ $region->id == $lid->region_id ? $region->title : '' }}
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                @foreach($courses as $course)
-                                                    {{ $course->id == $lid->course_id ? $course->title : '' }}
-                                                @endforeach
-                                            </td>
-                                            <td> </td>
-                                            <td>{{$lid->lastname}}</td>
-                                            <td>{{$lid->firstname}}</td>
-                                            <td>
-                                                @foreach($categories as $category)
-                                                    {{ $category->id == $lid->category_id ? $category->title : '' }}
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                <span class="badge rounded-pill
-                                                @switch($lid->status_id)
-                                                @case(1) {{$lid->status_id == 1 ? 'bg-danger' : ''}}
-                                                @break
-                                                @case(2) {{$lid->status_id == 2 ? 'bg-warning text-dark' : ''}}
-                                                @break
-                                                @case(3) {{$lid->status_id == 3 ? 'bg-info' : ''}}
-                                                @break
-                                                @case(4) {{$lid->status_id == 4 ? 'bg-success' : ''}}
-                                                @endswitch">
-                                                    @foreach($statuses as $status)
-                                                        {{$status->id == $lid->status_id ? $status->title : '' }}
-                                                    @endforeach
-                                                </span>
-                                            </td>
-                                            <td>{{$lid->created_at}}</td>
-                                            <td>{{$lid->utm_source}}</td>
-                                            <td>{{$lid->utm_medium}}</td>
-                                            <td>{{$lid->utm_campaign}}</td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-
+                                    <tbody></tbody>
                                 </table>
+
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -149,15 +92,51 @@
 
 @section('javascript')
     <script>
-        var table= new DataTable('#report1', {
-            order: [[0, 'desc']],
-            columnDefs: [
-                { targets: [ 4], visible: false }
-            ],
+
+
+        var table = new DataTable('#report', {
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-            "buttons": ["excel", "pdf", "colvis"],
+            "dom": 'Bfrtip',
+            "buttons": [{ extend: 'excel',
+                text: 'Excel',
+                action: function (e, dt, node, config)
+                {
+                    var rowData = dt.rows({ filter: 'applied' }).data();
+                    var rowKeys = Object.keys(rowData[0]);
+                    var OrderData = dt.order();
+                    var columnSortName = rowKeys[OrderData[0][0]];
+                    var columnSortOrder = OrderData[0][1];
+                    var search = dt.search();
+                    $.ajax({
+                        url: "{{route('admin.report.getReportExcel')}}",
+                        method: 'get',
+                        data: {
+                            search: search,
+                            columnSortName: columnSortName,
+                            columnSortOrder: columnSortOrder,
+                            filterAgent: $('#agent').val(),
+                            filterStatus: $('#status').val(),
+                            filterUtm: $('#utm_source').val(),
+                        },
+                        xhrFields:{
+                            responseType: 'blob'
+                        },
+                        success: function(data)
+                        {
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(data);
+                            link.download = `Report.xlsx`;
+                            link.click();
+                        },
+                    });
+                }
+            }, "colvis"],
+            order: [[0, 'desc']],
+            'columnDefs': [ {
+                targets: [ 4], visible: false
+            }],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
                 paginate: {
@@ -173,10 +152,30 @@
                 },
 
             },
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('admin.report.getReport')}}",
+            columns: [
+                { data: 'id' },
+                { data: 'agent' },
+                { data: 'region' },
+                { data: 'course' },
+                { data: 'id' }, // заменить на поток
+                { data: 'lastname' },
+                { data: 'firstname' },
+                { data: 'category' },
+                { data: 'status' },
+                { data: 'created_at' },
+                { data: 'utm_source' },
+                { data: 'utm_medium' },
+                { data: 'utm_campaign' },
+            ]
+        });
 
-        })
 
-        table.buttons().container().appendTo('#report1_wrapper .col-md-6:eq(0)');
+
+
+        table.buttons().container().appendTo('#report_wrapper .col-md-6:eq(0)');
 
         $('#agent').on('change', function (e){
 
