@@ -116,12 +116,12 @@
                         <h5><b>SEO</b></h5>
                         <label>Title</label>
                         <input name="seo_title" type="text" class="form-control" aria-describedby="Title"
-                               value="{{$course->seo_title}}">
+                               value="{{old('seo_title')}}">
                         @error('seo_title')
                             <div class="text-danger">{{$message}}</div>
                         @enderror
                         <label>Description</label>
-                        <textarea class="form-control" name="seo_description">{{$course->seo_description}}</textarea>
+                        <textarea class="form-control" name="seo_description">{{old('eo_description')}}</textarea>
                         @error('seo_description')
                             <div class="text-danger">{{$message}}</div>
                         @enderror
