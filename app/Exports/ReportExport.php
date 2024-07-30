@@ -46,6 +46,8 @@ class ReportExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
             'Статус',
             'Дата создания',
             'utm_source',
+            'utm_medium',
+            'utm_campaign'
         ];
     }
 
@@ -71,6 +73,8 @@ class ReportExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
         }
 
         $utm_source = $lid->utm_source;
+        $utm_medium = $lid->utm_medium;
+        $utm_campaign = $lid->utm_campaign;
 
         return [
             $id,
@@ -82,7 +86,9 @@ class ReportExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
             $category,
             $status,
             $created_at,
-            $utm_source
+            $utm_source,
+            $utm_medium,
+            $utm_campaign
         ];
     }
 }

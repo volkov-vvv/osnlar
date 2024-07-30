@@ -52,6 +52,17 @@
                                                 @endforeach
                                             </select>
                                         </td>
+                                        <!--
+                                        <td>
+                                            utm_medium:
+                                            <select id="utm_medium" name="utm_medium">
+                                                <option></option>
+                                                @foreach($utmMedium as $item)
+                                                    <option value="{{$item->utm_medium}}">{{$item->utm_medium}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        -->
                                     </tr>
                                     </tbody>
                                 </table>
@@ -197,6 +208,14 @@
 
             table
                 .column(10)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#utm_medium').on('change', function (e){
+
+            table
+                .column(11)
                 .search(this.value, {exact: true})
                 .draw();
         })
