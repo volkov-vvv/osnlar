@@ -47,22 +47,32 @@
                                             utm_source:
                                             <select id="utm_source" name="utm_source">
                                                 <option></option>
-                                                @foreach($sources as $source)
-                                                    <option value="{{$source->utm_source}}">{{$source->utm_source}}</option>
+                                                @foreach($utmFilter['sources'] as $item)
+                                                    <option value="{{$item->utm_source}}">{{$item->utm_source}}</option>
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <!--
+
                                         <td>
                                             utm_medium:
                                             <select id="utm_medium" name="utm_medium">
                                                 <option></option>
-                                                @foreach($utmMedium as $item)
+                                                @foreach($utmFilter['medium'] as $item)
                                                     <option value="{{$item->utm_medium}}">{{$item->utm_medium}}</option>
                                                 @endforeach
                                             </select>
                                         </td>
-                                        -->
+
+                                        <td>
+                                            utm_campaign:
+                                            <select id="utm_campaign" name="utm_campaign">
+                                                <option></option>
+                                                @foreach($utmFilter['campaign'] as $item)
+                                                    <option value="{{$item->utm_campaign}}">{{$item->utm_campaign}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+
                                     </tr>
                                     </tbody>
                                 </table>
@@ -129,7 +139,9 @@
                             columnSortOrder: columnSortOrder,
                             filterAgent: $('#agent').val(),
                             filterStatus: $('#status').val(),
-                            filterUtm: $('#utm_source').val(),
+                            filterUtmSource: $('#utm_source').val(),
+                            filterUtmMedium: $('#utm_medium').val(),
+                            filterUtmCampaign: $('#utm_campaign').val(),
                         },
                         xhrFields:{
                             responseType: 'blob'
@@ -216,6 +228,14 @@
 
             table
                 .column(11)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#utm_campaign').on('change', function (e){
+
+            table
+                .column(12)
                 .search(this.value, {exact: true})
                 .draw();
         })

@@ -25,10 +25,11 @@ class IndexController extends Controller
         $courses = Course::all();
         $users = User::where('role', 3)->get();
         $lids = Lid::all();
-        $sources = $lids->unique('utm_source')->values()->all();
-        $utmMedium = $lids->unique('utm_medium')->values()->all();
+        $utmFilter['sources'] = $lids->unique('utm_source')->values()->all();
+        $utmFilter['medium'] = $lids->unique('utm_medium')->values()->all();
+        $utmFilter['campaign'] = $lids->unique('utm_campaign')->values()->all();
 
-        return view('admin.report.index', compact('lids','courses','statuses','users','regions','agents','categories', 'sources', 'utmMedium'));
+        return view('admin.report.index', compact('lids','courses','statuses','users','regions','agents','categories', 'utmFilter'));
     }
 
     public function getReport(Request $request)
@@ -180,7 +181,9 @@ class IndexController extends Controller
         $param['search'] = $request->get('search');
         $param['agent'] = $request->get('filterAgent');
         $param['status'] = $request->get('filterStatus');
-        $param['utm_source'] = $request->get('filterUtm');
+        $param['utm_source'] = $request->get('filterUtmSource');
+        $param['utm_medium'] = $request->get('filterUtmMedium');
+        $param['utm_campaign'] = $request->get('filterUtmCampaign');
 
 
         return (new ReportExport)

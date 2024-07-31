@@ -76,7 +76,10 @@ class Lid extends Model
                         ->orwhere('lids.firstname', 'like', '%' . $searchValue . '%')
                         ->orwhere('lids.lastname', 'like', '%' . $searchValue . '%')
                         ->orwhere('lids.email', 'like', '%' . $searchValue . '%')
-                        ->orwhere('lids.phone', 'like', '%' . $searchValue . '%');
+                        ->orwhere('lids.phone', 'like', '%' . $searchValue . '%')
+                        ->orwhere('lids.utm_source', 'like', '%' . $searchValue . '%')
+                        ->orwhere('lids.utm_medium', 'like', '%' . $searchValue . '%')
+                        ->orwhere('lids.utm_campaign', 'like', '%' . $searchValue . '%');
                 });
             }
 
@@ -105,6 +108,14 @@ class Lid extends Model
 
         if ( isset($params['utm_source']) ) {
             $query->where('lids.utm_source', 'like', $params['utm_source'] );
+        }
+
+        if ( isset($params['utm_medium']) ) {
+            $query->where('lids.utm_medium', 'like', $params['utm_medium'] );
+        }
+
+        if ( isset($params['utm_campaign']) ) {
+            $query->where('lids.utm_campaign', 'like', $params['utm_campaign'] );
         }
 
         if ( isset($params['created_at']) ) {
