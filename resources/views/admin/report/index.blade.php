@@ -63,7 +63,7 @@
                                                 <option></option>
                                                 @foreach($utmFilter['medium'] as $item)
                                                     <option value="{{$item->utm_medium}}">
-                                                        {{ mb_strlen($item->utm_medium) > 30 ? mb_substr($item->utm_medium, 0, 25) . '...' : $item->utm_medium }}
+                                                        {{ mb_strlen($item->utm_medium) > 30 ? mb_substr($item->utm_medium, 0, 20) . '...' : $item->utm_medium }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -75,7 +75,7 @@
                                                 <option></option>
                                                 @foreach($utmFilter['campaign'] as $item)
                                                     <option value="{{$item->utm_campaign}}">
-                                                        {{ mb_strlen($item->utm_campaign) > 30 ? mb_substr($item->utm_campaign, 0, 25) . '...' : $item->utm_campaign }}
+                                                        {{ mb_strlen($item->utm_campaign) > 30 ? mb_substr($item->utm_campaign, 0, 20) . '...' : $item->utm_campaign }}
                                                     </option>
                                                 @endforeach
                                             </select>
