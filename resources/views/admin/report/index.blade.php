@@ -26,6 +26,10 @@
                                     <tbody>
                                     <tr>
                                         <td>
+                                            Дата:
+                                            <input id="date" type="date">
+                                        </td>
+                                        <td>
                                             Агент:
                                             <select id="agent" name="agent">
                                                 <option></option>
@@ -59,7 +63,7 @@
                                                 <option></option>
                                                 @foreach($utmFilter['medium'] as $item)
                                                     <option value="{{$item->utm_medium}}">
-                                                        {{ mb_strlen($item->utm_medium) > 30 ? mb_substr($item->utm_medium, 0, 30) . '...' : $item->utm_medium }}
+                                                        {{ mb_strlen($item->utm_medium) > 30 ? mb_substr($item->utm_medium, 0, 25) . '...' : $item->utm_medium }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -71,7 +75,7 @@
                                                 <option></option>
                                                 @foreach($utmFilter['campaign'] as $item)
                                                     <option value="{{$item->utm_campaign}}">
-                                                        {{ mb_strlen($item->utm_campaign) > 30 ? mb_substr($item->utm_campaign, 0, 30) . '...' : $item->utm_campaign }}
+                                                        {{ mb_strlen($item->utm_campaign) > 30 ? mb_substr($item->utm_campaign, 0, 25) . '...' : $item->utm_campaign }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -141,6 +145,7 @@
                             search: search,
                             columnSortName: columnSortName,
                             columnSortOrder: columnSortOrder,
+                            filterDate: $('#date').val(),
                             filterAgent: $('#agent').val(),
                             filterStatus: $('#status').val(),
                             filterUtmSource: $('#utm_source').val(),
@@ -240,6 +245,14 @@
 
             table
                 .column(12)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#date').on('change', function (e){
+
+            table
+                .column(9)
                 .search(this.value, {exact: true})
                 .draw();
         })

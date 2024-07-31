@@ -179,6 +179,7 @@ class IndexController extends Controller
 
 
         $param['search'] = $request->get('search');
+        $param['created_at'] = $request->get('filterDate');
         $param['agent'] = $request->get('filterAgent');
         $param['status'] = $request->get('filterStatus');
         $param['utm_source'] = $request->get('filterUtmSource');
