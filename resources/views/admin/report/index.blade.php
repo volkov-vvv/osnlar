@@ -58,7 +58,9 @@
                                             <select id="utm_medium" name="utm_medium">
                                                 <option></option>
                                                 @foreach($utmFilter['medium'] as $item)
-                                                    <option value="{{$item->utm_medium}}">{{$item->utm_medium}}</option>
+                                                    <option value="{{$item->utm_medium}}">
+                                                        {{ mb_strlen($item->utm_medium) > 30 ? mb_substr($item->utm_medium, 0, 30) . '...' : $item->utm_medium }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </td>
