@@ -69,7 +69,7 @@
                                                 <option></option>
                                                 @foreach($utmFilter['campaign'] as $item)
                                                     <option value="{{$item->utm_campaign}}">
-                                                        {{ strlen($item->utm_campaign) > 30 ? substr($item->utm_campaign, 0, 30) . '...' : $item->utm_campaign }}
+                                                        {{ mb_strlen($item->utm_campaign) > 30 ? mb_substr($item->utm_campaign, 0, 30) . '...' : $item->utm_campaign }}
                                                     </option>
                                                 @endforeach
                                             </select>
