@@ -106,7 +106,7 @@
                                         <td>{{$activity->updated_at}}</td>
                                         <td>{{$activity->user}}</td>
                                         <td>{{$activity->description}}</td>
-                                        <td>{{$activity->status_old}}  <i class="fa-solid fa-arrow-right"></i>  {{$activity->status_new}}</td>
+                                        <td>{{$activity->status_old}}  <i class="fas fa-arrow-right"></i>  {{$activity->status_new}}</td>
                                         <td>
                                             @if(!empty($activity->comment))
                                                 <div class="card-header collapsed" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true"><span class="accicon"><i class="fas fa-angle-down rotate-icon"></i></span></div>
