@@ -26,7 +26,7 @@
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="{{route('agent.main.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-house"></i>
+                        <i class="nav-icon fas fa-home"></i>
                         <p>
                             Дашборд
                         </p>
@@ -34,7 +34,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('agent.report.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-link"></i>
+                        <i class="nav-icon fas fa-link"></i>
                         <p>
                             Отчеты
                         </p>

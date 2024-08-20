@@ -26,7 +26,7 @@
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="{{route('admin.main.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-house"></i>
+                        <i class="nav-icon fas fa-home"></i>
                         <p>
                             Дашборд
                         </p>
@@ -34,7 +34,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.user.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-user-plus"></i>
+                        <i class="nav-icon fas fa-user-plus"></i>
                         <p>
                             Пользователи
                         </p>
@@ -57,7 +57,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{route('admin.document.index')}}" class="nav-link">
-                                <i class="fa-regular fa-folder-open nav-icon"></i>
+                                <i class="far fa-folder-open nav-icon"></i>
                                 <p>Документы</p>
                             </a>
                         </li>
@@ -65,7 +65,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.course.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-book-open"></i>
+                        <i class="nav-icon fas fa-book-open"></i>
                         <p>
                             Курсы
                         </p>
@@ -73,7 +73,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.author.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-people-group"></i>
+                        <i class="nav-icon fas fa-users"></i>
                         <p>
                             Авторы
                         </p>
@@ -81,7 +81,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.category.index')}}" class="nav-link">
-                        <i class="nav-icon fa fa-list"></i>
+                        <i class="nav-icon fas fa-list"></i>
                         <p>
                             Категории
                         </p>
@@ -89,7 +89,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.leveledu.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-user-graduate"></i>
+                        <i class="nav-icon fas fa-user-graduate"></i>
                         <p>
                             Уровни образования
                         </p>
@@ -97,7 +97,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.region.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-map-location-dot"></i>
+                        <i class="nav-icon fas fa-map-location-dot fa-map"></i>
                         <p>
                             Регионы
                         </p>
@@ -105,7 +105,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.link.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-link"></i>
+                        <i class="nav-icon fas fa-link"></i>
                         <p>
                             Ссылки
                         </p>
@@ -113,7 +113,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.agent.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-magnet"></i>
+                        <i class="nav-icon fas fa-magnet"></i>
                         <p>
                             Агенты
                         </p>
@@ -121,7 +121,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.status.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-circle-exclamation"></i>
+                        <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
                             Статусы
                         </p>
@@ -129,7 +129,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.lid.index')}}" class="nav-link">
-                        <i class="nav-icon fa-regular fa-bell"></i>
+                        <i class="nav-icon far fa-bell"></i>
                         <p>
                             Заявки
                         </p>
@@ -137,7 +137,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.report.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-chart-line"></i>
+                        <i class="nav-icon fas fa-chart-line"></i>
                         <p>
                             Отчеты
                         </p>

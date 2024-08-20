@@ -26,7 +26,7 @@
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="{{route('cc.main.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-house"></i>
+                        <i class="nav-icon fas fa-home"></i>
                         <p>
                             Дашборд
                         </p>
@@ -34,7 +34,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('cc.status.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-circle-exclamation"></i>
+                        <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
                             Статусы
                         </p>
@@ -42,7 +42,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('cc.lid.index')}}" class="nav-link">
-                        <i class="nav-icon fa-regular fa-bell"></i>
+                        <i class="nav-icon far fa-bell"></i>
                         <p>
                             Заявки (слушатели)
                         </p>
@@ -50,7 +50,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('cc.org.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-building-columns"></i>
+                        <i class="nav-icon fas fa-building-columns fa-landmark"></i>
                         <p>
                             Заявки организации
                         </p>
@@ -58,7 +58,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('cc.link.index')}}" class="nav-link">
-                        <i class="nav-icon fa-solid fa-link"></i>
+                        <i class="nav-icon fas fa-link"></i>
                         <p>
                             Ссылки
                         </p>
