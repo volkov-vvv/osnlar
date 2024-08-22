@@ -11,7 +11,12 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-    <div id="download" class="alert alert-info alert-dismissible fade in" role="alert" style="display: none;">
+    <style>
+        .alert {
+            display: none;
+        }
+    </style>
+    <div id="download" class="alert alert-info alert-dismissible fade in" role="alert">
         Подготовка файла Excel...
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
