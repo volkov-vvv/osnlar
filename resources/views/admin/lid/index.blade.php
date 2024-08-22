@@ -11,7 +11,7 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-    <div id="download" style="display:none">Подготовка файла Excel...</div>
+    <div id="download" class="alert alert-warning" role="alert">Подготовка файла Excel...</div>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
