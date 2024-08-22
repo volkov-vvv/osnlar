@@ -142,7 +142,7 @@
                     var columnSortOrder = OrderData[0][1];
                     var search = dt.search();
 
-                    $('#download').classList.add('show');
+                    $('#download').addClass('show');
 
                     $.ajax({
                         url: "{{route('admin.lid.getLidsExcel')}}",
