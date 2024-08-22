@@ -11,7 +11,12 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-    <div id="download" class="alert alert-warning" role="alert">Подготовка файла Excel...</div>
+    <div id="download" class="alert alert-info" role="alert">
+        Подготовка файла Excel...
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
