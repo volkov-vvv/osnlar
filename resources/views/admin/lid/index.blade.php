@@ -139,7 +139,7 @@
                     var columnSortOrder = OrderData[0][1];
                     var search = dt.search();
 
-                    $('#download').show();
+                    $('#download').alert();
 
                     $.ajax({
                         url: "{{route('admin.lid.getLidsExcel')}}",
@@ -162,7 +162,7 @@
                             link.href = window.URL.createObjectURL(data);
                             link.download = `Lids_report.xlsx`;
                             link.click();
-                            $('#download').hide();
+                            $('#download').alert('close');
                         },
                     });
                 }
