@@ -142,8 +142,8 @@
                     var columnSortOrder = OrderData[0][1];
                     var search = dt.search();
 
-                    $('#download').addClass('show');
-
+                    //$('#download').addClass('show');
+                    $('#alert_area').html('<div id="download" class="alert alert-info alert-dismissible fade" role="alert">Подготовка файла Excel...<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
                     $.ajax({
                         url: "{{route('admin.lid.getLidsExcel')}}",
                         method: 'get',
