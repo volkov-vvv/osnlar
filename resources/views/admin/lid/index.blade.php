@@ -144,6 +144,7 @@
 
                     //$('#download').addClass('show');
                     $('#alert_area').html('<div id="download" class="alert alert-info alert-dismissible fade" role="alert">Подготовка файла Excel...<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
+                    $('#download').addClass('show');
                     $.ajax({
                         url: "{{route('admin.lid.getLidsExcel')}}",
                         method: 'get',
