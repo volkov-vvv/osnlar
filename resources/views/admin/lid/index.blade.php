@@ -11,7 +11,7 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
+    <div id="download" style="display:none">Подготовка файла Excel...</div>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -133,6 +133,9 @@
                     var columnSortName = rowKeys[OrderData[0][0]];
                     var columnSortOrder = OrderData[0][1];
                     var search = dt.search();
+
+                    $('#download').show();
+
                     $.ajax({
                         url: "{{route('admin.lid.getLidsExcel')}}",
                         method: 'get',
@@ -154,6 +157,7 @@
                             link.href = window.URL.createObjectURL(data);
                             link.download = `Lids_report.xlsx`;
                             link.click();
+                            $('#download').hide();
                         },
                     });
                 }

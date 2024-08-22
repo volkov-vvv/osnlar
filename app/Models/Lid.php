@@ -121,7 +121,7 @@ class Lid extends Model
         if ( isset($params['created_at']) ) {
             $query->where('lids.created_at', 'like', '%' . $params['created_at'] . '%' );
         }
-
+//dump($query->toSql());
         return $query;
     }
 
