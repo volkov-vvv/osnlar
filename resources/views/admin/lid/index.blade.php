@@ -1,5 +1,6 @@
 @extends('admin.layouts.main')
 @section('content')
+    <div id="alert-area"></div>
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -11,17 +12,14 @@
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-    <style>
-        .alert {
-            display: none;
-        }
-    </style>
+
     <div id="download" class="alert alert-info alert-dismissible fade in" role="alert">
         Подготовка файла Excel...
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -144,7 +142,7 @@
                     var columnSortOrder = OrderData[0][1];
                     var search = dt.search();
 
-                    $('#download').show();
+                    $('#download').classList.add('show');
 
                     $.ajax({
                         url: "{{route('admin.lid.getLidsExcel')}}",
