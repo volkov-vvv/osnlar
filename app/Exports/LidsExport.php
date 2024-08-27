@@ -3,13 +3,17 @@
 namespace App\Exports;
 
 use App\Models\Lid;
+use App\Models\Status;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithDefaultStyles;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 
-class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
+class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithDefaultStyles
 {
     use Exportable;
 
@@ -47,6 +51,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             'Телефон',
             'Статус',
             'Реакция',
+            'Активность',
             'Дата создания'
         ];
     }
@@ -84,6 +89,23 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
         }else{
             $interval = '---';
         }
+        $activites = $lid->activities;
+
+        $activity = '';
+        if($activites){
+            foreach ($activites as $item){
+                $activitiesStatuses = $item->properties;
+                $activity .= $item->updated_at . '  ';
+                $activity .= User::findOrFail($item->causer_id)->name . '  ';
+                $activity .= Status::findOrFail($activitiesStatuses['status_id_old'])->title . '->' . Status::findOrFail($activitiesStatuses['status_id'])->title . '  ';
+                if(isset($activitiesStatuses['comment'])){
+                    $activity .= "\n";
+                    $activity .= $activitiesStatuses['comment'];
+                }
+                $activity .= "\n-------------\n\n";
+            }
+        }
+
         return [
             $id,
             $responsible,
@@ -96,7 +118,17 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $phone,
             $status,
             $interval,
+            $activity,
             $created_at,
+        ];
+    }
+
+    public function defaultStyles(Style $defaultStyle)
+    {
+        return [
+            'alignment' => [
+                'wrapText' => true,
+            ],
         ];
     }
 }

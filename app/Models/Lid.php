@@ -51,6 +51,11 @@ class Lid extends Model
         return $this->belongsTo(Activity::class, 'id', 'subject_id')->where('description', '=', 'Изменение статуса');
     }
 
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id');
+    }
+
     public function scopeFilter($query, $params)
     {
         $query = Lid::select('lids.*')
