@@ -58,7 +58,7 @@ class Lid extends Model
 
     public function scopeFilter($query, $params)
     {
-        $query = Lid::select(array('lids.*', 'statuses.title as status', 'statuses.color as status_color'))
+        $query = Lid::select(array('lids.*', 'statuses.title as status_title', 'statuses.color as status_color'))
             ->join('courses', 'courses.id', '=', 'lids.course_id')
             ->join('regions', 'regions.id', '=', 'lids.region_id')
             ->join('statuses', 'statuses.id', '=', 'lids.status_id')

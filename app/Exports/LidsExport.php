@@ -85,7 +85,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
         }
 
         //$status = $lid->status->title;
-        $status = $lid->status;
+        $status = $lid->status_title;
         if($lid->activity){
             $interval = dateDiff($lid->activity->created_at, $lid->created_at);
         }else{
