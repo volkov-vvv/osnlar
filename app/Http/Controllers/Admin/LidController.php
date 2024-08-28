@@ -247,8 +247,8 @@ class lidController extends Controller
                 $phone = $record->phone_prefix . $record->phone;
             }
 
-            $status = '<span class="badge rounded-pill" style="background-color: ' . $record->status->color . ' !important; color: ' . contrast_color($record->status->color) . '">'
-                                                    . $record->status->title .
+            $status = '<span class="badge rounded-pill" style="background-color: ' . $record->status_color . ' !important; color: ' . contrast_color($record->status_color) . '">'
+                                                    . $record->status .
                                                 '</span>';
             if($record->activity){
                 $interval = dateDiff($record->activity->created_at, $record->created_at);
