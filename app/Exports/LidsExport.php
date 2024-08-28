@@ -59,7 +59,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
     public function map($lid): array
     {
         $statuses = Status::all();
-        $users = User::where('role', 3)->get();
+        $users = User::all();
         $id = $lid->id;
         if(isset($lid->responsible)){
             $responsible = $lid->responsible->name;
@@ -98,7 +98,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             foreach ($activites as $item){
                 $activitiesStatuses = $item->properties;
                 $activity .= $item->updated_at . '  ';
-                $activity .= User::findOrFail($item->causer_id)->name . '  ';
+                $activity .= $users->where('id', $item->causer_id)->first()->name . '  ';
                 $activity .= $statuses->where('id',  $activitiesStatuses['status_id_old'])->first()->title . '->' . $statuses->where('id',  $activitiesStatuses['status_id'])->first()->title . '  ';
                 if(isset($activitiesStatuses['comment'])){
                     $activity .= "\n";
