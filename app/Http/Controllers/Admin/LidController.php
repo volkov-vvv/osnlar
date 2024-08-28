@@ -223,13 +223,13 @@ class lidController extends Controller
 
         foreach($records as $record){
             $id = $record->id;
-            if(isset($record->responsible)){
-                $responsible = $record->responsible->name;
+            if(isset($record->responsible_name)){
+                $responsible = $record->responsible_name;
             }else{
                 $responsible = '';
             }
-            if($record->agent){
-                $agent = $record->agent->title;
+            if($record->agent_title){
+                $agent = $record->agent_title;
             }else{
                 $agent = '';
             }

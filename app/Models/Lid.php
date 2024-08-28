@@ -62,7 +62,9 @@ class Lid extends Model
             'lids.*',
             'statuses.title as status_title', 'statuses.color as status_color',
             'courses.title as course_title',
-            'regions.title as region_title'
+            'regions.title as region_title',
+            'agents.title as agent_title',
+            'users.name as responsible_name',
         );
         $query = Lid::select($queryArray)
             ->join('courses', 'courses.id', '=', 'lids.course_id')

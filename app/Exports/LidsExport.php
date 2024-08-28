@@ -60,14 +60,14 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
     {
 
         $id = $lid->id;
-        if(isset($lid->responsible)){
-            $responsible = $lid->responsible->name;
+        if(isset($lid->responsible_name)){
+            $responsible = $lid->responsible_name;
         }else{
             $responsible = '';
         }
 
-        if(isset($lid->agent)) {
-            $agent = $lid->agent->title;
+        if(isset($lid->agent_title)) {
+            $agent = $lid->agent_title;
         }else{
             $agent = '';
         }
@@ -84,17 +84,26 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $phone = $lid->phone_prefix . $lid->phone;
         }
 
-        //$status = $lid->status->title;
+
         $status = $lid->status_title;
+        /*
         if($lid->activity){
             $interval = dateDiff($lid->activity->created_at, $lid->created_at);
         }else{
             $interval = '---';
         }
+        */
         $activites = $lid->activities;
 
         $activity = '';
         if($activites){
+            $firstTimeAction = $activites->where('description', '=', 'Изменение статуса')->first();
+            if($firstTimeAction){
+                $interval = dateDiff($firstTimeAction->created_at, $lid->created_at);
+            }else{
+                $interval = '---';
+            }
+            debug($interval);
             foreach ($activites as $item){
                 $activitiesStatuses = $item->properties;
                 $activity .= $item->updated_at . '  ';
