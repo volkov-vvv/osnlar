@@ -234,7 +234,7 @@ class lidController extends Controller
                 $agent = '';
             }
 
-            $course = $record->course->title;
+            $course = $record->course_title;
             $region = $record->region->title;
             $lastname = $record->lastname;
             $firstname = $record->firstname;
