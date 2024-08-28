@@ -72,7 +72,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $agent = '';
         }
         $course = $lid->course_title;
-        $region = $lid->region->title;
+        $region = $lid->region_title;
         $lastname = $lid->lastname;
         $firstname = $lid->firstname;
         $email = $lid->email;

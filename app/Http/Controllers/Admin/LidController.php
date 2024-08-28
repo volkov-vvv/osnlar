@@ -235,7 +235,7 @@ class lidController extends Controller
             }
 
             $course = $record->course_title;
-            $region = $record->region->title;
+            $region = $record->region_title;
             $lastname = $record->lastname;
             $firstname = $record->firstname;
             $email = $record->email;
