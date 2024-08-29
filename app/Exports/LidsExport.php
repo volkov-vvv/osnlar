@@ -19,6 +19,8 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
     public function __construct()
     {
         $this->statuses = Status::all();
+        $lid= new Lid();
+        $this->activites = $lid->activities();
     }
 
 
@@ -92,7 +94,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
         $status = $lid->status_title;
 
-        $activites = $lid->activities($lid);
+        $activites = $this->activites->where('subject_id', $id);
 
         $activity = '';
         if($activites){
@@ -107,7 +109,6 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                 $activitiesStatuses = json_decode($item->properties, true);
                 $activity .= $item->updated_at . '  ';
                 $activity .= $item->user_name . '  ';
-//                debug($this->statuses->where('id', $activitiesStatuses['status_id_old'])->first()->title);
                 $activity .= $this->statuses->where('id',$activitiesStatuses['status_id_old'])->first()->title
                     . '->'
                     . $this->statuses->where('id',$activitiesStatuses['status_id'])->first()->title
