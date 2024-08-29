@@ -93,7 +93,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $interval = '---';
         }
         */
-        $activites = $lid->activities;
+        $activites = $lid->activities($lid);
 
         $activity = '';
         if($activites){
@@ -103,11 +103,11 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             }else{
                 $interval = '---';
             }
-            debug($interval);
+
             foreach ($activites as $item){
-                $activitiesStatuses = $item->properties;
+                $activitiesStatuses = json_decode($item->properties, true);
                 $activity .= $item->updated_at . '  ';
-                $activity .= User::findOrFail($item->causer_id)->name . '  ';
+                $activity .= $item->user_name . '  ';
                 $activity .= Status::findOrFail($activitiesStatuses['status_id_old'])->title . '->' . Status::findOrFail($activitiesStatuses['status_id'])->title . '  ';
                 if(isset($activitiesStatuses['comment'])){
                     $activity .= "\n";
