@@ -16,6 +16,11 @@ use PhpOffice\PhpSpreadsheet\Style\Style;
 class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithDefaultStyles
 {
     use Exportable;
+    public function __construct()
+    {
+        $this->statuses = Status::all();
+    }
+
 
     public function Params($param)
     {
@@ -86,13 +91,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
 
         $status = $lid->status_title;
-        /*
-        if($lid->activity){
-            $interval = dateDiff($lid->activity->created_at, $lid->created_at);
-        }else{
-            $interval = '---';
-        }
-        */
+
         $activites = $lid->activities($lid);
 
         $activity = '';
@@ -108,7 +107,11 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                 $activitiesStatuses = json_decode($item->properties, true);
                 $activity .= $item->updated_at . '  ';
                 $activity .= $item->user_name . '  ';
-                $activity .= Status::findOrFail($activitiesStatuses['status_id_old'])->title . '->' . Status::findOrFail($activitiesStatuses['status_id'])->title . '  ';
+//                debug($this->statuses->where('id', $activitiesStatuses['status_id_old'])->first()->title);
+                $activity .= $this->statuses->where('id',$activitiesStatuses['status_id_old'])->first()->title
+                    . '->'
+                    . $this->statuses->where('id',$activitiesStatuses['status_id'])->first()->title
+                    . '  ';
                 if(isset($activitiesStatuses['comment'])){
                     $activity .= "\n";
                     $activity .= $activitiesStatuses['comment'];
