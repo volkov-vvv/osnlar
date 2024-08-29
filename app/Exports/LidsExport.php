@@ -93,7 +93,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
 
         $status = $lid->status_title;
-
+        start_measure('activities');
         $activites = $this->activites->where('subject_id', $id);
 
         $activity = '';
@@ -120,7 +120,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                 $activity .= "\n-------------\n\n";
             }
         }
-
+        stop_measure('activities');
         return [
             $id,
             $responsible,
