@@ -54,13 +54,22 @@ class Lid extends Model
     public function activities()
     {
         $queryArray = array(
-            'activity_log.*',
+            'activity_log.causer_id',
+            'activity_log.properties',
+            'activity_log.description',
+            'activity_log.subject_id',
+            'activity_log.created_at',
             'users.name as user_name',
         );
         $query = Lid::select($queryArray)
             ->join('activity_log', 'activity_log.subject_id', '=', 'lids.id')
             ->join('users', 'activity_log.causer_id', '=', 'users.id');
         return $query->get();
+    }
+
+    public function activities2()
+    {
+        return $this->hasMany(Activity::class, 'subject_id', 'id');
     }
 
     public function scopeFilter($query, $params)

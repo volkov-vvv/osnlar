@@ -95,7 +95,6 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
         $status = $lid->status_title;
         start_measure('activities');
         $activites = $this->activites->where('subject_id', $id);
-
         $activity = '';
         if($activites){
             $firstTimeAction = $activites->where('description', '=', 'Изменение статуса')->first();
