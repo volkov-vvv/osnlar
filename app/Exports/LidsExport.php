@@ -33,8 +33,20 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
     public function Order($columnSortName, $columnSortOrder)
     {
-        $this->columnSortName = $columnSortName;
-        $this->columnSortOrder = $columnSortOrder;
+        if(!empty($columnSortName)){
+            $this->columnSortName = $columnSortName;
+        }else{
+            $this->columnSortName = 'id';
+        }
+
+        if(!empty($columnSortOrder)){
+            $this->columnSortOrder = $columnSortOrder;
+        }else{
+            $this->columnSortOrder = 'desc';
+        }
+
+        debug($columnSortName);
+        debug($columnSortOrder);
 
         return $this;
     }
