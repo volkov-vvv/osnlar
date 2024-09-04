@@ -203,6 +203,7 @@ Route::group(['namespace' => 'Lid', 'prefix' => 'lid', 'middleware' => ['cookie'
     Route::post('/store-old', 'StoreController')->name('lid.store');
     Route::post('/', 'StoreNewController')->name('lid.store_new');
     Route::get('/thank', 'IndexController')->name('lid.index');
+    Route::get('/export', 'ExportController')->name('lid.export');
 });
 
 Route::group(['namespace' => 'Org', 'prefix' => 'org', 'middleware' => ['cookie']],function (){
