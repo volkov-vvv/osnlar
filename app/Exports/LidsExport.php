@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithDefaultStyles;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 
+
 class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithDefaultStyles
 {
     use Exportable;

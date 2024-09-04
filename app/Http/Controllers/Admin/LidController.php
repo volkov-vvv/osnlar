@@ -19,6 +19,7 @@ use Spatie\Activitylog\Models\Activity;
 use App\Models\User;
 use App\Exports\LidsExport;
 
+
 class lidController extends Controller
 {
 
@@ -301,6 +302,7 @@ class lidController extends Controller
 
         $columnSortName = $request->get('columnSortName');
         $columnSortOrder = $request->get('columnSortOrder');
+        $dateNow = now()->format('Y-m-d');
 
         if($columnSortName == 'course') $columnSortName = 'courses.title';
         if($columnSortName == 'region') $columnSortName = 'regions.title';
@@ -312,10 +314,11 @@ class lidController extends Controller
         $param['course'] = $request->get('filterCourse');
         $param['region'] = $request->get('filterRegion');
         $param['status'] = $request->get('filterStatus');
-
-        return (new LidsExport)
+        $filename = 'lids-' . $dateNow . '.xlsx';
+        (new LidsExport)
             ->Params($param)
             ->Order($columnSortName, $columnSortOrder)
-            ->download('lids.xlsx');
+            ->queue($filename);
+        return back()->withSuccess('Export started!');
     }
 }
