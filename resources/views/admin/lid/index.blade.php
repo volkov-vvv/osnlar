@@ -41,7 +41,6 @@
             <div class="row">
                 <div class="col">
                         <div class="card">
-
                             <div class="card-body">
                                 <table class="table table-striped mb-2">
                                     <tbody>
@@ -158,16 +157,34 @@
                             filterRegion: $('#region').val(),
                             filterStatus: $('#status').val(),
                         },
-                        xhrFields:{
-                            responseType: 'blob'
-                        },
                         success: function(data)
                         {
-                            var link = document.createElement('a');
-                            link.href = window.URL.createObjectURL(data);
-                            link.download = `Lids_report.xlsx`;
-                            link.click();
-                            $('#download').alert('close');
+                            var timerId = setInterval(function() {
+                                fileLink = '{{!empty($_SERVER['HTTPS']) ? 'https' : 'http'}}://{{$_SERVER['SERVER_NAME']}}/'+data;
+                                $.ajax({
+                                    url: fileLink,
+                                    type: 'HEAD',
+                                    success: function(data) {
+                                        clearInterval(timerId);
+                                        $('#download').alert('close');
+                                        $.ajax({
+                                            url: fileLink,
+
+                                            xhrFields: {
+                                                'responseType': 'blob'
+                                            },
+                                            success: function(data, status, xhr) {
+                                                var blob = new Blob([data], {type: xhr.getResponseHeader('Content-Type')});
+                                                var link = document.createElement('a');
+                                                link.href = window.URL.createObjectURL(blob);
+                                                link.download = 'report.xlsx';
+                                                link.click();
+                                            }
+                                        });
+                                    }
+                                });
+
+                            }, 5000);
                         },
                     });
                 }
