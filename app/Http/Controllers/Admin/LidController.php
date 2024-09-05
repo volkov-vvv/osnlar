@@ -303,7 +303,7 @@ class lidController extends Controller
         $columnSortName = $request->get('columnSortName');
         $columnSortOrder = $request->get('columnSortOrder');
         $dateNow = now()->format('Y-m-d_H-i-s');
-
+dump('1');
         if($columnSortName == 'course') $columnSortName = 'courses.title';
         if($columnSortName == 'region') $columnSortName = 'regions.title';
         if($columnSortName == 'responsible') $columnSortName = 'users.name';
@@ -315,6 +315,7 @@ class lidController extends Controller
         $param['region'] = $request->get('filterRegion');
         $param['status'] = $request->get('filterStatus');
         $filename = 'reports/lids-' . $dateNow . '.xlsx';
+        dump('2');
         (new LidsExport)
             ->Params($param)
             ->Order($columnSortName, $columnSortOrder)
