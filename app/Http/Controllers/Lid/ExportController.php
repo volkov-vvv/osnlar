@@ -16,6 +16,7 @@ class ExportController extends Controller
         $columnSortOrder = '';
         $filename = 'reports/lidsReport.xlsx';
         phpinfo();
+        dd('!!!');
         /*
         (new LidsExport)
             ->Params($param)
