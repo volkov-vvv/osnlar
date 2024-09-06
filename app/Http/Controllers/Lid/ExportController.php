@@ -15,10 +15,13 @@ class ExportController extends Controller
         $columnSortName = '';
         $columnSortOrder = '';
         $filename = 'reports/lidsReport.xlsx';
+        phpinfo();
+        /*
         (new LidsExport)
             ->Params($param)
             ->Order($columnSortName, $columnSortOrder)
             ->queue($filename);
         return back()->withSuccess('Export started!');
+        */
     }
 }
