@@ -23,5 +23,6 @@ class ExportController extends Controller
             ->queue($filename);
         return back()->withSuccess('Export started!');
         */
+        return '!!!';
     }
 }
