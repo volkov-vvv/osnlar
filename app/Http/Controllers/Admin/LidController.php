@@ -319,7 +319,7 @@ class lidController extends Controller
         (new LidsExport)
             ->Params($param)
             ->Order($columnSortName, $columnSortOrder)
-            ->queue($filename);
+            ->store($filename);
         //return back()->withSuccess('Export started!');
         return $filename;
     }

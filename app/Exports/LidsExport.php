@@ -12,6 +12,9 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithDefaultStyles;
 use PhpOffice\PhpSpreadsheet\Style\Style;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\WithCustomQuerySize;
+
 
 
 class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithDefaultStyles
@@ -47,6 +50,14 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
         }
 
         return $this;
+    }
+    public function querySize(): int
+    {
+        $query = Lid::filter($this->param)->orderBy($this->columnSortName,$this->columnSortOrder);
+        //dd($query->count());
+
+        $size = $query->count();
+        return $size;
     }
 
     public function query()
