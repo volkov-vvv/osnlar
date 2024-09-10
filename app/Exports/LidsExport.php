@@ -5,33 +5,27 @@ namespace App\Exports;
 use App\Models\Lid;
 use App\Models\Status;
 use App\Models\User;
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithDefaultStyles;
 use PhpOffice\PhpSpreadsheet\Style\Style;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Maatwebsite\Excel\Concerns\WithCustomQuerySize;
-
-
+use Maatwebsite\Excel\Concerns\WithDefaultStyles;
 
 class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithDefaultStyles
 {
     use Exportable;
+
     public function __construct()
     {
         $this->statuses = Status::all();
-        $lid= new Lid();
-        $this->activites = $lid->activities();
+        $this->users = User::all();
     }
-
 
     public function Params($param)
     {
         $this->param = $param;
-
         return $this;
     }
 
@@ -51,17 +45,10 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
         return $this;
     }
-    public function querySize(): int
-    {
-        $query = Lid::filter($this->param)->orderBy($this->columnSortName,$this->columnSortOrder);
-        //dd($query->count());
-
-        $size = $query->count();
-        return $size;
-    }
 
     public function query()
     {
+
         return Lid::filter($this->param)->orderBy($this->columnSortName,$this->columnSortOrder);
     }
 
@@ -75,6 +62,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             'Регион',
             'Фамилия',
             'Имя',
+            'Отчество',
             'Email',
             'Телефон',
             'Статус',
@@ -103,6 +91,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
         $region = $lid->region_title;
         $lastname = $lid->lastname;
         $firstname = $lid->firstname;
+        $middlename = $lid->middlename;
         $email = $lid->email;
         $created_at = $lid->created_at;
 
@@ -114,21 +103,21 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
 
         $status = $lid->status_title;
-        start_measure('activities');
-        $activites = $this->activites->where('subject_id', $id);
         $activity = '';
-        if($activites){
+        $interval = '';
+
+        $activites = $lid->activities2;
+        if($activites) {
             $firstTimeAction = $activites->where('description', '=', 'Изменение статуса')->first();
-            if($firstTimeAction){
+            if ($firstTimeAction) {
                 $interval = dateDiff($firstTimeAction->created_at, $lid->created_at);
-            }else{
+            } else {
                 $interval = '---';
             }
-
             foreach ($activites as $item){
-                $activitiesStatuses = json_decode($item->properties, true);
+                $activitiesStatuses = $item->properties;
                 $activity .= $item->updated_at . '  ';
-                $activity .= $item->user_name . '  ';
+                $activity .= $this->users->where('id',$item->causer_id)->first()->name . '  ';
                 $activity .= $this->statuses->where('id',$activitiesStatuses['status_id_old'])->first()->title
                     . '->'
                     . $this->statuses->where('id',$activitiesStatuses['status_id'])->first()->title
@@ -140,7 +129,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                 $activity .= "\n-------------\n\n";
             }
         }
-        stop_measure('activities');
+
         return [
             $id,
             $responsible,
@@ -149,6 +138,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             $region,
             $lastname,
             $firstname,
+            $middlename,
             $email,
             $phone,
             $status,
@@ -166,4 +156,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
             ],
         ];
     }
+
+
+
 }

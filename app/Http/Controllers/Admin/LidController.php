@@ -314,13 +314,11 @@ class lidController extends Controller
         $param['course'] = $request->get('filterCourse');
         $param['region'] = $request->get('filterRegion');
         $param['status'] = $request->get('filterStatus');
-        $filename = 'reports/lids-' . $dateNow . '.xlsx';
 
-        (new LidsExport)
+
+        return (new LidsExport)
             ->Params($param)
             ->Order($columnSortName, $columnSortOrder)
-            ->store($filename);
-        //return back()->withSuccess('Export started!');
-        return $filename;
+            ->download('lids-report.xlsx');
     }
 }

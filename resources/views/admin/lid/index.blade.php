@@ -157,34 +157,16 @@
                             filterRegion: $('#region').val(),
                             filterStatus: $('#status').val(),
                         },
+                        xhrFields:{
+                            responseType: 'blob'
+                        },
                         success: function(data)
                         {
-                            var timerId = setInterval(function() {
-                                fileLink = '{{!empty($_SERVER['HTTPS']) ? 'https' : 'http'}}://{{$_SERVER['SERVER_NAME']}}/'+data;
-                                $.ajax({
-                                    url: fileLink,
-                                    type: 'HEAD',
-                                    success: function(data) {
-                                        clearInterval(timerId);
-                                        $('#download').alert('close');
-                                        $.ajax({
-                                            url: fileLink,
-
-                                            xhrFields: {
-                                                'responseType': 'blob'
-                                            },
-                                            success: function(data, status, xhr) {
-                                                var blob = new Blob([data], {type: xhr.getResponseHeader('Content-Type')});
-                                                var link = document.createElement('a');
-                                                link.href = window.URL.createObjectURL(blob);
-                                                link.download = 'report.xlsx';
-                                                link.click();
-                                            }
-                                        });
-                                    }
-                                });
-
-                            }, 5000);
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(data);
+                            link.download = `Report.xlsx`;
+                            link.click();
+                            $('#download').alert('close');
                         },
                     });
                 }
