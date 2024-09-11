@@ -1,5 +1,6 @@
 @extends('cc.layouts.main')
 @section('content')
+    <div id="alert-area"></div>
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -17,12 +18,6 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
 
-{{--            <div class="row mb-3">--}}
-{{--                <div class="col">--}}
-{{--                    <a href="{{route('admin.lid.create')}}" type="button" class="btn btn-primary"><i--}}
-{{--                            class="fa-solid fa-plus"></i> Создать</a>--}}
-{{--                </div>--}}
-{{--            </div>--}}
 
             <div class="row">
                 <div class="col">
@@ -126,6 +121,8 @@
                     var columnSortName = rowKeys[OrderData[0][0]];
                     var columnSortOrder = OrderData[0][1];
                     var search = dt.search();
+                    $('#alert-area').html('<div id="download" class="alert alert-info alert-dismissible fade" role="alert">Подготовка файла Excel...<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>')
+                    $('#download').addClass('show');
                     $.ajax({
                         url: "{{route('cc.lid.getLidsExcel')}}",
                         method: 'get',
@@ -147,6 +144,7 @@
                             link.href = window.URL.createObjectURL(data);
                             link.download = `Lids_report.xlsx`;
                             link.click();
+                            $('#download').alert('close');
                         },
                     });
                 }
