@@ -168,7 +168,7 @@
             }, "colvis"],
             order: [[0, 'desc']],
             'columnDefs': [ {
-                targets: [ 4], visible: false
+                targets: [ 4, 7], visible: false
             }],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
