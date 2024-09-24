@@ -222,7 +222,7 @@
         $('#status').on('change', function (e){
 
             table
-                .column(8)
+                .column(9)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -230,7 +230,7 @@
         $('#utm_source').on('change', function (e){
 
             table
-                .column(10)
+                .column(11)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -238,7 +238,7 @@
         $('#utm_medium').on('change', function (e){
 
             table
-                .column(11)
+                .column(12)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -246,7 +246,7 @@
         $('#utm_campaign').on('change', function (e){
 
             table
-                .column(12)
+                .column(13)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -254,7 +254,7 @@
         $('#date').on('change', function (e){
 
             table
-                .column(9)
+                .column(10)
                 .search(this.value, {exact: true})
                 .draw();
         })
