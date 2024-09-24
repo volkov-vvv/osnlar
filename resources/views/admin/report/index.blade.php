@@ -95,6 +95,7 @@
                                         <th>Поток</th>
                                         <th>Фамилия</th>
                                         <th>Имя</th>
+                                        <th>Email</th>
                                         <th>Категория</th>
                                         <th>Статус</th>
                                         <th>Дата создания</th>
@@ -195,6 +196,7 @@
                 { data: 'id' }, // заменить на поток
                 { data: 'lastname' },
                 { data: 'firstname' },
+                { data: 'email' },
                 { data: 'category' },
                 { data: 'status' },
                 { data: 'created_at' },
