@@ -17,6 +17,8 @@ class IndexController extends Controller
         $data['coursesCount'] = Course::all()->count();
         $data['lidsCount'] = Lid::all()->count();
 
-        return view('admin.main.index',compact('data'));
+        $users = User::where('role', 3)->get();
+
+        return view('admin.main.index',compact('data', 'users'));
     }
 }

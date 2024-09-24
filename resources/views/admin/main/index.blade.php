@@ -80,6 +80,26 @@
                 </div>
                 <!-- ./col -->
             </div>
+            <div class="row">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Сотрудник</th>
+                        <th>Общее кол-во заявок</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($users as $user)
+                    <tr>
+                        <td></td>
+                        <td>{{$user->name}}</td>
+                        <td>{{$user->getLids->count()}}</td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
 
 
             <!-- /.row -->

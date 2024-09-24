@@ -28,9 +28,27 @@ class User extends Authenticatable
 
     public function agents()
     {
-        return $this->belongsToMany(Agent::class);
+        return $this->hasMany(Agent::class);
     }
 
+    public function getLids()
+    {
+        return $this->hasMany(Lid::class, 'responsible_id', 'id');
+    }
+/*
+    public function averageTime()
+    {
+        $queryArray = array(
+            'lids.created_at',
+            'activity_log.created_at',
+        );
+        $query = Lid::select($queryArray)
+            ->join('activity_log', 'activity_log.subject_id', '=', 'lids.id')
+            ->join('users', 'activity_log.causer_id', '=', 'users.id')
+            ->where('lids.id', mb_substr($searchValue, 1));
+        $activities = $query->get();
+    }
+*/
     /**
      * The attributes that are mass assignable.
      *
