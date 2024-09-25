@@ -65,6 +65,33 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label>Деятельность в ИТ</label>
+                        <textarea class="summernote" name="about_it">
+                            {{$about->about_it}}
+                        </textarea>
+                        @error('about_it')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Услуги</label>
+                        <textarea class="summernote" name="about_services">
+                            {{$about->about_services}}
+                        </textarea>
+                        @error('about_services')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Технические средства</label>
+                        <textarea class="summernote" name="about_tech">
+                            {{$about->about_tech}}
+                        </textarea>
+                        @error('about_tech')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <button type="submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.about.index')}}">Назад</a>
                 </form>

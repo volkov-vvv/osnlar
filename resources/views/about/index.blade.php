@@ -38,6 +38,14 @@
                    role="tab" aria-controls="v-pills-inet" aria-selected="false">
                     <i class="fa-solid fa-globe mr-2"></i>
                     <span class="font-weight-bold small text-uppercase">Деятельность в ИТ</span></a>
+                <a class="nav-link mb-3 p-3 shadow" id="v-pills-services-tab" data-toggle="pill" href="#v-pills-services"
+                   role="tab" aria-controls="v-pills-inet" aria-selected="false">
+                    <i class="fa-solid fa-globe mr-2"></i>
+                    <span class="font-weight-bold small text-uppercase">Услуги</span></a>
+                <a class="nav-link mb-3 p-3 shadow" id="v-pills-tech-tab" data-toggle="pill" href="#v-pills-tech"
+                   role="tab" aria-controls="v-pills-inet" aria-selected="false">
+                    <i class="fa-solid fa-globe mr-2"></i>
+                    <span class="font-weight-bold small text-uppercase">Технические средства</span></a>
             </div>
         </div>
         @foreach($abouts as $about)
@@ -104,6 +112,22 @@
                         <h4 class="font-italic mb-4">Деятельность в ИТ</h4>
                         <p class="font-italic text-muted mb-2">
                             {!! $about->about_it !!}
+                        </p>
+                    </div>
+
+                    <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-services" role="tabpanel"
+                         aria-labelledby="v-pills-services-tab">
+                        <h4 class="font-italic mb-4">Услуги</h4>
+                        <p class="font-italic text-muted mb-2">
+                            {!! $about->about_services !!}
+                        </p>
+                    </div>
+
+                    <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-tech" role="tabpanel"
+                         aria-labelledby="v-pills-tech-tab">
+                        <h4 class="font-italic mb-4">Технические средства</h4>
+                        <p class="font-italic text-muted mb-2">
+                            {!! $about->about_tech !!}
                         </p>
                     </div>
                 </div>
