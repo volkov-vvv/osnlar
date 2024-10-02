@@ -1,4 +1,23 @@
 @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
+
+@font-face {
+    font-family: "Soyuz Grotesk Bold";
+    src: url("../fonts/Soyuz_Grotesk_Bold.woff");
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Medium.eot');
+    src: local('Montserrat Medium'), local('Montserrat-Medium'),
+    url('../fonts/montserrat/Montserrat-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/montserrat/Montserrat-Medium.woff2') format('woff2'),
+    url('../fonts/montserrat/Montserrat-Medium.woff') format('woff'),
+    url('../fonts/montserrat/Montserrat-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
@@ -4457,7 +4476,7 @@ a.close.disabled {
 .carousel-inner {
   position: relative;
   width: 100%;
-  overflow: hidden; }
+  overflow: visible; }
   .carousel-inner::after {
     display: block;
     clear: both;
@@ -7163,7 +7182,14 @@ a.text-dark:hover, a.text-dark:focus {
   font-weight: 500; }
 
 .edica-header.edica-landing-header {
-  background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 55%, #fff0e8 55%, #fff0e8 100%); }
+  //background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 55%, #fff0e8 55%, #fff0e8 100%);
+    background-image: url("../images/photo_back.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 70% 0%;
+
+}
+
   .edica-header.edica-landing-header .carousel-indicators {
     top: 0;
     left: auto;
@@ -7184,9 +7210,44 @@ a.text-dark:hover, a.text-dark:focus {
     flex-direction: column;
     justify-content: center; }
     .edica-header.edica-landing-header .carousel-content-wrapper h1 {
-      margin-bottom: 22px; }
+        text-decoration: underline #83d16a;
+        text-decoration-thickness: 10px;
+        font-size: 69px;
+        position: relative;
+    }
+.edica-header.edica-landing-header .carousel-content-wrapper h1:before {
+    content: " ";
+    position: absolute;
+    top: -40px;
+    left: -60px;
+    width: 60px;
+    height: 60px;
+    z-index: -1;
+    background: url("../images/main_h1_back.svg") top center no-repeat;
+}
     .edica-header.edica-landing-header .carousel-content-wrapper p {
-      margin-bottom: 22px; }
+        font-family: Soyuz Grotesk Bold;
+        font-size: 32px;
+        line-height: normal;
+        margin-bottom: 30px;
+    }
+
+    .edica-header.edica-landing-header .carousel-content-wrapper ul{
+        padding-left: 30px;
+        margin-bottom: 60px;
+    }
+
+    .edica-header.edica-landing-header .carousel-content-wrapper ul li{
+//        font-family: Montserrat;
+        font-size: 18px;
+        list-style: none;
+    }
+.edica-header.edica-landing-header .carousel-content-wrapper ul li:before{
+    content: '\2014';
+    position: absolute;
+    margin-left: -25px;
+}
+
     .edica-header.edica-landing-header .carousel-content-wrapper .carousel-content-btns .btn {
       padding: 18px 34px;
       font-size: 18px;
@@ -7198,7 +7259,7 @@ a.text-dark:hover, a.text-dark:focus {
         margin-right: 0; }
   .edica-header.edica-landing-header .carousel-img-wrapper {
     display: flex;
-    padding-top: 95px;
+//    padding-top: 95px;
     justify-content: center;
     align-items: flex-end; }
 
@@ -7938,5 +7999,89 @@ label {
   padding-top: 90px;
   padding-bottom: 90px;
   text-align: center; }
+
+.button-main{
+    display: block;
+    position: relative;
+    width: 360px;
+    height: 72px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 18px 34px;
+    font-family: Montserrat;
+    font-size: 24px;
+    font-weight: 500;
+    color: #ffffff;
+    margin-right: 24px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 0.8rem;
+    -webkit-box-shadow: 0px 25px 20px -10px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 25px 20px -10px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 25px 20px -10px rgba(34, 60, 80, 0.2);
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.button-main:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    text-decoration: none;
+}
+
+.button-main:before {
+    content: " ";
+    position: absolute;
+    top: -30px;
+    left: 380px;
+    width: 165px;
+    height: 85px;
+    z-index: 100;
+    background: url("../images/main_arrow.svg") top center no-repeat;
+}
+.button-login {
+    padding: 0;
+    border: none;
+    color: #000000;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+@media (min-width: 992px) {
+.button-login{
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 5px 25px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #007bff;
+    background-color: #ffffff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #007bff;
+    border-radius: 0.5rem;
+    -webkit-box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
+    -moz-box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
+    box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
+}
+}
+.button-login:hover{
+    color: #0062cc;
+    border-color: #0062cc;
+    text-decoration: none;
+}
+
+
+
+
+
+
+
 
 /*# sourceMappingURL=style.css.map */
