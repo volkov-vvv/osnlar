@@ -7263,6 +7263,16 @@ a.text-dark:hover, a.text-dark:focus {
     justify-content: center;
     align-items: flex-end; }
 
+@media (min-width: 768px) and (max-width: 992px) {
+    .edica-header.edica-landing-header .carousel-content-wrapper h1 {
+        font-size: 50px;
+    }
+
+    .edica-header.edica-landing-header .carousel-content-wrapper p {
+        font-size: 22px;
+    }
+}
+
 .edica-header .nav-link {
   font-size: 16px;
   line-height: 1;
@@ -8042,6 +8052,13 @@ label {
     z-index: 100;
     background: url("../images/main_arrow.svg") top center no-repeat;
 }
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .button-main:before {
+        display: none;
+    }
+}
+
 .button-login {
     padding: 0;
     border: none;
