@@ -151,9 +151,9 @@
                                 <h1>IT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
                                 <p>которая специализируется на:</p>
                                 <ul>
-                                    <li>создании цифрового информационного контента</li>
+                                    <li>создании цифрового образовательного контента</li>
                                     <li>разработке образовательной платформы &laquo;Основание&raquo;</li>
-                                    <li>обучении IT-направлениям через собственные курсы</li>
+                                    <li>обучении по различным IT-направлениям</li>
                                 </ul>
                             <!--
                                 <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
@@ -177,20 +177,7 @@
                             </div>
                         </div>
                     </div>
-                    {{--                    <div class="carousel-item">--}}
-                    {{--                        <div class="row">--}}
-                    {{--                            <div class="col-md-6 carousel-content-wrapper">--}}
-                    {{--                                <h1 >Национальная программа «Кадры для цифровой экономики»</h1>--}}
-                    {{--                                <p>Учебный центр «Основание» участвует в отборе поставщиков цифровых образовательных сервисов, включающих цифровые образовательные ресурсы.</p>--}}
-                    {{--                                <div class="carousel-content-btns">--}}
-                    {{--                                    <a href="#!" class="btn btn-primary"><i class="fas fa-exclamation-circle mr-2"></i> Подробнее</a>--}}
-                    {{--                                </div>--}}
-                    {{--                            </div>--}}
-                    {{--                            <div class="col-md-6 carousel-img-wrapper">--}}
-                    {{--                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid" width="350px">--}}
-                    {{--                            </div>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
+
 
                 </div>
             </div>
