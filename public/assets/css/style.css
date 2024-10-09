@@ -7215,7 +7215,15 @@ a.text-dark:hover, a.text-dark:focus {
         font-size: 69px;
         position: relative;
     }
-.edica-header.edica-landing-header .carousel-content-wrapper h1:before {
+
+.top-banner h1 {
+    text-decoration: underline #83d16a;
+    text-decoration-thickness: 10px;
+    font-size: 69px;
+    position: relative;
+}
+
+.top-banner h1:before {
     content: " ";
     position: absolute;
     top: -40px;

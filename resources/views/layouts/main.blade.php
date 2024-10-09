@@ -147,7 +147,7 @@
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item active">
                         <div class="row">
-                            <div class="col-md-6 carousel-content-wrapper">
+                            <div class="col-md-6 carousel-content-wrapper top-banner">
                                 <h1>IT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
                                 <p>которая специализируется на:</p>
                                 <ul>
@@ -182,6 +182,42 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="edica-landing-header-content">
+            <div id="edicaLandingHeaderCarousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="0" class="active">.01</li>
+                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="1">.02</li>
+                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="2">.03</li>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-6 carousel-content-wrapper">
+                                <h1>Федеральный проект «Содействие занятости»</h1>
+                                <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
+                                    дополнительного профессионального образования отдельных категорий граждан в рамках
+                                    реализации федерального <a
+                                        href="https://trudvsem.ru/information-pages/support-employment/">проекта
+                                        «Содействие занятости»</a> национального проекта «Демография».</p>
+                                <div class="carousel-content-btns">
+                                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i
+                                            class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 carousel-img-wrapper">
+                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
+                                     width="350px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 </header>
 
