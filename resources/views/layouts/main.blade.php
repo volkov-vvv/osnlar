@@ -137,13 +137,7 @@
         </nav>
         <div class="edica-landing-header-content">
             <div id="edicaLandingHeaderCarousel" class="carousel slide" data-ride="carousel">
-                <!--
-                <ol class="carousel-indicators">
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="0" class="active">.01</li>
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="1">.02</li>
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="2">.03</li>
-                </ol>
-                -->
+
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item active">
                         <div class="row">
@@ -155,23 +149,17 @@
                                     <li>разработке образовательной платформы &laquo;Основание&raquo;</li>
                                     <li>обучении по различным IT-направлениям</li>
                                 </ul>
-                            <!--
-                                <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
-                                    дополнительного профессионального образования отдельных категорий граждан в рамках
-                                    реализации федерального <a
-                                        href="https://trudvsem.ru/information-pages/support-employment/">проекта
-                                        «Содействие занятости»</a> национального проекта «Демография».</p>
 
                                 <div class="carousel-content-btns">
-                                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i
-                                            class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                                    <a href="{{route('course.index')}}" class="button-main">Выберите курс</a>
                                 </div>
-                                -->
-                                <div class="carousel-content-btns">
-                                    <a href="{{route('lid.create')}}" class="button-main">Записаться</a>
+                                <div class="achievement">
+                                    <div><span class="achievement-bold">8000+</span><br>слушателей</div>
+                                    <div><span class="achievement-bold">40+</span><br>программ</div>
+                                    <div><span class="achievement-bold">82%</span><br>трудоустроились</div>
                                 </div>
                             </div>
-                            <div class="col-md-6 carousel-img-wrapper">
+                            <div class="col-md-6 carousel-img-wrapper top-banner">
                                 <img src="{{asset('assets/images/people.png')}}" alt="carousel-img" class="img-fluid"
                                      width="650px">
                             </div>
@@ -182,42 +170,6 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="edica-landing-header-content">
-            <div id="edicaLandingHeaderCarousel" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="0" class="active">.01</li>
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="1">.02</li>
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="2">.03</li>
-                </ol>
-                <div class="carousel-inner" role="listbox">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-6 carousel-content-wrapper">
-                                <h1>Федеральный проект «Содействие занятости»</h1>
-                                <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
-                                    дополнительного профессионального образования отдельных категорий граждан в рамках
-                                    реализации федерального <a
-                                        href="https://trudvsem.ru/information-pages/support-employment/">проекта
-                                        «Содействие занятости»</a> национального проекта «Демография».</p>
-                                <div class="carousel-content-btns">
-                                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i
-                                            class="fas fa-arrow-right mr-2"></i> Записаться</a>
-                                </div>
-                            </div>
-                            <div class="col-md-6 carousel-img-wrapper">
-                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
-                                     width="350px">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
     </div>
 </header>
 

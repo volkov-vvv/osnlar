@@ -3,6 +3,30 @@
 
 <main>
 
+    <section class="edica-landing-section about-osnovanie">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6" data-aos="fade-up-right">
+                    <h1>Федеральный проект «Содействие занятости»</h1>
+                    <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
+                        дополнительного профессионального образования отдельных категорий граждан в рамках
+                        реализации федерального <a
+                            href="https://trudvsem.ru/information-pages/support-employment/">проекта
+                            «Содействие занятости»</a> национального проекта «Демография».</p>
+                    <div class="carousel-content-btns">
+                        <a href="{{route('lid.create')}}" class="btn btn-primary"><i
+                                class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                    </div>
+                </div>
+                <div class="col-md-6 img-wrapper" data-aos="fade-up-left">
+                    <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
+                         width="350px">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <section class="edica-landing-section edica-landing-blog">
         <div class="container">
             <h4 class="edica-landing-section-subtitle" data-aos="fade-up">Наши курсы</h4>
