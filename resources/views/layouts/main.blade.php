@@ -62,7 +62,7 @@
 </head>
 <body>
 <div class="edica-loader"></div>
-<header class="edica-header edica-landing-header">
+<header class="edica-header edica-landing-header main-page">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}"

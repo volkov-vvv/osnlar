@@ -8,11 +8,11 @@
         </button>
         <div class="collapse navbar-collapse" id="edicaMainNav">
             <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{{route('main.index')}}">Главная <span
                             class="sr-only"></span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                 </li>
                 <li class="nav-item dropdown">
@@ -62,7 +62,7 @@
             @else
                 <ul class="navbar-nav mt-2 mt-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('login')}}">Войти</a>
+                        <a class="button-login" href="{{route('login')}}">Войти</a>
                     </li>
                 </ul>
             @endif

@@ -7186,7 +7186,7 @@ a.text-dark:hover, a.text-dark:focus {
 .font-weight-medium {
   font-weight: 500; }
 
-.edica-header.edica-landing-header {
+.edica-header.edica-landing-header.main-page {
   //background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 55%, #fff0e8 55%, #fff0e8 100%);
     background-image: url("../images/photo_back.png");
     background-repeat: no-repeat;

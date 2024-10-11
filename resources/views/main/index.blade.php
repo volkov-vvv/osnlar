@@ -6,7 +6,11 @@
     <section class="edica-landing-section about-osnovanie">
         <div class="container">
             <div class="row">
-                <div class="col-md-6" data-aos="fade-up-right">
+                <div class="col-md-6 img-wrapper" data-aos="fade-up-right">
+                    <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
+                         width="350px">
+                </div>
+                <div class="col-md-6" data-aos="fade-up-left">
                     <h1>Федеральный проект «Содействие занятости»</h1>
                     <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
                         дополнительного профессионального образования отдельных категорий граждан в рамках
@@ -17,10 +21,6 @@
                         <a href="{{route('lid.create')}}" class="btn btn-primary"><i
                                 class="fas fa-arrow-right mr-2"></i> Записаться</a>
                     </div>
-                </div>
-                <div class="col-md-6 img-wrapper" data-aos="fade-up-left">
-                    <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
-                         width="350px">
                 </div>
             </div>
         </div>
