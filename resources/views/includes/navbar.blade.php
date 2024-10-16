@@ -1,5 +1,5 @@
 
-    <nav id="my-class-main" class="navbar navbar-expand-lg" data-bs-theme="white">
+<nav id="my-class-main" class="navbar navbar-expand-lg" data-bs-theme="white">
         <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}"
                                                                     width="260" alt="Основание"></a>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav"
