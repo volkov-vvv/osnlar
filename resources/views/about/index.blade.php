@@ -2,7 +2,7 @@
 @section('content')
     <div class="row pt-5 pb-5">
         <div class="col text-center">
-            <h1>Сведения об образовательной организации</h1>
+            <h1>Сведения об организации</h1>
         </div>
     </div>
     <div class="row">
@@ -41,7 +41,7 @@
                 <a class="nav-link mb-3 p-3 shadow" id="v-pills-services-tab" data-toggle="pill" href="#v-pills-services"
                    role="tab" aria-controls="v-pills-inet" aria-selected="false">
                     <i class="fa-solid fa-globe mr-2"></i>
-                    <span class="font-weight-bold small text-uppercase">Услуги</span></a>
+                    <span class="font-weight-bold small text-uppercase">Контакты</span></a>
                 <a class="nav-link mb-3 p-3 shadow" id="v-pills-tech-tab" data-toggle="pill" href="#v-pills-tech"
                    role="tab" aria-controls="v-pills-inet" aria-selected="false">
                     <i class="fa-solid fa-globe mr-2"></i>
@@ -117,7 +117,7 @@
 
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-services" role="tabpanel"
                          aria-labelledby="v-pills-services-tab">
-                        <h4 class="font-italic mb-4">Услуги</h4>
+                        <h4 class="font-italic mb-4">Контакты</h4>
                         <p class="font-italic text-muted mb-2">
                             {!! $about->about_services !!}
                         </p>

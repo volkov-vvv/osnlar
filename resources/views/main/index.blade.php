@@ -18,8 +18,7 @@
                             href="https://trudvsem.ru/information-pages/support-employment/">проекта
                             «Содействие занятости»</a> национального проекта «Демография».</p>
                     <div class="carousel-content-btns">
-                        <a href="{{route('lid.create')}}" class="btn btn-primary"><i
-                                class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                        <a href="{{route('lid.create')}}" class="button-main">Записаться</a>
                     </div>
                 </div>
             </div>
@@ -44,7 +43,7 @@
 
             <div class="row mt-5">
                 <div class="carousel-content-btns mx-auto">
-                    <a href="{{route('course.index')}}" class="btn btn-primary">Все актуальные курсы</a>
+                    <a href="{{route('course.index')}}" class="button-main">Все актуальные курсы</a>
                 </div>
             </div>
         </div>
