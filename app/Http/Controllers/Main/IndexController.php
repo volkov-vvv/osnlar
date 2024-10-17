@@ -10,7 +10,15 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $randomCourses = Course::where('is_published', 1)->get()->random(6);
+        $allCourses = Course::where('is_published', 1)->get();
+        $countCourses = $allCourses->count();
+
+        if($countCourses >= 6){
+            $randomCourses = Course::where('is_published', 1)->get()->random(5);
+        }else{
+            $randomCourses = $allCourses;
+        }
+
         return view('main.index', compact('randomCourses'));
     }
 }

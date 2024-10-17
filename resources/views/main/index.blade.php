@@ -117,16 +117,16 @@
                 </div>
                 <ol class="carousel-indicators">
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="0">
-                        <img src="{{ asset('assets/images/LN.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/OV.jpg')}}" alt="avatar">
                         <div class="user-details">
-                            <h6>Людмила Никитченко</h6>
+                            <h6>Ольга Ванюхина</h6>
                             <p>Руководитель УМЦ</p>
                         </div>
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="1">
-                        <img src="{{ asset('assets/images/PAV.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/AK.jpg')}}" alt="avatar">
                         <div class="user-details">
-                            <h6>Дмитрий Павлов</h6>
+                            <h6>Анна Корякина</h6>
                             <p>Преподаватель</p>
                         </div>
                     </li>
