@@ -22,7 +22,7 @@
                                         <tr>
                                             <td>{{$course->id}}</td>
                                             <td>{{$course->title}}</td>
-                                            <td>{{$course->is_published == 0 ? 'В архиве' : ''}}</td>
+                                            <td>{{$course->is_published == 0 ? 'Архив' : ''}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

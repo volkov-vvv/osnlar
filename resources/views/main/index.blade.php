@@ -17,8 +17,9 @@
                         реализации федерального <a
                             href="https://trudvsem.ru/information-pages/support-employment/">проекта
                             «Содействие занятости»</a> национального проекта «Демография».</p>
+                    <p>Прием заявок на этот год закончен, но Вы можете оставить заявку на следующий год.</p>
                     <div class="carousel-content-btns">
-                        <a href="{{route('lid.create')}}" class="button-main">Записаться</a>
+                        <a href="{{route('lid.create')}}" class="button-main">Заявка на 2025 год</a>
                     </div>
                 </div>
             </div>
