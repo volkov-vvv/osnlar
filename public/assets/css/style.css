@@ -7933,6 +7933,12 @@ a.text-dark:hover, a.text-dark:focus {
     font-size: 18px;
     font-weight: 700; }
 
+.blog-post .price{
+    margin-top: 5px;
+    font-size: 18px;
+    color: #007bff;
+}
+
 .edica-404 {
   padding-top: 150px;
   padding-bottom: 200px; }
@@ -8139,7 +8145,10 @@ label {
 }
 
 
-
+.course-price{
+    font-size: 22px;
+    color: #007bff;
+}
 
 
 

@@ -13,8 +13,15 @@
             <section class="blog-post-featured-img" data-aos="fade-up" data-aos-delay="300">
                 <img src="{{url('storage/' . $course->image) }}" alt="featured image" class="w-100">
                 <div class="row">
-                <div class="col pt-5 text-center"><a href="{{route('lid.create', ['selectedCourse' => $course->id])}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
-                        Записаться</a></div>
+                    @if(isset($course->price) && $course->price != 0)
+                        <div class="col-12 pt-5 text-center course-price">
+                            Стомость обучения {{number_format($course->price, 0, ',', ' ')}} руб.
+                        </div>
+                    @endif
+                <div class="col-12 pt-5 text-center">
+                    <a href="{{route('lid.create', ['selectedCourse' => $course->id])}}" class="btn btn-primary btn-lg"><i class="fas fa-arrow-right mr-2"></i>
+                        Записаться</a>
+                </div>
                 </div>
 
             </section>

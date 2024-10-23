@@ -20,8 +20,12 @@ Route::group(['namespace' => 'Main'],function (){
 });
 
 Route::group(['namespace' => 'Course', 'prefix' => 'course', 'middleware' => ['cookie']],function (){
-    Route::get('/', 'IndexController')->name('course.index');
+    Route::get('/',[App\Http\Controllers\Course\IndexController::class, 'active'])->name('course.index');
     Route::get('/{course}', 'ShowController')->name('course.show');
+});
+
+Route::group(['namespace' => 'Commerce', 'prefix' => 'commerce', 'middleware' => ['cookie']],function (){
+    Route::get('/',[App\Http\Controllers\Course\IndexController::class, 'commerce'])->name('commerce.index');
 });
 
 Route::group(['namespace' => 'Archive', 'prefix' => 'archive', 'middleware' => ['cookie']],function (){

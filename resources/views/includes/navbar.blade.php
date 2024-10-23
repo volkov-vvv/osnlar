@@ -20,7 +20,8 @@
                         Курсы
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a></li>
+                        <li><a class="dropdown-item" href="{{route('course.index')}}">Бесплатные курсы</a></li>
+                        <li><a class="dropdown-item" href="{{route('commerce.index')}}">Платные курсы</a></li>
                         <li><a class="dropdown-item" href="{{route('archive.index')}}">Архив</a></li>
                     </ul>
                 </li>

@@ -137,6 +137,16 @@
                     </div>
 
                     <div class="mb-3 form-group">
+                        <h5><b>Торговый каталог</b></h5>
+                        <label>Стоимость обучения (руб.)</label>
+                        <input name="price" type="text" class="form-control" aria-describedby="price"
+                               value="{{$course->price}}">
+                        @error('price')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 form-group">
                         <h5><b>SEO</b></h5>
                         <label>Title</label>
                         <input name="seo_title" type="text" class="form-control" aria-describedby="Title"
