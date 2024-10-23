@@ -164,11 +164,13 @@
                     <p class="contact-details">ОСНОВАНИЕ</p>
                     <p class="contact-details">edu@partnerdpo.ru</p>
                     <p class="contact-details">+7 (499) 609-60-20</p>
+                    <a href="#!" class="nav-link">Адрес: 129110, г. Москва, ул. Гиляровского д. 57, стр. 1.</a>
+
                     <nav class="footer-social-links">
                         <a href="{{url('https://vk.com/osnovanie_study')}}" target="_blank"><i class="fab fa-vk"></i></a>
                         <a href="{{url('https://ok.ru/group/70000005562055')}}" target="_blank"><i class="fab fa-odnoklassniki"></i></a>
                         <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i></a>
-                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>
+{{--                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>--}}
                     </nav>
                 </nav>
             </div>
@@ -185,7 +187,7 @@
             <div class="col-md-3">
                 <nav class="footer-nav">
                     <a href="#!" class="nav-link">FAQ</a>
-                    <a href="#!" class="nav-link">Цены и услуги</a>
+{{--                    <a href="#!" class="nav-link">Цены и услуги</a>--}}
                     <a href="#!" class="nav-link">Условия сотрудничества</a>
                     <a href="#!" class="nav-link">Интеграция</a>
                     <a href="#!" class="nav-link">API</a>
