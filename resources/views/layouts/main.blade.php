@@ -180,7 +180,7 @@
 <section class="edica-footer-banner-section">
     <div class="container">
         <div class="footer-banner" data-aos="fade-up">
-            <h1 class="banner-title">Подать заявку!</h1>
+            <h1 class="banner-title">Подать заявку на 2025 год!</h1>
             <div class="banner-btns-wrapper">
                 <div class="carousel-content-btns">
                     <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i>
@@ -221,7 +221,7 @@
             <div class="col-md-3">
                 <nav class="footer-nav">
                     <a href="#!" class="nav-link">FAQ</a>
-                    <a href="#!" class="nav-link">Цены и услуги</a>
+{{--                    <a href="#!" class="nav-link">Цены и услуги</a>--}}
                     <a href="#!" class="nav-link">Условия сотрудничества</a>
                     <a href="#!" class="nav-link">Интеграция</a>
                     <a href="#!" class="nav-link">API</a>
