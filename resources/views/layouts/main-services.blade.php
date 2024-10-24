@@ -85,10 +85,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="{{route('services.index')}}">Услуги</a>
                     </li>
-                    <li class="nav-item dropdown active">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
                             <a class="dropdown-item" href="{{route('course.index')}}">Бесплатные курсы</a>
