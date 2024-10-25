@@ -155,7 +155,7 @@
                                 </ul>
 
                                 <div class="carousel-content-btns">
-                                    <a href="{{route('course.index')}}" class="button-main">Выберите курс</a>
+                                    <a href="{{route('commerce.index')}}" class="button-main">Выберите курс</a>
                                 </div>
                                 <div class="achievement">
                                     <div><span class="achievement-bold">8000+</span><br>слушателей</div>
@@ -198,10 +198,11 @@
         <div class="row footer-widget-area">
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <p class="contact-details">ОСНОВАНИЕ</p>
-                    <p class="contact-details">edu@partnerdpo.ru</p>
-                    <p class="contact-details">+7 (499) 609-60-20</p>
-                    <a href="#!" class="nav-link">Адрес: 129110, г. Москва, ул. Гиляровского д. 57, стр. 1.</a>
+                    <p class="">ООО «Центр повышения квалификации и профессиональной подготовки «Основание»</p>
+                    <p class="">Адрес: 129110, г. Москва, ул. Гиляровского д. 57, стр. 1.</p>
+                    <p class="">+7 (499) 609-60-20</p>
+                    <p class="">edu@partnerdpo.ru</p>
+
 
                     <nav class="footer-social-links">
                         <a href="{{url('https://vk.com/osnovanie_study')}}" target="_blank"><i class="fab fa-vk"></i></a>
@@ -213,22 +214,21 @@
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Реквизиты</a>
-                    <a href="#!" class="nav-link">Android приложение</a>
-                    <a href="#!" class="nav-link">ios приложение</a>
-                    <a href="#!" class="nav-link">Блог</a>
-                    <a href="#!" class="nav-link">Партнеры</a>
-                    <a href="#!" class="nav-link">Вакансии</a>
+                    <p>Реквизиты</p>
+                    <p>ИНН/КПП: 7751117260/770201001</p>
+                    <p>ОГРН: 5177746204763</p>
+                    <p>Режим работы</p>
+                    <p>Пн-Пт, 9:00 – 18:00</p>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
+                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Карточка организации</a>
+                    <a href="#!" class="nav-link">Блог</a>
                     <a href="#!" class="nav-link">FAQ</a>
 {{--                    <a href="#!" class="nav-link">Цены и услуги</a>--}}
                     <a href="#!" class="nav-link">Условия сотрудничества</a>
-                    <a href="#!" class="nav-link">Интеграция</a>
-                    <a href="#!" class="nav-link">API</a>
-                    <a href="#!" class="nav-link">Комментарии</a>
+                    <a href="#!" class="nav-link">Партнеры</a>
                 </nav>
             </div>
             <div class="col-md-3">
