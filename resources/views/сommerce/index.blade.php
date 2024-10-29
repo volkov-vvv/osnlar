@@ -3,7 +3,12 @@
 
     <main class="blog">
         <div class="container">
-            <h1 class="edica-page-title" data-aos="fade-up">Платные курсы</h1>
+            <div class="row p-5"  data-aos="fade-up">
+                <div class="col">
+                    <h1 class="text-center">Платные курсы</h1>
+                    <p class="text-center" style="color: grey; font-size: 20px">Предварительная запись на обучение</p>
+                </div>
+            </div>
             <section class="featured-posts-section">
                 <div class="row">
                     @foreach($courses as $course)
@@ -16,7 +21,7 @@
                             <p class="blog-post-category"></p>
                             <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                 <h6 class="blog-post-title">{{$course->title}}</h6>
-                                <p class="price">{{number_format($course->price, 0, ',', ' ')}} руб.</p>
+                                <p class="price">6250 р. в месяц <br>или единоразово {{number_format($course->price, 0, ',', ' ')}} руб.</p>
                             </a>
                         </div>
                     @endforeach

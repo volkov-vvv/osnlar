@@ -19,7 +19,7 @@
                             «Содействие занятости»</a> национального проекта «Демография».</p>
                     <p>Прием заявок на этот год закончен, но Вы можете оставить заявку на следующий год.</p>
                     <div class="carousel-content-btns">
-                        <a href="{{route('lid.create')}}" class="button-main">Заявка на 2025 год</a>
+                        <a href="{{route('course.index')}}" class="button-main">Заявка на 2025 год</a>
                     </div>
                 </div>
             </div>
@@ -27,28 +27,28 @@
     </section>
 
 
-    <section class="edica-landing-section edica-landing-blog">
-        <div class="container">
-            <h4 class="edica-landing-section-subtitle" data-aos="fade-up">Наши курсы</h4>
-            <h2 class="edica-landing-section-title" data-aos="fade-up">Выберите понравившийся курс</h2>
-            <div class="row">
-                @foreach($randomCourses as $course)
-                    <div class="col-md-4 pt-0 pb-5 landing-blog-post" data-aos="fade-right">
-                        <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>
-                        <p class="blog-post-category"></p>
-                        <h4 class="blog-post-title">{{$course->title}}</h4>
-                        <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>
-                    </div>
-                @endforeach
-            </div>
+{{--    <section class="edica-landing-section edica-landing-blog">--}}
+{{--        <div class="container">--}}
+{{--            <h4 class="edica-landing-section-subtitle" data-aos="fade-up">Наши курсы</h4>--}}
+{{--            <h2 class="edica-landing-section-title" data-aos="fade-up">Выберите понравившийся курс</h2>--}}
+{{--            <div class="row">--}}
+{{--                @foreach($randomCourses as $course)--}}
+{{--                    <div class="col-md-4 pt-0 pb-5 landing-blog-post" data-aos="fade-right">--}}
+{{--                        <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>--}}
+{{--                        <p class="blog-post-category"></p>--}}
+{{--                        <h4 class="blog-post-title">{{$course->title}}</h4>--}}
+{{--                        <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
+{{--            </div>--}}
 
-            <div class="row mt-5">
-                <div class="carousel-content-btns mx-auto">
-                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>
-                </div>
-            </div>
-        </div>
-    </section>
+{{--            <div class="row mt-5">--}}
+{{--                <div class="carousel-content-btns mx-auto">--}}
+{{--                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </section>--}}
 
     <section class="edica-landing-section edica-landing-about">
         <div class="container">
@@ -96,7 +96,6 @@
                                                     Хотелось бы даже продолжения, но курс закончился 👍
                                                     Огромная благодарность всему составу!»
                                                 </p>
-                                                <p><a href="https://t.me/JuL_Veber">@JuL_Veber</a></p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 carousel-img-wrapper">

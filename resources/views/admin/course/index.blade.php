@@ -18,7 +18,7 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <a href="{{route('admin.course.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
+                    <a href="{{route('admin.course.create')}}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
                 </div>
             </div>
 
@@ -32,6 +32,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Название</th>
+                                    <th>Год</th>
                                     <th>Публикация</th>
                                     <th>Дата создания</th>
                                     <th colspan="3">Действия</th>
@@ -42,6 +43,7 @@
                                     <tr>
                                         <td>{{$course->id}}</td>
                                         <td>{{$course->title}}</td>
+                                        <td>{{$course->years}}</td>
                                         <td>
                                             {{$course->is_published == 1 ? 'Опубликован' : 'Архив' }}
                                         </td>

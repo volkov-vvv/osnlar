@@ -36,6 +36,8 @@ class UpdateRequest extends FormRequest
             'price' => 'nullable|numeric',
             'seo_title' => '',
             'seo_description' => '',
+            'series' => '',
+            'years' => '',
         ];
     }
 

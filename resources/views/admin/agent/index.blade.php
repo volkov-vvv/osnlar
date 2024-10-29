@@ -19,7 +19,7 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <a href="{{route('admin.agent.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
+                    <a href="{{route('admin.agent.create')}}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
                 </div>
             </div>
 

@@ -161,6 +161,49 @@
                         @enderror
                     </div>
 
+{{--                    <div class="mb-3 form-group">--}}
+{{--                        <label>Выберите категорию</label>--}}
+{{--                        <select name="series" class="form-control">--}}
+{{--                            @foreach($series as $serie)--}}
+{{--                                <option value="{{$serie->id}}"--}}
+{{--                                    {{ $serie->id == old('series') ? 'selected' : '' }}--}}
+{{--                                >{{$serie->title}}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+{{--                        @error('series')--}}
+{{--                        <div class="text-danger">{{$message}}</div>--}}
+{{--                        @enderror--}}
+{{--                    </div>--}}
+
+                    <div class="mb-3">
+                        <label>Серия</label>
+                        <select name="series" class="form-control select2">
+                            @foreach($series as $serie)
+                                <option value="{{$serie->id}}"
+                                    {{ $serie->id == $course->series ? 'selected' : '' }}
+                                >{{$serie->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('series')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Год</label>
+                        <select name="years" class="form-control select2">
+                            @foreach($years as $year)
+                                <option value="{{$year}}"
+                                    {{ $year == $course->years ? 'selected' : '' }}
+                                >{{$year}}</option>
+                            @endforeach
+                        </select>
+                        @error('years')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+
                     <div class="mb-3 mt-5">
                         <button type="submit" class="btn btn-primary">Обновить</button>
                         <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
