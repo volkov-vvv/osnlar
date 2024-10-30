@@ -94,8 +94,48 @@
 
             <div class="row mb-3">
                 <div class="col">
+                    <p>Сколько сотрудников КЦ = {{$data['usersKcCount']}}</p>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="link_table" class="table table-bordered table-striped hover">
+                                        <thead>
+                                        <tr>
+                                            <th>ФИО</th>
+                                            <th>Кол-во обработанных заявок</th>
+                                            <th>% обработанных заявок</th>
+                                            <th>Среднее время реакции</th>
+                                            <th>Обучение</th>
+                                            <th>Ждем на РР</th>
+                                            <th>Недозвон</th>
+                                            <th>Отказ</th>
 
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($users as $user)
+                                            <tr>
+                                                <td>{{$user->name}}</td>
+                                                <td>---</td>
+                                                <td><span class="badge bg-danger">55%</span></td>
+                                                <td>---</td>
+                                                <td>---</td>
+                                                <td>---</td>
+                                                <td>---</td>
+                                                <td>---</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
 
 
                 </div>

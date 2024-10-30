@@ -27,7 +27,7 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+                            <table class="table table-hover">
                                 <tbody>
                                 <tr>
                                     <td>Номер заявки</td>
@@ -101,7 +101,7 @@
                     <div class="alert"><b>История изменений</b></div>
                     <div class="card">
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+                            <table class="table table-hover">
                                 <tr>
                                     <th>Дата</th>
                                     <th>Сотрудник</th>
