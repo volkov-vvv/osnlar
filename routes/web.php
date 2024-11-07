@@ -141,8 +141,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 
     Route::get('/lid/getLids',[App\Http\Controllers\Admin\LidController::class, 'getLids'])->name('admin.lid.getLids');
     Route::get('/lid/getLidsExcel',[App\Http\Controllers\Admin\LidController::class, 'getLidsExcel'])->name('admin.lid.getLidsExcel');
+
     Route::group(['as' => 'admin.'], function() {
         Route::resource('lid', LidController::class);
+        Route::resource('commerciallid', CommercialLidController::class);
     });
 
 
@@ -203,6 +205,10 @@ Route::group(['namespace' => 'Agent', 'prefix' => 'agent', 'middleware' => ['aut
     Route::group(['namespace' => 'Report', 'prefix' => 'report'],function (){
         Route::get('/', 'IndexController')->name('agent.report.index');
     });
+});
+
+Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth', 'user']],function (){
+        Route::get('/', 'IndexController')->name('user.index');
 });
 
 Route::group(['namespace' => 'Lid', 'prefix' => 'lid', 'middleware' => ['cookie']],function (){
