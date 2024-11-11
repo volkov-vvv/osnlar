@@ -9,7 +9,7 @@ class PaymentService
     private function getClient(): Client
     {
         $client = new Client();
-        $client->setAuth(config('services.yookassa_shop_id'), config('services.yookassa_secret_key'));
+        $client->setAuth(config('services.yookassa.shop_id'), config('services.yookassa.secret_key'));
 
         return $client;
     }
