@@ -10,6 +10,7 @@ use App\Models\Lid;
 use App\Models\Link;
 use App\Models\Order;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\Lid\StoreNewRequest;
 use Illuminate\Support\Facades\Hash;
@@ -41,9 +42,11 @@ class StoreNewController extends Controller
         $course = Course::all()->where('id', $request->course_id)->last();
         if(isset($course->price)){ //Если у курса есть цена, то курс платный
             //Проверяем наличие записи в таблице customers. Если записи нет, то создаем
-            $customer = Customer::all()->where('email', $request->email)->last();
+            //$customer = Customer::all()->where('email', $request->email)->last();
+            $customer = User::all()->where('email', $request->email)->last();
             if(!$customer){
                 $password = Str::random(8);
+                /*
                 $customerData = array(
                     'lastname' => $request->lastname,
                     'firstname' => $request->firstname,
@@ -53,8 +56,17 @@ class StoreNewController extends Controller
                     'politic' => 1,
                     'password' => Hash::make($password)
                 );
+                */
 
-                $customer = Customer::firstOrCreate($customerData);
+                $customerData = array(
+                    'name' => $request->lastname . ' ' . $request->firstname . ' ' . $request->middlename,
+                    'email' => $request->email,
+                    'role' => 10,
+                    'password' => Hash::make($password)
+                );
+
+//                $customer = Customer::firstOrCreate($customerData);
+                $customer = User::firstOrCreate($customerData);
                 dump('Пользователя нет'); //
                 dump($customer->id);
                 dump('Пароль: ' . $password);

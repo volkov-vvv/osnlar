@@ -226,3 +226,7 @@ Route::group(['namespace' => 'Org', 'prefix' => 'org', 'middleware' => ['cookie'
     Route::post('/', 'StoreController')->name('org.store');
     Route::get('/thank', 'IndexController')->name('org.index');
 });
+
+Route::match(['GET', 'POST'], '/payments/callback', [\App\Http\Controllers\PaymentController::class, 'callback'])->name('payment.callback');
+Route::post('/payments/create', [\App\Http\Controllers\PaymentController::class, 'create'])->name('payment.create');
+Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');

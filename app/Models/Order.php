@@ -13,4 +13,9 @@ class Order extends Model
 
     protected $table = 'orders';
     protected $guarded = false;
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }

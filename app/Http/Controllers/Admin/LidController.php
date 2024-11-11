@@ -35,8 +35,13 @@ class lidController extends Controller
         $regions = Region::all();
         $statuses = Status::all();
         $users = User::where('role', 3)->get();
+        if(isset($_GET['commerce'])){
+            $commerce = 1;
+        }else{
+            $commerce = 0;
+        }
 
-        return view('admin.lid.index', compact('courses','users','regions','statuses'));
+        return view('admin.lid.index', compact('courses','users','regions','statuses', 'commerce'));
     }
 
     /**

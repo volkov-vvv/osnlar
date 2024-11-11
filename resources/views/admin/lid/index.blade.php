@@ -192,7 +192,7 @@
             },
             processing: true,
             serverSide: true,
-            ajax: "{{route('admin.lid.getLids')}}",
+            ajax: "{{route('admin.lid.getLids')}}?commerce={{$commerce}}",
             columns: [
                 { data: 'id' },
                 { data: 'responsible' },
