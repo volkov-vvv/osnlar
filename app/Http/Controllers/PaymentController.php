@@ -42,13 +42,22 @@ class PaymentController extends Controller
     public function callback(Request $request, PaymentService $service)
     {
         $source = file_get_contents('php://input');
+        \Log::info(json_encode($source));
         $requestBody = json_decode($source, true);
         $notification = ($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
             ? new NotificationSucceeded($requestBody)
             : new NotificationWaitingForCapture($requestBody);
 
         $payment = $notification->getObject();
-        \Log::info(json_encode($payment));
+
+
+        if(isset($payment->status) && $payment->status === 'waiting_for_capture'){
+            $service->getClient()->capturePayment([
+                'amount' => $payment->amount,
+            ], $payment->id, uniqid('', true));
+        }
+
+
         if(isset($payment->status) && $payment->status === 'succeeded'){
             if((bool)$payment->paid === true){
                 $metadata = (object)$payment->metadata;
