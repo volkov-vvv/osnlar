@@ -25,7 +25,7 @@ class PaymentService
             'capture' => false,
             'confirmation' => [
                 'type' => 'redirect',
-                'return_url' => route('payment.callback'),
+                'return_url' => route('payment.index'),
             ],
             'metadata' => [
                 'transaction_id' => $options['transaction_id'],

@@ -6,6 +6,7 @@ use App\Enums\PaymentStatusEnum;
 use App\Models\Transaction;
 use App\Service\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use YooKassa\Model\Notification\NotificationSucceeded;
 use YooKassa\Model\Notification\NotificationWaitingForCapture;
 use YooKassa\Model\NotificationEventType;
@@ -47,6 +48,7 @@ class PaymentController extends Controller
             : new NotificationWaitingForCapture($requestBody);
 
         $payment = $notification->getObject();
+        \Log::info(json_encode($payment));
         if(isset($payment->status) && $payment->status === 'succeeded'){
             if((bool)$payment->paid === true){
                 $metadata = (object)$payment->metadata;
