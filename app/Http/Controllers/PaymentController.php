@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatusEnum;
+use App\Models\Order;
 use App\Models\Transaction;
 use App\Service\PaymentService;
 use Illuminate\Http\Request;
@@ -69,11 +70,17 @@ class PaymentController extends Controller
                     $transaction->status = PaymentStatusEnum::CONFIRMED;
                     $transaction->save();
 
+                    $order = Order::find($transaction->order_id);
+                    $order->status = 'оплачен';
+                    $order->save();
+
+                    /*
                     if(cache()->has('amount')){
                         cache()->forever('balance', (float)cache()->get('balance') + $payment->amount->value);
                     }else{
                         cache()->forever('balance', (float)$payment->amount->value);
                     }
+                    */
 
                 }
             }
