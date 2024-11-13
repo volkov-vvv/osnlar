@@ -22,17 +22,18 @@ class PaymentController extends Controller
 
     public function create(Request $request, PaymentService $service)
     {
-        dd($request);
+
         $order_id = (int)$request->input('order_id');
         $amount = (float)$request->input('amount');
         $description = (string)$request->input('description');
 
-
+        dump($order_id);
         $transaction = Transaction::create([
             'order_id' => $order_id,
             'amount' => $amount,
             'description' => $description
         ]);
+        dd($transaction);
 
         if($transaction){
             $link = $service->createPayment($amount, $description, [
