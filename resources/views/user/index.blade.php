@@ -18,6 +18,7 @@
                                                 <th>Курс</th>
                                                 <th>Стоимость</th>
                                                 <th>Статус</th>
+                                                <th>Действия</th>
                                             </tr>
                                             <tbody>
                                             @foreach($userOrders as $order)
@@ -25,8 +26,20 @@
                                                     <td>{{$order->id}}</td>
                                                     <td>{{$order->created_at}}</td>
                                                     <td>{{$order->course->title}}</td>
-                                                    <td>{{$order->price}}</td>
+                                                    <td>{{$order->amount}}</td>
                                                     <td>{{$order->status}}</td>
+                                                    <td>
+                                                        @if($order->status == 'разрешена оплата')
+                                                            <form method="post" action="{{route('payment.create')}}">
+                                                                @csrf
+                                                                <input type="hidden" name="description" id="description" value="Оплата обучения">
+                                                                <input type="hidden" name="amount" id="amount" value="{{$order->amount}}">
+                                                                <button type="submit">
+                                                                    Оплатить
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                             </tbody>

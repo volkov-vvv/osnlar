@@ -77,7 +77,7 @@ class StoreNewController extends Controller
                 $orderData = array(
                     'customer_id' => $customer->id,
                     'course_id' => $request->course_id,
-                    'price' => $course->price,
+                    'amount' => $course->price,
                     'status' => 'ожидание оплаты'
                 );
                 $order = Order::firstOrCreate($orderData);
