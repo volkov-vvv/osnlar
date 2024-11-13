@@ -27,13 +27,13 @@ class PaymentController extends Controller
         $amount = (float)$request->input('amount');
         $description = (string)$request->input('description');
 
-        dump($order_id);
+//        dump($order_id);
         $transaction = Transaction::create([
             'order_id' => $order_id,
             'amount' => $amount,
             'description' => $description
         ]);
-        dd($transaction);
+//        dd($transaction);
 
         if($transaction){
             $link = $service->createPayment($amount, $description, [
