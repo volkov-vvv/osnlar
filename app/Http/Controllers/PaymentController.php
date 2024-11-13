@@ -21,11 +21,13 @@ class PaymentController extends Controller
 
     public function create(Request $request, PaymentService $service)
     {
+        $order_id = (int)$request->input('order_id');
         $amount = (float)$request->input('amount');
-        $description = 'Пополнение баланса';
+        $description = (string)$request->input('description');
 
 
         $transaction = Transaction::create([
+            'order_id' => $order_id,
             'amount' => $amount,
             'description' => $description
         ]);
@@ -42,7 +44,7 @@ class PaymentController extends Controller
     public function callback(Request $request, PaymentService $service)
     {
         $source = file_get_contents('php://input');
-        \Log::info(json_encode($source));
+
         $requestBody = json_decode($source, true);
         $notification = ($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
             ? new NotificationSucceeded($requestBody)

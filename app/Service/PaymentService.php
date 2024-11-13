@@ -22,7 +22,7 @@ class PaymentService
                 'value' => $amount,
                 'currency' => 'RUB',
             ],
-            'capture' => false,
+            'capture' => true,
             'confirmation' => [
                 'type' => 'redirect',
                 'return_url' => route('payment.index'),

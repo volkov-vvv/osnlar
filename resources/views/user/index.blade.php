@@ -34,6 +34,7 @@
                                                                 @csrf
                                                                 <input type="hidden" name="description" id="description" value="Оплата обучения">
                                                                 <input type="hidden" name="amount" id="amount" value="{{$order->amount}}">
+                                                                <input type="hidden" name="order_id" id="amount" value="{{$order->id}}">
                                                                 <button type="submit">
                                                                     Оплатить
                                                                 </button>
