@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Service\LidService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -18,6 +19,8 @@ use App\Models\Status;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\User;
 use App\Exports\LidsExport;
+use App\DTO\getLidsDTO;
+use Spatie\DataTransferObject\DataTransferObject;
 
 
 class lidController extends Controller
@@ -35,11 +38,9 @@ class lidController extends Controller
         $regions = Region::all();
         $statuses = Status::all();
         $users = User::where('role', 3)->get();
-        if(isset($_GET['commerce'])){
-            $commerce = 1;
-        }else{
-            $commerce = 0;
-        }
+
+        $commerce = 0;
+
 
         return view('admin.lid.index', compact('courses','users','regions','statuses', 'commerce'));
     }
@@ -185,8 +186,15 @@ class lidController extends Controller
     /*
    AJAX request
    */
-    public function getLids(Request $request)
+    public function getLids(Request $request, LidService $service)
     {
+
+        $data = new getLidsDTO($request->all());
+
+
+        $response = $service->getLids($data);
+
+        /*
         ## Read value
         $draw = $request->get('draw');
         $start = $request->get("start");
@@ -293,8 +301,8 @@ class lidController extends Controller
             "iTotalDisplayRecords" => $totalRecordswithFilter,
             "aaData" => $data_arr
         );
-
-        echo json_encode($response);
+*/
+        echo $response;
         exit;
 
     }

@@ -18,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PaymentService::class, function ($app) {
             return new PaymentService();
         });
+
+        $this->app->bind(LidService::class, function ($app) {
+            return new LidService();
+        });
     }
 
     /**

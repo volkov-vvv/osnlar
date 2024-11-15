@@ -114,6 +114,14 @@ class Lid extends Model
 
         }
 
+        //Платные и бесплатные курсы
+
+        if ( $params['commerce'] == 1 ) {
+            $query->whereNotNull('courses.price');
+        }else{
+            $query->whereNull('courses.price');
+        }
+
         // Фильтры
         if ( isset($params['responsible']) ) {
             $query->where('users.name', 'like', $params['responsible'] );

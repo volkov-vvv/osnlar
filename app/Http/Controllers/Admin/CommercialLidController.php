@@ -3,7 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\Region;
+use App\Models\Status;
+use App\Models\User;
+use App\Service\LidService;
 use Illuminate\Http\Request;
+use App\DTO\getLidsDTO;
+use Spatie\DataTransferObject\DataTransferObject;
 
 class CommercialLidController extends Controller
 {
@@ -14,8 +21,16 @@ class CommercialLidController extends Controller
      */
     public function index()
     {
+        $courses = Course::all();
+        $regions = Region::all();
+        $statuses = Status::all();
+        $users = User::where('role', 3)->get();
 
-        return view('admin.commerciallid.index');
+        $commerce = 1;
+
+
+        return view('admin.commerciallid.index', compact('courses','users','regions','statuses', 'commerce'));
+
     }
 
     /**
@@ -87,30 +102,15 @@ class CommercialLidController extends Controller
     /*
    AJAX request
    */
-    public function getLids(Request $request)
+    public function getLids(Request $request, LidService $service)
     {
-        ## Read value
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // Rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        if($columnName == 'course') $columnName = 'courses.title';
-        if($columnName == 'region') $columnName = 'regions.title';
-        if($columnName == 'responsible') $columnName = 'users.name';
-        if($columnName == 'status') $columnName = 'statuses.title';
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
-
-        $param['search'] = $searchValue;
+        $data = new getLidsDTO($request->all());
 
 
+        $response = $service->getLids($data);
+
+        echo $response;
+        exit;
     }
 
 }
