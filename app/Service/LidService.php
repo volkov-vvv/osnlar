@@ -13,6 +13,10 @@ class LidService
     public function getLids(getLidsDTO $data)
     {
 
+        $route_name = [
+            0 => 'lid',
+            1 => 'commerciallid'
+        ];
         ## Read value
         $draw = $data->draw;
 
@@ -36,6 +40,7 @@ class LidService
 
         $param['search'] = $searchValue;
         $param['commerce'] = $data->commerce;
+
 
         // Фильтры
         foreach ($columnName_arr as $key => $column) {
@@ -91,10 +96,12 @@ class LidService
                 $interval = '---';
             }
 
-            $actions = '<a href="' . route('admin.lid.show', $record->id) . '}">
+
+
+            $actions = '<a href="' . route('admin.' . $route_name[$data->commerce] . '.show', $record->id) . '}">
                             <i class="far fa-eye"></i>
                         </a> &nbsp; &nbsp;
-                        <a href="' . route('admin.lid.edit', $record->id) . '" class="text-success">
+                        <a href="' . route('admin.' . $route_name[$data->commerce] . '.edit', $record->id) . '" class="text-success">
                             <i class="fas fa-pen"></i>
                         </a>';
 
