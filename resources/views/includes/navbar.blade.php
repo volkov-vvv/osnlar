@@ -44,15 +44,14 @@
                             </a>
                             <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
-                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
+                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') . ' ">Административная панель' : ''}}
                             @break
-                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
+                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') . ' ">Административная панель' : ''}}
                             @break
                             @default
-                                    {{route('cc.main.index')}}
+                                    {{route('user.index')}}">Личный кабинет
                             @endswitch
-                            ">
-                                Административная панель
+
                             </a>
                             <a class="dropdown-item" href="#">
                                 <form action="{{route('logout')}}" method="post">

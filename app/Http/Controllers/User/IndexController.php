@@ -14,7 +14,6 @@ class IndexController extends Controller
         $currentUserId = auth()->user()->id;
         $userOrders = Order::all()->where('customer_id', $currentUserId);
 
-        dump($userOrders);
         return view('user.index', compact('userOrders'));
     }
 }

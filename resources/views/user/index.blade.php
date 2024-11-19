@@ -1,5 +1,12 @@
 @extends('layouts.main2')
 @section('content')
+
+    <div class="row pt-5 pb-5">
+        <div class="col text-center">
+            <h1>Мои заказы</h1>
+        </div>
+    </div>
+
     <main class="blog">
         <div class="container">
             <section class="featured-posts-section">
@@ -10,7 +17,7 @@
                                 <div class="row">
                                     <div class="col">
 
-                                        <table>
+                                        <table id="user_orders_table" class="table table-bordered table-striped hover">
                                             <thead>
                                             <tr>
                                                 <th>№</th>
@@ -35,7 +42,7 @@
                                                                 <input type="hidden" name="description" id="description" value="Оплата обучения">
                                                                 <input type="hidden" name="amount" id="amount" value="{{$order->amount}}">
                                                                 <input type="hidden" name="order_id" id="amount" value="{{$order->id}}">
-                                                                <button type="submit">
+                                                                <button type="submit" class="btn btn-primary">
                                                                     Оплатить
                                                                 </button>
                                                             </form>
@@ -50,10 +57,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- /.card-body -->
                         </div>
+                        <!-- /.card-->
                     </div>
                 </div>
             </section>
+
         </div>
+
     </main>
 @endsection

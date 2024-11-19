@@ -233,3 +233,8 @@ Route::group(['namespace' => 'Org', 'prefix' => 'org', 'middleware' => ['cookie'
 Route::match(['GET', 'POST'], '/payments/callback', [\App\Http\Controllers\PaymentController::class, 'callback'])->name('payment.callback');
 Route::post('/payments/create', [\App\Http\Controllers\PaymentController::class, 'create'])->name('payment.create');
 Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
+Route::group(['namespace' => 'Order', 'prefix' => 'order'],function (){
+    Route::get('/create/{course}', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
+    Route::post('/', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
+});
+

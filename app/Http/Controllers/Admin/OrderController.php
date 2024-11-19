@@ -59,7 +59,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        $statuses = array('ожидает оплаты', 'разрешена оплата', 'отменен');
+        $statuses = array('ожидает оплаты', 'разрешена оплата', 'оплачен', 'отменен'); //Временно
         return view('admin.order.edit', compact('order', 'statuses'));
     }
 
