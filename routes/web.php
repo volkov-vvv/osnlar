@@ -235,6 +235,6 @@ Route::post('/payments/create', [\App\Http\Controllers\PaymentController::class,
 Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
 Route::group(['namespace' => 'Order', 'prefix' => 'order'],function (){
     Route::get('/create/{course}', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
-    Route::post('/', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
+    Route::post('/create/finish', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
 });
 
