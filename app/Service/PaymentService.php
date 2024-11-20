@@ -25,7 +25,7 @@ class PaymentService
             'capture' => true,
             'confirmation' => [
                 'type' => 'redirect',
-                'return_url' => route('payment.index'),
+                'return_url' => route('user.index'),
             ],
             'metadata' => [
                 'transaction_id' => $options['transaction_id'],
