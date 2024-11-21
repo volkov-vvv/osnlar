@@ -32,6 +32,7 @@ class StoreRequest extends FormRequest
             'email' => 'required|string|email',
             'politic' => 'required',
             'course_id' => 'required|numeric',
+            'region_id' => 'numeric|nullable',
         ];
     }
 }

@@ -137,7 +137,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('admin.order.index')}}" class="nav-link">
-                        <i class="nav-icon far fa-bell"></i>
+                        <i class="nav-icon far fa-usd"></i>
                         <p>
                             Заказы
                         </p>

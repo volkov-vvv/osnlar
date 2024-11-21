@@ -34,6 +34,7 @@
                                     <th>ID</th>
                                     <th>Курс</th>
                                     <th>ФИО</th>
+                                    <th>Регион</th>
                                     <th>Email</th>
                                     <th>Телефон</th>
                                     <th>Сумма</th>
@@ -47,21 +48,15 @@
                                     <tr>
                                         <td>{{$order->id}}</td>
                                         <td>{{$order->course->title}}</td>
-                                        <td>{{$order->user->name}}</td>
+                                        <td>{{$order->user->lastname}} {{$order->user->name}} {{$order->user->middlename}}</td>
+                                        <td>{{$order->region?->title}}</td>
                                         <td>{{$order->user->email}}</td>
                                         <td></td>
                                         <td>{{$order->amount}}</td>
                                         <td>{{$order->status}}</td>
                                         <td>{{$order->created_at}}</td>
                                         <td>
-                                            <a  href="{{route('admin.order.show', $order->id)}}"><i class="far fa-eye"></i></a>
                                             <a  href="{{route('admin.order.edit', $order->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
-
-                                            <form method="post" action="{{route('admin.order.destroy', $order->id)}}" class="d-inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

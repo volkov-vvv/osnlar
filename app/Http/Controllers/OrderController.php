@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Http\Requests\Common\Order\StoreRequest;
 use App\Models\Order;
+use App\Models\Region;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -15,7 +16,8 @@ class OrderController extends Controller
     public function create(Course $course)
     {
         $pageDescription = 'Заказ на обучение';
-        return view('order.create', compact('pageDescription', 'course'));
+        $regions = Region::all();
+        return view('order.create', compact('pageDescription', 'course', 'regions'));
     }
 
     public function store(StoreRequest $request)
@@ -30,12 +32,14 @@ class OrderController extends Controller
 
 
             $customerData = array(
-                'name' => $data['lastname'] . ' ' . $data['firstname'] . ' ' . $data['middlename'],
+                'name' =>  $data['firstname'],
+                'middlename' => $data['middlename'],
+                'lastname' => $data['lastname'],
                 'email' => $data['email'],
                 'role' => 10,
                 'password' => Hash::make($password)
             );
-
+//            dump($customerData);
             $customer = User::firstOrCreate($customerData);
             $userData = [
                 'email' => $data['email'],
@@ -51,6 +55,7 @@ class OrderController extends Controller
             $orderData = array(
                 'customer_id' => $customer->id,
                 'course_id' => $course->id,
+                'region_id' => $data['region_id'],
                 'amount' => $course->price,
                 'status' => 'ожидание оплаты'
             );

@@ -74,6 +74,21 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="col">
+                        <label>Выберите Ваш регион</label>
+                        <div class="form-group">
+                            <select name="region_id" class="form-control select2">
+                                @foreach($regions as $region)
+                                    <option value="{{$region->id}}"
+                                        {{ $region->id == old('region_id') ? ' selected' : '' }}
+                                    >{{$region->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('region_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
