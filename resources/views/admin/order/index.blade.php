@@ -49,7 +49,11 @@
                                         <td>{{$order->id}}</td>
                                         <td>{{$order->course->title}}</td>
                                         <td>{{$order->user->lastname}} {{$order->user->name}} {{$order->user->middlename}}</td>
-                                        <td>{{$order->region?->title}}</td>
+                                        <td>
+                                            @if(isset($order->region))
+                                                {{$order->region->title}}
+                                            @endif
+                                        </td>
                                         <td>{{$order->user->email}}</td>
                                         <td></td>
                                         <td>{{$order->amount}}</td>
