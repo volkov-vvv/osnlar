@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendEmail;
 use App\Models\Course;
 use App\Http\Requests\Common\Order\StoreRequest;
 use App\Models\Order;
@@ -39,7 +40,6 @@ class OrderController extends Controller
                 'role' => 10,
                 'password' => Hash::make($password)
             );
-//            dump($customerData);
             $customer = User::firstOrCreate($customerData);
             $userData = [
                 'email' => $data['email'],
@@ -63,6 +63,14 @@ class OrderController extends Controller
         }else{
             dd('Вы уже оформили заявку на этот курс'); //Временно
         }
+        $data['login'] = $userData['email'];
+        $data['password'] = $userData['password'];
+        $data['course_title'] = $course->title;
+        $mailData = collect($data);
+        $mailData->subject = 'Ваша заявка на обучение принята';
+        $mailData->template = 'mails.order';
+        \Mail::to($data['email'])->send(new SendEmail($mailData));
+
         return view('order.store', compact('userData', 'course', 'pageDescription'));
     }
 }
