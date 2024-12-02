@@ -40,7 +40,20 @@
                         <label>Регион</label>
                         <input type="text" class="form-control" value="@if(isset($order->region->title)) {{$order->region->title}} @endif" disabled>
                     </div>
-                    <div class="mb-3 form-group">
+                    <div class="mb-3 form-group alert alert-secondary">
+                        <label>Ответственный</label>
+                        <select name="responsible_id" class="form-control select2">
+                            @foreach($users as $user)
+                                <option value="{{$user->id}}"
+                                    {{ $user->id == $lid->responsible_id ? ' selected' : '' }}
+                                >{{$user->name}}</option>
+                            @endforeach
+                        </select>
+                        @error('responsible_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3 form-group alert alert-secondary">
                         <label>Статус</label>
                         <select name="status" class="form-control">
                             @foreach($statuses as $status)
