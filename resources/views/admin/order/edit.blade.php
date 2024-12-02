@@ -43,9 +43,10 @@
                     <div class="mb-3 form-group alert alert-secondary">
                         <label>Ответственный</label>
                         <select name="responsible_id" class="form-control select2">
+                            <option value="">---</option>
                             @foreach($users as $user)
                                 <option value="{{$user->id}}"
-
+                                    {{ $user->id == $order->responsible_id ? ' selected' : '' }}
                                 >{{$user->name}}</option>
                             @endforeach
                         </select>
