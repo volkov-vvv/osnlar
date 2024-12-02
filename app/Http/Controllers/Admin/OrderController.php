@@ -75,6 +75,7 @@ class OrderController extends Controller
     public function update(UpdateRequest $request, Order $order)
     {
         $data = $request->validated();
+        dd($data);
         $order->update($data);
         return redirect()->route('admin.order.edit', compact('order'));
     }
