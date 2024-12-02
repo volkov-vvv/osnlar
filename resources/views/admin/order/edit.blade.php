@@ -38,7 +38,7 @@
                     </div>
                     <div class="mb-3">
                         <label>Регион</label>
-                        <input type="text" class="form-control" value="{{$order->region->title}}" disabled>
+                        <input type="text" class="form-control" value="@if(isset($order->region->title)) {{$order->region->title}} @endif" disabled>
                     </div>
                     <div class="mb-3 form-group">
                         <label>Статус</label>
