@@ -22,10 +22,15 @@
                     @method('PATCH')
                     <div class="mb-3">
                         <label>ФИО</label>
-                        <input type="text" class="form-control" value="{{$order->user->name}}" disabled>
-                        @error('email')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
+                        <input type="text" class="form-control" value="{{$order->user->firstname}} {{$order->user->name}} {{$order->user->middlename}}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label>Телефон</label>
+                        <input type="text" class="form-control" value="{{$order->user->phone_prefix}}{{$order->user->phone}}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="text" class="form-control" value="{{$order->user->email}}" disabled>
                     </div>
                     <div class="mb-3 form-group">
                         <label>Статус</label>
