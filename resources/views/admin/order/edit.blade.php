@@ -21,6 +21,10 @@
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
+                        <label>Курс</label>
+                        <input type="text" class="form-control" value="{{$order->course->title}}}" disabled>
+                    </div>
+                    <div class="mb-3">
                         <label>ФИО</label>
                         <input type="text" class="form-control" value="{{$order->user->firstname}} {{$order->user->name}} {{$order->user->middlename}}" disabled>
                     </div>
@@ -31,6 +35,10 @@
                     <div class="mb-3">
                         <label>Email</label>
                         <input type="text" class="form-control" value="{{$order->user->email}}" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label>Регион</label>
+                        <input type="text" class="form-control" value="{{$order->region->title}}" disabled>
                     </div>
                     <div class="mb-3 form-group">
                         <label>Статус</label>
