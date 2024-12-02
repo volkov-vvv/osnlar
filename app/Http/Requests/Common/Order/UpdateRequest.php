@@ -26,6 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'status' => 'required|string',
             'amount' => 'required|numeric',
+            'responsible_id' => 'numeric|nullable',
         ];
     }
 }
