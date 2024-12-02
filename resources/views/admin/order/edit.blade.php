@@ -16,10 +16,17 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
-            <div  class="col">
+            <div  class="col-xl-4">
                 <form action="{{route('admin.order.update', $order->id)}}" method="post">
                     @csrf
                     @method('PATCH')
+                    <div class="mb-3">
+                        <label>ФИО</label>
+                        <input type="text" class="form-control" value="{{$order->user->name}}" disabled>
+                        @error('email')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3 form-group">
                         <label>Статус</label>
                         <select name="status" class="form-control">
