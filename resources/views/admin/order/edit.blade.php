@@ -45,7 +45,7 @@
                         <select name="responsible_id" class="form-control select2">
                             @foreach($users as $user)
                                 <option value="{{$user->id}}"
-                                    {{ $user->id == $lid->responsible_id ? ' selected' : '' }}
+
                                 >{{$user->name}}</option>
                             @endforeach
                         </select>
