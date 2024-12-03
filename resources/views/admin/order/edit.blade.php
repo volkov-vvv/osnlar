@@ -76,7 +76,7 @@
                     </div>
 
 
-                    <button type="submit" id="link-edit-submit" class="btn btn-primary">Обновить</button>
+                    <button type="submit" id="form-submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.order.index')}}">Назад</a>
                 </form>
             </div>
