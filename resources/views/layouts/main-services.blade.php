@@ -106,9 +106,11 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
                             <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                                <!--
                                 <a class="dropdown-item btn btn-link" href="#">
                                     Настройки
                                 </a>
+                                -->
                                 <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
                             @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}

@@ -40,6 +40,13 @@
                         <label>Регион</label>
                         <input type="text" class="form-control" value="@if(isset($order->region->title)) {{$order->region->title}} @endif" disabled>
                     </div>
+                    <div class="mb-3 form-group">
+                        <label>Сумма</label>
+                        <input name="amount" type="text" class="form-control" aria-describedby="Сумма" value="{{$order->amount}}">
+                        @error('amount')
+                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                        @enderror
+                    </div>
                     <div class="mb-3 form-group alert alert-secondary">
                         <label>Ответственный</label>
                         <select name="responsible_id" class="form-control select2">
@@ -67,15 +74,6 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="mb-3 form-group">
-                        <label>Сумма</label>
-                        <input name="amount" type="text" class="form-control" aria-describedby="Сумма" value="{{$order->amount}}">
-                        @error('amount')
-                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
-                        @enderror
-                    </div>
-
-
                     <button type="submit" id="form-submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.order.index')}}">Назад</a>
                 </form>
