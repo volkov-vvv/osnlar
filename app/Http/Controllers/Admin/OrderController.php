@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Http\Requests\Common\Order\UpdateRequest;
+use App\Models\Status;
 use App\Models\User;
 
 class OrderController extends Controller
@@ -60,7 +61,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        $statuses = array('ожидает оплаты', 'разрешена оплата', 'оплачен', 'отменен'); //Временно
+        $statuses = Status::where('type', 'order')->get();
         $users = User::where('role', 3)->get();
         return view('admin.order.edit', compact('order', 'statuses', 'users'));
     }

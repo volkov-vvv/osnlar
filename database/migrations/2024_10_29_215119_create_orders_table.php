@@ -17,8 +17,10 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('region_id')->nullable();
+            $table->unsignedBigInteger('responsible_id')->nullable();
             $table->decimal('amount', 10,2)->nullable();
-            $table->string('status');
+            $table->unsignedBigInteger('status_id');
             $table->softDeletes();
             $table->timestamps();
         });

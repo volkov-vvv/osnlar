@@ -65,9 +65,9 @@
                         <label>Статус</label>
                         <select name="status" class="form-control">
                             @foreach($statuses as $status)
-                                <option value="{{$status}}"
-                                    {{ $order->status == $status ? ' selected' : '' }}
-                                >{{$status}}</option>
+                                <option value="{{$status->id}}"
+                                    {{ $order->status == $status->title ? ' selected' : '' }}
+                                >{{$status->title}}</option>
                             @endforeach
                         </select>
                         @error('status')
