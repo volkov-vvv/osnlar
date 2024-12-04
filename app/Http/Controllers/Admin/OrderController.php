@@ -80,8 +80,8 @@ class OrderController extends Controller
         $order->update($data);
         $actionDescription = 'Изменение информации';
         if ($oldStatus != $data['status_id']) $actionDescription = 'Изменение статуса';
-        activity()->performedOn($order)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])
-            ->log($actionDescription)->useLogName('order');
+        activity('order')->performedOn($order)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])
+            ->log($actionDescription);
         dd(Activity::all()->last());
 
         return redirect()->route('admin.order.edit', compact('order'));
