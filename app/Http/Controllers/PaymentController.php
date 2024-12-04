@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\PaymentStatusEnum;
 use App\Models\Order;
+use App\Models\Status;
 use App\Models\Transaction;
 use App\Service\PaymentService;
 use Illuminate\Http\Request;
@@ -73,7 +74,8 @@ class PaymentController extends Controller
                     $transaction->save();
 
                     $order = Order::find($transaction->order_id);
-                    $order->status = 'оплачен';
+                    $statusPaid = Status::where('code', 'paid')->first();
+                    $order->status_d = $statusPaid->id;
                     $order->save();
 
                     /*

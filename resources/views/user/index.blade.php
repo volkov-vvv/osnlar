@@ -34,7 +34,7 @@
                                                     <td>{{$order->created_at}}</td>
                                                     <td>{{$order->course->title}}</td>
                                                     <td>{{$order->amount}}</td>
-                                                    <td>{{$order->status}}</td>
+                                                    <td>{{$order->status->title}}</td>
                                                     <td>
                                                         @if($order->status == 'разрешена оплата')
                                                             <form method="post" action="{{route('payment.create')}}">
