@@ -57,7 +57,7 @@
                                         <td>{{$order->user->email}}</td>
                                         <td></td>
                                         <td>{{$order->amount}}</td>
-                                        <td>{{$order->status}}</td>
+                                        <td>{{$order->status->title}}</td>
                                         <td>{{$order->created_at}}</td>
                                         <td>
                                             <a  href="{{route('admin.order.edit', $order->id)}}" class="text-success"><i class="fas fa-pen"></i></a>

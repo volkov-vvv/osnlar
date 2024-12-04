@@ -11,9 +11,6 @@
                         <p class="edics-404-text" data-aos="fade-up" data-aos-delay="200">На указанный Вами почтовый ящик отправлено письмо с логином и паролем для входа в Личный кабинет.</p>
                         <p class="edics-404-text" data-aos="fade-up" data-aos-delay="200">Вы всегда можете написать нам на почту, или позвонить по телефону: +7 (499) 609-60-20.</p>
                         <a href="{{route('main.index')}}" class="btn btn-primary" data-aos="fade-up" data-aos-delay="300">На главную</a>
-                        <br><br>
-                        <p>Логин: <b>{{$userData['email']}}</b></p>
-                        <p>Пароль: <b>{{$userData['password']}}</b></p>
                     </section>
                 </div>
             </div>
