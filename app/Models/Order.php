@@ -24,6 +24,11 @@ class Order extends Model
         return $this->belongsTo(Region::class);
     }
 
+    public function status()
+    {
+        return $this->belongsTo(Ststus::class);
+    }
+
     public function user()
     {
         return$this->belongsTo(User::class, 'customer_id', 'id' );

@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Http\Requests\Common\Order\StoreRequest;
 use App\Models\Order;
 use App\Models\Region;
+use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -52,12 +53,13 @@ class OrderController extends Controller
         //Проверяем наличие заказа и создаем, если его нет
         $order = Order::all()->where('customer_id', $customer->id)->where('course_id', $course->id)->last();
         if(!$order){
+            $status = Status::where('code', 'waiting-payment')->first();
             $orderData = array(
                 'customer_id' => $customer->id,
                 'course_id' => $course->id,
                 'region_id' => $data['region_id'],
                 'amount' => $course->price,
-                'status' => 'ожидание оплаты'
+                'status_id' => $status->id,
             );
             $order = Order::firstOrCreate($orderData);
         }else{
