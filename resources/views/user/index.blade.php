@@ -36,7 +36,7 @@
                                                     <td>{{$order->amount}}</td>
                                                     <td>{{$order->status->title}}</td>
                                                     <td>
-                                                        @if($order->status == 'разрешена оплата')
+                                                        @if($order->status->code == 'payment-allowed')
                                                             <form method="post" action="{{route('payment.create')}}">
                                                                 @csrf
                                                                 <input type="hidden" name="description" id="description" value="Оплата обучения">
