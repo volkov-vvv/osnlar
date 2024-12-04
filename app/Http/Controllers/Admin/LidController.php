@@ -36,7 +36,7 @@ class lidController extends Controller
 
         $courses = Course::all();
         $regions = Region::all();
-        $statuses = Status::all();
+        $statuses = Status::whereNull('type')->get();
         $users = User::where('role', 3)->get();
 
         $commerce = 0;
