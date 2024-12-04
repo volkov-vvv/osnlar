@@ -76,7 +76,13 @@ class OrderController extends Controller
     public function update(UpdateRequest $request, Order $order)
     {
         $data = $request->validated();
+        $oldStatus = $order->status_id;
         $order->update($data);
+        $actionDescription = 'Изменение информации';
+        if ($oldStatus != $data['status_id']) $actionDescription = 'Изменение статуса';
+        activity()->performedOn($order)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])
+            ->log($actionDescription)->useLogName('order');
+
         return redirect()->route('admin.order.edit', compact('order'));
     }
 
