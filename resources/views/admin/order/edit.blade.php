@@ -63,10 +63,10 @@
                     </div>
                     <div class="mb-3 form-group alert alert-secondary">
                         <label>Статус</label>
-                        <select name="status" class="form-control">
+                        <select name="status_id" class="form-control">
                             @foreach($statuses as $status)
                                 <option value="{{$status->id}}"
-                                    {{ $order->status == $status->title ? ' selected' : '' }}
+                                    {{ $order->status_id == $status->id ? ' selected' : '' }}
                                 >{{$status->title}}</option>
                             @endforeach
                         </select>
