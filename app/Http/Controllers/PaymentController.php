@@ -75,7 +75,7 @@ class PaymentController extends Controller
 
                     $order = Order::find($transaction->order_id);
                     $statusPaid = Status::where('code', 'paid')->first();
-                    $order->status_d = $statusPaid->id;
+                    $order->status_id = $statusPaid->id;
                     $order->save();
 
                     /*
