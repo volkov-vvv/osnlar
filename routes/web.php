@@ -194,6 +194,7 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
     Route::get('/lid/getLidsExcel',[App\Http\Controllers\CC\LidController::class, 'getLidsExcel'])->name('cc.lid.getLidsExcel');
     Route::group(['as' => 'cc.'], function() {
         Route::resource('lid', LidController::class);
+        Route::resource('order', OrderController::class);
     });
 
     Route::group(['as' => 'cc.'], function() {
