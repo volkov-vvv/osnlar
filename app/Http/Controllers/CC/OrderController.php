@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CC;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\Order\UpdateRequest;
 use App\Models\Order;
 use App\Models\Status;
 use App\Models\User;
@@ -73,9 +74,17 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, Order $order)
     {
-        //
+        $data = $request->validated();
+        $oldStatus = $order->status_id;
+        $order->update($data);
+        $actionDescription = 'Изменение информации';
+        if ($oldStatus != $data['status_id']) $actionDescription = 'Изменение статуса';
+        activity('order')->performedOn($order)->withProperties(['status_id_old' => $oldStatus, 'status_id' => $data['status_id'], 'comment' => $request->comment])
+            ->log($actionDescription);
+
+        return redirect()->route('cc.order.edit', compact('order'));
     }
 
     /**
