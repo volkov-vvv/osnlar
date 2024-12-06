@@ -39,7 +39,7 @@ class OrderController extends Controller
                 'lastname' => $data['lastname'],
                 'email' => $data['email'],
                 'phone_prefix' => $data['phone_prefix'],
-                'phone' => $data['phone'],
+                'phone' => explode('+' . $data['phone_prefix'], $data['phone'])[1],
                 'role' => 10,
                 'password' => Hash::make($password)
             );
