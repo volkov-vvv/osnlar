@@ -4,6 +4,8 @@ namespace App\Http\Controllers\CC;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Status;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -57,9 +59,11 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Order $order)
     {
-        //
+        $statuses = Status::where('type', 'order')->get();
+        $users = User::where('role', 3)->get();
+        return view('cc.order.edit', compact('order', 'statuses', 'users'));
     }
 
     /**
