@@ -55,7 +55,11 @@
                                             @endif
                                         </td>
                                         <td>{{$order->user->email}}</td>
-                                        <td></td>
+                                        <td>
+                                            @if(isset($order->user->phone))
+                                                {{$order->user->phone_prefix}} {{$order->user->phone}}
+                                            @endif
+                                        </td>
                                         <td>{{$order->amount}}</td>
                                         <td>{{$order->status->title}}</td>
                                         <td>{{$order->created_at}}</td>
