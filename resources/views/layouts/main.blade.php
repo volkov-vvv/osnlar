@@ -103,22 +103,20 @@
                             <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
                             <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                                <!--
                                 <a class="dropdown-item btn btn-link" href="#">
                                     Настройки
                                 </a>
+                                -->
                                 <a class="dropdown-item btn btn-link" href="
-                            @switch(auth()->user()->role)
-                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
-                            @break
-                            @case(2) {{auth()->user()->role == 2 ? route('agent.main.index') : ''}}
-                            @break
-                            @case(3) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
-                            @break
-                            @default
-                                    {{route('cc.main.index')}}
-                            @endswitch
-                            ">
-                                    Административная панель
+                                @switch(auth()->user()->role)
+                                    @case(1) {{route('admin.main.index')}}">Административная панель
+                                    @break
+                                    @case(3) {{route('cc.main.index')}}">Административная панель
+                                    @break
+                                    @default
+                                    {{route('user.index')}}">Личный кабинет
+                                @endswitch
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <form action="{{route('logout')}}" method="post">

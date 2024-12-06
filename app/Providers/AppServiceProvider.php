@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Service\PaymentService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +15,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(PaymentService::class, function ($app) {
+            return new PaymentService();
+        });
+
+        $this->app->bind(LidService::class, function ($app) {
+            return new LidService();
+        });
     }
 
     /**

@@ -49,6 +49,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('cc.order.index')}}" class="nav-link">
+                        <i class="nav-icon far fa-usd"></i>
+                        <p>
+                            Заказы
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('cc.org.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-building-columns fa-landmark"></i>
                         <p>
