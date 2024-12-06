@@ -57,7 +57,7 @@
                                         <td>{{$order->user->email}}</td>
                                         <td>
                                             @if(isset($order->user->phone))
-                                                {{$order->user->phone_prefix}} {{$order->user->phone}}
+                                                8{{$order->user->phone}}
                                             @endif
                                         </td>
                                         <td>{{$order->amount}}</td>
