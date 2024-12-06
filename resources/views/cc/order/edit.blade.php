@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div  class="col-xl-4">
-                <form action="{{route('admin.order.update', $order->id)}}" method="post">
+                <form action="{{route('cc.order.update', $order->id)}}" method="post">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
@@ -76,7 +76,7 @@
                     </div>
                     <input type="hidden" name="comment" id="comment">
                     <button type="submit" id="form-submit" class="btn btn-primary">Обновить</button>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.order.index')}}">Назад</a>
+                    <a class="btn btn-outline-secondary" href="{{route('cc.order.index')}}">Назад</a>
                 </form>
             </div>
 
