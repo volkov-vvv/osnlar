@@ -28,6 +28,22 @@ class PaymentController extends Controller
         $amount = (float)$request->input('amount');
         $description = (string)$request->input('description');
 
+        $order = Order::find($order_id);
+        $email = $order->user->email;
+
+        $items = array();
+        $items[0] = [
+            'description' => $order->course->title,
+            'quantity' => 1.000,
+            'amount' => [
+                'value' => $amount,
+                'currency' => 'RUB'
+            ],
+            'vat_code' => 1,
+            'payment_mode' => 'full_payment',
+            'payment_subject' => 'service',
+        ];
+
 //        dump($order_id);
         $transaction = Transaction::create([
             'order_id' => $order_id,
@@ -37,7 +53,7 @@ class PaymentController extends Controller
 //        dd($transaction);
 
         if($transaction){
-            $link = $service->createPayment($amount, $description, [
+            $link = $service->createPayment($amount, $description, $email, $items, [
                 'transaction_id' => $transaction->id
             ]);
 

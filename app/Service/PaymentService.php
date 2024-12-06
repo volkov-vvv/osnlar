@@ -14,7 +14,7 @@ class PaymentService
         return $client;
     }
 
-    public function createPayment(float $amount, string $description, array $options = [])
+    public function createPayment(float $amount, string $description, string $email, array $items, array $options = [])
     {
         $client = $this->getClient();
         $payment = $client->createPayment([
@@ -31,6 +31,12 @@ class PaymentService
                 'transaction_id' => $options['transaction_id'],
             ],
             'description' => $description,
+            'receipt' => [
+                'customer' => [
+                    'email' => $email,
+                ],
+                'items' => $items,
+            ]
         ],  uniqid('', true));
 
         return $payment->getConfirmation()->getConfirmationUrl();
