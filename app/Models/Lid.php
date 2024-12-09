@@ -115,7 +115,7 @@ class Lid extends Model
         }
 
 
-        $query->whereNull('courses.price');
+ //       $query->whereNull('courses.price');
 
 
         // Фильтры
