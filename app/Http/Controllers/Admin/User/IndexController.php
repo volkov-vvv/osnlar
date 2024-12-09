@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
+
 
 class IndexController extends Controller
 {
     public function __invoke()
     {
-        $roles = User::getRoles();
+        $user = new User();
+        $roles = $user->getRoles();
         $users = User::all();
         return view('admin.user.index', compact('users','roles'));
     }

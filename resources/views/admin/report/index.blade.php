@@ -95,6 +95,7 @@
                                         <th>Поток</th>
                                         <th>Фамилия</th>
                                         <th>Имя</th>
+                                        <th>Email</th>
                                         <th>Категория</th>
                                         <th>Статус</th>
                                         <th>Дата создания</th>
@@ -167,7 +168,7 @@
             }, "colvis"],
             order: [[0, 'desc']],
             'columnDefs': [ {
-                targets: [ 4], visible: false
+                targets: [ 4, 7], visible: false
             }],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -195,6 +196,7 @@
                 { data: 'id' }, // заменить на поток
                 { data: 'lastname' },
                 { data: 'firstname' },
+                { data: 'email' },
                 { data: 'category' },
                 { data: 'status' },
                 { data: 'created_at' },
@@ -220,7 +222,7 @@
         $('#status').on('change', function (e){
 
             table
-                .column(8)
+                .column(9)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -228,7 +230,7 @@
         $('#utm_source').on('change', function (e){
 
             table
-                .column(10)
+                .column(11)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -236,7 +238,7 @@
         $('#utm_medium').on('change', function (e){
 
             table
-                .column(11)
+                .column(12)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -244,7 +246,7 @@
         $('#utm_campaign').on('change', function (e){
 
             table
-                .column(12)
+                .column(13)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -252,7 +254,7 @@
         $('#date').on('change', function (e){
 
             table
-                .column(9)
+                .column(10)
                 .search(this.value, {exact: true})
                 .draw();
         })

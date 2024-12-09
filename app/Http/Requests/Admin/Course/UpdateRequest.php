@@ -33,8 +33,11 @@ class UpdateRequest extends FormRequest
             'author_ids' => 'nullable|array',
             'author_ids.*' => 'nullable|integer|exists:authors,id',
             'is_published' => 'nullable',
+            'price' => 'nullable|numeric',
             'seo_title' => '',
             'seo_description' => '',
+            'series' => '',
+            'years' => '',
         ];
     }
 

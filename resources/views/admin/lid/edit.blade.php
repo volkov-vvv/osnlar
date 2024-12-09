@@ -97,7 +97,7 @@
 
                     <input type="hidden" name="comment" id="comment">
 
-                    <button type="submit" id="lid-edit-submit" class="btn btn-primary">Обновить</button>
+                    <button type="submit" id="form-submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.lid.index')}}">Назад</a>
                 </form>
             </div>

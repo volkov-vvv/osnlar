@@ -29,6 +29,8 @@ class UpdateRequest extends FormRequest
             'about_computers' => '',
             'about_all' => '',
             'about_it' => '',
+            'about_services' => '',
+            'about_tech' => '',
         ];
     }
 }

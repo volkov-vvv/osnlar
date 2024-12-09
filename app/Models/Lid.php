@@ -114,6 +114,10 @@ class Lid extends Model
 
         }
 
+
+ //       $query->whereNull('courses.price');
+
+
         // Фильтры
         if ( isset($params['responsible']) ) {
             $query->where('users.name', 'like', $params['responsible'] );
@@ -150,8 +154,14 @@ class Lid extends Model
         if ( isset($params['created_at']) ) {
             $query->where('lids.created_at', 'like', '%' . $params['created_at'] . '%' );
         }
-//dd($query->toSql());
+
         return $query;
+    }
+
+    //Коммерческие заявки
+    public function commercial()
+    {
+        return $this->belongsTo(Course::class)->whereNotNull('price');
     }
 
 }

@@ -26,7 +26,7 @@
         <div class="container-fluid">
             <div class="row mb-3">
                 <div class="col">
-                    <a href="{{route('admin.lid.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Создать</a>
+                    <a href="{{route('admin.lid.create')}}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
                 </div>
             </div>
             <!-- Small boxes (Stat box) -->
@@ -192,7 +192,7 @@
             },
             processing: true,
             serverSide: true,
-            ajax: "{{route('admin.lid.getLids')}}",
+            ajax: "{{route('admin.lid.getLids')}}?commerce={{$commerce}}",
             columns: [
                 { data: 'id' },
                 { data: 'responsible' },

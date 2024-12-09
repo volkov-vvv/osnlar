@@ -3,7 +3,12 @@
 
     <main class="blog">
         <div class="container">
-            <h1 class="edica-page-title" data-aos="fade-up">Архив курсов</h1>
+            <div class="row p-5"  data-aos="fade-up">
+                <div class="col">
+                    <h1 class="text-center">Архив курсов</h1>
+                    <p class="text-center" style="color: grey; font-size: 20px"></p>
+                </div>
+            </div>
             <section class="featured-posts-section">
                 <div class="row">
                     <div class="col fetured-post blog-post" data-aos="fade-right">
@@ -14,6 +19,7 @@
                                     <tr>
                                         <th>№</th>
                                         <th>Название курса</th>
+                                        <th>Год</th>
                                         <th>Статус</th>
                                     </tr>
                                     </thead>
@@ -22,7 +28,8 @@
                                         <tr>
                                             <td>{{$course->id}}</td>
                                             <td>{{$course->title}}</td>
-                                            <td>{{$course->is_published == 0 ? 'В архиве' : ''}}</td>
+                                            <td>{{$course->years}}</td>
+                                            <td>{{$course->is_published == 0 ? 'Архив' : ''}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

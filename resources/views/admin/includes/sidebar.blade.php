@@ -136,6 +136,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.order.index')}}" class="nav-link">
+                        <i class="nav-icon far fa-usd"></i>
+                        <p>
+                            Заказы
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.report.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-chart-line"></i>
                         <p>

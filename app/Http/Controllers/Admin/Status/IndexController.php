@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $statuses = Status::all();
+        $statuses = Status::whereNull('type')->get();
         return view('admin.status.index', compact('statuses'));
     }
 }

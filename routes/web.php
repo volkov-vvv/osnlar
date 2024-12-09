@@ -20,8 +20,12 @@ Route::group(['namespace' => 'Main'],function (){
 });
 
 Route::group(['namespace' => 'Course', 'prefix' => 'course', 'middleware' => ['cookie']],function (){
-    Route::get('/', 'IndexController')->name('course.index');
+    Route::get('/',[App\Http\Controllers\Course\IndexController::class, 'active'])->name('course.index');
     Route::get('/{course}', 'ShowController')->name('course.show');
+});
+
+Route::group(['namespace' => 'Commerce', 'prefix' => 'commerce', 'middleware' => ['cookie']],function (){
+    Route::get('/',[App\Http\Controllers\Course\IndexController::class, 'commerce'])->name('commerce.index');
 });
 
 Route::group(['namespace' => 'Archive', 'prefix' => 'archive', 'middleware' => ['cookie']],function (){
@@ -31,6 +35,10 @@ Route::group(['namespace' => 'Archive', 'prefix' => 'archive', 'middleware' => [
 
 Route::group(['namespace' => 'About', 'prefix' => 'about', 'middleware' => ['cookie']],function (){
     Route::get('/', 'IndexController')->name('about.index');
+});
+
+Route::group(['namespace' => 'Services', 'prefix' => 'services', 'middleware' => ['cookie']],function (){
+    Route::get('/', 'IndexController')->name('services.index');
 });
 
 Route::get('/sitemap.xml', 'SitemapController@index');
@@ -133,8 +141,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
 
     Route::get('/lid/getLids',[App\Http\Controllers\Admin\LidController::class, 'getLids'])->name('admin.lid.getLids');
     Route::get('/lid/getLidsExcel',[App\Http\Controllers\Admin\LidController::class, 'getLidsExcel'])->name('admin.lid.getLidsExcel');
+
+    Route::get('/commerciallid/getLids',[App\Http\Controllers\Admin\CommercialLidController::class, 'getLids'])->name('admin.commerciallid.getLids');
+
     Route::group(['as' => 'admin.'], function() {
         Route::resource('lid', LidController::class);
+        Route::resource('order', OrderController::class);
+        Route::resource('commerciallid', CommercialLidController::class);
     });
 
 
@@ -181,6 +194,7 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
     Route::get('/lid/getLidsExcel',[App\Http\Controllers\CC\LidController::class, 'getLidsExcel'])->name('cc.lid.getLidsExcel');
     Route::group(['as' => 'cc.'], function() {
         Route::resource('lid', LidController::class);
+        Route::resource('order', OrderController::class);
     });
 
     Route::group(['as' => 'cc.'], function() {
@@ -195,6 +209,10 @@ Route::group(['namespace' => 'Agent', 'prefix' => 'agent', 'middleware' => ['aut
     Route::group(['namespace' => 'Report', 'prefix' => 'report'],function (){
         Route::get('/', 'IndexController')->name('agent.report.index');
     });
+});
+
+Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth', 'user']],function (){
+        Route::get('/', 'IndexController')->name('user.index');
 });
 
 Route::group(['namespace' => 'Lid', 'prefix' => 'lid', 'middleware' => ['cookie']],function (){
@@ -212,3 +230,12 @@ Route::group(['namespace' => 'Org', 'prefix' => 'org', 'middleware' => ['cookie'
     Route::post('/', 'StoreController')->name('org.store');
     Route::get('/thank', 'IndexController')->name('org.index');
 });
+
+Route::match(['GET', 'POST'], '/payments/callback', [\App\Http\Controllers\PaymentController::class, 'callback'])->name('payment.callback');
+Route::post('/payments/create', [\App\Http\Controllers\PaymentController::class, 'create'])->name('payment.create');
+Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
+Route::group(['namespace' => 'Order', 'prefix' => 'order'],function (){
+    Route::get('/create/{course}', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
+    Route::post('/create/finish', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
+});
+

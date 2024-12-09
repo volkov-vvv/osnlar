@@ -1,5 +1,5 @@
 
-    <nav id="my-class-main" class="navbar navbar-expand-lg" data-bs-theme="white">
+<nav id="my-class-main" class="navbar navbar-expand-lg" data-bs-theme="white">
         <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}"
                                                                     width="260" alt="Основание"></a>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav"
@@ -8,19 +8,23 @@
         </button>
         <div class="collapse navbar-collapse" id="edicaMainNav">
             <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{{route('main.index')}}">Главная <span
                             class="sr-only"></span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="{{route('about.index')}}">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('services.index')}}">Услуги</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Курсы
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a></li>
+                        <li><a class="dropdown-item" href="{{route('course.index')}}">Бесплатные курсы</a></li>
+                        <li><a class="dropdown-item" href="{{route('commerce.index')}}">Платные курсы</a></li>
                         <li><a class="dropdown-item" href="{{route('archive.index')}}">Архив</a></li>
                     </ul>
                 </li>
@@ -40,15 +44,14 @@
                             </a>
                             <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
-                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
+                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') . ' ">Административная панель' : ''}}
                             @break
-                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
+                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') . ' ">Административная панель' : ''}}
                             @break
                             @default
-                                    {{route('cc.main.index')}}
+                                    {{route('user.index')}}">Личный кабинет
                             @endswitch
-                            ">
-                                Административная панель
+
                             </a>
                             <a class="dropdown-item" href="#">
                                 <form action="{{route('logout')}}" method="post">
@@ -62,7 +65,7 @@
             @else
                 <ul class="navbar-nav mt-2 mt-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('login')}}">Войти</a>
+                        <a class="button-login" href="{{route('login')}}">Войти</a>
                     </li>
                 </ul>
             @endif

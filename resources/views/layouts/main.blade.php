@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v3">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
 
@@ -62,7 +62,7 @@
 </head>
 <body>
 <div class="edica-loader"></div>
-<header class="edica-header edica-landing-header">
+<header class="edica-header edica-landing-header main-page">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}"
@@ -80,11 +80,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('services.index')}}">Услуги</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                            <a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a>
+                            <a class="dropdown-item" href="{{route('course.index')}}">Бесплатные курсы</a>
+                            <a class="dropdown-item" href="{{route('commerce.index')}}">Платные курсы</a>
                             <a class="dropdown-item" href="{{route('archive.index')}}">Архив</a>
                         </div>
                     </li>
@@ -99,22 +103,20 @@
                             <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
                             <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                                <!--
                                 <a class="dropdown-item btn btn-link" href="#">
                                     Настройки
                                 </a>
+                                -->
                                 <a class="dropdown-item btn btn-link" href="
-                            @switch(auth()->user()->role)
-                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
-                            @break
-                            @case(2) {{auth()->user()->role == 2 ? route('agent.main.index') : ''}}
-                            @break
-                            @case(3) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
-                            @break
-                            @default
-                                    {{route('cc.main.index')}}
-                            @endswitch
-                            ">
-                                    Административная панель
+                                @switch(auth()->user()->role)
+                                    @case(1) {{route('admin.main.index')}}">Административная панель
+                                    @break
+                                    @case(3) {{route('cc.main.index')}}">Административная панель
+                                    @break
+                                    @default
+                                    {{route('user.index')}}">Личный кабинет
+                                @endswitch
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <form action="{{route('logout')}}" method="post">
@@ -128,7 +130,7 @@
                 @else
                     <ul class="navbar-nav mt-2 mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('login')}}">Войти</a>
+                            <a class="button-login" href="{{route('login')}}">Войти</a>
                         </li>
                     </ul>
                 @endif
@@ -137,46 +139,35 @@
         </nav>
         <div class="edica-landing-header-content">
             <div id="edicaLandingHeaderCarousel" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="0" class="active">.01</li>
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="1">.02</li>
-                    <li data-target="#edicaLandingHeaderCarousel" data-slide-to="2">.03</li>
-                </ol>
+
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item active">
                         <div class="row">
-                            <div class="col-md-6 carousel-content-wrapper">
-                                <h1>Федеральный проект «Содействие занятости»</h1>
-                                <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
-                                    дополнительного профессионального образования отдельных категорий граждан в рамках
-                                    реализации федерального <a
-                                        href="https://trudvsem.ru/information-pages/support-employment/">проекта
-                                        «Содействие занятости»</a> национального проекта «Демография».</p>
+                            <div class="col-md-6 carousel-content-wrapper top-banner">
+                                <h1>IT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
+                                <p>которая специализируется на:</p>
+                                <ul>
+                                    <li>создании цифрового образовательного контента</li>
+                                    <li>разработке образовательной платформы &laquo;Основание&raquo;</li>
+                                    <li>обучении по различным IT-направлениям</li>
+                                </ul>
+
                                 <div class="carousel-content-btns">
-                                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i
-                                            class="fas fa-arrow-right mr-2"></i> Записаться</a>
+                                    <a href="{{route('commerce.index')}}" class="button-main">Выберите курс</a>
+                                </div>
+                                <div class="achievement">
+                                    <div><span class="achievement-bold">8000+</span><br>слушателей</div>
+                                    <div><span class="achievement-bold">40+</span><br>программ</div>
+                                    <div><span class="achievement-bold">82%</span><br>трудоустроились</div>
                                 </div>
                             </div>
-                            <div class="col-md-6 carousel-img-wrapper">
-                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
-                                     width="350px">
+                            <div class="col-md-6 carousel-img-wrapper top-banner">
+                                <img src="{{asset('assets/images/people.png')}}" alt="carousel-img" class="img-fluid"
+                                     width="650px">
                             </div>
                         </div>
                     </div>
-                    {{--                    <div class="carousel-item">--}}
-                    {{--                        <div class="row">--}}
-                    {{--                            <div class="col-md-6 carousel-content-wrapper">--}}
-                    {{--                                <h1 >Национальная программа «Кадры для цифровой экономики»</h1>--}}
-                    {{--                                <p>Учебный центр «Основание» участвует в отборе поставщиков цифровых образовательных сервисов, включающих цифровые образовательные ресурсы.</p>--}}
-                    {{--                                <div class="carousel-content-btns">--}}
-                    {{--                                    <a href="#!" class="btn btn-primary"><i class="fas fa-exclamation-circle mr-2"></i> Подробнее</a>--}}
-                    {{--                                </div>--}}
-                    {{--                            </div>--}}
-                    {{--                            <div class="col-md-6 carousel-img-wrapper">--}}
-                    {{--                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid" width="350px">--}}
-                    {{--                            </div>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
+
 
                 </div>
             </div>
@@ -190,7 +181,7 @@
 <section class="edica-footer-banner-section">
     <div class="container">
         <div class="footer-banner" data-aos="fade-up">
-            <h1 class="banner-title">Подать заявку!</h1>
+            <h1 class="banner-title">Подать заявку на 2025 год!</h1>
             <div class="banner-btns-wrapper">
                 <div class="carousel-content-btns">
                     <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i>
@@ -205,35 +196,37 @@
         <div class="row footer-widget-area">
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <p class="contact-details">ОСНОВАНИЕ</p>
-                    <p class="contact-details">edu@partnerdpo.ru</p>
-                    <p class="contact-details">+7 (499) 609-60-20</p>
+                    <p class="">ООО «Центр повышения квалификации и профессиональной подготовки «Основание»</p>
+                    <p class="">Адрес: 129110, г. Москва, ул. Гиляровского д. 57, стр. 1.</p>
+                    <p class="">+7 (499) 609-60-20</p>
+                    <p class="">edu@partnerdpo.ru</p>
+
+
                     <nav class="footer-social-links">
                         <a href="{{url('https://vk.com/osnovanie_study')}}" target="_blank"><i class="fab fa-vk"></i></a>
                         <a href="{{url('https://ok.ru/group/70000005562055')}}" target="_blank"><i class="fab fa-odnoklassniki"></i></a>
                         <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i></a>
-                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>
+{{--                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>--}}
                     </nav>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Реквизиты</a>
-                    <a href="#!" class="nav-link">Android приложение</a>
-                    <a href="#!" class="nav-link">ios приложение</a>
-                    <a href="#!" class="nav-link">Блог</a>
-                    <a href="#!" class="nav-link">Партнеры</a>
-                    <a href="#!" class="nav-link">Вакансии</a>
+                    <p>Реквизиты</p>
+                    <p>ИНН/КПП: 7751117260/770201001</p>
+                    <p>ОГРН: 5177746204763</p>
+                    <p>Режим работы</p>
+                    <p>Пн-Пт, 9:00 – 18:00</p>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
+                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Карточка организации</a>
+                    <a href="#!" class="nav-link">Блог</a>
                     <a href="#!" class="nav-link">FAQ</a>
-                    <a href="#!" class="nav-link">Цены и услуги</a>
+{{--                    <a href="#!" class="nav-link">Цены и услуги</a>--}}
                     <a href="#!" class="nav-link">Условия сотрудничества</a>
-                    <a href="#!" class="nav-link">Интеграция</a>
-                    <a href="#!" class="nav-link">API</a>
-                    <a href="#!" class="nav-link">Комментарии</a>
+                    <a href="#!" class="nav-link">Партнеры</a>
                 </nav>
             </div>
             <div class="col-md-3">

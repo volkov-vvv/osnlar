@@ -16,6 +16,7 @@ class User extends Authenticatable
     const ROLE_ADMIN = 1;
     const ROLE_AGENT = 2;
     const ROLE_CONTACT = 3;
+    const ROLE_USER = 10;
 
     public function getRoles()
     {
@@ -23,6 +24,7 @@ class User extends Authenticatable
             self::ROLE_ADMIN => 'Администратор',
             self::ROLE_AGENT => 'Агент',
             self::ROLE_CONTACT => 'Специалист КЦ',
+            self::ROLE_USER => 'Пользователь',
         ];
     }
 
@@ -56,7 +58,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'middlename',
+        'lastname',
         'email',
+        'phone_prefix',
+        'phone',
         'password',
         'role',
         'utm'

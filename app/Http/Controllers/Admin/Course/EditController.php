@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\CourseSeries;
 use Illuminate\Http\Request;
 
 class EditController extends BaseController
@@ -14,6 +15,11 @@ class EditController extends BaseController
     {
 
         $authors = Author::all();
-        return view('admin.course.edit', compact('course', 'authors'));
+        $series = CourseSeries::all();
+        $years = [
+            "1" => 2024,
+            "2" => 2025,
+        ];
+        return view('admin.course.edit', compact('course', 'authors','series','years'));
     }
 }

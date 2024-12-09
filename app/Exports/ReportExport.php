@@ -42,6 +42,7 @@ class ReportExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
             'Курс',
             'Фамилия',
             'Имя',
+            'Email',
             'Категория',
             'Статус',
             'Дата создания',
@@ -62,6 +63,7 @@ class ReportExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
         $course = $lid->course->title;
         $region = $lid->region->title;
         $lastname = $lid->lastname;
+        $email = $lid->email;
         $firstname = $lid->firstname;
         $created_at = $lid->created_at;
         $status = $lid->status->title;
@@ -83,6 +85,7 @@ class ReportExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSi
             $course,
             $lastname,
             $firstname,
+            $email,
             $category,
             $status,
             $created_at,

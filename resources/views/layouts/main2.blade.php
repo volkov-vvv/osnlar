@@ -17,10 +17,12 @@
         <meta property="og:title" content="Основание :: Главная"/>
     @endif
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v2">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
 
@@ -79,16 +81,20 @@
             </button>
             <div class="collapse navbar-collapse" id="edicaMainNav">
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{route('main.index')}}">Главная <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('services.index')}}">Услуги</a>
+                    </li>
+                    <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                            <a class="dropdown-item" href="{{route('course.index')}}">Актуальные курсы</a>
+                            <a class="dropdown-item" href="{{route('course.index')}}">Бесплатные курсы</a>
+                            <a class="dropdown-item" href="{{route('commerce.index')}}">Платные курсы</a>
                             <a class="dropdown-item" href="{{route('archive.index')}}">Архив</a>
                         </div>
                     </li>
@@ -102,20 +108,18 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
                             <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                                <a class="dropdown-item btn btn-link" href="#">
+                               <!-- <a class="dropdown-item btn btn-link" href="#">
                                     Настройки
-                                </a>
+                                </a> -->
                                 <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
-                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
+                            @case(1) {{route('admin.main.index')}}">Административная панель
                             @break
-                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
+                            @case(3) {{route('cc.main.index')}}">Административная панель
                             @break
                             @default
-                                    {{route('cc.main.index')}}
+                                    {{route('user.index')}}">Личный кабинет
                             @endswitch
-                            ">
-                                    Административная панель
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <form action="{{route('logout')}}" method="post">
@@ -129,7 +133,7 @@
                 @else
                     <ul class="navbar-nav mt-2 mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('login')}}">Войти</a>
+                            <a class="button-login" href="{{route('login')}}">Войти</a>
                         </li>
                     </ul>
                 @endif
@@ -161,42 +165,46 @@
         <div class="row footer-widget-area">
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <p class="contact-details">ОСНОВАНИЕ</p>
-                    <p class="contact-details">edu@partnerdpo.ru</p>
-                    <p class="contact-details">+7 (499) 609-60-20</p>
+                    <p class="">ООО «Центр повышения квалификации и профессиональной подготовки «Основание»</p>
+                    <p class="">Адрес: 129110, г. Москва, ул. Гиляровского д. 57, стр. 1.</p>
+                    <p class="">+7 (499) 609-60-20</p>
+                    <p class="">edu@partnerdpo.ru</p>
+
+
                     <nav class="footer-social-links">
                         <a href="{{url('https://vk.com/osnovanie_study')}}" target="_blank"><i class="fab fa-vk"></i></a>
                         <a href="{{url('https://ok.ru/group/70000005562055')}}" target="_blank"><i class="fab fa-odnoklassniki"></i></a>
                         <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i></a>
-                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>
+                        {{--                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>--}}
                     </nav>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
-                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Реквизиты</a>
-                    <a href="#!" class="nav-link">Android приложение</a>
-                    <a href="#!" class="nav-link">ios приложение</a>
-                    <a href="#!" class="nav-link">Блог</a>
-                    <a href="#!" class="nav-link">Партнеры</a>
-                    <a href="#!" class="nav-link">Вакансии</a>
+                    <p>Реквизиты</p>
+                    <p>ИНН/КПП: 7751117260/770201001</p>
+                    <p>ОГРН: 5177746204763</p>
+                    <p>Режим работы</p>
+                    <p>Пн-Пт, 9:00 – 18:00</p>
                 </nav>
             </div>
             <div class="col-md-3">
                 <nav class="footer-nav">
+                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Карточка организации</a>
+                    <a href="#!" class="nav-link">Блог</a>
                     <a href="#!" class="nav-link">FAQ</a>
-                    <a href="#!" class="nav-link">Цены и услуги</a>
+                    {{--                    <a href="#!" class="nav-link">Цены и услуги</a>--}}
                     <a href="#!" class="nav-link">Условия сотрудничества</a>
-                    <a href="#!" class="nav-link">Интеграция</a>
-                    <a href="#!" class="nav-link">API</a>
-                    <a href="#!" class="nav-link">Комментарии</a>
+                    <a href="#!" class="nav-link">Партнеры</a>
                 </nav>
             </div>
             <div class="col-md-3">
                 <div class="dropdown footer-country-dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="footerCountryDropdown" data-toggle="dropdown" aria-haspopup="true"
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="footerCountryDropdown"
+                            data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
-                        <span class="flag-icon flag-icon-ru flag-icon-squared"></span> Русский <i class="fas fa-chevron-down ml-2"></i>
+                        <span class="flag-icon flag-icon-ru flag-icon-squared"></span> Русский <i
+                            class="fas fa-chevron-down ml-2"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="footerCountryDropdown">
                         <button class="dropdown-item" href="#">
@@ -219,8 +227,8 @@
     </div>
 </footer>
 
-<script src="{{asset('assets/vendors/popper.js/popper.min.js')}}"></script>
-<script src="{{asset('assets/vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 <script src="{{asset('assets/vendors/aos/aos.js')}}"></script>
 <script src="{{asset('assets/js/main.js')}}"></script>
 <script>

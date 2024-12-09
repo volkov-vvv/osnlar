@@ -3,28 +3,52 @@
 
 <main>
 
-    <section class="edica-landing-section edica-landing-blog">
+    <section class="edica-landing-section about-osnovanie">
         <div class="container">
-            <h4 class="edica-landing-section-subtitle" data-aos="fade-up">Наши курсы</h4>
-            <h2 class="edica-landing-section-title" data-aos="fade-up">Выберите понравившийся курс</h2>
             <div class="row">
-                @foreach($randomCourses as $course)
-                    <div class="col-md-4 pt-0 pb-5 landing-blog-post" data-aos="fade-right">
-                        <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>
-                        <p class="blog-post-category"></p>
-                        <h4 class="blog-post-title">{{$course->title}}</h4>
-                        <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>
+                <div class="col-md-6 img-wrapper" data-aos="fade-up-right">
+                    <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
+                         width="350px">
+                </div>
+                <div class="col-md-6" data-aos="fade-up-left">
+                    <h1>Федеральный проект «Содействие занятости»</h1>
+                    <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
+                        дополнительного профессионального образования отдельных категорий граждан в рамках
+                        реализации федерального <a
+                            href="https://trudvsem.ru/information-pages/support-employment/">проекта
+                            «Содействие занятости»</a> национального проекта «Демография».</p>
+                    <p>Прием заявок на этот год закончен, но Вы можете оставить заявку на следующий год.</p>
+                    <div class="carousel-content-btns">
+                        <a href="{{route('course.index')}}" class="button-main">Заявка на 2025 год</a>
                     </div>
-                @endforeach
-            </div>
-
-            <div class="row mt-5">
-                <div class="carousel-content-btns mx-auto">
-                    <a href="{{route('course.index')}}" class="btn btn-primary">Все актуальные курсы</a>
                 </div>
             </div>
         </div>
     </section>
+
+
+{{--    <section class="edica-landing-section edica-landing-blog">--}}
+{{--        <div class="container">--}}
+{{--            <h4 class="edica-landing-section-subtitle" data-aos="fade-up">Наши курсы</h4>--}}
+{{--            <h2 class="edica-landing-section-title" data-aos="fade-up">Выберите понравившийся курс</h2>--}}
+{{--            <div class="row">--}}
+{{--                @foreach($randomCourses as $course)--}}
+{{--                    <div class="col-md-4 pt-0 pb-5 landing-blog-post" data-aos="fade-right">--}}
+{{--                        <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>--}}
+{{--                        <p class="blog-post-category"></p>--}}
+{{--                        <h4 class="blog-post-title">{{$course->title}}</h4>--}}
+{{--                        <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
+{{--            </div>--}}
+
+{{--            <div class="row mt-5">--}}
+{{--                <div class="carousel-content-btns mx-auto">--}}
+{{--                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </section>--}}
 
     <section class="edica-landing-section edica-landing-about">
         <div class="container">
@@ -45,6 +69,82 @@
             </div>
         </div>
     </section>
+
+    <section class="edica-landing-section edica-landing-clients">
+        <div class="container">
+            <h4 class="edica-landing-section-subtitle-alt">Отзывы</h4>
+
+            <header class="edica-header edica-landing-header">
+                <div class="container">
+                    <div class="edica-landing-header-content">
+                        <div id="edicaLandingHeaderCarousel" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#edicaLandingHeaderCarousel" data-slide-to="0" class="">.01</li>
+                                <li data-target="#edicaLandingHeaderCarousel" data-slide-to="1" class="">.02</li>
+                                <li data-target="#edicaLandingHeaderCarousel" data-slide-to="2" class="">.03</li>
+                            </ol>
+                            <div class="carousel-inner" role="listbox">
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-md-6 carousel-content-wrapper">
+                                            <h1>Вебер Юлия</h1>
+                                            <p>41 года, г. Москва</p>
+                                            <p>Курс «Азбука Цифры. Киберпсихология - психология личности в виртуальном мире»</p>
+                                            <div class="carousel-content-btns">
+                                                <p>«Все очень понравилось. Конечно темп приличный, учитывая, что проходила с маленьким ребёнком 8мес. Но все очень продуманно и реально.
+                                                    Из всех пройденных за последнее время курсов (а их было немало), очень понравилась организация, четкость, структура, подход, глубина знаний, которую дали и показали.
+                                                    Хотелось бы даже продолжения, но курс закончился 👍
+                                                    Огромная благодарность всему составу!»
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 carousel-img-wrapper">
+                                            <img src="{{asset('assets/images/Veber.Y.png')}}" alt="carousel-img" class="img-fluid" width="350px">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        <div class="col-md-6 carousel-content-wrapper">
+                                            <h1>Мирзоян Элина</h1>
+                                            <p>32 года, г. Санкт-Петербург</p>
+                                            <p>Курс «Азбука цифры. Нейросети в SMM-маркетинге»</p>
+                                            <div class="carousel-content-btns">
+                                                <p>«Ваше обучение, это лучшее обучение, которое было в моей жизни. Столько , действительно, полезного и уникального материала, невозможно было даже представить. Обучение превзошло ожидания в сотни раз. Потрясающая команда, и в частности Прохорова Полина, я даже вспомнить не могу, когда в последний раз мое внимание было настолько задержано! Я желаю всем вашим проектам огромного развития и большого количества студентов,  Вы на , определенно, правильном пути!»
+
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 carousel-img-wrapper">
+                                            <img src="{{asset('assets/images/Mirzoyan.E.png')}}" alt="carousel-img" class="img-fluid" width="350px">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item active">
+                                    <div class="row">
+                                        <div class="col-md-6 carousel-content-wrapper">
+                                            <h1>Агеев Александр</h1>
+                                            <p>40 лет, Владимирская обл.</p>
+                                            <p>Курс «Азбука цифры. Профессия Python-программист»</p>
+                                            <div class="carousel-content-btns">
+                                                <p>«Очень понравилась организация обучения. Могу сказать в сравнении. Моя супруга проходила подобное обучение в другой организации. Это кардинально другой уровень. Я благодарю вас от всего сердца за вовлеченность в процесс преподавания и желания помочь понять дисциплину. Откровенно говоря, чувствую грусть, что обучение закончилось.»
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 carousel-img-wrapper">
+                                            <img src="{{asset('assets/images/Ageev.a.png')}}" alt="carousel-img" class="img-fluid" width="350px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+        </div>
+    </section>
+
     <section class="edica-landing-section edica-landing-clients">
         <div class="container">
             <h4 class="edica-landing-section-subtitle-alt">Наши партнеры</h4>
@@ -56,7 +156,6 @@
             </div>
         </div>
     </section>
-
 
     <section class="edica-landing-section edica-landing-testimonials" data-aos="fade-up">
         <div class="container">
@@ -93,16 +192,16 @@
                 </div>
                 <ol class="carousel-indicators">
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="0">
-                        <img src="{{ asset('assets/images/LN.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/OV.jpg')}}" alt="avatar">
                         <div class="user-details">
-                            <h6>Людмила Никитченко</h6>
+                            <h6>Ванюхина Ольга</h6>
                             <p>Руководитель УМЦ</p>
                         </div>
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="1">
-                        <img src="{{ asset('assets/images/PAV.png')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/AK.jpg')}}" alt="avatar">
                         <div class="user-details">
-                            <h6>Дмитрий Павлов</h6>
+                            <h6>Корякина Анна</h6>
                             <p>Преподаватель</p>
                         </div>
                     </li>
@@ -117,14 +216,14 @@
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="3">
                         <img src="{{ asset('assets/images/SON.png')}}" alt="avatar">
                         <div class="user-details">
-                            <h6>Соня </h6>
+                            <h6>Давтян Соня</h6>
                             <p>Методист</p>
                         </div>
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="4">
                         <img src="{{ asset('assets/images/VVV.png')}}" alt="avatar">
                         <div class="user-details">
-                            <h6>Вячеслав Волков</h6>
+                            <h6>Волков Вячеслав</h6>
                             <p>Академический директор</p>
                         </div>
                     </li>
@@ -132,6 +231,9 @@
             </div>
         </div>
     </section>
+
+
+
     <section class="edica-landing-section edica-landing-services">
         <div class="container">
             <h4 class="edica-landing-section-subtitle">Наши особенности</h4>
@@ -160,6 +262,8 @@
             </div>
         </div>
     </section>
+
+
 
 
 {{--    <section class="edica-landing-section edica-landing-blog-posts">--}}
