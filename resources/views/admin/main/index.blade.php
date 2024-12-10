@@ -87,6 +87,7 @@
                         <th>№</th>
                         <th>Сотрудник</th>
                         <th>Общее кол-во заявок</th>
+                        <th>Кол-во обработанных заявок</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -95,6 +96,7 @@
                         <td></td>
                         <td>{{$user->name}}</td>
                         <td>{{$user->getLids->count()}}</td>
+                        <td>{{$user->getActiveLids()}}</td>
                     </tr>
                     @endforeach
                     </tbody>

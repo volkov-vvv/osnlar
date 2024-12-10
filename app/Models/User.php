@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\Models\Activity;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,7 @@ class User extends Authenticatable
     const ROLE_AGENT = 2;
     const ROLE_CONTACT = 3;
     const ROLE_USER = 10;
+
 
     public function getRoles()
     {
@@ -36,6 +38,36 @@ class User extends Authenticatable
     public function getLids()
     {
         return $this->hasMany(Lid::class, 'responsible_id', 'id');
+    }
+
+    public function  getActiveLids()
+    {
+
+//        $lids = $this->hasMany(Lid::class, 'responsible_id', 'id');
+//        dd($lids->hasMany(Activity::class, 'subject_id', 'id'));
+//        return $this->hasMany(Activity::class, 'causer_id', 'id');
+
+       dump($this->id);
+
+        $userId = $this->id;
+        $queryArray = array(
+            'activity_log.causer_id',
+            'activity_log.properties',
+            'activity_log.description',
+            'activity_log.subject_id',
+            'activity_log.created_at',
+            'users.name as user_name',
+        );
+        $query = Activity::select($queryArray)
+            ->leftjoin('lids', 'activity_log.subject_id', '=', 'lids.id')
+            ->leftjoin('users', 'activity_log.causer_id', '=', 'users.id')
+            ->where('users.id', $this->id)->where('lids.responsible_id', $this->id);
+
+//        dump($query->toSql());
+//        dump($query->get()->unique('subject_id')->count());
+
+        return $query->get()->unique('subject_id')->count();
+
     }
 /*
     public function averageTime()
