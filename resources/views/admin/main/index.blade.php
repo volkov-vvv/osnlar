@@ -80,28 +80,6 @@
                 </div>
                 <!-- ./col -->
             </div>
-            <div class="row">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Сотрудник</th>
-                        <th>Общее кол-во заявок</th>
-                        <th>Кол-во обработанных заявок</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($users as $user)
-                    <tr>
-                        <td></td>
-                        <td>{{$user->name}}</td>
-                        <td>{{$user->getLids->count()}}</td>
-                        <td>{{$user->getActiveLids()}}</td>
-                    </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
 
 
             <!-- /.row -->
@@ -141,13 +119,13 @@
                                         @foreach($users as $user)
                                             <tr>
                                                 <td>{{$user->name}}</td>
+                                                <td>{{$user->getActiveLids()['count']}}</td>
+                                                <td><span class="badge bg-danger">{{$user->getActiveLids()['persent']}}</span></td>
                                                 <td>---</td>
-                                                <td><span class="badge bg-danger">55%</span></td>
-                                                <td>---</td>
-                                                <td>---</td>
-                                                <td>---</td>
-                                                <td>---</td>
-                                                <td>---</td>
+                                                <td>{{$user->getLids->where('status_id', 4)->count()}}</td>
+                                                <td>{{$user->getLids->where('status_id', 6)->count()}}</td>
+                                                <td>{{$user->getLids->where('status_id', 2)->count()}}</td>
+                                                <td>{{$user->getLids->where('status_id', 9)->count()}}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
