@@ -55,12 +55,10 @@ class User extends Authenticatable
             ->whereNull('lids.deleted_at');
 
         $activeLidsCount = $query->get()->unique('subject_id')->count();
-        $lidsCount = $this->getLids->count();
-        if($lidsCount != 0){
-            $ActiveLidsPersent = $activeLidsCount / $lidsCount * 100;
-        }else{
-            $ActiveLidsPersent = 0;
-        }
+        $lidsCount = Lid::whereNull('lids.deleted_at')->count();
+
+        $ActiveLidsPersent = round($activeLidsCount / $lidsCount * 100, 2);
+
         $ActiveLids = collect(['count' => $activeLidsCount, 'persent' => $ActiveLidsPersent]);
 
         return $ActiveLids;
