@@ -121,7 +121,7 @@
                                                 <td>{{$user->name}}</td>
                                                 <td>{{$user->getActiveLids()['count']}}</td>
                                                 <td><span class="badge bg-danger">{{$user->getActiveLids()['persent']}}</span></td>
-                                                <td>---</td>
+                                                <td>{{$user->averageTime()}}</td>
                                                 <td>{{$user->getLids->where('status_id', 4)->count()}}</td>
                                                 <td>{{$user->getLids->where('status_id', 6)->count()}}</td>
                                                 <td>{{$user->getLids->where('status_id', 2)->count()}}</td>
