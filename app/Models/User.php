@@ -63,20 +63,52 @@ class User extends Authenticatable
 
         return $ActiveLids;
     }
-/*
+
     public function averageTime()
     {
         $queryArray = array(
-            'lids.created_at',
-            'activity_log.created_at',
+            'lids.created_at AS lid_create',
+            'activity_log.created_at As activity_create',
+            'activity_log.subject_id'
         );
-        $query = Lid::select($queryArray)
-            ->join('activity_log', 'activity_log.subject_id', '=', 'lids.id')
-            ->join('users', 'activity_log.causer_id', '=', 'users.id')
-            ->where('lids.id', mb_substr($searchValue, 1));
-        $activities = $query->get();
+        $query = Activity::select($queryArray)
+            ->leftjoin('lids', 'activity_log.subject_id', '=', 'lids.id')
+            ->where('lids.responsible_id', $this->id)
+            ->where('activity_log.description', 'Изменение статуса')
+            ->whereNull('lids.deleted_at')
+            ->orderBy('activity_log.created_at');
+        $activities = $query->get()->unique('subject_id');
+
+            $diffTime = 0;
+            foreach ($activities as $activity){
+                $diffTime += strtotime($activity->activity_create) - strtotime($activity->lid_create);
+            }
+            if($activities->count() != 0){
+                $diff = round($diffTime / $activities->count(), 0);
+                $years = floor($diff / (365*60*60*24));
+                $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+                $days = floor(
+                    ($diff - $years * 365*60*60*24 -
+                        $months * 30*60*60*24) / (60*60*24));
+                $hours = floor(
+                    ($diff - $years * 365*60*60*24 - $months *
+                        30*60*60*24 - $days * 60*60*24) / (60*60));
+                $minutes = floor(
+                    ($diff - $years * 365*60*60*24 - $months * 30*60*60*24 -
+                        $days * 60*60*24 - $hours * 60*60) / 60);
+                $seconds = floor(($diff - $years * 365*60*60*24 - $months *
+                    30*60*60*24 - $days * 60*60*24 - $hours *
+                    60*60 - $minutes * 60));
+                $medianTime = $minutes . ' мин.';
+                if($hours > 0) $medianTime = $hours . 'ч. ' . $medianTime;
+                if($days > 0) $medianTime = $days . 'д. ' . $medianTime;
+            }else{
+                $medianTime = '---';
+            }
+            return $medianTime;
+
     }
-*/
+
     /**
      * The attributes that are mass assignable.
      *
