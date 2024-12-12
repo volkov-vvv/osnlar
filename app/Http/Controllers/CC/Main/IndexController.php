@@ -16,7 +16,9 @@ class IndexController extends Controller
         $data['usersCount'] = User::all()->count();
         $data['coursesCount'] = Course::all()->count();
         $data['lidsCount'] = Lid::all()->count();
+        $data['usersKcCount'] = User::where('role', 3)->count();
+        $users = User::where('role', 3)->get();
 
-        return view('cc.main.index',compact('data'));
+        return view('cc.main.index',compact('data','users'));
     }
 }

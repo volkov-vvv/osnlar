@@ -65,7 +65,48 @@
             <div class="row mb-3">
                 <div class="col">
 
+                    <p>Сколько сотрудников КЦ = {{$data['usersKcCount']}}</p>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="dashboard_table" class="table table-bordered table-striped hover">
+                                        <thead>
+                                        <tr>
+                                            <th>ФИО</th>
+                                            <th>Кол-во обработанных заявок</th>
+                                            <th>% обработанных заявок</th>
+                                            <th>Среднее время реакции</th>
+                                            <th>Обучение</th>
+                                            <th>Ждем на РР</th>
+                                            <th>Недозвон</th>
+                                            <th>Отказ</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($users as $user)
+                                            <tr>
+                                                <td>{{$user->name}}</td>
+                                                <td>{{$user->getActiveLids()['count']}}</td>
+                                                <td><span class="badge bg-danger">{{$user->getActiveLids()['persent']}}</span></td>
+                                                <td>{{$user->averageTime()}}</td>
+                                                <td>{{$user->getLids->where('status_id', 4)->count()}}</td>
+                                                <td>{{$user->getLids->where('status_id', 6)->count()}}</td>
+                                                <td>{{$user->getLids->where('status_id', 2)->count()}}</td>
+                                                <td>{{$user->getLids->where('status_id', 9)->count()}}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
 
 
                 </div>
@@ -79,3 +120,32 @@
 
 @endsection
 
+@section('javascript')
+    <script>
+        $("#dashboard_table").DataTable({
+            order: [[2, 'desc']],
+            pageLength: 20,
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "pdf", "colvis"],
+            // "language": {
+            //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
+            // },
+            "language": {
+                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                paginate: {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                search: "Поиск:",
+                buttons: {
+                    colvis: 'Выбрать колонки',
+                    search: 'Поиск'
+                },
+            }
+        }).buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
+    </script>
+@endsection
