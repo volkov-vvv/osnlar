@@ -72,6 +72,7 @@ class OrderController extends Controller
         $data['password'] = $userData['password'];
         $data['course_title'] = $course->title;
         $data['order_number'] = $order->id;
+        $data['region'] = $order->region->title;
         $data['price'] = $course->price;
         $mailData = collect($data);
         $mailData->subject = 'Ваша заявка на обучение принята';
@@ -79,7 +80,13 @@ class OrderController extends Controller
         \Mail::to($data['email'])->send(new SendEmail($mailData));
 
         //Отправка письма сотруднику
-        $emails = ['mitin_a@mail.ru', 'nik.swet.83@mail.ru', 'Obr@osnovanie.info'];
+        $emails = [
+            'mitin_a@mail.ru',
+            /*
+            'nik.swet.83@mail.ru',
+            'Obr@osnovanie.info'
+            */
+        ];
         $mailData->subject = 'Создан новый заказ на обучение №' . $order->id;
         $mailData->template = 'mails.order_employee';
         foreach ($emails as $email) {

@@ -4,3 +4,4 @@
 <p>Заказчик: {{ $data['lastname'] }} {{ $data['firstname'] }} {{ $data['middlename'] }}</p>
 <p>Телефон: {{ $data['phone_prefix'] }} {{ $data['phone'] }} </p>
 <p>Email: {{ $data['email'] }} </p>
+<p>Регион: {{ $data['region'] }} </p>
