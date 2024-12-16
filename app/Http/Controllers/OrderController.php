@@ -82,10 +82,8 @@ class OrderController extends Controller
         //Отправка письма сотруднику
         $emails = [
             'mitin_a@mail.ru',
-            /*
             'nik.swet.83@mail.ru',
             'Obr@osnovanie.info'
-            */
         ];
         $mailData->subject = 'Создан новый заказ на обучение №' . $order->id;
         $mailData->template = 'mails.order_employee';
