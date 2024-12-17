@@ -55,7 +55,7 @@
             <div class="row">
                 <div class="col-md-6" data-aos="fade-up-right">
                     <h4 class="edica-landing-section-subtitle-alt">О нас</h4>
-                    <h2 class="edica-landing-section-title">Успешно обучили более 10 289 слушателей</h2>
+                    <h2 class="edica-landing-section-title">Успешно обучили более 10 000 слушателей</h2>
                     <p>Мы современная образовательная организация, стремимся делать наши курсы максимально удобными и эффективными. Основные принципы, которых мы придерживаемся:</p>
                     <ul class="landing-about-list">
                         <li>Привлечение лучших специалистов</li>

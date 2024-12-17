@@ -156,7 +156,7 @@
                                     <a href="{{route('commerce.index')}}" class="button-main">Выберите курс</a>
                                 </div>
                                 <div class="achievement">
-                                    <div><span class="achievement-bold">8000+</span><br>слушателей</div>
+                                    <div><span class="achievement-bold">10 289</span><br>слушателей</div>
                                     <div><span class="achievement-bold">40+</span><br>программ</div>
                                     <div><span class="achievement-bold">82%</span><br>трудоустроились</div>
                                 </div>
