@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     public function agents()
     {
-        return $this->hasMany(Agent::class);
+        return $this->belongsToMany(Agent::class)->withPivot('user_id','agent_id');
     }
 
     public function getLids()
