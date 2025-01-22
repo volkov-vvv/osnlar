@@ -148,6 +148,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
         Route::resource('lid', LidController::class);
         Route::resource('order', OrderController::class);
         Route::resource('commerciallid', CommercialLidController::class);
+        Route::resource('company', CompanyController::class);
     });
 
 
