@@ -21,7 +21,7 @@
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
-                        <label>Название курса</label>
+                        <label>Название компании</label>
                         <input name="title" type="text" class="form-control" aria-describedby="Название"
                                value="{{$company->title}}">
                         @error('title')
@@ -29,7 +29,7 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label>Описание курса</label>
+                        <label>Описание</label>
                         <textarea class="summernote" name="description">
                             {{$company->description}}
                         </textarea>

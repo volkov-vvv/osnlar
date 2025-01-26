@@ -24,6 +24,21 @@
             <div  class="col-6">
                 <form action="{{route('admin.course.store')}}" method="post" enctype="multipart/form-data">
                     @csrf
+                    <div class="mb-3 form-group">
+                        <label>Выберите компанию:</label>
+                        <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
+                            @foreach($companies as $company)
+                                <option
+                                    @if(!empty(old('company_id')) && $company->id == old('$company_id'))
+                                     selected
+                                    @endif
+                                    value="{{$company->id}}">{{$company->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('author_ids')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label>Название курса</label>
                         <input name="title" type="text" class="form-control" aria-describedby="Название"
@@ -109,6 +124,15 @@
                             </div>
                         </div>
                         @error('image')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3 form-group">
+                        <h5><b>Торговый каталог</b></h5>
+                        <label>Стоимость обучения (руб.)</label>
+                        <input name="price" type="text" class="form-control" aria-describedby="price"
+                               value="{{old('price')}}">
+                        @error('price')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>

@@ -38,6 +38,7 @@ class UpdateRequest extends FormRequest
             'seo_description' => '',
             'series' => '',
             'years' => '',
+            'company_id' => 'nullable|integer',
         ];
     }
 

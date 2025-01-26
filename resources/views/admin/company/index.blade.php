@@ -42,14 +42,24 @@
                                         <td>{{$company->id}}</td>
                                         <td>{{$company->title}}</td>
                                         <td>{{$company->description}}</td>
-                                        <td><a  href="{{route('admin.company.show', $company->id)}}"><i class="far fa-eye"></i></a></td>
-                                        <td><a  href="{{route('admin.company.edit', $company->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
+                                            @if($company->id != 1)
+                                            <a  href="{{route('admin.company.show', $company->id)}}"><i class="far fa-eye"></i></a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($company->id != 1)
+                                            <a  href="{{route('admin.company.edit', $company->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($company->id != 1)
                                             <form method="post" action="{{route('admin.company.destroy', $company->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
                                             </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

@@ -20,5 +20,9 @@ class Course extends Model
     public function links(){
         return $this->hasMany(Link::class );
     }
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
 }

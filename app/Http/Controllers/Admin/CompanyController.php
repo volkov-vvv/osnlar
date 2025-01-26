@@ -50,9 +50,9 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Company $company)
     {
-        //
+        return view('admin.company.show', compact('company'));
     }
 
     /**
@@ -73,9 +73,11 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreRequest $request, Company $company)
     {
-        //
+        $data = $request->validated();
+        $company->update($data);
+        return redirect()->route('admin.company.show', compact('company'));
     }
 
     /**

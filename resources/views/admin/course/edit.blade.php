@@ -20,6 +20,21 @@
                 <form action="{{route('admin.course.update', $course->id)}}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
+                    <div class="mb-3 form-group">
+                        <label>Выберите компанию:</label>
+                        <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
+                            @foreach($companies as $company)
+                                <option
+                                    @if(!empty($course->company_id) && $company->id == $course->company_id)
+                                    selected
+                                    @endif
+                                    value="{{$company->id}}">{{$company->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('author_ids')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label>Название курса</label>
                         <input name="title" type="text" class="form-control" aria-describedby="Название"

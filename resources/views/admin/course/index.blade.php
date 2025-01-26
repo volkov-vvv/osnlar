@@ -27,15 +27,33 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+
+                            <table class="table table-striped mb-2">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        Компания:
+                                        <select id="company" name="company">
+                                            <option></option>
+                                            @foreach($companies as $company)
+                                                <option value="{{$company->title}}">{{$company->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <table id="course_table" class="table table-bordered table-striped hover">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Название</th>
                                     <th>Год</th>
+                                    <th>Компания</th>
                                     <th>Публикация</th>
                                     <th>Дата создания</th>
-                                    <th colspan="3">Действия</th>
+                                    <th>Действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -45,13 +63,21 @@
                                         <td>{{$course->title}}</td>
                                         <td>{{$course->years}}</td>
                                         <td>
+                                            @if(!empty($course->company))
+                                                {{$course->company->title}}
+                                            @else
+                                                Основание
+                                            @endif
+                                        </td>
+                                        <td>
                                             {{$course->is_published == 1 ? 'Опубликован' : 'Архив' }}
                                         </td>
                                         <td>{{$course->created_at}}</td>
-                                        <td><a  href="{{route('admin.course.show', $course->id)}}"><i class="far fa-eye"></i></a></td>
-                                        <td><a  href="{{route('admin.course.edit', $course->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.course.delete', $course->id)}}">
+                                            <a  href="{{route('admin.course.show', $course->id)}}"><i class="far fa-eye"></i></a>
+                                            <a  href="{{route('admin.course.edit', $course->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
+
+                                            <form method="post" action="{{route('admin.course.delete', $course->id)}}" class="d-inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
@@ -73,7 +99,43 @@
         </div><!-- /.container-fluid -->
     </section>
 
+@section('javascript')
+    <script>
+    $(document).ready(function() {
+        var table = new DataTable('#course_table', {
+            order: [[0, 'desc']],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "pdf", "colvis"],
+            "language": {
+                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                paginate: {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                search: "Поиск:",
+                buttons: {
+                colvis: 'Выбрать колонки',
+                search: 'Поиск'
+                },
+            }
+        });
 
+        table.buttons().container().appendTo('#course_table_wrapper .col-md-6:eq(0)');
+
+    $('#company').on('change', function (e){
+
+    table
+    .column(3)
+    .search(this.value, {exact: true})
+    .draw();
+    })
+    });
+    </script>
+@endsection
 
 
 

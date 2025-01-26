@@ -34,6 +34,8 @@ class StoreRequest extends FormRequest
             'author_ids.*' => 'nullable|integer|exists:authors,id',
             'seo_title' => 'nullable|string',
             'seo_description' => 'nullable|string',
+            'company_id' => 'nullable|integer',
+            'price' => 'nullable|numeric',
         ];
     }
     public function messages()
