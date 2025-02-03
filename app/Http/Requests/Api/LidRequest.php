@@ -13,7 +13,7 @@ class LidRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -36,6 +36,14 @@ class LidRequest extends FormRequest
             'category_id' => '',
             'company_id' => 'required|string',
             'politic' => 'required',
+            'in_project' => '',
+            'utm_source' => '',
+            'utm_medium' => '',
+            'utm_campaign' => '',
+            'utm_term' => '',
+            'utm_content' => '',
+            'created_at' => 'nullable|string',
+            'responsible_id' => 'nullable',
         ];
     }
 }

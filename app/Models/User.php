@@ -35,7 +35,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Agent::class)->withPivot('user_id','agent_id');
     }
 
-    public function getLids()
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+        public function getLids()
     {
         return $this->hasMany(Lid::class, 'responsible_id', 'id');
     }
@@ -123,7 +128,8 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
-        'utm'
+        'utm',
+        'company_id'
     ];
 
     /**

@@ -36,6 +36,11 @@ class Lid extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class);
@@ -81,11 +86,13 @@ class Lid extends Model
             'regions.title as region_title',
             'agents.title as agent_title',
             'users.name as responsible_name',
+            'companies.title as company_title',
         );
         $query = Lid::select($queryArray)
             ->join('courses', 'courses.id', '=', 'lids.course_id')
             ->join('regions', 'regions.id', '=', 'lids.region_id')
             ->join('statuses', 'statuses.id', '=', 'lids.status_id')
+            ->leftjoin('companies', 'companies.id', '=', 'lids.company_id')
             ->leftjoin('categories', 'categories.id', '=', 'lids.category_id')
             ->leftjoin('agents', 'agents.id', '=', 'lids.agent_id')
             ->leftjoin('users', 'users.id', '=', 'lids.responsible_id');
@@ -153,6 +160,23 @@ class Lid extends Model
 
         if ( isset($params['created_at']) ) {
             $query->where('lids.created_at', 'like', '%' . $params['created_at'] . '%' );
+        }
+
+        if ( isset($params['company']) ) {
+            if($params['company'] == 'Основание'){
+                $query->where(function ($query) {
+                    $query->where('lids.company_id', '=', 1)
+                        ->orWhereNull('lids.company_id');
+                });
+            }else {
+                $query->where('companies.title', 'like', '%' . $params['company'] . '%');
+            }
+        }
+
+        // Фильтр по компании для сотрудников КЦ
+        $user = auth()->user();
+        if($user->role == 3 && !empty($user->company_id)){
+            $query->where('companies.id', $user->company_id);
         }
 
         return $query;

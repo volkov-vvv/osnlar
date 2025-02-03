@@ -80,6 +80,23 @@
                         </div>
                     </div>
 
+                    <div id="company-form"
+                         @if($user->role != 3)
+                         style="display: none"
+                        @endif
+                    >
+                        <div class="mb-3 form-group">
+                            <label>Компания</label>
+                            <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
+                                <option>---</option>
+                                @foreach($companies as $company)
+                                    <option value="{{$company->id}}"
+                                        {{ !empty($user->company->id) && $user->company->id == $company->id ? ' selected' : ''  }}
+                                    >{{$company->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
 
                     <button type="submit" class="btn btn-primary">Обновить</button>
@@ -102,6 +119,12 @@
                 $('#agent-form').show();
             }else{
                 $('#agent-form').hide();
+            }
+
+            if($('#role option:selected').val() == 3){
+                $('#company-form').show();
+            }else{
+                $('#company-form').hide();
             }
         })
     </script>

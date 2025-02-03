@@ -42,15 +42,27 @@
                 <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <table class="table table-striped mb-2">
+                                <table class="table">
                                     <tbody>
-                                    <tr>
+                                    <tr class="active">
                                         <td>
-                                            Дата:
+                                            Компания:
+                                            <select id="company" name="company">
+                                                <option></option>
+                                                @foreach($companies as $company)
+                                                    <option value="{{$company->title}}">{{$company->title}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td colspan="4"></td>
+                                    </tr>
+                                    <tr class="active">
+                                        <td>
+                                            Дата:<br>
                                             <input id="date" type="date">
                                         </td>
                                         <td>
-                                            Ответсвенный:
+                                            Ответсвенный:<br>
                                             <select id="responsible" name="responsible">
                                                 <option></option>
                                                 @foreach($users as $user)
@@ -59,7 +71,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            Курс:
+                                            Курс:<br>
                                             <select id="course" name="course">
                                                 <option></option>
                                                 @foreach($courses as $course)
@@ -68,7 +80,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            Регион:
+                                            Регион:<br>
                                             <select id="region" name="region">
                                                 <option></option>
                                                 @foreach($regions as $region)
@@ -104,6 +116,7 @@
                                         <th>Статус</th>
                                         <th>Реакция</th>
                                         <th>Дата создания</th>
+                                        <th>Компания</th>
                                         <th>Действия</th>
                                     </tr>
                                     </thead>
@@ -172,7 +185,7 @@
             }, "colvis"],
             order: [[0, 'desc']],
             'columnDefs': [ {
-                'targets': [9,11], // column index (start from 0)
+                'targets': [9,12], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             }],
             "language": {
@@ -205,6 +218,7 @@
                 { data: 'status' },
                 { data: 'interval' },
                 { data: 'created_at' },
+                { data: 'company' },
                 { data: 'actions' },
             ]
         });
@@ -249,6 +263,14 @@
 
             table
                 .column(10)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#company').on('change', function (e){
+
+            table
+                .column(11)
                 .search(this.value, {exact: true})
                 .draw();
         })

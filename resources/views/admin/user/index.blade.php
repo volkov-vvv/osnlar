@@ -31,9 +31,12 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Фамилия</th>
                                     <th>Имя</th>
+                                    <th>Отчество</th>
                                     <th>Email</th>
                                     <th>Роль</th>
+                                    <th>Компания</th>
                                     <th>Дата создания</th>
                                     <th colspan="3">Действия</th>
                                 </tr>
@@ -42,12 +45,19 @@
                                 @foreach($users as $user)
                                     <tr>
                                         <td>{{$user->id}}</td>
+                                        <td>{{$user->lastname}}</td>
                                         <td>{{$user->name}}</td>
+                                        <td>{{$user->middlename}}</td>
                                         <td>{{$user->email}}</td>
                                         <td>
                                             @foreach($roles as $id => $role)
                                                 {{ $id == $user->role ? $role : '' }}
                                             @endforeach
+                                        </td>
+                                        <td>
+                                            @if(!empty($user->company))
+                                                {{$user->company->title}}
+                                            @endif
                                         </td>
                                         <td>{{$user->created_at}}</td>
                                         <td><a  href="{{route('admin.user.show', $user->id)}}"><i class="far fa-eye"></i></a></td>

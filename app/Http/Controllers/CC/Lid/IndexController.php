@@ -13,10 +13,13 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
+        $user = auth()->user();
+        $companyId = 1;
+        if(!empty($user->company_id)) $companyId = $user->company_id;
         $statuses = Status::all();
         $courses = Course::all();
         $lids = Lid::all();
         $users = User::where('role', 3)->get();
-        return view('cc.lid.index', compact('lids','courses','statuses','users'));
+        return view('cc.lid.index', compact('lids','courses','statuses','users', 'companyId'));
     }
 }

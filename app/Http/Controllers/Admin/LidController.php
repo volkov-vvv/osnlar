@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Models\Company;
 use App\Service\LidService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -36,13 +37,14 @@ class lidController extends Controller
 
         $courses = Course::all();
         $regions = Region::all();
+        $companies = Company::all();
         $statuses = Status::whereNull('type')->get();
         $users = User::where('role', 3)->get();
 
         $commerce = 0;
 
 
-        return view('admin.lid.index', compact('courses','users','regions','statuses', 'commerce'));
+        return view('admin.lid.index', compact('courses','users','regions','statuses', 'commerce', 'companies'));
     }
 
     /**

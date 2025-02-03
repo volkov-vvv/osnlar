@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\LidRequest;
+use App\Models\Lid;
 use Illuminate\Http\Request;
 
 class LidCompanyController extends Controller
@@ -14,7 +16,6 @@ class LidCompanyController extends Controller
      */
     public function index()
     {
-        return 'test';
     }
 
 
@@ -24,9 +25,12 @@ class LidCompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LidRequest $request)
     {
-        //
+        $data = $request->validated();
+//        dump($data);
+        $lid = Lid::firstOrCreate($data);
+        return 'testOK';
     }
 
     /**

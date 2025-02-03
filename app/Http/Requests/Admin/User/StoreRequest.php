@@ -28,6 +28,7 @@ class StoreRequest extends FormRequest
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string',
             'role' => 'required|string',
+            'company_id' => 'integer',
         ];
     }
     public function messages()

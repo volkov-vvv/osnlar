@@ -74,6 +74,12 @@ class LidService
                 $agent = '';
             }
 
+            if($record->company_title){
+                $company = $record->company_title;
+            }else{
+                $company = 'Основание';
+            }
+
             $course = $record->course_title;
             $region = $record->region_title;
             $lastname = $record->lastname;
@@ -118,6 +124,7 @@ class LidService
                 "phone" => $phone,
                 "status" => $status,
                 "interval" => $interval,
+                "company" => $company,
                 "created_at" => $created_at,
                 "actions" => $actions,
             );

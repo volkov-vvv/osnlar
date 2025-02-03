@@ -46,7 +46,7 @@
                     </div>
                     <div class="mb-3 form-group">
                         <label>Роль пользователя</label>
-                        <select name="role" class="form-control">
+                        <select name="role" id="role" class="form-control">
                             @foreach($roles as $id => $role)
                                 <option value="{{$id}}"
                                     {{ $id == old('role') ? ' selected' : '' }}
@@ -56,6 +56,19 @@
                         @error('role')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
+                    </div>
+                    <div id="company-form" style="display: none">
+                        <div class="mb-3 form-group">
+                            <label>Компания</label>
+                            <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
+                                <option>---</option>
+                                @foreach($companies as $company)
+                                    <option value="{{$company->id}}"
+                                        {{ !empty(old('company_id')) && old('company_id') == $company->id ? ' selected' : ''  }}
+                                    >{{$company->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Создать</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.user.index')}}">Назад</a>
@@ -76,4 +89,16 @@
 
 
 
+@endsection
+
+@section('javascript')
+    <script>
+        $('#role').on('change', function (e){
+            if($('#role option:selected').val() == 3){
+                $('#company-form').show();
+            }else{
+                $('#company-form').hide();
+            }
+        })
+    </script>
 @endsection
