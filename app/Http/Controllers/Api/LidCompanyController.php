@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\LidRequest;
+use App\Models\Course;
 use App\Models\Lid;
+use App\Models\Region;
 use Illuminate\Http\Request;
 
 class LidCompanyController extends Controller
@@ -28,7 +30,7 @@ class LidCompanyController extends Controller
     public function store(LidRequest $request)
     {
         $data = $request->validated();
-//        dump($data);
+
         $lid = Lid::firstOrCreate($data);
         return 'testOK';
     }

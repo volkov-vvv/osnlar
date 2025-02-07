@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Models\Course;
+use App\Models\Region;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LidRequest extends FormRequest
@@ -30,11 +32,11 @@ class LidRequest extends FormRequest
             'data' => '',
             'phone' => 'required|string',
             'email' => 'required|string|email|unique:lids',
-            'course_id' => 'required|string',
-            'lid_level_edu_id' => 'string',
-            'region_id' => 'required|string',
-            'category_id' => '',
-            'company_id' => 'required|string',
+            'course_id' => 'required|integer',
+            'lid_level_edu' => 'string',
+            'region_id' => 'required|integer',
+            'category' => 'string',
+            'company_id' => 'required|integer',
             'politic' => 'required',
             'in_project' => '',
             'utm_source' => '',
@@ -45,5 +47,20 @@ class LidRequest extends FormRequest
             'created_at' => 'nullable|string',
             'responsible_id' => 'nullable',
         ];
+    }
+
+    protected function prepareForValidation() {
+
+        $course = Course::where('is_published', 1)
+            ->where('title', $this->course)
+            ->where('company_id', $this->company_id)
+            ->first();
+//dd($course);
+        $region = Region::where('title', $this->region)->first();
+
+        $this->merge( [
+                'course_id' => $course->id,
+                'region_id' => $region->id
+            ] );
     }
 }
