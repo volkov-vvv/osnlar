@@ -50,7 +50,7 @@ class LidRequest extends FormRequest
     }
 
     protected function prepareForValidation() {
-
+dd($this);
         $course = Course::where('is_published', 1)
             ->where('title', $this->course)
             ->where('company_id', $this->company_id)
@@ -59,7 +59,7 @@ class LidRequest extends FormRequest
         $region = Region::where('title', $this->region)->first();
 
         $this->merge( [
-                'course_id' => $course->id,
+                //'course_id' => $course->id,
                 'region_id' => $region->id
             ] );
     }
