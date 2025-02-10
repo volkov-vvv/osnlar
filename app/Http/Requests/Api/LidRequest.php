@@ -59,7 +59,7 @@ class LidRequest extends FormRequest
         $region = Region::where('title', $this->region)->first();
 
         $this->merge( [
-                //'course_id' => $course->id,
+                'course_id' => $course->id,
                 'region_id' => $region->id
             ] );
     }
