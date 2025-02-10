@@ -50,12 +50,12 @@ class LidRequest extends FormRequest
     }
 
     protected function prepareForValidation() {
-
+        dd($this->course);
         $course = Course::where('is_published', 1)
             ->where('title', $this->course)
             ->where('company_id', $this->company_id)
             ->first();
-dd($course);
+
         $region = Region::where('title', $this->region)->first();
 
         $this->merge( [
