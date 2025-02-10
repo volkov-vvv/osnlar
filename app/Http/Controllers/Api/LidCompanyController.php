@@ -27,7 +27,7 @@ class LidCompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LidRequest $request)
+    public function store(Request $request)
     {
 //        $data = $request->validated();
 dd($request);
