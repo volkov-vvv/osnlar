@@ -30,7 +30,7 @@ class LidCompanyController extends Controller
     public function store(LidRequest $request)
     {
         $data = $request->validated();
-
+dd($data);
         $lid = Lid::firstOrCreate($data);
         return 'testOK';
     }

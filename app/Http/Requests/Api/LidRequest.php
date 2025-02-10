@@ -32,7 +32,7 @@ class LidRequest extends FormRequest
             'data' => '',
             'phone' => 'required|string',
             'email' => 'required|string|email|unique:lids',
-            'course_id' => 'required|integer',
+            'course_id' => 'integer',
             'lid_level_edu' => 'string',
             'region_id' => 'required|integer',
             'category' => 'string',
@@ -50,7 +50,7 @@ class LidRequest extends FormRequest
     }
 
     protected function prepareForValidation() {
-dump($this);
+
         $course = Course::where('is_published', 1)
             ->where('title', $this->course)
             ->where('company_id', $this->company_id)
