@@ -50,7 +50,7 @@ class LidRequest extends FormRequest
     }
 
     protected function prepareForValidation() {
-dd($this);
+dump($this);
         $course = Course::where('is_published', 1)
             ->where('title', $this->course)
             ->where('company_id', $this->company_id)
