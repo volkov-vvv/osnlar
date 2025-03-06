@@ -289,7 +289,7 @@
 
             <input type="hidden" name="utm_source" value="{{$utm['utm_source']}}">
             <input type="hidden" name="utm_medium" value="{{$utm['utm_medium']}}">
-            <input type="hidden" name="utm_campaign" value="{{$utm['utm_campaign']}}">
+            <input type="hidden" name="utm_medium" value="{{$utm['utm_campaign']}}">
 
         </form>
 

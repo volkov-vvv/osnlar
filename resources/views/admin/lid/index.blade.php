@@ -47,7 +47,7 @@
                                     <tr class="active">
                                         <td>
                                             Компания:
-                                            <select id="company" name="company">
+                                            <select id="company" name="company" class="form-control form-control-sm">
                                                 <option></option>
                                                 @foreach($companies as $company)
                                                     <option value="{{$company->title}}">{{$company->title}}</option>
@@ -59,11 +59,11 @@
                                     <tr class="active">
                                         <td>
                                             Дата:<br>
-                                            <input id="date" type="date">
+                                            <input id="date" type="date" class="form-control form-control-sm">
                                         </td>
                                         <td>
                                             Ответсвенный:<br>
-                                            <select id="responsible" name="responsible">
+                                            <select id="responsible" name="responsible" class="form-control form-control-sm">
                                                 <option></option>
                                                 @foreach($users as $user)
                                                     <option value="{{$user->name}}">{{$user->name}}</option>
@@ -72,7 +72,7 @@
                                         </td>
                                         <td>
                                             Курс:<br>
-                                            <select id="course" name="course">
+                                            <select id="course" name="course" class="form-control form-control-sm">
                                                 <option></option>
                                                 @foreach($courses as $course)
                                                     <option value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
@@ -81,7 +81,7 @@
                                         </td>
                                         <td>
                                             Регион:<br>
-                                            <select id="region" name="region">
+                                            <select id="region" name="region" class="form-control form-control-sm">
                                                 <option></option>
                                                 @foreach($regions as $region)
                                                     <option value="{{$region->title}}">{{$region->title}}</option>
@@ -89,8 +89,8 @@
                                             </select>
                                         </td>
                                         <td>
-                                            Статус:
-                                            <select id="status" name="status">
+                                            Статус:<br>
+                                            <select id="status" name="status" class="form-control form-control-sm">
                                                 <option></option>
                                                 @foreach($statuses as $status)
                                                     <option value="{{$status->title}}">{{$status->title}}</option>
