@@ -15,7 +15,7 @@
                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Все</button>
                     <button class="nav-link" id="nav-digital-tab" data-bs-toggle="tab" data-bs-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false">Азбука цифры</button>
-                    <button class="nav-link" id="nav-designed-tab" data-bs-toggle="tab" data-bs-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Азбука стиля</button>
+                    <button class="nav-link" id="nav-designed-tab" data-bs-toggle="tab" data-bs-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Азбука дизайна</button>
                     <button class="nav-link" id="nav-business-tab" data-bs-toggle="tab" data-bs-target="#nav-business" type="button" role="tab" aria-controls="nav-business" aria-selected="false">Азбука бизнеса</button>
                 </div>
             </nav>
