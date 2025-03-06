@@ -24,9 +24,23 @@
                         <input type="hidden" name="user_id" value="{{$user->id}}">
                     </div>
                     <div class="mb-3">
-                        <label>Имя пользователя</label>
-                        <input name="name" type="text" class="form-control" aria-describedby="Название" value="{{$user->name}}">
+                        <label>Фамилия</label>
+                        <input name="lastname" type="text" class="form-control" aria-describedby="Фамилия" value="{{$user->lastname}}">
+                        @error('lastname')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Имя</label>
+                        <input name="name" type="text" class="form-control" aria-describedby="Имя" value="{{$user->name}}">
                         @error('name')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Отчество</label>
+                        <input name="middlename" type="text" class="form-control" aria-describedby="Отчество" value="{{$user->middlename}}">
+                        @error('middlename')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -34,6 +48,13 @@
                         <label>Email</label>
                         <input name="email" type="email" class="form-control" value="{{$user->email}}">
                         @error('email')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Пароль</label>
+                        <input name="password" type="password" class="form-control">
+                        @error('password')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -88,7 +109,7 @@
                         <div class="mb-3 form-group">
                             <label>Компания</label>
                             <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
-                                <option>---</option>
+                                <option value="">---</option>
                                 @foreach($companies as $company)
                                     <option value="{{$company->id}}"
                                         {{ !empty($user->company->id) && $user->company->id == $company->id ? ' selected' : ''  }}

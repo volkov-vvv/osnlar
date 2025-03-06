@@ -24,13 +24,16 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'lastname' => '',
             'name' => 'required|string',
+            'middlename' => '',
             'email' => 'required|string|email|unique:users,email,' . $this->user_id,
             'user_id' => 'required|integer|exists:users,id',
             'role' => 'required|string',
-            'company_id' => 'integer',
+            'company_id' => '',
             'agent_ids' => 'array',
             'utm' => 'array',
+            'password' => '',
         ];
     }
 
