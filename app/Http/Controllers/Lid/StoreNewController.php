@@ -38,7 +38,6 @@ class StoreNewController extends Controller
         $status = Status::all()->where('title', 'На 2025 год')->first();
         $data['status_id'] =  $status->id;
 
-
         $lid = Lid::firstOrCreate($data);
         $data['link'] = $link;
         $data['id'] = $lid->id;

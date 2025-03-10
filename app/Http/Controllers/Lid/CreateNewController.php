@@ -52,6 +52,7 @@ class CreateNewController extends Controller
         }else{
             $pageDescription = 'Подать заявку на обучение в рамках проекта Содействие занятости';
         }
+
         return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'pageDescription', 'utm'));
     }
 
