@@ -35,7 +35,6 @@ class LogRequests
         $method = $request->getMethod();
         $ip = $request->getClientIp();
 
-        dump($request->all());
 
         $log = "{$ip}: {$method}@{$url} - {$duration}ms \n".
             "Request : {[ \n";
