@@ -37,6 +37,7 @@ class LogRequests
 
         $log = "{$ip}: {$method}@{$url} - {$duration}ms \n".
             "Request : {[$request->all()]} \n".
+            "Request2 : {[$request->input()]} \n".
             "Response : {$response->getContent()} \n";
 
         Log::info($log);
