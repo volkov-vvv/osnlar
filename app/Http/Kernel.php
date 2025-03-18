@@ -49,6 +49,7 @@ class Kernel extends HttpKernel
             'throttle:api',
             \App\Http\Middleware\ForceJsonResponse::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'request_logger'
         ],
     ];
 
@@ -74,5 +75,6 @@ class Kernel extends HttpKernel
         'agent' => AgentMiddleware::class,
         'user' => UserMiddleware::class,
         'cookie' => \App\Http\Middleware\SetUserCookie::class,
+        'request_logger' => \App\Http\Middleware\LogRequests::class
     ];
 }
