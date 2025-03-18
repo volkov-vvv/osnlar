@@ -38,8 +38,11 @@ class LogRequests
         dump($request->all());
 
         $log = "{$ip}: {$method}@{$url} - {$duration}ms \n".
-            "Request : {[print_r($request->all(), true)]} \n".
-            "Request2 : {[$request->input()]} \n".
+            "Request : {[";
+        foreach ($request->all() as $item=>$key){
+            $log .= $key . " => " . $item . "\n";
+        }
+        $log .= "]} \n";
             "Response : {$response->getContent()} \n";
 
         Log::info($log);
