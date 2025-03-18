@@ -38,7 +38,7 @@ class LogRequests
         dump($request->all());
 
         $log = "{$ip}: {$method}@{$url} - {$duration}ms \n".
-            "Request : {[$request->all()]} \n".
+            "Request : {[print_r($request->all(), true)]} \n".
             "Request2 : {[$request->input()]} \n".
             "Response : {$response->getContent()} \n";
 
