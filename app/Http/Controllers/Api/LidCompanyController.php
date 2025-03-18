@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\LidRequest;
+use App\Mail\SendEmail;
 use App\Models\Course;
 use App\Models\Lid;
 use App\Models\Region;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
 class LidCompanyController extends Controller
@@ -31,8 +33,19 @@ class LidCompanyController extends Controller
     {
         $data = $request->validated();
 
+        // Всем заявкам присваиваем статус 'На 2025 год'
+        $status = Status::all()->where('title', 'На 2025 год')->first();
+        $data['status_id'] =  $status->id;
+
         $lid = Lid::firstOrCreate($data);
-        return 'testOK';
+
+        $data['id'] = $lid->id;
+        $mailData = collect($data);
+        $mailData->subject = 'Ваша заявка на обучение принята';
+        $mailData->template = 'mails.template';
+        \Mail::to($data['email'])->send(new SendEmail($mailData));
+
+        return 'OK';
     }
 
     /**
