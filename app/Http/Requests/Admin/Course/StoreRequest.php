@@ -28,7 +28,7 @@ class StoreRequest extends FormRequest
             'description' => 'required|string',
             'prev_img' => 'required|file',
             'image' => 'required|file',
-            'utp' => 'sometimes|file',
+            'utp' => 'nullable|file',
 //            'category_id' => 'required|integer|exists:categories,id',
             'author_ids' => 'nullable|array',
             'author_ids.*' => 'nullable|integer|exists:authors,id',
