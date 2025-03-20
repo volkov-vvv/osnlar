@@ -123,7 +123,7 @@
                                 <span class="input-group-text">Загрузить</span>
                             </div>
                         </div>
-                        @error('image')
+                        @error('utp')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
