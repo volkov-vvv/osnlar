@@ -12,7 +12,8 @@ class StoreController extends BaseController
 {
     public function __invoke(StoreRequest $request)
     {
-            $data = $request->validated();
+        dump($request);
+        $data = $request->validated();
 dump($data);
             $this->service->store($data);
 dd($this);
