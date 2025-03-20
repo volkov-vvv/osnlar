@@ -46,7 +46,10 @@ class CreateNewController extends Controller
         $regions = Region::all();
         $authors = Author::all();
         $levelsedu = Leveledu::all();
-        $courses = Course::where('is_published', 1)->whereNull('price')->get();
+        $courses = Course::where('is_published', 1)->whereNull('price')->where(function ($query) {
+            $query->where('company_id', '=', 1)
+                ->orWhereNull('company_id');
+        })->get();
         if(isset($selectedCourse)){
             $pageDescription = 'Подать заявку на обучение по курсу ' . $courses->where('id', $selectedCourse)->first()->title . 'в рамках проекта Содействие занятости';
         }else{
