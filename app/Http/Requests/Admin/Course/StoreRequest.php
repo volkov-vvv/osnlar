@@ -28,7 +28,7 @@ class StoreRequest extends FormRequest
             'description' => 'required|string',
             'prev_img' => 'required|file',
             'image' => 'required|file',
-//            'utp' => 'nullable',
+            'utp' => 'sometimes|file',
 //            'category_id' => 'required|integer|exists:categories,id',
             'author_ids' => 'nullable|array',
             'author_ids.*' => 'nullable|integer|exists:authors,id',
@@ -53,7 +53,8 @@ class StoreRequest extends FormRequest
 //            'category_id.integer' => 'ID категории должно быть числом',
 //            'category_id.exists' => 'ID категории должно быть в базе данных',
             'author_ids.array' => 'Необходимо отправить массив данных',
-
+            'utp.sometimes' => 'Ошибка sometimes',
+            'utp.file' => 'Ошибка file',
         ];
     }
 
