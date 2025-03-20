@@ -55,7 +55,7 @@ class OrderController extends Controller
         //Проверяем наличие заказа и создаем, если его нет
         $order = Order::all()->where('customer_id', $customer->id)->where('course_id', $course->id)->last();
         if(!$order){
-            $status = Status::where('code', 'payment-allowed')->first();
+            $status = Status::where('code', 'waiting-payment')->first();
             $orderData = array(
                 'customer_id' => $customer->id,
                 'course_id' => $course->id,
