@@ -42,7 +42,7 @@ class CreateNewController extends Controller
 
         $categories = Category::whereNotIn('id',[4,5])->get()->sortBy('order');
         $categoriesMain = Category::find([4,5])->sortBy('order');
-        $agents = Agent::all();
+        $agents = Agent::where('active', 1)->get();
         $regions = Region::all();
         $authors = Author::all();
         $levelsedu = Leveledu::all();

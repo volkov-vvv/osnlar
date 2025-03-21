@@ -33,6 +33,16 @@
                                     <td>{{$agent->title}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Активность</td>
+                                    <td>
+                                        @if($agent->active == 1)
+                                            Да
+                                        @else
+                                            Нет
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$agent->created_at}}</td>
                                 </tr>
