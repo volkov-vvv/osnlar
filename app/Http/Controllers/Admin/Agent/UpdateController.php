@@ -13,7 +13,7 @@ class UpdateController extends Controller
     public function __invoke(UpdateRequest $request, Agent $agent)
     {
         $data = $request->validated();
-        dd($data);
+
         $agent->update($data);
 
         return redirect()->route('admin.agent.show', compact('agent'));
