@@ -20,17 +20,25 @@
                 <form action="{{route('admin.agent.store')}}" method="post">
                     @csrf
                     <div class="mb-3">
-                        <label>ФИО агента</label>
-                        <input name="title" type="text" class="form-control" aria-describedby="Иванов И.И.">
-                        @error('title')
-                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
-                        @enderror
+                        <div class="form-group">
+                            <label>ФИО агента</label>
+                            <input name="title" type="text" class="form-control" aria-describedby="Иванов И.И.">
+                            @error('title')
+                            <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" name="active" value="0">
+                                <input name="active" type="checkbox" class="custom-control-input" id="customSwitch2" value="1" checked>
+                                <label class="custom-control-label" for="customSwitch2">Активность</label>
+                            </div>
+                            @error('active')
+                            <div class="text-danger">{{$message}}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="custom-control custom-switch">
-                        <input type="hidden" name="is_published" value="0">
-                        <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch2" value="1" checked>
-                        <label class="custom-control-label" for="customSwitch2">Активность</label>
-                    </div>
+
                     <button type="submit" class="btn btn-primary">Создать</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.agent.index')}}">Назад</a>
                 </form>
