@@ -26,6 +26,11 @@
                         <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
                         @enderror
                     </div>
+                    <div class="custom-control custom-switch">
+                        <input type="hidden" name="is_published" value="0">
+                        <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch2" value="1" checked>
+                        <label class="custom-control-label" for="customSwitch2">Активность</label>
+                    </div>
                     <button type="submit" class="btn btn-primary">Создать</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.agent.index')}}">Назад</a>
                 </form>
