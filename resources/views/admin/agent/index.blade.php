@@ -33,6 +33,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>ФИО</th>
+                                    <th>Активность</th>
                                     <th>Дата создания</th>
                                     <th colspan="3">Действия</th>
                                 </tr>
@@ -42,6 +43,11 @@
                                     <tr>
                                         <td>{{$agent->id}}</td>
                                         <td>{{$agent->title}}</td>
+                                        <td>
+                                            @if($agent->active == 1)
+                                                <i class="far fa-check" aria-hidden="true"></i>
+                                            @endif
+                                        </td>
                                         <td>{{$agent->created_at}}</td>
                                         <td><a  href="{{route('admin.agent.show', $agent->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.agent.edit', $agent->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
