@@ -12,12 +12,12 @@ class StoreController extends BaseController
 {
     public function __invoke(StoreRequest $request)
     {
-//        dump($request);
+
         $data = $request->validated();
-//dump($data);
-            $this->service->store($data);
-//dd($this);
-            return redirect()->route('admin.course.index');
+
+        $this->service->store($data);
+
+        return redirect()->route('admin.course.index');
 
     }
 }
