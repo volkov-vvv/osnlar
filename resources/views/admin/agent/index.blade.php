@@ -43,9 +43,9 @@
                                     <tr>
                                         <td>{{$agent->id}}</td>
                                         <td>{{$agent->title}}</td>
-                                        <td class="text-center">
+                                        <td>
                                             @if($agent->active == 1)
-                                                <i class="fa fa-check green" aria-hidden="true"></i>
+                                                <i class="fa fa-check text-success" aria-hidden="true"></i>
                                             @endif
                                         </td>
                                         <td>{{$agent->created_at}}</td>
