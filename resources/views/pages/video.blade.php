@@ -15,7 +15,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col" style="height:60vw; min-height: 240px;">
-                                        <iframe width="100%" src="https://rutube.ru/play/embed/9f34d19f35f14f39642ac28775c91ee5/" frameBorder="0" allow="clipboard-write; autoplay" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                                        <iframe width="100%" height="100%"  src="https://rutube.ru/play/embed/9f34d19f35f14f39642ac28775c91ee5/" frameBorder="0" allow="clipboard-write; autoplay" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
                                     </div>
                                 </div>
                             </div>
