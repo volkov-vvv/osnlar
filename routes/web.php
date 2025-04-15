@@ -41,6 +41,8 @@ Route::group(['namespace' => 'Services', 'prefix' => 'services', 'middleware' =>
     Route::get('/', 'IndexController')->name('services.index');
 });
 
+Route::get('/video',function () {return view('pages.video');});
+
 Route::get('/sitemap.xml', 'SitemapController@index');
 
 Auth::routes();
