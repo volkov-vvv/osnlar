@@ -215,6 +215,12 @@ class LidController extends Controller
                 $agent = '';
             }
 
+            if($record->course_years){
+                $year = $record->course_years;
+            }else{
+                $year = '';
+            }
+
             $course = $record->course->title;
             $region = $record->region->title;
             $lastname = $record->lastname;
@@ -258,6 +264,7 @@ class LidController extends Controller
                 "status" => $status,
                 "interval" => $interval,
                 "created_at" => $created_at,
+                "year" => $year,
                 "actions" => $actions,
             );
         }

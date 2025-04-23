@@ -28,6 +28,16 @@
                                     <tbody>
                                     <tr>
                                         <td>
+                                            Год:
+                                            <select id="year" name="year" class="form-control form-control-sm">
+                                                <option value="2025">2025</option>
+                                                <option value="2024">2024</option>
+                                            </select>
+                                        </td>
+                                        <td colspan="4"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             Дата:
                                             <input id="date" type="date">
                                         </td>
@@ -86,6 +96,7 @@
                                         <th>Статус</th>
                                         <th>Реакция</th>
                                         <th>Дата создания</th>
+                                        <th>Год</th>
                                         <th>Действия</th>
                                     </tr>
                                     </thead>
@@ -154,7 +165,7 @@
                 'targets': [10,12], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             },
-                { targets: [2], visible: false }
+                { targets: [2, 12], visible: false }
             ],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -187,6 +198,7 @@
                 { data: 'status' },
                 { data: 'interval' },
                 { data: 'created_at' },
+                { data: 'year' },
                 { data: 'actions' },
             ]
         });
@@ -231,6 +243,14 @@
 
             table
                 .column(11)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#year').on('change', function (e){
+
+            table
+                .column(12)
                 .search(this.value, {exact: true})
                 .draw();
         })

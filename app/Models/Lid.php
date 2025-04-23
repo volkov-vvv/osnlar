@@ -83,6 +83,7 @@ class Lid extends Model
             'lids.*',
             'statuses.title as status_title', 'statuses.color as status_color',
             'courses.title as course_title',
+            'courses.years as course_years',
             'regions.title as region_title',
             'agents.title as agent_title',
             'users.name as responsible_name',
@@ -173,10 +174,17 @@ class Lid extends Model
             }
         }
 
+
         // Фильтр по компании для сотрудников КЦ
         $user = auth()->user();
         if($user->role == 3 && !empty($user->company_id)){
             $query->where('companies.id', $user->company_id);
+        }
+
+        if ( isset($params['year']) ) {
+            $query->where('courses.years', $params['year']);
+        }else{
+            $query->where('courses.years', '2025');
         }
 
         return $query;

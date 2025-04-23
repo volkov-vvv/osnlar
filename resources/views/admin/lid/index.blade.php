@@ -54,7 +54,14 @@
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td colspan="4"></td>
+                                        <td>
+                                            Год:
+                                            <select id="year" name="year" class="form-control form-control-sm">
+                                                <option value="2025">2025</option>
+                                                <option value="2024">2024</option>
+                                            </select>
+                                        </td>
+                                        <td colspan="3"></td>
                                     </tr>
                                     <tr class="active">
                                         <td>
@@ -117,6 +124,7 @@
                                         <th>Реакция</th>
                                         <th>Дата создания</th>
                                         <th>Компания</th>
+                                        <th>Год</th>
                                         <th>Действия</th>
                                     </tr>
                                     </thead>
@@ -187,7 +195,9 @@
             'columnDefs': [ {
                 'targets': [9,12], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
-            }],
+            },
+                { targets: [12], visible: false }
+            ],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
                 paginate: {
@@ -219,6 +229,7 @@
                 { data: 'interval' },
                 { data: 'created_at' },
                 { data: 'company' },
+                { data: 'year' },
                 { data: 'actions' },
             ]
         });
@@ -275,7 +286,13 @@
                 .draw();
         })
 
+        $('#year').on('change', function (e){
 
+            table
+                .column(12)
+                .search(this.value, {exact: true})
+                .draw();
+        })
 
     </script>
 @endsection

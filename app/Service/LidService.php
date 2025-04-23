@@ -80,6 +80,12 @@ class LidService
                 $company = 'Основание';
             }
 
+            if($record->course_years){
+                $year = $record->course_years;
+            }else{
+                $year = '';
+            }
+
             $course = $record->course_title;
             $region = $record->region_title;
             $lastname = $record->lastname;
@@ -125,6 +131,7 @@ class LidService
                 "status" => $status,
                 "interval" => $interval,
                 "company" => $company,
+                "year" => $year,
                 "created_at" => $created_at,
                 "actions" => $actions,
             );
