@@ -138,6 +138,21 @@
 
                     <div class="mb-3">
                         <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" name="open_registration" value="0">
+                                <input name="open_registration" type="checkbox" class="custom-control-input" id="customSwitch" value="1"
+                                    {{ $course->open_registration == 1 ? ' checked' : '' }}
+                                >
+                                <label class="custom-control-label" for="customSwitch">Открыть запись на обучение</label>
+                            </div>
+                            @error('open_registration')
+                            <div class="text-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-group">
                                 <div class="custom-control custom-switch">
                                     <input type="hidden" name="is_published" value="0">
                                     <input name="is_published" type="checkbox" class="custom-control-input" id="customSwitch2" value="1"
