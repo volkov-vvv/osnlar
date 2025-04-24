@@ -47,7 +47,7 @@ class StoreNewController extends Controller
         $data['id'] = $lid->id;
         $mailData = collect($data);
         $mailData->subject = 'Ваша заявка на обучение принята';
-        $mailData->template = 'mails.template';
+        $mailData->template = $mail_template;
         \Mail::to($data['email'])->send(new SendEmail($mailData));
 
         return redirect()->route('lid.index');
