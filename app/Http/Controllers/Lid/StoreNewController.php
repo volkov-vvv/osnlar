@@ -21,8 +21,10 @@ class StoreNewController extends Controller
     public function __invoke(StoreNewRequest $request)
     {
         $data = $request->validated();
+        $mail_template = 'mails.lid_year';
         $course = Course::all()->where('id', $request->course_id)->first();
         if($course->open_registration == 1){
+            $mail_template = 'mails.lid_link';
             // Определение, доступен ли курс в регионе.
             $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
             if($links){
