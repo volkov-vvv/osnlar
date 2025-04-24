@@ -28,9 +28,9 @@ class StoreNewController extends Controller
             // Определение, доступен ли курс в регионе.
             $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
             if($links){
-                $link = $links->link;
+                $data['link'] = $links->link;
             }else{
-                $link = '';
+                $data['link'] = '';
 
                     $status = Status::all()->where('code', 'not-in-region')->first();
                     $data['status_id'] =  $status->id;
@@ -43,7 +43,6 @@ class StoreNewController extends Controller
         }
 
         $lid = Lid::firstOrCreate($data);
-        $data['link'] = $link;
         $data['id'] = $lid->id;
         $mailData = collect($data);
         $mailData->subject = 'Ваша заявка на обучение принята';
