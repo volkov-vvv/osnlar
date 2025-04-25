@@ -181,7 +181,7 @@
 <section class="edica-footer-banner-section">
     <div class="container">
         <div class="footer-banner" data-aos="fade-up">
-            <h1 class="banner-title">Подать заявку на 2025 год!</h1>
+            <h1 class="banner-title">Подать заявку на обучение</h1>
             <div class="banner-btns-wrapper">
                 <div class="carousel-content-btns">
                     <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i>

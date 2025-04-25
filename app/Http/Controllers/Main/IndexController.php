@@ -14,7 +14,7 @@ class IndexController extends Controller
         $countCourses = $allCourses->count();
 
         if($countCourses >= 6){
-            $randomCourses = Course::where('is_published', 1)->get()->random(5);
+            $randomCourses = Course::where('is_published', 1)->get()->random(3);
         }else{
             $randomCourses = $allCourses;
         }

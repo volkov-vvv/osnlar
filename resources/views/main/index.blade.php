@@ -11,15 +11,15 @@
                          width="350px">
                 </div>
                 <div class="col-md-6" data-aos="fade-up-left">
-                    <h1>Федеральный проект «Содействие занятости»</h1>
+                    <h1>Федеральный проект «Активные меры содействия занятости»</h1>
                     <p>Учебный центр «Основание» организует <em>бесплатное</em> обучение по программам
                         дополнительного профессионального образования отдельных категорий граждан в рамках
-                        реализации федерального <a
+                        реализации Федерального <a
                             href="https://trudvsem.ru/information-pages/support-employment/">проекта
-                            «Содействие занятости»</a> национального проекта «Демография».</p>
-                    <p>Прием заявок на этот год закончен, но Вы можете оставить заявку на следующий год.</p>
+                            «Содействие занятости»</a> Национального проекта «Кадры».</p>
+                    <p>Стартовал прием заявок на обучение в 2025 год. Количество мест ограничено. </p>
                     <div class="carousel-content-btns">
-                        <a href="{{route('course.index')}}" class="button-main">Заявка на 2025 год</a>
+                        <a href="{{route('course.index')}}" class="button-main">Подать заявку</a>
                     </div>
                 </div>
             </div>
@@ -27,28 +27,28 @@
     </section>
 
 
-{{--    <section class="edica-landing-section edica-landing-blog">--}}
-{{--        <div class="container">--}}
-{{--            <h4 class="edica-landing-section-subtitle" data-aos="fade-up">Наши курсы</h4>--}}
-{{--            <h2 class="edica-landing-section-title" data-aos="fade-up">Выберите понравившийся курс</h2>--}}
-{{--            <div class="row">--}}
-{{--                @foreach($randomCourses as $course)--}}
-{{--                    <div class="col-md-4 pt-0 pb-5 landing-blog-post" data-aos="fade-right">--}}
-{{--                        <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>--}}
-{{--                        <p class="blog-post-category"></p>--}}
-{{--                        <h4 class="blog-post-title">{{$course->title}}</h4>--}}
-{{--                        <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>--}}
-{{--                    </div>--}}
-{{--                @endforeach--}}
-{{--            </div>--}}
+    <section class="edica-landing-section edica-landing-blog">
+        <div class="container">
+            <h4 class="edica-landing-section-subtitle-alt">Наши курсы</h4>
+            <h2 class="edica-landing-section-title" data-aos="fade-up">Бесплатные курсы, в рамках Федерального проекта</h2>
+            <div class="row">
+                @foreach($randomCourses as $course)
+                    <div class="col-md-4 pt-0 pb-5 landing-blog-post" data-aos="fade-right">
+                        <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>
+                        <p class="blog-post-category"></p>
+                        <h4 class="blog-post-title">{{$course->title}}</h4>
+                        <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>
+                    </div>
+                @endforeach
+            </div>
 
-{{--            <div class="row mt-5">--}}
-{{--                <div class="carousel-content-btns mx-auto">--}}
-{{--                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </section>--}}
+            <div class="row mt-5">
+                <div class="carousel-content-btns mx-auto">
+                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="edica-landing-section edica-landing-about">
         <div class="container">
@@ -152,7 +152,8 @@
                 <img src="{{asset('assets/images/irpo-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="250">
                 <img src="{{asset('assets/images/ranx-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="500">
                 <img src="{{asset('assets/images/tgu-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="750">
-                <img src="{{asset('assets/images/rr-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="1000">
+{{--                <img src="{{asset('assets/images/vnii-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="1000">--}}
+                <img src="{{asset('assets/images/rr-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="1250">
             </div>
         </div>
     </section>
@@ -192,9 +193,9 @@
                 </div>
                 <ol class="carousel-indicators">
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="0">
-                        <img src="{{ asset('assets/images/OV.jpg')}}" alt="avatar">
+                        <img src="{{ asset('assets/images/Albina.jpg')}}" alt="avatar">
                         <div class="user-details">
-                            <h6>Ванюхина Ольга</h6>
+                            <h6>Каримова Альбина</h6>
                             <p>Руководитель УМЦ</p>
                         </div>
                     </li>
