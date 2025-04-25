@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $allCourses = Course::where('is_published', 1)->where('company_id', 1)->get();
+        $allCourses = Course::where('is_published', 1)->where('company_id', 1)->where('price', NULL)->get();
         $countCourses = $allCourses->count();
 
         if($countCourses >= 6){
