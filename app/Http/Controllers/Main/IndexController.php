@@ -13,8 +13,8 @@ class IndexController extends Controller
         $allCourses = Course::where('is_published', 1)->where('company_id', 1)->where('price', NULL)->get();
         $countCourses = $allCourses->count();
 
-        if($countCourses >= 6){
-            $randomCourses = Course::where('is_published', 1)->get()->random(3);
+        if($countCourses >= 3){
+            $randomCourses = Course::where('is_published', 1)->where('company_id', 1)->where('price', NULL)->get()->random(3);
         }else{
             $randomCourses = $allCourses;
         }
