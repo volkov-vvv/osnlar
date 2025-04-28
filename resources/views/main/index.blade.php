@@ -152,7 +152,7 @@
                 <img src="{{asset('assets/images/irpo-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="250">
                 <img src="{{asset('assets/images/ranx-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="500">
                 <img src="{{asset('assets/images/tgu-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="750">
-{{--                <img src="{{asset('assets/images/vnii-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="1000">--}}
+                <img src="{{asset('assets/images/vnii-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="1000">
                 <img src="{{asset('assets/images/rr-logo.png')}}" alt="client logo" data-aos="flip-right" data-aos-delay="1250">
             </div>
         </div>
@@ -210,7 +210,7 @@
                         <img src="{{ asset('assets/images/AI.png')}}" alt="avatar">
                         <div class="user-details">
                             <h6>Скуратов Александр</h6>
-                            <p>Директор</p>
+                            <p>Генеральный директор</p>
                         </div>
 
                     </li>
@@ -218,7 +218,7 @@
                         <img src="{{ asset('assets/images/SON.png')}}" alt="avatar">
                         <div class="user-details">
                             <h6>Давтян Соня</h6>
-                            <p>Методист</p>
+                            <p>Методист по юридической работе</p>
                         </div>
                     </li>
                     <li data-target="#edicaLandingTestimonialCarousel" data-slide-to="4">

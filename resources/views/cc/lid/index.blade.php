@@ -3,12 +3,12 @@
     <div id="alert-area"></div>
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
+            <div class="row mb-0">
+                <div class="col">
                     <h1>Заявки</h1>
                 </div>
-
             </div><!-- /.row -->
+
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
@@ -17,94 +17,93 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
-
-
             <div class="row">
                 <div class="col">
-                        <div class="card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="container-fluid">
+                                <div class="row pb-2">
+                                    <div class="col col-lg-1">
+                                        Год:
+                                        <select id="year" name="year" class="form-control form-control-sm">
+                                            <option value="2025">2025</option>
+                                            <option value="2024">2024</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row pb-4">
+                                    <div class="col-12 col-lg-1">
+                                        Дата:
+                                        <input id="date" type="date" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col col-lg-2">
+                                        Ответсвенный:
+                                        <select id="responsible" name="responsible"
+                                                class="form-control form-control-sm ">
+                                            <option></option>
+                                            @foreach($users as $user)
+                                                <option value="{{$user->name}}">{{$user->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-5">
+                                        Курс:
+                                        <select id="course" name="course" class="form-control form-control-sm select2">
+                                            <option></option>
+                                            @foreach($courses as $course)
+                                                <option
+                                                    value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        Регион:
+                                        <select id="region" name="region" class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($regions as $region)
+                                                <option value="{{$region->title}}">{{$region->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        Статус:
+                                        <select id="status" name="status" class="form-control form-control-sm ">
+                                            <option></option>
+                                            @foreach($statuses as $status)
+                                                <option value="{{$status->title}}">{{$status->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
-                            <div class="card-body">
-                                <table class="table table-striped mb-2">
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            Год:
-                                            <select id="year" name="year" class="form-control form-control-sm">
-                                                <option value="2025">2025</option>
-                                                <option value="2024">2024</option>
-                                            </select>
-                                        </td>
-                                        <td colspan="4"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Дата:
-                                            <input id="date" type="date">
-                                        </td>
-                                        <td>
-                                            Ответсвенный:
-                                            <select id="responsible" name="responsible">
-                                                <option></option>
-                                                @foreach($users as $user)
-                                                    <option value="{{$user->name}}">{{$user->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Курс:
-                                            <select id="course" name="course">
-                                                <option></option>
-                                                @foreach($courses as $course)
-                                                    <option value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Регион:
-                                            <select id="region" name="region">
-                                                <option></option>
-                                                @foreach($regions as $region)
-                                                    <option value="{{$region->title}}">{{$region->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Статус:
-                                            <select id="status" name="status">
-                                                <option></option>
-                                                @foreach($statuses as $status)
-                                                    <option value="{{$status->title}}">{{$status->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
 
-                                <table id="example2" class="table table-bordered table-striped hover">
-                                    <thead>
-                                    <tr>
-                                        <th>№</th>
-                                        <th>Ответственный</th>
-                                        <th>Агент</th>
-                                        <th>Курс</th>
-                                        <th>Регион</th>
-                                        <th>Фамилия</th>
-                                        <th>Имя</th>
-                                        <th>Email</th>
-                                        <th>Телефон</th>
-                                        <th>Статус</th>
-                                        <th>Реакция</th>
-                                        <th>Дата создания</th>
-                                        <th>Год</th>
-                                        <th>Действия</th>
-                                    </tr>
-                                    </thead>
-                                </table>
                             </div>
-                            <!-- /.card-body -->
+
+
+                            <table id="example2" class="table table-bordered table-striped hover">
+                                <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Ответственный</th>
+                                    <th>Агент</th>
+                                    <th>Курс</th>
+                                    <th>Регион</th>
+                                    <th>Фамилия</th>
+                                    <th>Имя</th>
+                                    <th>Email</th>
+                                    <th>Телефон</th>
+                                    <th>Статус</th>
+                                    <th>Реакция</th>
+                                    <th>Дата создания</th>
+                                    <th>Год</th>
+                                    <th>Действия</th>
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
-                        <!-- /.card-->
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card-->
                 </div>
             </div>
 
@@ -122,11 +121,11 @@
             "lengthChange": false,
             "autoWidth": false,
             "dom": 'Bfrtip',
-            "buttons": [{ extend: 'excel',
+            "buttons": [{
+                extend: 'excel',
                 text: 'Excel',
-                action: function (e, dt, node, config)
-                {
-                    var rowData = dt.rows({ filter: 'applied' }).data();
+                action: function (e, dt, node, config) {
+                    var rowData = dt.rows({filter: 'applied'}).data();
                     var rowKeys = Object.keys(rowData[0]);
                     var OrderData = dt.order();
                     var columnSortName = rowKeys[OrderData[0][0]];
@@ -146,11 +145,10 @@
                             filterRegion: $('#region').val(),
                             filterStatus: $('#status').val(),
                         },
-                        xhrFields:{
+                        xhrFields: {
                             responseType: 'blob'
                         },
-                        success: function(data)
-                        {
+                        success: function (data) {
                             var link = document.createElement('a');
                             link.href = window.URL.createObjectURL(data);
                             link.download = `Lids_report.xlsx`;
@@ -161,11 +159,11 @@
                 }
             }, "colvis"],
             order: [[0, 'desc']],
-            'columnDefs': [ {
-                'targets': [10,12], // column index (start from 0)
+            'columnDefs': [{
+                'targets': [10, 12], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             },
-                { targets: [2, 12], visible: false }
+                {targets: [2, 12], visible: false}
             ],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -186,28 +184,27 @@
             serverSide: true,
             ajax: "{{route('cc.lid.getLids')}}",
             columns: [
-                { data: 'id' },
-                { data: 'responsible' },
-                { data: 'agent' },
-                { data: 'course' },
-                { data: 'region' },
-                { data: 'lastname' },
-                { data: 'firstname' },
-                { data: 'email' },
-                { data: 'phone' },
-                { data: 'status' },
-                { data: 'interval' },
-                { data: 'created_at' },
-                { data: 'year' },
-                { data: 'actions' },
+                {data: 'id'},
+                {data: 'responsible'},
+                {data: 'agent'},
+                {data: 'course'},
+                {data: 'region'},
+                {data: 'lastname'},
+                {data: 'firstname'},
+                {data: 'email'},
+                {data: 'phone'},
+                {data: 'status'},
+                {data: 'interval'},
+                {data: 'created_at'},
+                {data: 'year'},
+                {data: 'actions'},
             ]
         });
 
         table.buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
 
 
-
-        $('#responsible').on('change', function (e){
+        $('#responsible').on('change', function (e) {
 
             table
                 .column(1)
@@ -215,7 +212,7 @@
                 .draw();
         })
 
-        $('#course').on('change', function (e){
+        $('#course').on('change', function (e) {
 
             table
                 .column(3)
@@ -223,7 +220,7 @@
                 .draw();
         })
 
-        $('#region').on('change', function (e){
+        $('#region').on('change', function (e) {
 
             table
                 .column(4)
@@ -231,7 +228,7 @@
                 .draw();
         })
 
-        $('#status').on('change', function (e){
+        $('#status').on('change', function (e) {
 
             table
                 .column(9)
@@ -239,7 +236,7 @@
                 .draw();
         })
 
-        $('#date').on('change', function (e){
+        $('#date').on('change', function (e) {
 
             table
                 .column(11)
@@ -247,7 +244,7 @@
                 .draw();
         })
 
-        $('#year').on('change', function (e){
+        $('#year').on('change', function (e) {
 
             table
                 .column(12)
