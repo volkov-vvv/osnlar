@@ -131,6 +131,27 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+
+
+                                <div class="card-body">
+                                    <table id="dashboard_table_ajax" class="table table-bordered table-striped hover">
+                                        <thead>
+                                        <tr>
+                                            <th>ФИО</th>
+                                            <th>Кол-во обработанных заявок</th>
+                                            <th>% обработанных заявок</th>
+                                            <th>Среднее время реакции</th>
+                                            <th>Обучение</th>
+                                            <th>Ждем на РР</th>
+                                            <th>Недозвон</th>
+                                            <th>Отказ</th>
+
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
                                 <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
@@ -175,6 +196,46 @@
                     search: 'Поиск'
                 },
             }
+        }).buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
+
+
+        $("#dashboard_table_ajax").DataTable({
+            order: [[2, 'desc']],
+            pageLength: 20,
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            //"buttons": ["excel", "pdf", "colvis"],
+            // "language": {
+            //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
+            // },
+            "language": {
+                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                paginate: {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                search: "Поиск:",
+                buttons: {
+                    colvis: 'Выбрать колонки',
+                    search: 'Поиск'
+                },
+            },
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('admin.dashboard.getDashboard')}}",
+            columns: [
+                { data: 'fio' },
+                { data: 'count' },
+                { data: 'percent' },
+                { data: 'average_time' },
+                { data: 'status_learning' },
+                { data: 'status_pp' },
+                { data: 'status_non_call' },
+                { data: 'status_rejection' },
+            ]
         }).buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
     </script>
 @endsection

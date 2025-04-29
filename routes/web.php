@@ -144,6 +144,8 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['aut
     Route::get('/lid/getLids',[App\Http\Controllers\Admin\LidController::class, 'getLids'])->name('admin.lid.getLids');
     Route::get('/lid/getLidsExcel',[App\Http\Controllers\Admin\LidController::class, 'getLidsExcel'])->name('admin.lid.getLidsExcel');
 
+    Route::get('/admin/getDashboard',[App\Http\Controllers\Admin\DashboardController::class, 'getDashboard'])->name('admin.dashboard.getDashboard');
+
     Route::get('/commerciallid/getLids',[App\Http\Controllers\Admin\CommercialLidController::class, 'getLids'])->name('admin.commerciallid.getLids');
 
     Route::group(['as' => 'admin.'], function() {
