@@ -144,6 +144,7 @@
                             filterCourse: $('#course').val(),
                             filterRegion: $('#region').val(),
                             filterStatus: $('#status').val(),
+                            filterYear: $('#year').val(),
                         },
                         xhrFields: {
                             responseType: 'blob'

@@ -300,6 +300,7 @@ class LidController extends Controller
         $param['course'] = $request->get('filterCourse');
         $param['region'] = $request->get('filterRegion');
         $param['status'] = $request->get('filterStatus');
+        $param['year'] = $request->get('filterYear');
 
         return (new LidsExport)
             ->Params($param)
