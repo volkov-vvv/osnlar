@@ -174,8 +174,8 @@
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
                 paginate: {
                     "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
+                    "previous": "<<",
+                    "next": ">>",
                     "last": "Последняя"
                 },
                 search: "Поиск:",
