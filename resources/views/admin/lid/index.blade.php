@@ -42,71 +42,70 @@
                 <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <table class="table">
-                                    <tbody>
-                                    <tr class="active">
-                                        <td>
-                                            Компания:
-                                            <select id="company" name="company" class="form-control form-control-sm">
-                                                <option></option>
-                                                @foreach($companies as $company)
-                                                    <option value="{{$company->title}}">{{$company->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Год:
-                                            <select id="year" name="year" class="form-control form-control-sm">
-                                                <option value="2025">2025</option>
-                                                <option value="2024">2024</option>
-                                            </select>
-                                        </td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr class="active">
-                                        <td>
-                                            Дата:<br>
-                                            <input id="date" type="date" class="form-control form-control-sm">
-                                        </td>
-                                        <td>
-                                            Ответсвенный:<br>
-                                            <select id="responsible" name="responsible" class="form-control form-control-sm">
-                                                <option></option>
-                                                @foreach($users as $user)
-                                                    <option value="{{$user->name}}">{{$user->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Курс:<br>
-                                            <select id="course" name="course" class="form-control form-control-sm">
-                                                <option></option>
-                                                @foreach($courses as $course)
-                                                    <option value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Регион:<br>
-                                            <select id="region" name="region" class="form-control form-control-sm">
-                                                <option></option>
-                                                @foreach($regions as $region)
-                                                    <option value="{{$region->title}}">{{$region->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Статус:<br>
-                                            <select id="status" name="status" class="form-control form-control-sm">
-                                                <option></option>
-                                                @foreach($statuses as $status)
-                                                    <option value="{{$status->title}}">{{$status->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="row pb-2">
+                                    <div class="col col-lg-2">
+                                        Компания:
+                                        <select id="company" name="company" class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($companies as $company)
+                                                <option value="{{$company->title}}">{{$company->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col col-lg-1">
+                                        Год:
+                                        <select id="year" name="year" class="form-control form-control-sm">
+                                            <option value="2025">2025</option>
+                                            <option value="2024">2024</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row pb-4">
+                                    <div class="col-12 col-lg-1">
+                                        Дата:
+                                        <input id="date" type="date" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col col-lg-2">
+                                        Ответсвенный:
+                                        <select id="responsible" name="responsible"
+                                                class="form-control form-control-sm ">
+                                            <option></option>
+                                            @foreach($users as $user)
+                                                <option value="{{$user->name}}">{{$user->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-5">
+                                        Курс:
+                                        <select id="course" name="course" class="form-control form-control-sm select2">
+                                            <option></option>
+                                            @foreach($courses as $course)
+                                                <option
+                                                    value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        Регион:
+                                        <select id="region" name="region" class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($regions as $region)
+                                                <option value="{{$region->title}}">{{$region->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        Статус:
+                                        <select id="status" name="status" class="form-control form-control-sm ">
+                                            <option></option>
+                                            @foreach($statuses as $status)
+                                                <option value="{{$status->title}}">{{$status->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+
 
 
                                 <table id="example2" class="table table-bordered table-striped hover">

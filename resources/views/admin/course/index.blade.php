@@ -26,23 +26,36 @@
                 <div class="col">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0">
+                        <div class="card-body">
+                            <div class="row pb-2">
+                                <div class="col col-lg-2">
+                                    Компания:
+                                    <select id="company" name="company" class="form-control form-control-sm">
+                                        <option></option>
+                                        @foreach($companies as $company)
+                                            <option value="{{$company->title}}">{{$company->title}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col col-lg-1">
+                                    Год:
+                                    <select id="year" name="year" class="form-control form-control-sm">
+                                        <option></option>
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                            <table class="table table-striped mb-2">
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        Компания:
-                                        <select id="company" name="company">
-                                            <option></option>
-                                            @foreach($companies as $company)
-                                                <option value="{{$company->title}}">{{$company->title}}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+
+{{--                                        Компания:--}}
+{{--                                        <select id="company" name="company">--}}
+{{--                                            <option></option>--}}
+{{--                                            @foreach($companies as $company)--}}
+{{--                                                <option value="{{$company->title}}">{{$company->title}}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+
 
                             <table id="course_table" class="table table-bordered table-striped hover">
                                 <thead>
@@ -104,6 +117,7 @@
     $(document).ready(function() {
         var table = new DataTable('#course_table', {
             order: [[0, 'desc']],
+            paging: false,
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
@@ -112,8 +126,8 @@
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
                 paginate: {
                     "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
+                    "previous": "<<",
+                    "next": ">>",
                     "last": "Последняя"
                 },
                 search: "Поиск:",
@@ -132,6 +146,15 @@
     .column(3)
     .search(this.value, {exact: true})
     .draw();
+    })
+
+
+    $('#year').on('change', function (e){
+
+        table
+            .column(2)
+            .search(this.value, {exact: true})
+            .draw();
     })
     });
     </script>
