@@ -100,41 +100,16 @@
                         <div class="col">
                             <div class="card">
                                 <!-- /.card-header -->
-                                <div class="card-body">
-                                    <table id="dashboard_table" class="table table-bordered table-striped hover">
-                                        <thead>
-                                        <tr>
-                                            <th>ФИО</th>
-                                            <th>Кол-во обработанных заявок</th>
-                                            <th>% обработанных заявок</th>
-                                            <th>Среднее время реакции</th>
-                                            <th>Обучение</th>
-                                            <th>Ждем на РР</th>
-                                            <th>Недозвон</th>
-                                            <th>Отказ</th>
 
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($users as $user)
-                                            <tr>
-                                                <td>{{$user->name}}</td>
-                                                <td>{{$user->getActiveLids()['count']}}</td>
-                                                <td><span class="badge bg-danger">{{$user->getActiveLids()['persent']}}</span></td>
-                                                <td>{{$user->averageTime()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 4)->count()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 6)->count()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 2)->count()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 9)->count()}}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
 
 
 
                                 <div class="card-body">
+                                    Год:
+                                    <select id="year" name="year" class="form-control form-control-sm">
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                    </select>
                                     <table id="dashboard_table_ajax" class="table table-bordered table-striped hover">
                                         <thead>
                                         <tr>
@@ -146,7 +121,7 @@
                                             <th>Ждем на РР</th>
                                             <th>Недозвон</th>
                                             <th>Отказ</th>
-
+                                            <th>Год</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -199,7 +174,7 @@
         }).buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
 
 
-        $("#dashboard_table_ajax").DataTable({
+        var table = new DataTable('#dashboard_table_ajax', {
             order: [[2, 'desc']],
             pageLength: 20,
             "responsive": true,
@@ -235,7 +210,18 @@
                 { data: 'status_pp' },
                 { data: 'status_non_call' },
                 { data: 'status_rejection' },
+                { data: 'year' },
             ]
-        }).buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
+        });
+
+        table.buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
+
+        $('#year').on('change', function (e){
+
+            table
+                .column(8)
+                .search(this.value, {exact: true})
+                .draw();
+        })
     </script>
 @endsection

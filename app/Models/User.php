@@ -45,7 +45,7 @@ class User extends Authenticatable
         return $this->hasMany(Lid::class, 'responsible_id', 'id');
     }
 
-    public function  getActiveLids()
+    public function  getActiveLids($courseYear)
     {
         $queryArray = array(
             'activity_log.causer_id',
@@ -56,11 +56,17 @@ class User extends Authenticatable
         );
         $query = Activity::select($queryArray)
             ->leftjoin('lids', 'activity_log.subject_id', '=', 'lids.id')
+            ->leftjoin('courses', 'lids.course_id', '=', 'courses.id')
             ->where('lids.responsible_id', $this->id)
+            ->where('courses.years', $courseYear)
             ->whereNull('lids.deleted_at');
 
         $activeLidsCount = $query->get()->unique('subject_id')->count();
-        $lidsCount = Lid::whereNull('lids.deleted_at')->count();
+        $lidsCount = Lid::select('lids.id')
+            ->leftjoin('courses', 'lids.course_id', '=', 'courses.id')
+            ->where('courses.years', $courseYear)
+            ->whereNull('lids.deleted_at')->count();
+
 
         $ActiveLidsPersent = round($activeLidsCount / $lidsCount * 100, 2);
 
