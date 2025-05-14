@@ -21,6 +21,7 @@ class StoreNewController extends Controller
     public function __invoke(StoreNewRequest $request)
     {
         $data = $request->validated();
+        $course_link = '';
         $mail_template = 'mails.lid_year';
         $course = Course::all()->where('id', $request->course_id)->first();
         if($course->open_registration == 1){
@@ -28,13 +29,10 @@ class StoreNewController extends Controller
             // Определение, доступен ли курс в регионе.
             $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
             if($links){
-                $data['link'] = $links->link;
+                $course_link = $links->link;
             }else{
-                $data['link'] = '';
-
                     $status = Status::all()->where('code', 'not-in-region')->first();
                     $data['status_id'] =  $status->id;
-
             }
         }else{
             // Всем остальным заявкам присваиваем статус 'На 2025 год'
@@ -44,6 +42,7 @@ class StoreNewController extends Controller
 
         $lid = Lid::firstOrCreate($data);
         $data['id'] = $lid->id;
+        $data['link'] = $course_link;
         $mailData = collect($data);
         $mailData->subject = 'Ваша заявка на обучение принята';
         $mailData->template = $mail_template;
