@@ -90,6 +90,11 @@
     box-shadow: none;
     text-decoration: none;
 }
+
+.filter-year{
+    width: 80px;
+}
+
 @media (min-width: 992px) {
     .button-login{
         text-align: center;

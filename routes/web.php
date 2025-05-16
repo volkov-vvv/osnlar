@@ -205,6 +205,8 @@ Route::group(['namespace' => 'CC', 'prefix' => 'cc', 'middleware' => ['auth', 'c
     Route::group(['as' => 'cc.'], function() {
         Route::resource('link', LinkController::class);
     });
+
+    Route::get('/cc/getDashboard',[App\Http\Controllers\Admin\DashboardController::class, 'getDashboard'])->name('cc.dashboard.getDashboard');
 });
 
 Route::group(['namespace' => 'Agent', 'prefix' => 'agent', 'middleware' => ['auth', 'agent']],function (){

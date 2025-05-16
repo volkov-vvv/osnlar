@@ -64,15 +64,23 @@
 
             <div class="row mb-3">
                 <div class="col">
-
                     <p>Сколько сотрудников КЦ = {{$data['usersKcCount']}}</p>
 
                     <div class="row">
                         <div class="col">
                             <div class="card">
                                 <!-- /.card-header -->
+
+
+
+
                                 <div class="card-body">
-                                    <table id="dashboard_table" class="table table-bordered table-striped hover">
+                                    Год:
+                                    <select id="year" name="year" class="form-control form-control-sm filter-year">
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                    </select>
+                                    <table id="dashboard_table_ajax" class="table table-bordered table-striped hover">
                                         <thead>
                                         <tr>
                                             <th>ФИО</th>
@@ -83,25 +91,12 @@
                                             <th>Ждем на РР</th>
                                             <th>Недозвон</th>
                                             <th>Отказ</th>
-
+                                            <th>Год</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        @foreach($users as $user)
-                                            <tr>
-                                                <td>{{$user->name}}</td>
-                                                <td>{{$user->getActiveLids()['count']}}</td>
-                                                <td><span class="badge bg-danger">{{$user->getActiveLids()['persent']}}</span></td>
-                                                <td>{{$user->averageTime()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 4)->count()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 6)->count()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 2)->count()}}</td>
-                                                <td>{{$user->getLids->where('status_id', 9)->count()}}</td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
+
                                 <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
@@ -122,13 +117,22 @@
 
 @section('javascript')
     <script>
-        $("#dashboard_table").DataTable({
+
+        var table = new DataTable('#dashboard_table_ajax', {
             order: [[2, 'desc']],
+            'columnDefs': [ {
+                'targets': [3], // column index (start from 0)
+                'orderable': false, // set orderable false for selected columns
+            },
+                { targets: [8], visible: false }
+            ],
             pageLength: 20,
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-            "buttons": ["excel", "pdf", "colvis"],
+            sDom: 'lrtip',
+//            searching: false,
+            //"buttons": ["excel", "pdf", "colvis"],
             // "language": {
             //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
             // },
@@ -145,7 +149,31 @@
                     colvis: 'Выбрать колонки',
                     search: 'Поиск'
                 },
-            }
-        }).buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
+            },
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('cc.dashboard.getDashboard')}}",
+            columns: [
+                { data: 'fio' },
+                { data: 'count' },
+                { data: 'percent' },
+                { data: 'average_time' },
+                { data: 'status_learning' },
+                { data: 'status_pp' },
+                { data: 'status_non_call' },
+                { data: 'status_rejection' },
+                { data: 'year' },
+            ]
+        });
+
+        table.buttons().container().appendTo('#dashboard_table_wrapper .col-md-6:eq(0)');
+
+        $('#year').on('change', function (e){
+
+            table
+                .column(8)
+                .search(this.value, {exact: true})
+                .draw();
+        })
     </script>
 @endsection

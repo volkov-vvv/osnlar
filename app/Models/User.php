@@ -40,9 +40,23 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-        public function getLids()
+    public function getLids()
     {
         return $this->hasMany(Lid::class, 'responsible_id', 'id');
+    }
+
+    public function getLids2($courseYear)
+    {
+        $queryArray = array(
+            'lids.id',
+            'lids.status_id',
+        );
+        $query = Lid::select($queryArray)
+            ->leftjoin('courses', 'lids.course_id', '=', 'courses.id')
+            ->where('lids.responsible_id', $this->id)
+            ->where('courses.years', $courseYear)
+            ->whereNull('lids.deleted_at');
+        return $query->get();
     }
 
     public function  getActiveLids($courseYear)
@@ -62,20 +76,11 @@ class User extends Authenticatable
             ->whereNull('lids.deleted_at');
 
         $activeLidsCount = $query->get()->unique('subject_id')->count();
-        $lidsCount = Lid::select('lids.id')
-            ->leftjoin('courses', 'lids.course_id', '=', 'courses.id')
-            ->where('courses.years', $courseYear)
-            ->whereNull('lids.deleted_at')->count();
 
-
-        $ActiveLidsPersent = round($activeLidsCount / $lidsCount * 100, 2);
-
-        $ActiveLids = collect(['count' => $activeLidsCount, 'persent' => $ActiveLidsPersent]);
-
-        return $ActiveLids;
+        return $activeLidsCount;
     }
 
-    public function averageTime()
+    public function averageTime($courseYear)
     {
         $queryArray = array(
             'lids.created_at AS lid_create',
@@ -84,8 +89,10 @@ class User extends Authenticatable
         );
         $query = Activity::select($queryArray)
             ->leftjoin('lids', 'activity_log.subject_id', '=', 'lids.id')
+            ->leftjoin('courses', 'lids.course_id', '=', 'courses.id')
             ->where('lids.responsible_id', $this->id)
             ->where('activity_log.description', 'Изменение статуса')
+            ->where('courses.years', $courseYear)
             ->whereNull('lids.deleted_at')
             ->orderBy('activity_log.created_at');
         $activities = $query->get()->unique('subject_id');
