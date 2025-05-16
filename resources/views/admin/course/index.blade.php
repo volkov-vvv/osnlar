@@ -50,8 +50,8 @@
                                     Публикация:
                                     <select id="is_published" name="is_published" class="form-control form-control-sm">
                                         <option></option>
-                                        <option value="0">Архив</option>
-                                        <option value="1">Опубликован</option>
+                                        <option value="Архив">Архив</option>
+                                        <option value="Опубликован">Опубликован</option>
                                     </select>
                                 </div>
 
@@ -176,7 +176,7 @@
                 $('#is_published').on('change', function (e) {
 
                     table
-                        .column(5)
+                        .column(4)
                         .search(this.value, {exact: true})
                         .draw();
                 })
