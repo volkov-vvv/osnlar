@@ -43,6 +43,8 @@ Route::group(['namespace' => 'Services', 'prefix' => 'services', 'middleware' =>
 
 Route::get('/video',function () {return view('pages.video');});
 
+Route::get('/guide',function () {return response()->file('files/2_Документация,_содержащая_описание_функциональных_характеристик.pdf');});
+
 Route::get('/sitemap.xml', 'SitemapController@index');
 
 Auth::routes();
