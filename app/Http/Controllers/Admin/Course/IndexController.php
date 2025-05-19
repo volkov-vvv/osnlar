@@ -13,6 +13,7 @@ class IndexController extends BaseController
     {
         $courses = Course::all();
         $companies = Company::all();
+
         return view('admin.course.index', compact('courses', 'companies'));
     }
 }

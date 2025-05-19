@@ -54,6 +54,14 @@
                                         <option value="Опубликован">Опубликован</option>
                                     </select>
                                 </div>
+                                <div class="col col-lg-2">
+                                    Тип:
+                                    <select id="course_type" name="course_type" class="form-control form-control-sm">
+                                        <option></option>
+                                        <option value="1">Платный</option>
+                                        <option value="0">Бесплатный</option>
+                                    </select>
+                                </div>
 
                             </div>
 
@@ -66,6 +74,7 @@
                                         <th>Год</th>
                                         <th>Компания</th>
                                         <th>Публикация</th>
+                                        <th>Платный</th>
                                         <th>Дата создания</th>
                                         <th>Действия</th>
                                     </tr>
@@ -85,6 +94,9 @@
                                             </td>
                                             <td>
                                                 {{$course->is_published == 1 ? 'Опубликован' : 'Архив' }}
+                                            </td>
+                                            <td>
+                                                {{isset($course->price) ? '1' : '0' }}
                                             </td>
                                             <td>{{$course->created_at}}</td>
                                             <td>
@@ -131,6 +143,7 @@
                         { data: 'years' },
                         { data: 'company' },
                         { data: 'is_publshed' },
+                        { data: 'course_type' },
                         { data: 'created_at' },
                         { data: 'actions' },
                     ],
@@ -138,6 +151,9 @@
                     "lengthChange": false,
                     "autoWidth": false,
                     "buttons": ["excel", "pdf", "colvis"],
+                    'columnDefs': [
+                        { targets: [5], visible: false }
+                    ],
                     "language": {
                         info: "Записи с _START_ до _END_ из _TOTAL_ записей",
                         paginate: {
@@ -178,6 +194,14 @@
                     table
                         .column(4)
                         .search(this.value, {exact: true})
+                        .draw();
+                })
+
+                $('#course_type').on('change', function (e) {
+
+                    table
+                        .column(5)
+                        .search(this.value, {exact: true, })
                         .draw();
                 })
 
