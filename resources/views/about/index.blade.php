@@ -57,7 +57,7 @@
                 <a class="nav-link mb-3 p-3 shadow" id="v-pills-global-tab" data-toggle="pill" href="#v-pills-global"
                    role="tab" aria-controls="v-pills-inet" aria-selected="false">
                     <i class="fa-solid fa-globe mr-2"></i>
-                    <span class="font-weight-bold small text-uppercase">Международной сотрудничество</span></a>
+                    <span class="font-weight-bold small text-uppercase">Международное сотрудничество</span></a>
                 <a class="nav-link mb-3 p-3 shadow" id="v-pills-financial-tab" data-toggle="pill" href="#v-pills-financial"
                    role="tab" aria-controls="v-pills-inet" aria-selected="false">
                     <i class="fa-solid fa-coins mr-2"></i>
@@ -177,7 +177,7 @@
 
                     <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-global" role="tabpanel"
                          aria-labelledby="v-pills-vak-global">
-                        <h4 class="font-italic mb-4">Международной сотрудничество</h4>
+                        <h4 class="font-italic mb-4">Международное сотрудничество</h4>
                         <p class="font-italic text-muted mb-2">
                             {!! $about->about_global !!}
                         </p>
