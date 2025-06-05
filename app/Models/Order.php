@@ -33,4 +33,9 @@ class Order extends Model
     {
         return$this->belongsTo(User::class, 'customer_id', 'id' );
     }
+
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class);
+    }
 }

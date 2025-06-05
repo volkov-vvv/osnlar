@@ -64,7 +64,9 @@ class OrderController extends Controller
                 'region_id' => $data['region_id'],
                 'amount' => $course->price,
                 'status_id' => $status->id,
+                'agent_id' => $data['agent_id'],
             );
+
             $order = Order::firstOrCreate($orderData);
         }else{
             dd('Вы уже оформили заявку на этот курс'); //Временно
