@@ -31,6 +31,13 @@ class UpdateRequest extends FormRequest
             'about_it' => '',
             'about_services' => '',
             'about_tech' => '',
+            'about_admissions' => '',
+            'about_catering' => '',
+            'about_global' => '',
+            'about_financial' => '',
+            'about_tuition' => '',
+            'about_education' => '',
+            'about_grants' => '',
         ];
     }
 }
