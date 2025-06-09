@@ -89,8 +89,24 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+
+                    <div class="form-group">
+                        <label>Ваш персональный агент</label>
+                        <div class="form-group">
+                            <select name="agent_id" class="form-control select2">
+                                @foreach($agents as $agent)
+                                    <option value="{{$agent->id}}"
+                                        {{ $agent->id == old('agent_id') ? ' selected' : '' }}
+                                    >{{$agent->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
+
 
             <div class="row mt-1">
                 <div class="col">

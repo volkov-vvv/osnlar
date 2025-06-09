@@ -33,6 +33,7 @@ class StoreRequest extends FormRequest
             'politic' => 'required',
             'course_id' => 'required|numeric',
             'region_id' => 'numeric|nullable',
+            'agent_id' => 'string',
         ];
     }
 }

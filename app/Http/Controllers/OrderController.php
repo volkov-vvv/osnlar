@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendEmail;
+use App\Models\Agent;
 use App\Models\Course;
 use App\Http\Requests\Common\Order\StoreRequest;
 use App\Models\Order;
@@ -19,7 +20,8 @@ class OrderController extends Controller
     {
         $pageDescription = 'Заказ на обучение';
         $regions = Region::all();
-        return view('order.create', compact('pageDescription', 'course', 'regions'));
+        $agents = Agent::where('active', 1)->get();
+        return view('order.create', compact('pageDescription', 'course', 'regions', 'agents'));
     }
 
     public function store(StoreRequest $request)
@@ -62,7 +64,9 @@ class OrderController extends Controller
                 'region_id' => $data['region_id'],
                 'amount' => $course->price,
                 'status_id' => $status->id,
+                'agent_id' => $data['agent_id'],
             );
+
             $order = Order::firstOrCreate($orderData);
         }else{
             dd('Вы уже оформили заявку на этот курс'); //Временно

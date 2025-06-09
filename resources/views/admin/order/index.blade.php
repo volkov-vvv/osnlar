@@ -37,6 +37,7 @@
                                     <th>Регион</th>
                                     <th>Email</th>
                                     <th>Телефон</th>
+                                    <th>Агент</th>
                                     <th>Сумма</th>
                                     <th>Статус</th>
                                     <th>Дата создания</th>
@@ -58,6 +59,11 @@
                                         <td>
                                             @if(isset($order->user->phone))
                                                 8{{$order->user->phone}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(isset($order->agent))
+                                                {{$order->agent->title}}
                                             @endif
                                         </td>
                                         <td>{{$order->amount}}</td>
