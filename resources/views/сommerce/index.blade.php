@@ -21,7 +21,7 @@
                             <p class="blog-post-category"></p>
                             <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                 <h6 class="blog-post-title">{{$course->title}}</h6>
-                                <p class="price">6250 р. в месяц <br>или единоразово {{number_format($course->price, 0, ',', ' ')}} руб.</p>
+                                <p class="price">Единоразово {{number_format($course->price, 0, ',', ' ')}} руб. или в рассрочу</p>
                             </a>
                         </div>
                     @endforeach
