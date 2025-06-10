@@ -28,7 +28,7 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="link_table" class="table table-bordered table-striped hover">
+                            <table id="order_table" class="table table-bordered table-striped hover">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -41,6 +41,9 @@
                                     <th>Сумма</th>
                                     <th>Статус</th>
                                     <th>Дата создания</th>
+                                    <th>utm_source</th>
+                                    <th>utm_medium</th>
+                                    <th>utm_campaign</th>
                                     <th>Действия</th>
                                 </tr>
                                 </thead>
@@ -69,6 +72,21 @@
                                         <td>{{$order->amount}}</td>
                                         <td>{{$order->status->title}}</td>
                                         <td>{{$order->created_at}}</td>
+                                        <td>
+                                            @if(isset($order->utm_source))
+                                                {{$order->utm_source}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(isset($order->utm_source))
+                                                {{$order->utm_medium}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(isset($order->utm_source))
+                                                {{$order->utm_campaign}}
+                                            @endif
+                                        </td>
                                         <td>
                                             <a  href="{{route('admin.order.edit', $order->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
                                         </td>

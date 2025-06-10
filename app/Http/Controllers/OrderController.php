@@ -10,18 +10,44 @@ use App\Models\Order;
 use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
 class OrderController extends Controller
 {
-    public function create(Course $course)
+    public function create(Request $request, Course $course)
     {
         $pageDescription = 'Заказ на обучение';
         $regions = Region::all();
         $agents = Agent::where('active', 1)->get();
-        return view('order.create', compact('pageDescription', 'course', 'regions', 'agents'));
+
+        $cookies = $request->cookie();
+        $utm = ['utm_source' => '', 'utm_medium' => '', 'utm_campaign' =>''];
+
+        if(isset($_GET['utm_source'])){
+            $utm['utm_source'] = $_GET['utm_source'];
+        }
+        elseif(isset($cookies['utm_source'])){
+            $utm['utm_source'] = $cookies['utm_source'];
+        }
+
+        if(isset($_GET['utm_medium'])){
+            $utm['utm_medium'] = $_GET['utm_medium'];
+        }
+        elseif(isset($cookies['utm_medium'])){
+            $utm['utm_medium'] = $cookies['utm_medium'];
+        }
+
+        if(isset($_GET['utm_campaign'])){
+            $utm['utm_campaign'] = $_GET['utm_campaign'];
+        }
+        elseif(isset($cookies['utm_campaign'])){
+            $utm['utm_campaign'] = $cookies['utm_campaign'];
+        }
+
+        return view('order.create', compact('pageDescription', 'course', 'regions', 'agents', 'utm'));
     }
 
     public function store(StoreRequest $request)
@@ -57,6 +83,7 @@ class OrderController extends Controller
         //Проверяем наличие заказа и создаем, если его нет
         $order = Order::all()->where('customer_id', $customer->id)->where('course_id', $course->id)->last();
         if(!$order){
+
             $status = Status::where('code', 'waiting-payment')->first();
             $orderData = array(
                 'customer_id' => $customer->id,
@@ -65,6 +92,9 @@ class OrderController extends Controller
                 'amount' => $course->price,
                 'status_id' => $status->id,
                 'agent_id' => $data['agent_id'],
+                'utm_source' => $data['utm_source'],
+                'utm_medium' => $data['utm_medium'],
+                'utm_campaign' => $data['utm_campaign'],
             );
 
             $order = Order::firstOrCreate($orderData);

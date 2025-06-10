@@ -120,6 +120,9 @@
                 </div>
             </div>
             <input type="hidden" name="course_id" value="{{$course->id}}">
+            <input type="hidden" name="utm_source" value="{{$utm['utm_source']}}">
+            <input type="hidden" name="utm_medium" value="{{$utm['utm_medium']}}">
+            <input type="hidden" name="utm_campaign" value="{{$utm['utm_campaign']}}">
             <button type="submit" class="btn btn-primary">Отправить</button>
             <a class="btn btn-outline-secondary" href="{{route('main.index')}}">Назад</a>
         </form>

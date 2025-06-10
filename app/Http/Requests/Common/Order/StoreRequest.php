@@ -34,6 +34,11 @@ class StoreRequest extends FormRequest
             'course_id' => 'required|numeric',
             'region_id' => 'numeric|nullable',
             'agent_id' => 'string',
+            'utm_source' => '',
+            'utm_medium' => '',
+            'utm_campaign' => '',
+            'utm_term' => '',
+            'utm_content' => '',
         ];
     }
 }
