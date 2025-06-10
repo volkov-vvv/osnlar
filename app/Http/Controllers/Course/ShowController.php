@@ -11,21 +11,26 @@ class ShowController extends Controller
 {
     public function __invoke(Course $course)
     {
-        $authors = Author::all();
+        if($course->is_published != 0){
+            $authors = Author::all();
 
-        // SEO
-        if(isset($course->seo_title)){
-            $pageTitle = $course->seo_title;
+            // SEO
+            if(isset($course->seo_title)){
+                $pageTitle = $course->seo_title;
+            }else{
+                $pageTitle = $course->title;
+            }
+
+            if(isset($course->seo_description)){
+                $pageDescription = $course->seo_description;
+            }else{
+                $pageDescription = 'Бесплатное обучение по программе "' . $course->title . '"';
+            }
+
+            return view('course.show',compact('course','authors', 'pageTitle', 'pageDescription'));
         }else{
-            $pageTitle = $course->title;
+            return abort(404);
         }
 
-        if(isset($course->seo_description)){
-            $pageDescription = $course->seo_description;
-        }else{
-            $pageDescription = 'Бесплатное обучение по программе "' . $course->title . '"';
-        }
-
-        return view('course.show',compact('course','authors', 'pageTitle', 'pageDescription'));
     }
 }
