@@ -10,20 +10,27 @@
             </div>
             <section class="featured-posts-section">
                 <div class="row">
-                    @foreach($courses as $course)
-                        <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
-                            <div class="blog-post-thumbnail-wrapper">
-                                <a href="{{route('course.show', $course->id)}}">
-                                    <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
+
+                    @if(!empty($courses))
+                        @foreach($courses as $course)
+                            <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
+                                <div class="blog-post-thumbnail-wrapper">
+                                    <a href="{{route('course.show', $course->id)}}">
+                                        <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
+                                    </a>
+                                </div>
+                                <p class="blog-post-category"></p>
+                                <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
+                                    <h6 class="blog-post-title">{{$course->title}}</h6>
                                 </a>
                             </div>
-                            <p class="blog-post-category"></p>
-                            <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
-                                <h6 class="blog-post-title">{{$course->title}}</h6>
-                                <p class="price">Единоразово {{number_format($course->price, 0, ',', ' ')}} руб. или в рассрочу</p>
-                            </a>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @else
+                        <p>Здесь пока ничего нет</p>
+                        <br><br><br>
+                    @endif
+
+
                 </div>
             </section>
 
