@@ -23,6 +23,7 @@
                         Курсы
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{route('future.index')}}">Код будущего</a></li>
                         <li><a class="dropdown-item" href="{{route('course.index')}}">Бесплатные курсы</a></li>
                         <li><a class="dropdown-item" href="{{route('commerce.index')}}">Платные курсы</a></li>
                         <li><a class="dropdown-item" href="{{route('archive.index')}}">Архив</a></li>

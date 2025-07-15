@@ -33,6 +33,10 @@ Route::group(['namespace' => 'Archive', 'prefix' => 'archive', 'middleware' => [
     Route::get('/{archive}', 'ShowController')->name('archive.show');
 });
 
+Route::group(['namespace' => 'Future', 'prefix' => 'future', 'middleware' => ['cookie']],function (){
+    Route::get('/',[App\Http\Controllers\Course\IndexController::class, 'future'])->name('future.index');
+});
+
 Route::group(['namespace' => 'About', 'prefix' => 'about', 'middleware' => ['cookie']],function (){
     Route::get('/', 'IndexController')->name('about.index');
 });

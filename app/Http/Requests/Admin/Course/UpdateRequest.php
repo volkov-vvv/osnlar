@@ -34,6 +34,7 @@ class UpdateRequest extends FormRequest
             'author_ids.*' => 'nullable|integer|exists:authors,id',
             'is_published' => 'nullable',
             'open_registration' => 'nullable',
+            'code_future' => 'nullable',
             'price' => 'nullable|numeric',
             'seo_title' => '',
             'seo_description' => '',

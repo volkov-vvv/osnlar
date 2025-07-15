@@ -166,6 +166,21 @@
                         </div>
                     </div>
 
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" name="code_future" value="0">
+                                <input name="code_future" type="checkbox" class="custom-control-input" id="customSwitch3" value="1"
+                                    {{ $course->code_future == 1 ? ' checked' : '' }}
+                                >
+                                <label class="custom-control-label" for="customSwitch3">Код будущего</label>
+                            </div>
+                            @error('code_future')
+                            <div class="text-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="mb-3 form-group">
                         <h5><b>Торговый каталог</b></h5>
                         <label>Стоимость обучения (руб.)</label>

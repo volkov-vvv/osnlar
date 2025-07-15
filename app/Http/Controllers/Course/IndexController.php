@@ -44,4 +44,17 @@ class IndexController extends Controller
         $pageDescription = "Платные курсы Учебного центра «Основание» по программам дополнительного профессионального образования в рамках реализации федерального проекта «Содействие занятости»";
         return view('сommerce.index',compact('courses', 'pageTitle', 'pageDescription'));
     }
+
+    //Код будущего
+    public function future()
+    {
+        $courses = Course::where('is_published', 1)->where('code_future', 1)->where(function ($query) {
+            $query->where('company_id', '=', 1)
+                ->orWhereNull('company_id');
+        })->get()->sortBy('order');
+        $pageTitle = "Код будущего";
+        $pageDescription = "Курсы Учебного центра «Основание» по программе «Код будущег»";
+        return view('future.index',compact('courses', 'pageTitle', 'pageDescription'));
+    }
+
 }
