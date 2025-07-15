@@ -14,19 +14,31 @@ class IndexController extends Controller
         $courses = Course::where('is_published', 1)->whereNull('price')->where(function ($query) {
             $query->where('company_id', '=', 1)
                 ->orWhereNull('company_id');
+        })->where(function ($query) {
+            $query->where('code_future', '!=', 1)
+                ->orWhereNull('code_future');
         })->get()->sortBy('order');
 
         $coursesS1 = Course::where('is_published', 1)->where('series', 1)->whereNull('price')->where(function ($query) {
             $query->where('company_id', '=', 1)
                 ->orWhereNull('company_id');
+        })->where(function ($query) {
+            $query->where('code_future', '!=', 1)
+                ->orWhereNull('code_future');
         })->get()->sortBy('order');
         $coursesS2 = Course::where('is_published', 1)->where('series', 2)->whereNull('price')->where(function ($query) {
             $query->where('company_id', '=', 1)
                 ->orWhereNull('company_id');
+        })->where(function ($query) {
+            $query->where('code_future', '!=', 1)
+                ->orWhereNull('code_future');
         })->get()->sortBy('order');
         $coursesS3 = Course::where('is_published', 1)->where('series', 3)->whereNull('price')->where(function ($query) {
             $query->where('company_id', '=', 1)
                 ->orWhereNull('company_id');
+        })->where(function ($query) {
+            $query->where('code_future', '!=', 1)
+                ->orWhereNull('code_future');
         })->get()->sortBy('order');
         $pageTitle = "Курсы";
         $pageDescription = "Бесплатные курсы Учебного центра «Основание» по программам дополнительного профессионального образования в рамках реализации федерального проекта «Содействие занятости»";
