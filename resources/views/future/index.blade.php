@@ -11,7 +11,7 @@
             <section class="featured-posts-section">
                 <div class="row">
 
-                    @if(!empty($courses))
+                    @if(count($courses) != 0)
                         @foreach($courses as $course)
                             <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
                                 <div class="blog-post-thumbnail-wrapper">
@@ -26,8 +26,12 @@
                             </div>
                         @endforeach
                     @else
-                        <p>Здесь пока ничего нет</p>
-                        <br><br><br>
+                        <div class="row p-5"  data-aos="fade-up">
+                            <div class="col">
+                                <p class="text-center">Здесь пока ничего нет</p>
+                                <br><br><br>
+                            </div>
+                        </div>
                     @endif
 
 
