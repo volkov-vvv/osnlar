@@ -6,6 +6,8 @@
             <div class="row p-5"  data-aos="fade-up">
                 <div class="col">
                     <h1 class="text-center">Код будущего</h1>
+                    <p class="text-center" style="color: grey; font-size: 20px">В рамках реализации федерального проекта «Кадры для цифровой трансформации» национального проекта «Экономика данных и цифровая трансформация государства».  <br> Для школьников 8–11 классов и обучающихся по программам среднего профессионального образования</p>
+
                 </div>
             </div>
             <section class="featured-posts-section">
