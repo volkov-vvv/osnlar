@@ -15,9 +15,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('services.index')}}">Услуги</a>
-                </li>
+{{--                <li class="nav-item">--}}
+{{--                    <a class="nav-link" href="{{route('services.index')}}">Услуги</a>--}}
+{{--                </li>--}}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Курсы
@@ -31,6 +31,12 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto p-3">
+                <li class="nav-item">
+                    <a class="btn btn-danger" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
                 </li>
             </ul>
 
