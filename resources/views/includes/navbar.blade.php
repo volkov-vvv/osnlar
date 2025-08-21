@@ -34,11 +34,7 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav ml-auto p-3">
-                <li class="nav-item">
-                    <a class="btn btn-danger" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
-                </li>
-            </ul>
+
 
             @if( isset(auth()->user()->id) )
                 <ul class="navbar-nav ml-auto">
@@ -70,6 +66,11 @@
                     </li>
                 </ul>
             @else
+                <ul class="navbar-nav ml-auto p-3">
+                    <li class="nav-item">
+                        <a class="btn btn-danger" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav mt-2 mt-lg-0">
                     <li class="nav-item">
                         <a class="button-login" href="{{route('login')}}">Войти</a>
