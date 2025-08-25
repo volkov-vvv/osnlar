@@ -104,7 +104,7 @@
 
                 <ul class="navbar-nav ml-auto p-3">
                     <li class="nav-item">
-                        <a class="btn btn-danger" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
+                        <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
                     </li>
                 </ul>
 

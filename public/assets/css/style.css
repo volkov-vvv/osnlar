@@ -8112,7 +8112,7 @@ label {
     }
 }
 
-.button-login {
+.button-login, .button-lid-create{
     padding: 0;
     border: none;
     color: #000000;
@@ -8140,12 +8140,42 @@ label {
     -moz-box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
     box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
 }
+    .button-lid-create{
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        padding: 5px 10px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #ffffff;
+        background-color: #dc3545;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #dc3545;
+        border-radius: 0.5rem;
+        -webkit-box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
+        -moz-box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
+        box-shadow: 0px 10px 30px -10px rgba(34, 60, 80, 0.5);
+    }
+
+    .button-lid-create:hover {
+        color: #fff;
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
 }
+
+.button-lid-create:hover {
+    text-decoration: none;
+}
+
 .button-login:hover{
     color: #0062cc;
     border-color: #0062cc;
     text-decoration: none;
 }
+
+
 
 
 .course-price{

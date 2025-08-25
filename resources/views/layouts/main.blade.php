@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v3">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v5">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
 
@@ -131,9 +131,9 @@
                         </li>
                     </ul>
                 @else
-                    <ul class="navbar-nav ml-auto p-3">
+                    <ul class="navbar-nav ml-auto pr-3">
                         <li class="nav-item">
-                            <a class="btn btn-danger" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
+                            <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mt-2 mt-lg-0">
