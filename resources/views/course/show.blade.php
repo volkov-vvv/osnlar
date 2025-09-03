@@ -45,10 +45,10 @@
                 <div class="row pb-1">
                     <div class="col-lg-9 mx-auto" data-aos="fade-up">
                         <div class="alert alert-secondary" role="alert">
-                            <p class="text-center" style="margin-bottom: 0;">
+
                                 <a href="{{ url('storage/' . $course->utp) }}" style="color: darkblue" target="_blank">
-                                    Учебно-тематический план</a>
-                            </p>
+                                    <img src="{{asset('assets/images/plan.png')}}" class="text-decoration-none"> Учебно-тематический план</a>
+
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                                 Стомость обучения {{number_format($course->price, 0, ',', ' ')}} руб.
                             </div>
                         @endif
-                        <div class="col-12 pt-5 text-center">
+                        <div class="col-12 pt-5 pb-5 text-center">
                             <a href="
                         @if(isset($course->price) && $course->price != 0)
                             {{route('order.create', $course->id)}}
@@ -82,14 +82,15 @@
                     <div class="col-sm-6" data-aos="fade-up"><img src="{{asset('assets/images/graf_edu2.png')}}"
                                                              alt="featured image" class="w-100"></div>
                 </div>
-                <div class="row pt-5">
-                    <div class="blog-post-featured-img" data-aos="fade-up">
-                        <img src="{{asset('assets/images/tools.png')}}" class="w-100">
-                        <img src="{{asset('assets/images/tools1.png')}}" class="w-100">
-                    </div>
+                <div class="row pt-2">
+                    <div class="col-sm-6" data-aos="fade-up">
+                        <img src="{{asset('assets/images/tools.png')}}" class="w-100"></div>
+                    <div class="col-sm-6" data-aos="fade-up">
+                        <img src="{{asset('assets/images/tools1.png')}}" class="w-100"></div>
+
                 </div>
 
-
+                </div>
             </section>
 
             <div class="row">

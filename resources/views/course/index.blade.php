@@ -7,21 +7,23 @@
             <div class="row p-5"  data-aos="fade-up">
                 <div class="col">
                     <h1 class="text-center">Бесплатные курсы</h1>
-                    <p class="text-center" style="color: grey; font-size: 20px">В рамках реализации федерального проекта «Активные меры содействия занятости»<br> национального проекта «Кадры». Предварительная запись на обучение в 2025 году</p>
+                    <div class="d-none d-lg-block"><p class="text-center" style="color: grey; font-size: 20px">В рамках реализации федерального проекта «Активные меры содействия занятости»<br> национального проекта «Кадры». Предварительная запись на обучение в 2025 году</p>
+                    </div>
+                    <div class="d-lg-none pb-2"><p class="text-center" data-aos="fade-up" style="color: grey">В рамках реализации федерального проекта «Активные меры содействия занятости»</p></div>
                 </div>
             </div>
 
             <nav>
-                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Все</button>
-                    <button class="nav-link" id="nav-digital-tab" data-bs-toggle="tab" data-bs-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false">Азбука цифры</button>
-                    <button class="nav-link" id="nav-designed-tab" data-bs-toggle="tab" data-bs-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Азбука дизайна</button>
-                    <button class="nav-link" id="nav-business-tab" data-bs-toggle="tab" data-bs-target="#nav-business" type="button" role="tab" aria-controls="nav-business" aria-selected="false">Азбука бизнеса</button>
-                </div>
+{{--                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">--}}
+{{--                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Все</button>--}}
+{{--                    <button class="nav-link" id="nav-digital-tab" data-bs-toggle="tab" data-bs-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false">Азбука цифры</button>--}}
+{{--                    <button class="nav-link" id="nav-designed-tab" data-bs-toggle="tab" data-bs-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Азбука дизайна</button>--}}
+{{--                    <button class="nav-link" id="nav-business-tab" data-bs-toggle="tab" data-bs-target="#nav-business" type="button" role="tab" aria-controls="nav-business" aria-selected="false">Азбука бизнеса</button>--}}
+{{--                </div>--}}
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-                    <section class="featured-posts-section pt-5">
+                    <section class="featured-posts-section">
                         <div class="row">
                             @foreach($courses as $course)
                                 <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
