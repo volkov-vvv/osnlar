@@ -42,7 +42,7 @@
                         <p>{!! $course->description !!}</p>
                     </div>
                 </div>
-                <div class="row pb-1">
+                <div class="row pt-5 pb-1">
                     <div class="col-lg-9 mx-auto" data-aos="fade-up">
                         <div class="alert alert-secondary" role="alert">
 

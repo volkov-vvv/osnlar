@@ -240,16 +240,17 @@
             <h4 class="edica-landing-section-subtitle">Наши особенности</h4>
             <h2 class="edica-landing-section-title">Почему выбирают нас:</h2>
             <div class="row">
+                <div class="col-md-6 landing-service-card" data-aos="fade-left">
+                    <img src="{{asset('assets/images/internet2.png')}}" alt="card img" class="img-fluid service-card-img">
+                    <h4 class="service-card-title">Очное и дистанционное обучение</h4>
+                    <p class="service-card-description">Наше обучение проходит и в очном и дистанционном формате на платформе LMS, что позволяет нашим слушателям обучаться эффективно с учетом их персонального графика и личного куратора</p>
+                </div>
                 <div class="col-md-6 landing-service-card" data-aos="fade-right">
                     <img src="{{asset('assets/images/picture.svg')}}" alt="card img" class="img-fluid service-card-img">
                     <h4 class="service-card-title">Видеоуроки в режиме реального времени</h4>
-                    <p class="service-card-description">Обучение проходит в режиме реального времени, что способствует более глубокому пониманию материала. Вы можете активно участвовать в обсуждениях, задавать вопросы и обмениваться мнениями с преподавателем и другими слушателями. Это позволяет не только получить дополнительные объяснения, но и расширить свои знания, услышав разные точки зрения</p>
+                    <p class="service-card-description">Вы можете активно участвовать в обсуждениях, задавать вопросы и обмениваться мнениями с преподавателем и другими слушателями. Это позволяет не только получить дополнительные объяснения, но и расширить свои знания, услышав разные точки зрения</p>
                 </div>
-                <div class="col-md-6 landing-service-card" data-aos="fade-left">
-                    <img src="{{asset('assets/images/internet2.png')}}" alt="card img" class="img-fluid service-card-img">
-                    <h4 class="service-card-title">Дистанционное обучение</h4>
-                    <p class="service-card-description">Наше обучение проходит в дистанционном формате на платформе LMS, что позволяет нашим слушателям обучаться эффективно с учетом их персонального графика и личного куратора</p>
-                </div>
+
                 <div class="col-md-6 landing-service-card" data-aos="fade-right">
                     <img src="{{asset('assets/images/goal.svg')}}" alt="card img" class="img-fluid service-card-img">
                     <h4 class="service-card-title">Максимальная персонализация обучения</h4>
