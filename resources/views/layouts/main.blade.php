@@ -161,7 +161,7 @@
                                 </ul>
 
                                 <div class="carousel-content-btns">
-                                    <a href="{{route('commerce.index')}}" class="button-main">Выберите курс</a>
+                                    <a href="{{route('course.index')}}" class="button-main">Выберите курс</a>
                                 </div>
                                 <div class="achievement">
                                     <div><span class="achievement-bold">10 289</span><br>слушателей</div>

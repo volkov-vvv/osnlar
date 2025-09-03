@@ -3,8 +3,11 @@
 
     <main class="blog-post">
         <div class="container">
-            <h1 class="edica-page-title" data-aos="fade-up" style="color: #094ca1">{{$course->title}}</h1>
-            <p class="edica-blog-post-meta" data-aos="fade-up" data-aos-delay="200">Эксперты курса:
+            <div class="d-none d-lg-block"><h1 class="edica-page-title" data-aos="fade-up" style="color: #094ca1">{{$course->title}}</h1></div>
+            <div class="d-lg-none pb-2"><h3 class="text-center" data-aos="fade-up" style="color: #094ca1">{{$course->title}}</h3></div>
+
+            <p class="pb-lg-3 text-center" style="color: grey" data-aos="fade-up" data-aos-delay="200">Эксперты курса:
+
                 @foreach($authors as $author)
                     {{ is_array($course->authors->pluck('id')->toArray()) && in_array($author->id, $course->authors->pluck('id')->toArray()) ? $author->name . ',' : ''  }}
                 @endforeach
