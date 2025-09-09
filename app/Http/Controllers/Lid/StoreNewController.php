@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\lid;
 
+use App\Helpers\Telegram;
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmail;
 use App\Models\Course;
@@ -18,7 +19,7 @@ use Illuminate\Support\Str;
 
 class StoreNewController extends Controller
 {
-    public function __invoke(StoreNewRequest $request)
+    public function __invoke(StoreNewRequest $request, Telegram $telegram)
     {
         $data = $request->validated();
         $course_link = '';
@@ -43,10 +44,17 @@ class StoreNewController extends Controller
         $lid = Lid::firstOrCreate($data);
         $data['id'] = $lid->id;
         $data['link'] = $course_link;
+        $data['course_title'] = $course->title;
+        $data['region'] = $lid->region->title;
+
         $mailData = collect($data);
         $mailData->subject = 'Ваша заявка на обучение принята';
         $mailData->template = $mail_template;
         \Mail::to($data['email'])->send(new SendEmail($mailData));
+//dd($data);
+        $telegram->sendMessage('708532278', (string)view('messages.new_lid', $data));
+//        $telegram->sendMessage('708532278', "Новый заказ", $data);
+
 
         return redirect()->route('lid.index');
 

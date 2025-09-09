@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Helpers\Telegram;
 use App\Service\PaymentService;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -21,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(LidService::class, function ($app) {
             return new LidService();
+        });
+
+        $this->app->bind(Telegram::class, function ($app) {
+            return new Telegram(new Http(), config('bots.bot'));
         });
     }
 

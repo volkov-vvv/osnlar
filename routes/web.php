@@ -252,3 +252,11 @@ Route::group(['namespace' => 'Order', 'prefix' => 'order'],function (){
     Route::post('/create/finish', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
 });
 
+Route::get('/bot', function (){
+    \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot7779970135:AAHt5HdNl6pnYXytRV-fY5-9BAC0N9tkI20/sendMessage', [
+        'chat_id' => '708532278',
+        'text' => '<b>Привет</b>',
+        'parse_mode' => 'html'
+    ]);
+});
+
