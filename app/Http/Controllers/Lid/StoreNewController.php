@@ -53,6 +53,7 @@ class StoreNewController extends Controller
         \Mail::to($data['email'])->send(new SendEmail($mailData));
 //dd($data);
         $telegram->sendMessage('708532278', (string)view('messages.new_lid', $data));
+        $telegram->sendMessage('591655532', (string)view('messages.new_lid', $data));
 //        $telegram->sendMessage('708532278', "Новый заказ", $data);
 
 
