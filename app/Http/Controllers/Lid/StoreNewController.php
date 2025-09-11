@@ -51,9 +51,25 @@ class StoreNewController extends Controller
         $mailData->subject = 'Ваша заявка на обучение принята';
         $mailData->template = $mail_template;
         \Mail::to($data['email'])->send(new SendEmail($mailData));
+
+        $buttons = [
+            'inline_keyboard' =>[
+                [
+                    [
+                        'text' => 'Принять',
+                        'callback_data' => '1',
+                    ],
+                    [
+                        'text' => 'Отклонить',
+                        'callback_data' => '0',
+                    ],
+                ]
+            ]
+        ];
+
 //dd($data);
-        $telegram->sendMessage('708532278', (string)view('messages.new_lid', $data));
-        $telegram->sendMessage('591655532', (string)view('messages.new_lid', $data));
+        $telegram->sendButton('708532278', (string)view('messages.new_lid', $data), json_encode($buttons));
+//        $telegram->sendMessage('591655532', (string)view('messages.new_lid', $data));
 //        $telegram->sendMessage('708532278', "Новый заказ", $data);
 
 
