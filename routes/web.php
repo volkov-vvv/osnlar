@@ -260,7 +260,7 @@ Route::get('/bot', function (){
         'parse_mode' => 'html'
     ]);
     */
-    $hhtp = \Illuminate\Support\Facades\Http::get('https://api.telegram.org/bot7779970135:AAHt5HdNl6pnYXytRV-fY5-9BAC0N9tkI20/setWemhook?url=https://test.osnovanie.info/webhook/');
+    $hhtp = \Illuminate\Support\Facades\Http::get('https://api.telegram.org/bot7779970135:AAHt5HdNl6pnYXytRV-fY5-9BAC0N9tkI20/setWebhook?url=https://test.osnovanie.info/webhook/');
     dd(json_decode($hhtp->body()));
 });
 
