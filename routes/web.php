@@ -263,4 +263,5 @@ Route::get('/bot', function (){
     $hhtp = \Illuminate\Support\Facades\Http::get('https://api.telegram.org/bot7779970135:AAHt5HdNl6pnYXytRV-fY5-9BAC0N9tkI20/setWebhook?url=https://test.osnovanie.info/webhook/');
     dd(json_decode($hhtp->body()));
 });
+Route::post('/webhook', 'WebhookController@index');
 
