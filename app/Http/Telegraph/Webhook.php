@@ -15,7 +15,7 @@ class Webhook extends WebhookHandler
 //        $username = $this->message->from()->firstName();
 //        Telegraph::message('test')->dump();
 
-        Log::debug($this->message->all());
+        Log::debug($this->message->from());
 //        $this->chat->html($userName)->dd();
         $this->chat->html('Привет, !')->send();
     }
