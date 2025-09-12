@@ -10,9 +10,9 @@ use DefStudio\Telegraph\Handlers\WebhookHandler;
 
 class Webhook extends WebhookHandler
 {
-    public function start(Message $message){
+    public function start(string $userName){
 //        $username = $this->message->from()->firstName();
-        $this->message($message)->dd();
+        $this->message($userName)->dd();
 //        $this->chat->html('Привет,' . $userName . '!')->send();
     }
 }
