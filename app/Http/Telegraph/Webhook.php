@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class Webhook extends WebhookHandler
 {
-    public function start(User $user){
+    public function start(){
 //        $username = $this->message->from()->firstName();
 //        Telegraph::message('test')->dump();
 
-        Log::debug($user->all());
+        Log::debug($this->message->all());
 //        $this->chat->html($userName)->dd();
         $this->chat->html('Привет, !')->send();
     }
