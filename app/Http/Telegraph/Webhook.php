@@ -12,7 +12,7 @@ class Webhook extends WebhookHandler
 {
     public function start(string $userName){
 //        $username = $this->message->from()->firstName();
-        $this->message($userName)->dd();
+        $this->chat->html($userName)->dd();
 //        $this->chat->html('Привет,' . $userName . '!')->send();
     }
 }
