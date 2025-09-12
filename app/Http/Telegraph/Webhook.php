@@ -12,6 +12,7 @@ use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Stringable;
 
+
 class Webhook extends WebhookHandler
 {
     public function start(){
@@ -30,6 +31,8 @@ class Webhook extends WebhookHandler
         $userId = $this->message->contact()->userId();
         $verifyUserId = $this->message->from()->id();
         $isVerifyPhone = intval($userId == $verifyUserId);
+        Log::debug($this->message->contact());
         $this->chat->html("Проверка: $phone, $userId, $verifyUserId, результат: $isVerifyPhone")->send();
+ //       $user = \App\Models\User::where('phone', );
     }
 }
