@@ -12,7 +12,10 @@ class Webhook extends WebhookHandler
 {
     public function start(string $userName){
 //        $username = $this->message->from()->firstName();
-        $this->chat->html($userName)->dd();
+        Telegraph::message('test')->dump();
+
+
+//        $this->chat->html($userName)->dd();
 //        $this->chat->html('Привет,' . $userName . '!')->send();
     }
 }
