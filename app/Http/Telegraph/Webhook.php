@@ -17,6 +17,6 @@ class Webhook extends WebhookHandler
 
         Log::debug($this->message->from());
 //        $this->chat->html($userName)->dd();
-        $this->chat->html('Привет, !')->send();
+        $this->chat->html('Привет, ' . $this->message->from()->firstName() . '!')->send();
     }
 }
