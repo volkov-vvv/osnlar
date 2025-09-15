@@ -32,9 +32,9 @@ class Webhook extends WebhookHandler
         $verifyUserId = $this->message->from()->id();
         $isVerifyPhone = intval($userId == $verifyUserId);
 
-        $phone = str_replace('+', '', $phone);
         $this->chat->html("Проверка: $phone, $userId, $verifyUserId, результат: $isVerifyPhone")->send();
-        $user = \App\Models\User::where(\DB::raw("concat(phone_prefix,phone)"),"like", $phone);
+        $phone = str_replace('+', '', $phone);
+        $user = \App\Models\User::where(\DB::raw("concat('phone_prefix','phone')"),"like", $phone)->get();
         Log::debug($user);
     }
 }
