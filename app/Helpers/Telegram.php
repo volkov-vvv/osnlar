@@ -25,4 +25,13 @@ class Telegram
             'parse_mode' => 'html'
         ]);
     }
+
+    public function sendButton($chat_id, $message, $button){
+        $this->http::post(self::url.$this->bot.'/sendMessage', [
+            'chat_id' => $chat_id, //'708532278'
+            'text' => $message,
+            'parse_mode' => 'html',
+            'reply_markup' => $button
+        ]);
+    }
 }

@@ -12,6 +12,7 @@ use App\Models\Link;
 use App\Models\Order;
 use App\Models\Status;
 use App\Models\User;
+use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\Lid\StoreNewRequest;
 use Illuminate\Support\Facades\Hash;
@@ -51,9 +52,30 @@ class StoreNewController extends Controller
         $mailData->subject = 'Ваша заявка на обучение принята';
         $mailData->template = $mail_template;
         \Mail::to($data['email'])->send(new SendEmail($mailData));
+
+        $buttons = [
+            'inline_keyboard' =>[
+                [
+                    [
+                        'text' => 'Принять',
+                        'callback_data' => '1',
+                    ],
+                    [
+                        'text' => 'Отклонить',
+                        'callback_data' => '0',
+                    ],
+                ]
+            ]
+        ];
+
 //dd($data);
-        $telegram->sendMessage('708532278', (string)view('messages.new_lid', $data));
-        $telegram->sendMessage('591655532', (string)view('messages.new_lid', $data));
+        $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
+        foreach ($users as $user) {
+            $chat = TelegraphChat::where('id', $user->telegraph_chat_id)->first();
+            $telegram->sendMessage($chat->chat_id, (string)view('messages.new_lid', $data));
+        }
+//        $telegram->sendButton('708532278', (string)view('messages.new_lid', $data), json_encode($buttons));
+//        $telegram->sendMessage('591655532', (string)view('messages.new_lid', $data));
 //        $telegram->sendMessage('708532278', "Новый заказ", $data);
 
 

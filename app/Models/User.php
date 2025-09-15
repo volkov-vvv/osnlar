@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use DefStudio\Telegraph\Models\TelegraphChat;
+use DefStudio\Telegraph\Telegraph;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -39,6 +41,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
 
     public function getLids()
     {
