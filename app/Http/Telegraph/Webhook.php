@@ -34,7 +34,7 @@ class Webhook extends WebhookHandler
 
         $this->chat->html("Проверка: $phone, $userId, $verifyUserId, результат: $isVerifyPhone")->send();
         $phone = str_replace('+', '', $phone);
-        $user = \App\Models\User::where(\DB::raw("concat('phone_prefix','phone')"),"like", $phone)->get();
+        $user = \App\Models\User::where(\DB::raw("concat(phone_prefix,phone)"),"like", $phone)->whereIn('role', [1,3])->get();
         Log::debug($user);
     }
 }
