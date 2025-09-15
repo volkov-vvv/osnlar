@@ -9,6 +9,8 @@ use DefStudio\Telegraph\DTO\User;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use DefStudio\Telegraph\Keyboard\ReplyButton;
 use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
+use DefStudio\Telegraph\Models\TelegraphChat;
+use DefStudio\Telegraph\Telegraph;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Stringable;
 
@@ -32,9 +34,22 @@ class Webhook extends WebhookHandler
         $verifyUserId = $this->message->from()->id();
         $isVerifyPhone = intval($userId == $verifyUserId);
 
-        $this->chat->html("Проверка: $phone, $userId, $verifyUserId, результат: $isVerifyPhone")->send();
-        $phone = str_replace('+', '', $phone);
-        $user = \App\Models\User::where(\DB::raw("concat(phone_prefix,phone)"),"like", $phone)->whereIn('role', [1,3])->get();
-        Log::debug($user);
+//        $this->chat->html("Проверка: $phone, $userId, $verifyUserId, результат: $isVerifyPhone")->send();
+        if($isVerifyPhone == 1){
+            $phone = str_replace('+', '', $phone);
+            $user = \App\Models\User::where(\DB::raw("concat(phone_prefix,phone)"),"like", $phone)->whereIn('role', [1,3])->first();
+
+            if($user){
+                $chat = TelegraphChat::where('chat_id', $userId)->first();
+                $user->telegraph_chat_id = $chat->id;
+                Log::debug($user);
+                $user->save();
+                $this->chat->html("Здравствуйте,  $user->name. Вы успешно подписаны на рассылку по новым заявкам.")->send();
+            }else{
+                $this->chat->html("Вы не являетесь сотрудником компании.")->send();
+            }
+        }else{
+            $this->chat->html("Вы отправили чужой номер телефона.")->send();
+        }
     }
 }
