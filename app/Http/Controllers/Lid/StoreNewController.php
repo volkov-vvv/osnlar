@@ -69,7 +69,7 @@ class StoreNewController extends Controller
         ];
 
 //dd($data);
-        $users = User::whereIn('role', [1,3])->where_not_null('telegraph_chat_id')->get();
+        $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
         foreach ($users as $user) {
             $chat = TelegraphChat::where('id', $user->telegraph_chat_id)->first();
             $telegram->sendMessage($chat->chat_id, (string)view('messages.new_lid', $data));
