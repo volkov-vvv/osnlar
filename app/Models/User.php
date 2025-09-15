@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function telegraph()
     {
-        return $this->belongsTo(TelegraphChat::class);
+        return TelegraphChat::where('chat_id', $this->telegraph_chat_id)->first();;
     }
 
 
