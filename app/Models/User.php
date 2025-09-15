@@ -42,11 +42,6 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-    public function telegraph()
-    {
-        return TelegraphChat::where('chat_id', $this->telegraph_chat_id)->first();;
-    }
-
 
     public function getLids()
     {

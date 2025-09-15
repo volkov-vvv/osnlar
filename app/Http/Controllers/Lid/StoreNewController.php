@@ -12,6 +12,7 @@ use App\Models\Link;
 use App\Models\Order;
 use App\Models\Status;
 use App\Models\User;
+use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\Lid\StoreNewRequest;
 use Illuminate\Support\Facades\Hash;
@@ -68,7 +69,12 @@ class StoreNewController extends Controller
         ];
 
 //dd($data);
-        $telegram->sendButton('708532278', (string)view('messages.new_lid', $data), json_encode($buttons));
+        $users = User::whereIn('role', [1,3])->where_not_null('telegraph_chat_id')->get();
+        foreach ($users as $user) {
+            $chat = TelegraphChat::where('id', $user->telegraph_chat_id)->first();
+            $telegram->sendMessage($chat->chat_id, (string)view('messages.new_lid', $data));
+        }
+//        $telegram->sendButton('708532278', (string)view('messages.new_lid', $data), json_encode($buttons));
 //        $telegram->sendMessage('591655532', (string)view('messages.new_lid', $data));
 //        $telegram->sendMessage('708532278', "Новый заказ", $data);
 
