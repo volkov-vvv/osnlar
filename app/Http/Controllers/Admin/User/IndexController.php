@@ -13,8 +13,6 @@ class IndexController extends Controller
         $user = new User();
         $roles = $user->getRoles();
         $users = User::all();
-//        $tuser = $user->where('role', 1)->get();
-        dd($user->telegraph());
         return view('admin.user.index', compact('users','roles'));
     }
 }
