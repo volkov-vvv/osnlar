@@ -55,7 +55,9 @@ class Webhook extends WebhookHandler
     public function lidResponsible(): void
     {
         $lidId = $this->data->get('lid_id');
+        Log::debug($lidId);
         $lid = Lid::find($lidId);
+        Log::debug($lid);
         if($lid->responsible_id){
             $this->chat->html('У этой заявки уже есть ответственный')->send();
         }else{
