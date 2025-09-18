@@ -18,6 +18,7 @@
     @endif
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
@@ -72,10 +73,13 @@
 </head>
 <body>
 <div class="edica-loader"></div>
-<header class="edica-header edica-landing-header">
+{{--box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+sticky-top  bg-white bg-opacity-75
+--}}
+<header class="edica-header sticky-top bg-opacity-75" style="background-color: rgba(255, 255, 255, 0.97);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}" width="220"  alt="Основание"></a>
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-invert.png')}}" width="220"  alt="Основание"></a>
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

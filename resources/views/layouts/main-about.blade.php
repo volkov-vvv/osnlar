@@ -58,7 +58,7 @@
 </head>
 <body>
 <div class="container">
-    @include('includes.navbar')
+{{--    @include('includes.navbar')--}}
     @yield('content')
 </div>
 
