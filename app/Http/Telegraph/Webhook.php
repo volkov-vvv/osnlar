@@ -52,7 +52,7 @@ class Webhook extends WebhookHandler
         }
     }
 
-    public function lidResponsible(): void
+    public function lid_responsible(): void
     {
         $lidId = $this->data->get('lid_id');
         Log::debug($lidId);

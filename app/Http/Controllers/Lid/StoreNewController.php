@@ -76,7 +76,7 @@ class StoreNewController extends Controller
             $chat = TelegraphChat::find($user->telegraph_chat_id);
             if($user->role == 3){
                 $chat->html((string)view('messages.new_lid', $data))->keyboard(
-                    Keyboard::make()->button('Принять заявку')->action('lidResponsible')->param('lid_id', $data['id'])
+                    Keyboard::make()->button('Принять заявку')->action('lid_responsible')->param('lid_id', $data['id'])
                 )->send();
             }else{
                 $chat->html((string)view('messages.new_lid', $data))->send();
