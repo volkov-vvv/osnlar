@@ -84,17 +84,22 @@ sticky-top  bg-white bg-opacity-75
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="edicaMainNav">
+
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('main.index')}}">Главная <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->is('about*') ? 'active' : null }}">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
 {{--                    <li class="nav-item">--}}
 {{--                        <a class="nav-link" href="{{route('services.index')}}">Услуги</a>--}}
 {{--                    </li>--}}
-                    <li class="nav-item dropdown active">
+                    <li class="nav-item dropdown
+                    @if(request()->is('course*') || request()->is('future*') || request()->is('commerce*') || request()->is('archive*'))
+                        active
+                    @endif
+                    ">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
                             <a class="dropdown-item" href="{{route('future.index')}}">Код будущего</a>
