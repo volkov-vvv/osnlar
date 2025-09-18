@@ -4,6 +4,7 @@
 namespace App\Http\Telegraph;
 
 
+use App\Models\Lid;
 use DefStudio\Telegraph\DTO\Message;
 use DefStudio\Telegraph\DTO\User;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
@@ -41,7 +42,6 @@ class Webhook extends WebhookHandler
             if($user){
                 $chat = TelegraphChat::where('chat_id', $userId)->first();
                 $user->telegraph_chat_id = $chat->id;
-//                Log::debug($user);
                 $user->save();
                 $this->chat->html("Здравствуйте,  $user->name. Вы успешно подписаны на рассылку по новым заявкам.")->send();
             }else{
@@ -49,6 +49,21 @@ class Webhook extends WebhookHandler
             }
         }else{
             $this->chat->html("Вы отправили чужой номер телефона.")->send();
+        }
+    }
+
+    public function lidResponsible(): void
+    {
+        $lidId = $this->data->get('lid_id');
+        $lid = Lid::find($lidId);
+        if($lid->responsible_id){
+            $this->chat->html('У этой заявки уже есть ответственный')->send();
+        }else{
+            $chat = TelegraphChat::where('chat_id', $this->chat->chat_id)->first();
+            $user = \App\Models\User::where('telegraph_chat_id', $chat->id)->first();
+            $lid->responsible_id = $user->id;
+            $lid->save();
+            $this->chat->html('Вы назначены ответсвенным за эту заявку')->send();
         }
     }
 }

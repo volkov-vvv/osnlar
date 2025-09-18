@@ -12,6 +12,7 @@ use App\Models\Link;
 use App\Models\Order;
 use App\Models\Status;
 use App\Models\User;
+use DefStudio\Telegraph\Keyboard\Keyboard;
 use DefStudio\Telegraph\Models\TelegraphChat;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\Lid\StoreNewRequest;
@@ -68,15 +69,18 @@ class StoreNewController extends Controller
             ]
         ];
 
-//dd($data);
         $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
         foreach ($users as $user) {
-            $chat = TelegraphChat::where('id', $user->telegraph_chat_id)->first();
-            $telegram->sendMessage($chat->chat_id, (string)view('messages.new_lid', $data));
+            $chat = TelegraphChat::find($user->telegraph_chat_id);
+            $chat->html((string)view('messages.new_lid', $data))->send();
+            // Выводим кнопку для СС
+            if($user->role == 3){
+                $chat->keyboard(
+                    Keyboard::make()->oneTime()->button('Принять заявку')->action('lidResponsible')->param('lid_id', $data['id'])
+                )->send();
+            }
         }
-//        $telegram->sendButton('708532278', (string)view('messages.new_lid', $data), json_encode($buttons));
-//        $telegram->sendMessage('591655532', (string)view('messages.new_lid', $data));
-//        $telegram->sendMessage('708532278', "Новый заказ", $data);
+
 
 
         return redirect()->route('lid.index');
