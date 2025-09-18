@@ -251,20 +251,6 @@ Route::group(['namespace' => 'Order', 'prefix' => 'order'],function (){
     Route::get('/create/{course}', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
     Route::post('/create/finish', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
 });
-/*
-Route::get('/bot', function (){
-*/
-    /*
-    \Illuminate\Support\Facades\Http::post('https://api.telegram.org/bot7779970135:AAHt5HdNl6pnYXytRV-fY5-9BAC0N9tkI20/sendMessage', [
-        'chat_id' => '708532278',
-        'text' => '<b>Привет</b>',
-        'parse_mode' => 'html'
-    ]);
-    */
-/*
-    $hhtp = \Illuminate\Support\Facades\Http::get('https://api.telegram.org/bot7779970135:AAHt5HdNl6pnYXytRV-fY5-9BAC0N9tkI20/setWebhook?url=https://test.osnovanie.info/webhook');
-    dd(json_decode($hhtp->body()));
-});
-*/
-Route::post('/webhook', 'WebhookController@index');
+
+//Route::post('/webhook', 'WebhookController@index');
 
