@@ -20,7 +20,7 @@ class Webhook extends WebhookHandler
 {
     public function start(){
 
-//        Log::debug($this->message->from());
+        Log::debug($this->message->from());
 
         $this->chat->message('Здравствуйте! Для авторизации нужно отправить свой номер телефона.')->replyKeyboard(ReplyKeyboard::make()->oneTime()->buttons([
             ReplyButton::make('Отправить номер телефона')->requestContact()
