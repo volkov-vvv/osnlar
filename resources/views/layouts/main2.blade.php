@@ -78,7 +78,7 @@ sticky-top  bg-white bg-opacity-75
 --}}
 <header class="edica-header sticky-top bg-opacity-75" style="background-color: rgba(255, 255, 255, 0.97);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <div class="container">
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-invert.png')}}" width="220"  alt="Основание"></a>
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

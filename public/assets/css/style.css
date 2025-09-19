@@ -8183,6 +8183,12 @@ label {
     color: #007bff;
 }
 
+@media (max-width: 575px) {
+    .navbar{
+        padding: 1.25rem 1.5rem;
+    }
+}
+
 
 
 
