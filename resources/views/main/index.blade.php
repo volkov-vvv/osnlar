@@ -1,10 +1,53 @@
-@extends('layouts.main')
+@extends('layouts.main2')
 @section('content')
 
 <main>
+    <section class="edica-header edica-landing-header main-page">
+        <div class="container">
+            <div class="edica-landing-header-content">
+                <div id="edicaLandingHeaderCarousel" class="carousel slide" data-ride="carousel">
+
+                    <div class="carousel-inner" role="listbox">
+                        <div class="carousel-item active">
+                            <div class="row">
+                                <div class="col-md-6 carousel-content-wrapper top-banner">
+                                    <h1>IT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
+                                    <p>которая специализируется на:</p>
+                                    <ul>
+                                        <li>создании цифрового образовательного контента</li>
+                                        <li>разработке образовательной платформы &laquo;Основание&raquo;</li>
+                                        <li>обучении по различным IT-направлениям</li>
+                                    </ul>
+
+                                    <div class="carousel-content-btns">
+                                        <a href="{{route('course.index')}}" class="button-main">Выберите курс</a>
+                                    </div>
+                                    <div class="achievement">
+                                        <div><span class="achievement-bold">10 289</span><br>слушателей</div>
+                                        <div><span class="achievement-bold">40+</span><br>программ</div>
+                                        <div><span class="achievement-bold">82%</span><br>трудоустроились</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 carousel-img-wrapper top-banner">
+                                    <img src="{{asset('assets/images/people.png')}}" alt="carousel-img" class="img-fluid"
+                                         width="650px">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
 
     <section class="edica-landing-section about-osnovanie">
         <div class="container">
+            <h4 class="edica-landing-section-subtitle-alt">Проекты</h4>
             <div class="row">
                 <div class="col-md-6 img-wrapper" data-aos="fade-up-right">
                     <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"

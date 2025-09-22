@@ -17,6 +17,9 @@
         <meta property="og:title" content="Основание :: Главная"/>
     @endif
 
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
@@ -96,8 +99,8 @@ sticky-top  bg-white bg-opacity-75
             <div class="collapse navbar-collapse" id="edicaMainNav">
 
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('main.index')}}">Главная <span class="sr-only">(current)</span></a>
+                    <li class="nav-item {{ request()->is('/') ? 'active' : null }}">
+                        <a class="nav-link" href="{{route('main.index')}}">Главная</a>
                     </li>
                     <li class="nav-item {{ request()->is('about*') ? 'active' : null }}">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
