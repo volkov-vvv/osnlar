@@ -76,10 +76,20 @@
 {{--box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 sticky-top  bg-white bg-opacity-75
 --}}
-<header class="edica-header sticky-top bg-opacity-75" style="background-color: rgba(255, 255, 255, 0.97);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+<header class="edica-header sticky-top bg-opacity-75" style="background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-invert.png')}}" width="220"  alt="Основание"></a>
+
+            <div class="d-none d-lg-block"> <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-invert.png')}}" width="220"  alt="Основание"></a></div>
+            <div class="d-lg-none">
+                <div class="row justify-content-center">
+                <div class="col-2"><a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-little.png')}}" width="40"  alt="Основание"></a></div>
+                <div class="col-10 pt-2"><a class="btn btn-danger" role="button" href="{{route('lid.create')}}">Оставить заявку</a></div>
+                </div>
+
+            </div>
+
+
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
