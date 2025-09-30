@@ -40,8 +40,8 @@ class StoreNewController extends Controller
                     $data['status_id'] =  $status->id;
             }
         }else{
-            // Всем остальным заявкам присваиваем статус 'На 2025 год'
-            $status = Status::all()->where('title', 'На 2025 год')->first();
+            // Всем остальным заявкам присваиваем статус 'На 2026 год'
+            $status = Status::all()->where('title', 'На 2026 год')->first();
             $data['status_id'] =  $status->id;
         }
 

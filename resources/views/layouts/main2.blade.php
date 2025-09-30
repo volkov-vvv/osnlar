@@ -156,7 +156,7 @@ sticky-top  bg-white bg-opacity-75
                 @else
                     <ul class="navbar-nav ml-auto p-3">
                         <li class="nav-item">
-                            <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
+                            <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Заявка на 2026</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mt-2 mt-lg-0">

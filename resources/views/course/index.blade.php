@@ -6,9 +6,16 @@
 
             <div class="row p-5"  data-aos="fade-up">
                 <div class="col">
-                    <h1 class="text-center">Бесплатные курсы</h1>
-                    <div class="d-none d-lg-block"><p class="text-center" style="color: grey; font-size: 20px">В рамках реализации федерального проекта «Активные меры содействия занятости»<br> национального проекта «Кадры». Предварительная запись на обучение в 2025 году</p>
+                    <h1 class="text-center">Предварительная запись на обучение</h1>
+{{--                    <div class="d-none d-lg-block"><p class="text-center" style="color: grey; font-size: 20px">В рамках реализации федерального проекта «Активные меры содействия занятости»<br> национального проекта «Кадры». Предварительная запись на обучение в 2025 году</p>--}}
+{{--                    </div>--}}
+                    <div class="d-none d-lg-block"><p class="text-center" style="color: grey; font-size: 20px">Федеральный проект «Активные меры содействия занятости»</p>
                     </div>
+                    <p class="text-center" style="color: #3d444b; font-size: 20px">Набор на бесплатное обучение в этом году завершен!
+                        <br> Оставьте заявку на 2026 год и пройдите обучение в числе первых.
+                        <br> Подпишитесь на наш <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i> Телеграм канал</a>, чтобы оставаться с нами на связи.</p>
+
+
                     <div class="d-lg-none pb-2"><p class="text-center" data-aos="fade-up" style="color: grey">В рамках реализации федерального проекта «Активные меры содействия занятости»</p></div>
                 </div>
             </div>

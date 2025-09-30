@@ -11,7 +11,7 @@
 
         <div class="row mb-3">
             <div class="col">
-                <h1 class="text-center">Заявка на обучение</h1>
+                <h1 class="text-center">Заявка на обучение в 2026 году</h1>
                 <h4 class="text-center">сделайте первый шаг к востребованной профессии!</h4>
             </div>
         </div>
