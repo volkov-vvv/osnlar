@@ -21,6 +21,7 @@ class EditController extends BaseController
         $years = [
             "1" => 2024,
             "2" => 2025,
+            "3" => 2026,
         ];
         return view('admin.course.edit', compact('course', 'companies', 'authors','series','years'));
     }
