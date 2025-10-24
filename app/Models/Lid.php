@@ -192,7 +192,7 @@ class Lid extends Model
         if ( isset($params['year']) ) {
             $query->where('courses.years', $params['year']);
         }else{
-            $query->where('courses.years', '2025');
+            $query->where('courses.years', '2026');
         }
 
         return $query;
