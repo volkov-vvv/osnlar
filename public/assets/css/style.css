@@ -8106,14 +8106,26 @@ label {
     background: url("../images/main_arrow.svg") top center no-repeat;
 }
 
-@media (min-width: 768px) and (max-width: 992px) {
+@media (max-width: 992px) {
     .button-main:before {
         display: none;
+    }
+
+    .dropdown-menu {
+        background: transparent;
+        border: none;
+    }
+
+    .button-login, .button-lid-create{
+        display: block;
+        padding: 0.5rem 1rem; !important;
     }
 }
 
 .button-login, .button-lid-create{
-    padding: 0;
+    padding: 0.5rem 0;
+    line-height: 1rem;
+    display: block;
     border: none;
     color: #000000;
     font-weight: 700;

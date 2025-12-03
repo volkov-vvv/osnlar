@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v2">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v3">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
 
@@ -97,7 +97,6 @@ sticky-top  bg-white bg-opacity-75
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="edicaMainNav">
-
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
                     <li class="nav-item {{ request()->is('/') ? 'active' : null }}">
                         <a class="nav-link" href="{{route('main.index')}}">Главная</a>
@@ -105,14 +104,11 @@ sticky-top  bg-white bg-opacity-75
                     <li class="nav-item {{ request()->is('about*') ? 'active' : null }}">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
-{{--                    <li class="nav-item">--}}
-{{--                        <a class="nav-link" href="{{route('services.index')}}">Услуги</a>--}}
-{{--                    </li>--}}
                     <li class="nav-item dropdown
                     @if(request()->is('course*') || request()->is('future*') || request()->is('commerce*') || request()->is('archive*'))
                         active
                     @endif
-                    ">
+                        ">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
                             <a class="dropdown-item" href="{{route('future.index')}}">Код будущего</a>
@@ -124,25 +120,21 @@ sticky-top  bg-white bg-opacity-75
                     <li class="nav-item">
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
-                </ul>
 
-                @if( isset(auth()->user()->id) )
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
+                    @if( isset(auth()->user()->id) )
+
+                        <li class="nav-item dropdown ml-lg-5">
                             <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
                             <div class="dropdown-menu" aria-labelledby="blogDropdown">
-                               <!-- <a class="dropdown-item btn btn-link" href="#">
-                                    Настройки
-                                </a> -->
                                 <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
-                            @case(1) {{route('admin.main.index')}}">Административная панель
-                            @break
-                            @case(3) {{route('cc.main.index')}}">Административная панель
-                            @break
-                            @default
+                                @case(1) {{route('admin.main.index')}}">Административная панель
+                                    @break
+                                    @case(3) {{route('cc.main.index')}}">Административная панель
+                                    @break
+                                    @default
                                     {{route('user.index')}}">Личный кабинет
-                            @endswitch
+                                    @endswitch
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <form action="{{route('logout')}}" method="post">
@@ -152,19 +144,20 @@ sticky-top  bg-white bg-opacity-75
                                 </a>
                             </div>
                         </li>
-                    </ul>
-                @else
-                    <ul class="navbar-nav ml-auto p-3">
-                        <li class="nav-item">
+
+                    @else
+
+                        <li class="nav-item mr-lg-3 ml-lg-3">
                             <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Заявка на 2026</a>
                         </li>
-                    </ul>
-                    <ul class="navbar-nav mt-2 mt-lg-0">
+
                         <li class="nav-item">
                             <a class="button-login" href="{{route('login')}}">Войти</a>
                         </li>
-                    </ul>
-                @endif
+                    @endif
+
+
+                </ul>
 
             </div>
         </nav>
