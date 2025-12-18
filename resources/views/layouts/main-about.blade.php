@@ -71,3 +71,4 @@
 
 </body>
 </html>
+@include('cookie-consent::index')

@@ -117,6 +117,7 @@
                                             <th>Кол-во обработанных заявок</th>
                                             <th>% обработанных заявок</th>
                                             <th>Среднее время реакции</th>
+                                            <th>Завершил обучение</th>
                                             <th>Обучение</th>
                                             <th>Ждем на РР</th>
                                             <th>Недозвон</th>
@@ -188,6 +189,7 @@
                 { data: 'count' },
                 { data: 'percent' },
                 { data: 'average_time' },
+                { data: 'status_end_learning' },
                 { data: 'status_learning' },
                 { data: 'status_pp' },
                 { data: 'status_non_call' },
@@ -201,7 +203,7 @@
         $('#year').on('change', function (e){
 
             table
-                .column(8)
+                .column(9)
                 .search(this.value, {exact: true})
                 .draw();
         })

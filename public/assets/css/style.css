@@ -8206,3 +8206,25 @@ label {
 
 
 /*# sourceMappingURL=style.css.map */
+
+.cookie-consent {
+    z-index: 9999;
+}
+
+
+.cookie-consent__agree-button {
+background-color: #4CAF50; /* Ваш цвет кнопки */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 0.8rem;
+}
+
+.cookie-consent__agree-button:hover {
+    background-color: #45a049;
+}
+
+.cookie-consent p{
+    color: #fff;
+}

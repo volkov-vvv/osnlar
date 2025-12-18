@@ -19,7 +19,7 @@
         "phpoffice/phpspreadsheet": "^1.29",
         "spatie/data-transfer-object": "^3.9",
         "spatie/laravel-activitylog": "^3.17",
-        "spatie/laravel-cookie-consent": "^2.12",
+        "spatie/laravel-cookie-consent": "^3.2",
         "yoomoney/yookassa-sdk-php": "^2.11"
     },
     "require-dev": {

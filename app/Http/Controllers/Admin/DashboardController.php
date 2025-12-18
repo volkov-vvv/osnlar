@@ -44,6 +44,7 @@ class DashboardController extends Controller
                 'percent' => round($activeLids / $lidsCount * 100, 2),
                 'average_time' => $user->averageTime($year),
                 'status_learning' => $userLids->where('status_id', 4)->count(),
+                'status_end_learning' => $userLids->where('status_id', 23)->count(),
                 'status_pp' => $userLids->where('status_id', 6)->count(),
                 'status_non_call' => $userLids->where('status_id', 2)->count(),
                 'status_rejection' => $userLids->where('status_id', 9)->count(),

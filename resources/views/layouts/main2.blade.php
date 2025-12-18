@@ -246,6 +246,7 @@ sticky-top  bg-white bg-opacity-75
             <p class="mb-0">© Все права защищены</p>
         </div>
     </div>
+
 </footer>
 
 <script src="{{asset('assets/vendors/popper.js/popper.min.js')}}"></script>
@@ -257,5 +258,8 @@ sticky-top  bg-white bg-opacity-75
         duration: 2000
     });
 </script>
+
+@include('cookie-consent::index')
 </body>
 </html>
+

@@ -244,3 +244,4 @@
 {{-- @include('cookieConsent::index') --}}
 </body>
 </html>
+@include('cookie-consent::index')
