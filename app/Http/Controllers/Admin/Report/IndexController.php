@@ -95,6 +95,12 @@ class IndexController extends Controller
                 $agent = '';
             }
 
+            if($record->course_years){
+                $year = $record->course_years;
+            }else{
+                $year = '';
+            }
+
             $course = $record->course->title;
             $region = $record->region->title;
 
@@ -147,6 +153,7 @@ class IndexController extends Controller
                 "utm_source" => $utm_source,
                 "utm_medium" => $utm_medium,
                 "utm_campaign" => $utm_campaign,
+                "year" => $year,
             );
         }
 

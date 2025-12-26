@@ -22,8 +22,19 @@
 
                             <div class="card-body">
 
-                                <table class="table table-striped mb-2">
+                                <table class="table mb-2">
                                     <tbody>
+                                    <tr>
+                                        <td>
+                                            Год:
+                                            <select id="year" name="year" class="form-control form-control-sm">
+                                                <option value="2026">2026</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2024">2024</option>
+                                            </select>
+                                        </td>
+                                        <td colspan="5"></td>
+                                    </tr>
                                     <tr>
                                         <td>
                                             Дата:
@@ -102,6 +113,7 @@
                                         <th>utm_source</th>
                                         <th>utm_medium</th>
                                         <th>utm_campaign</th>
+                                        <th>Год</th>
                                     </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -203,6 +215,7 @@
                 { data: 'utm_source' },
                 { data: 'utm_medium' },
                 { data: 'utm_campaign' },
+                { data: 'year' },
             ]
         });
 
@@ -255,6 +268,14 @@
 
             table
                 .column(10)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#year').on('change', function (e){
+
+            table
+                .column(14)
                 .search(this.value, {exact: true})
                 .draw();
         })
