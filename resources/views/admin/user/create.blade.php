@@ -24,15 +24,29 @@
                 <form action="{{route('admin.user.store')}}" method="post">
                     @csrf
                     <div class="mb-3">
-                        <label>Имя пользователя</label>
-                        <input name="name" type="text" class="form-control" aria-describedby="Иванов И.И.">
+                        <label>Фамилия</label>
+                        <input name="lastname" type="text" class="form-control" aria-describedby="Фамилия" value="{{old('lastname')}}">
+                        @error('lastname')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Имя</label>
+                        <input name="name" type="text" class="form-control" aria-describedby="Имя" value="{{old('name')}}">
                         @error('name')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label>Отчество</label>
+                        <input name="middlename" type="text" class="form-control" aria-describedby="Отчество" value="{{old('middlename')}}">
+                        @error('middlename')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label>Email</label>
-                        <input name="email" type="email" class="form-control">
+                        <input name="email" type="email" class="form-control" value="{{old('email')}}">
                         @error('email')
                         <div class="text-danger">{{$message}}</div>
                         @enderror
@@ -61,7 +75,7 @@
                         <div class="mb-3 form-group">
                             <label>Компания</label>
                             <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
-                                <option>---</option>
+                                <option disabled selected value>---</option>
                                 @foreach($companies as $company)
                                     <option value="{{$company->id}}"
                                         {{ !empty(old('company_id')) && old('company_id') == $company->id ? ' selected' : ''  }}
