@@ -11,8 +11,7 @@
 {{--                    </div>--}}
                     <div class="d-none d-lg-block"><p class="text-center" style="color: grey; font-size: 20px">Федеральный проект «Активные меры содействия занятости»</p>
                     </div>
-                    <p class="text-center" style="color: #3d444b; font-size: 20px">Набор на бесплатное обучение в этом году завершен!
-                        <br> Оставьте заявку на 2026 год и пройдите обучение в числе первых.
+                    <p class="text-center" style="color: #3d444b; font-size: 20px">Оставьте заявку и пройдите обучение в числе первых.
                         <br> Подпишитесь на наш <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i> Телеграм канал</a>, чтобы оставаться с нами на связи.</p>
 
 

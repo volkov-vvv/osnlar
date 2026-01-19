@@ -15,7 +15,7 @@
                                     <p>которая специализируется на:</p>
                                     <ul>
                                         <li>создании цифрового образовательного контента</li>
-                                        <li>разработке образовательной платформы &laquo;Основание&raquo;</li>
+                                        <li>внедрении образовательной платформы &laquo;Основание&raquo;</li>
                                         <li>обучении по различным IT-направлениям</li>
                                     </ul>
 
@@ -23,9 +23,9 @@
                                         <a href="{{route('course.index')}}" class="button-main">Выберите курс</a>
                                     </div>
                                     <div class="achievement">
-                                        <div><span class="achievement-bold">10 289</span><br>слушателей</div>
-                                        <div><span class="achievement-bold">40+</span><br>программ</div>
-                                        <div><span class="achievement-bold">82%</span><br>трудоустроились</div>
+                                        <div><span class="achievement-bold">11 535</span><br>слушателей</div>
+                                        <div><span class="achievement-bold">60+</span><br>программ</div>
+                                        <div><span class="achievement-bold">85%</span><br>трудоустроились</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 carousel-img-wrapper top-banner">
@@ -56,14 +56,12 @@
                 <div class="col-md-6" data-aos="fade-up-left">
                     <h2>Федеральный проект «Активные меры содействия занятости»</h2>
                     <p></p>
-                    <p>Учебный центр «Основание» информирует о завершении набора на <em>бесплатное</em> обучение по программам
+                    <p>Учебный центр «Основание» открывает предварительную запись на <em>бесплатное</em> обучение по программам
                         дополнительного профессионального образования отдельных категорий граждан в рамках
-                        реализации Федерального <a
-                            href="https://trudvsem.ru/information-pages/support-employment/">проекта
-                            «Активные меры содействия занятости»</a> Национального проекта «Кадры».</p>
-                    <p>Стартовал предварительный прием заявок <br>на обучение в 2026 году.</p>
+                        реализации Федерального проекта «Активные меры содействия занятости» <a href="https://xn--80aapampemcchfmo7a3c9ehj.xn--p1ai/new-projects/kadry/" target="_blank">Национального проекта «Кадры»</a>.</p>
+
                     <div class="carousel-content-btns">
-                        <a href="{{route('course.index')}}" class="button-main">Заявка на 2026 год</a>
+                        <a href="{{route('course.index')}}" class="button-main">Оставить заявку</a>
                     </div>
                 </div>
             </div>
@@ -87,8 +85,10 @@
             </div>
 
             <div class="row mt-5">
-                <div class="carousel-content-btns mx-auto">
-                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>
+
+                <div class="carousel-content-btns mx-auto text-center">
+                    <a href="{{route('course.index')}}" type="button" class="btn btn-primary btn-lg px-5"> Все курсы </a>
+{{--                    <a href="{{route('course.index')}}" class="button-main ">Все курсы</a>--}}
                 </div>
             </div>
         </div>
@@ -99,7 +99,7 @@
             <div class="row">
                 <div class="col-md-6" data-aos="fade-up-right">
                     <h4 class="edica-landing-section-subtitle-alt">О нас</h4>
-                    <h2 class="edica-landing-section-title">Успешно обучили более 10 000 слушателей</h2>
+                    <h2 class="edica-landing-section-title">Успешно обучили более 11 000 слушателей</h2>
                     <p>Мы современная образовательная организация, стремимся делать наши курсы максимально удобными и эффективными. Основные принципы, которых мы придерживаемся:</p>
                     <ul class="landing-about-list">
                         <li>Привлечение лучших специалистов</li>
