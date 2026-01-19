@@ -192,6 +192,7 @@ class IndexController extends Controller
         $param['utm_source'] = $request->get('filterUtmSource');
         $param['utm_medium'] = $request->get('filterUtmMedium');
         $param['utm_campaign'] = $request->get('filterUtmCampaign');
+        $param['year'] = $request->get('filterYear');
 
 
         return (new ReportExport)

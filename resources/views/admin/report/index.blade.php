@@ -164,6 +164,7 @@
                             filterUtmSource: $('#utm_source').val(),
                             filterUtmMedium: $('#utm_medium').val(),
                             filterUtmCampaign: $('#utm_campaign').val(),
+                            filterYear: $('#year').val(),
                         },
                         xhrFields:{
                             responseType: 'blob'
