@@ -136,6 +136,20 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+
+                        <div class="custom-control custom-switch">
+                            <input type="hidden" name="fast_pay" value="0">
+                            <input name="fast_pay" type="checkbox" class="custom-control-input" id="customSwitch4" value="1"
+                                {{ old('fast_pay') == 1 ? ' checked' : '' }}
+                            >
+                            <label class="custom-control-label" for="customSwitch4">Разрешена оплата после создания заявки</label>
+                        </div>
+                        @error('fast_pay')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+
+                    </div>
                     <div class="mb-3 form-group">
                         <h5><b>SEO</b></h5>
                         <label>Title</label>

@@ -225,7 +225,9 @@ Route::group(['namespace' => 'Agent', 'prefix' => 'agent', 'middleware' => ['aut
 });
 
 Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth', 'user']],function (){
-        Route::get('/', 'IndexController')->name('user.index');
+    Route::get('/', 'IndexController')->name('user.index');
+    Route::get('/upload/{order?}', 'UploadController')->name('user.upload');
+    Route::post('/', 'UploadStoreController')->name('user.upload.store');
 });
 
 Route::group(['namespace' => 'Lid', 'prefix' => 'lid', 'middleware' => ['cookie']],function (){

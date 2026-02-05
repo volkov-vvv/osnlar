@@ -36,6 +36,7 @@ class StoreRequest extends FormRequest
             'seo_description' => 'nullable|string',
             'company_id' => 'nullable|integer',
             'price' => 'nullable|numeric',
+            'fast_pay' => 'nullable',
         ];
     }
     public function messages()

@@ -41,6 +41,7 @@ class UpdateRequest extends FormRequest
             'series' => '',
             'years' => '',
             'company_id' => 'nullable|integer',
+            'fast_pay' => 'nullable',
         ];
     }
 
