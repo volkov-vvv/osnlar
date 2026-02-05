@@ -21,9 +21,9 @@
             <nav>
                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Все</button>
-                    <button class="nav-link" id="nav-digital-tab" data-toggle="tab" data-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false">Профессиональная переподготовка (256 ч.)</button>
-                    <button class="nav-link" id="nav-designed-tab" data-toggle="tab" data-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Повышение квалификации (144 ч.)</button>
-                    <button class="nav-link" id="nav-business-tab" data-toggle="tab" data-target="#nav-business" type="button" role="tab" aria-controls="nav-business" aria-selected="false">Повышение квалификации (72 ч.)</button>
+                    <button class="nav-link" id="nav-digital-tab" data-toggle="tab" data-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false">Профессиональная переподготовка<br> (256 ч.)</button>
+                    <button class="nav-link" id="nav-designed-tab" data-toggle="tab" data-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Повышение квалификации<br> (144 ч.)</button>
+                    <button class="nav-link" id="nav-business-tab" data-toggle="tab" data-target="#nav-business" type="button" role="tab" aria-controls="nav-business" aria-selected="false">Повышение квалификации<br> (72 ч.)</button>
                 </div>
             </nav>
             <div class="pt-5 tab-content" id="nav-tabContent">
