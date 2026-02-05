@@ -121,7 +121,7 @@ sticky-top  bg-white bg-opacity-75
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
                     <li class="nav-item pr-2 pl-2">
-                        <a href="{{url('https://max.ru/join/-CB9Bb5DHub3m2g7IiHfWfvp3zXS7fYoiT7Vdz_9FwA')}}"><img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28"  alt="Max"></a>
+                        <a href="{{url('https://max.ru/id7751117260_biz')}}"><img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28"  alt="Max"></a>
                     </li>
                     <li class="nav-item">
                         <a href="{{url('https://t.me/osnovanie_study')}}"><img src="{{asset('assets/images/Telegram_Messenger.png')}}" width="28"  alt="Telegram"></a>
