@@ -26,7 +26,7 @@ class DashboardController extends Controller
         if ( isset($param['year']) ) {
             $year = $param['year'];
         }else{
-            $year = 2025;
+            $year = 2026;
         }
 
 
@@ -38,10 +38,15 @@ class DashboardController extends Controller
         foreach($users as $user){
             $userLids = $user->getLids2($year);
             $activeLids = $user->getActiveLids($year);
+            if($lidsCount !=0){
+                $percent = round($activeLids / $lidsCount * 100, 2);
+            }else{
+                $percent = 0;
+            }
             $data_arr[] = array(
                 'fio' => $user->name,
                 'count' => $activeLids,
-                'percent' => round($activeLids / $lidsCount * 100, 2),
+                'percent' => $percent,
                 'average_time' => $user->averageTime($year),
                 'status_learning' => $userLids->where('status_id', 4)->count(),
                 'status_end_learning' => $userLids->where('status_id', 23)->count(),
