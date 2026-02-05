@@ -98,9 +98,9 @@ sticky-top  bg-white bg-opacity-75
             </button>
             <div class="collapse navbar-collapse" id="edicaMainNav">
                 <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
-                    <li class="nav-item {{ request()->is('/') ? 'active' : null }}">
-                        <a class="nav-link" href="{{route('main.index')}}">Главная</a>
-                    </li>
+{{--                    <li class="nav-item {{ request()->is('/') ? 'active' : null }}">--}}
+{{--                        <a class="nav-link" href="{{route('main.index')}}">Главная</a>--}}
+{{--                    </li>--}}
                     <li class="nav-item {{ request()->is('about*') ? 'active' : null }}">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
@@ -120,6 +120,13 @@ sticky-top  bg-white bg-opacity-75
                     <li class="nav-item">
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
+                    <li class="nav-item pr-2 pl-2">
+                        <a href="{{url('https://max.ru/join/-CB9Bb5DHub3m2g7IiHfWfvp3zXS7fYoiT7Vdz_9FwA')}}"><img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28"  alt="Max"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{url('https://t.me/osnovanie_study')}}"><img src="{{asset('assets/images/Telegram_Messenger.png')}}" width="28"  alt="Telegram"></a>
+                    </li>
+
 
                     @if( isset(auth()->user()->id) )
 
