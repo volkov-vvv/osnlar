@@ -13,8 +13,8 @@
         <meta property="og:title" content="{{$pageTitle}}"/>
         <title>{{$pageTitle}}</title>
     @else
-        <title>Основание :: Главная</title>
-        <meta property="og:title" content="Основание :: Главная"/>
+        <title>Главная</title>
+        <meta property="og:title" content="Главная"/>
     @endif
 
     <!-- Favicon-->

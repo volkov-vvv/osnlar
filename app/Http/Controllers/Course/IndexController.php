@@ -40,7 +40,7 @@ class IndexController extends Controller
             $query->where('code_future', '!=', 1)
                 ->orWhereNull('code_future');
         })->get()->sortBy('order');
-        $pageTitle = "Курсы";
+        $pageTitle = "Бесплатные курсы";
         $pageDescription = "Бесплатные курсы Учебного центра «Основание» по программам дополнительного профессионального образования в рамках реализации федерального проекта «Содействие занятости»";
         return view('course.index',compact('courses', 'pageTitle', 'pageDescription','coursesS1','coursesS2','coursesS3'));
     }

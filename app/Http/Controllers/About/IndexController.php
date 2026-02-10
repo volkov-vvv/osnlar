@@ -14,6 +14,8 @@ class IndexController extends Controller
     {
         $abouts = About::all();
         $documents = Document::all();
-        return view('about.index', compact('abouts','documents'));
+        $pageTitle = "О нас";
+        $pageDescription = "Основные сведения о Центре повышения квалификации и профессиональной подготовки «Основание»";
+        return view('about.index', compact('abouts','documents','pageTitle', 'pageDescription'));
     }
 }
