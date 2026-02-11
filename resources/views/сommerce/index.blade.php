@@ -5,8 +5,14 @@
         <div class="container">
             <div class="row p-5"  data-aos="fade-up">
                 <div class="col">
-                    <h1 class="text-center">Платные курсы</h1>
-                    <p class="text-center" style="color: grey; font-size: 20px">Предварительная запись на обучение</p>
+
+                    <div class="col text-center"><img src="{{asset('assets/images/mosfuture1.png')}}"></div>
+                    <h1 class="text-center">Софинансирование обучения</h1>
+                    <p class="text-center" style="color: grey; font-size: 20px">   Предварительная запись на обучение в рамках проекта «Профессии Будущего»<br>
+                        Государственная программа профессионального обучения и дополнительного профессионального образования, реализуемая на условиях софинансирования при поддержке Правительства Москвы.
+                    </p>
+                
+
                 </div>
             </div>
             <section class="featured-posts-section">

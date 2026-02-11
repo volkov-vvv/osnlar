@@ -13,8 +13,8 @@
         <meta property="og:title" content="{{$pageTitle}}"/>
         <title>{{$pageTitle}}</title>
     @else
-        <title>Основание :: Главная</title>
-        <meta property="og:title" content="Основание :: Главная"/>
+        <title>Главная</title>
+        <meta property="og:title" content="Главная"/>
     @endif
 
     <!-- Favicon-->
@@ -112,9 +112,9 @@ sticky-top  bg-white bg-opacity-75
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
                         <div class="dropdown-menu" aria-labelledby="blogDropdown">
 {{--                            <a class="dropdown-item" href="{{route('future.index')}}">Код будущего</a>--}}
-                            <a class="dropdown-item" href="{{route('course.index')}}">Бесплатные курсы</a>
-                            <a class="dropdown-item" href="{{route('commerce.index')}}">Платные курсы</a>
-                            <a class="dropdown-item" href="{{route('archive.index')}}">Архив</a>
+                            <a class="dropdown-item" href="{{route('course.index')}}">- Бесплатные курсы «Активные меры содействия занятости»</a>
+                            <a class="dropdown-item" href="{{route('commerce.index')}}">- Софинансирование обучения «Профессии будущего»</a>
+                            <a class="dropdown-item" href="{{route('archive.index')}}">- Архив</a>
                         </div>
                     </li>
                     <li class="nav-item">

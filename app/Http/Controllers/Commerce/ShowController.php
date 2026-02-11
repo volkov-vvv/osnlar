@@ -23,7 +23,7 @@ class ShowController extends Controller
         if(isset($course->seo_description)){
             $pageDescription = $course->seo_description;
         }else{
-            $pageDescription = 'Бесплатное обучение по программе "' . $course->title . '"';
+            $pageDescription = 'Обучение по программе "' . $course->title . '"';
         }
 
         return view('course.show',compact('course','authors', 'pageTitle', 'pageDescription'));
