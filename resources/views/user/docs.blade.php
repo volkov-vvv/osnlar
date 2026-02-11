@@ -16,25 +16,36 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
-
                                         <form action="{{route('user.upload.store')}}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" name="order_id" value="{{$order->id}}">
-                                            <input type="file" name="doc">
+
                                             <div class="mb-3 form-group">
-                                                <label for="exampleInputFile">Добавить основное изображение курса</label>
+                                                <label for="exampleInputFile">
+                                                    Загрузите согласие на обработку персональных данных
+                                                </label>
+                                                @if(!empty($docs['soglasie']))
+                                                    <div class="mb-2">
+                                                        <a href="{{ url('storage/' . $docs['soglasie']['file']) }}" target="_blank">
+                                                            <img src="{{asset('assets/images/' . $docs['soglasie']['ext'] . '.svg')}}">
+                                                            {{$docs['soglasie']['title']}}
+                                                        </a>
+                                                    </div>
+                                                @endif
+
                                                 <div class="input-group">
-
-
-
-
-
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name="doc[soglasie]">
+                                                        <label class="custom-file-label">Выберите файл</label>
+                                                    </div>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Загрузить</span>
+                                                    </div>
                                                 </div>
-                                                @error('image')
+                                                @error('doc')
                                                 <div class="text-danger">{{$message}}</div>
                                                 @enderror
                                             </div>
-
                                             <div class="mb-3 mt-5">
                                                 <button type="submit" class="btn btn-primary">Сохранить</button>
                                                 <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>

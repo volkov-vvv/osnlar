@@ -48,7 +48,7 @@
                                                             </form>
                                                         @endif
                                                         @if($order->status->code == 'waiting-documents')
-                                                                <a href="{{route('user.upload', ['order' => $order->id])}}" class="btn btn-primary">Загрузить документы</a>
+                                                                <a href="{{route('user.docs', ['order' => $order->id])}}" class="btn btn-primary">Загрузить документы</a>
                                                         @endif
                                                     </td>
                                                 </tr>

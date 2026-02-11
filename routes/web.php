@@ -226,7 +226,7 @@ Route::group(['namespace' => 'Agent', 'prefix' => 'agent', 'middleware' => ['aut
 
 Route::group(['namespace' => 'User', 'prefix' => 'user', 'middleware' => ['auth', 'user']],function (){
     Route::get('/', 'IndexController')->name('user.index');
-    Route::get('/upload/{order?}', 'UploadController')->name('user.upload');
+    Route::get('/docs/{order?}', 'DocsController')->name('user.docs');
     Route::post('/', 'UploadStoreController')->name('user.upload.store');
 });
 
