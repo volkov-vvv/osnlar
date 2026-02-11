@@ -11,11 +11,17 @@ class UploadStoreController extends Controller
 {
     public function __invoke(Request $request)
     {
-
-        $request->validate([
+        $valArr = [
             'order_id' => 'required|numeric',
-            'doc.*' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        ];
+        $needDocs = UserDocument::FIRST_STEP_DOCS;
+        foreach ($needDocs as $key => $needDoc){
+            $valArr['doc.' . $key] = 'nullable|file|mimes:' . $needDoc['mimes'] . '|max:2048';
+        }
+        //dump($valArr);
+//dd($request);
+
+        $request->validate($valArr);
 
         $message = '';
         $files = $request->file('doc');

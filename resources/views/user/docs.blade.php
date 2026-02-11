@@ -20,6 +20,35 @@
                                             @csrf
                                             <input type="hidden" name="order_id" value="{{$order->id}}">
 
+                                            @foreach($needDocs as $key => $needDoc)
+                                                <div class="mb-3 form-group">
+                                                    <label for="exampleInputFile">
+                                                        {{$needDoc['title']}}
+                                                    </label>
+                                                    @if(!empty($docs[$key]))
+                                                        <div class="mb-2">
+                                                            <a href="{{ url('storage/' . $docs[$key]['file']) }}" target="_blank">
+                                                                <img src="{{asset('assets/images/' . $docs[$key]['ext'] . '.svg')}}">
+                                                                {{$docs[$key]['title']}}
+                                                            </a>
+                                                        </div>
+                                                    @endif
+
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" name="doc[{{$key}}]">
+                                                            <label class="custom-file-label">Выберите файл</label>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">Загрузить</span>
+                                                        </div>
+                                                    </div>
+                                                    @error('doc')
+                                                    <div class="text-danger">{{$message}}</div>
+                                                    @enderror
+                                                </div>
+                                            @endforeach
+
                                             <div class="mb-3 form-group">
                                                 <label for="exampleInputFile">
                                                     Загрузите согласие на обработку персональных данных
