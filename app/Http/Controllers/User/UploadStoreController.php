@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Status;
 use App\Models\UserDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,12 +52,22 @@ class UploadStoreController extends Controller
             case 'first_step_done':
 
                 $docsCollection = UserDocument::where('user_id', Auth::user()->id)->where('order_id', $request->order_id)->get();
-                dump($docsCollection);
-
+                $errors = [];
                 foreach ($needDocs as $key => $needDoc){
-
-                    if($docsCollection->doesntContain('type', $key)) echo $needDoc['title'] . ' не загружен<br>';
+                    if($docsCollection->doesntContain('type', $key)) $errors[] = $needDoc['title'];
                 }
+                if(empty($errors)){
+                    $status = Status::where('code', 'docs_first_step_done')->first();
+                    //$order = Order::findOrFail($request->order_id);
+                    //dd($order);
+                    //$order>update(['status' => $status]);
+                    Order::where('id', $request->order_id)->update(['status_id' => $status->id]);
+                    echo 'Документы отправлены на проверку';
+                    // Дописать отправку мейла пользователю
+                }else{
+                    echo 'Не все документы загружены';
+                }
+
 
  //               echo "Проверяем, все ли документы загружены";
                 break;
