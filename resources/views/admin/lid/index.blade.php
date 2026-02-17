@@ -69,7 +69,7 @@
                                     <div class="col col-lg-2">
                                         Ответсвенный:
                                         <select id="responsible" name="responsible"
-                                                class="form-control form-control-sm ">
+                                                class="form-control form-control-sm">
                                             <option></option>
                                             @foreach($users as $user)
                                                 <option value="{{$user->name}}">{{$user->name}}</option>

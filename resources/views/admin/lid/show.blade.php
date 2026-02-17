@@ -71,8 +71,7 @@
                                     <td>
                                         @foreach($categories as $category)
                                             {{ $category->id == $lid->category_id ? $category->title : '' }}
-                                        @endforeach
-                                        {{$lid->category_id}}</td>
+                                        @endforeach</td>
                                 </tr>
                                 <tr>
                                     <td>Образование</td>
