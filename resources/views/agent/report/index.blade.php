@@ -29,42 +29,39 @@
                         <div class="card">
 
                             <div class="card-body">
+                                <div class="row pb-4">
+                                    <div class="col col-lg-1">
+                                        Год:
+                                        <select id="year" name="year" class="form-control form-control-sm">
+                                            <option value="2026">2026</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2024">2024</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        Статус:
+                                        <select id="status" name="status"
+                                                class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($statuses as $status)
+                                                <option value="{{$status->title}}">{{$status->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        utm_source:
+                                        <select id="utm_source" name="utm_source"
+                                                class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($sourcesForFilter as $source)
+                                                @if(!empty($source->utm_source))
+                                                    <option value="{{$source->utm_source}}">{{$source->utm_source}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
-                                <table class="table table-striped mb-2">
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            Агент:
-                                            <select id="agent" name="agent">
-                                                <option></option>
-                                                @foreach($agentsForFilter as $agent)
-                                                    <option value="{{$agent->agent->title}}">{{$agent->agent->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Статус:
-                                            <select id="status" name="status">
-                                                <option></option>
-                                                @foreach($statuses as $status)
-                                                    <option value="{{$status->title}}">{{$status->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            utm_source:
-                                            <select id="utm_source" name="utm_source">
-                                                <option></option>
-                                                @foreach($sourcesForFilter as $source)
-                                                    @if(!empty($source->utm_source))
-                                                        <option value="{{$source->utm_source}}">{{$source->utm_source}}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
 
                                 <table id="report1" class="table table-bordered table-striped hover">
                                     <thead>

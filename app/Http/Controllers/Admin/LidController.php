@@ -54,7 +54,7 @@ class lidController extends Controller
      */
     public function create()
     {
-        $courses = Course::all();
+        $courses = Course::where('is_published', 1)->get();
         $regions = Region::all();
         $levelsedu = Leveledu::all();
         $categories = Category::all();

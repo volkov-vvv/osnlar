@@ -180,7 +180,7 @@
                                         @if(old('status_id'))
                                             {{ $status->id == old('status_id') ? ' selected' : '' }}
                                         @else
-                                            {{ $status->title == 'FLOW' ? ' selected' : '' }}
+                                            {{ $status->id == 7 ? ' selected' : '' }}
                                         @endif
                                 >{{$status->title}}</option>
                             @endforeach

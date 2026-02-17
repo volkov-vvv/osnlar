@@ -19,82 +19,78 @@
             <div class="row">
                 <div class="col">
                         <div class="card">
-
                             <div class="card-body">
+                                <div class="row pb-2">
+                                    <div class="col col-lg-1">
+                                        Год:
+                                        <select id="year" name="year" class="form-control form-control-sm">
+                                            <option value="2026">2026</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2024">2024</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row pb-4">
+                                    <div class="col-12 col-lg-1">
+                                        Дата:
+                                        <input id="date" type="date" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        Агент:
+                                        <select id="agent" name="agent"
+                                                class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($agents as $agent)
+                                                <option value="{{$agent->title}}">{{$agent->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        Статус:
+                                        <select id="status" name="status"
+                                                class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($statuses as $status)
+                                                <option value="{{$status->title}}">{{$status->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        utm_source:
+                                        <select id="utm_source" name="utm_source"
+                                                class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($utmFilter['sources'] as $item)
+                                                <option value="{{$item->utm_source}}">{{$item->utm_source}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-2">
+                                        utm_medium:
+                                        <select id="utm_medium" name="utm_medium"
+                                                class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($utmFilter['medium'] as $item)
+                                                <option value="{{$item->utm_medium}}">
+                                                    {{ mb_strlen($item->utm_medium) > 20 ? mb_substr($item->utm_medium, 0, 20) . '...' : $item->utm_medium }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-lg-3">
+                                        utm_campaign:
+                                        <select id="utm_campaign" name="utm_campaign"
+                                                class="form-control form-control-sm">
+                                            <option></option>
+                                            @foreach($utmFilter['campaign'] as $item)
+                                                <option value="{{$item->utm_campaign}}">
+                                                    {{ mb_strlen($item->utm_campaign) > 20 ? mb_substr($item->utm_campaign, 0, 20) . '...' : $item->utm_campaign }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                <table class="table mb-2">
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            Год:
-                                            <select id="year" name="year" class="form-control form-control-sm">
-                                                <option value="2026">2026</option>
-                                                <option value="2025">2025</option>
-                                                <option value="2024">2024</option>
-                                            </select>
-                                        </td>
-                                        <td colspan="5"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Дата:
-                                            <input id="date" type="date">
-                                        </td>
-                                        <td>
-                                            Агент:
-                                            <select id="agent" name="agent">
-                                                <option></option>
-                                                @foreach($agents as $agent)
-                                                    <option value="{{$agent->title}}">{{$agent->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            Статус:
-                                            <select id="status" name="status">
-                                                <option></option>
-                                                @foreach($statuses as $status)
-                                                    <option value="{{$status->title}}">{{$status->title}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            utm_source:
-                                            <select id="utm_source" name="utm_source">
-                                                <option></option>
-                                                @foreach($utmFilter['sources'] as $item)
-                                                    <option value="{{$item->utm_source}}">{{$item->utm_source}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            utm_medium:
-                                            <select id="utm_medium" name="utm_medium">
-                                                <option></option>
-                                                @foreach($utmFilter['medium'] as $item)
-                                                    <option value="{{$item->utm_medium}}">
-                                                        {{ mb_strlen($item->utm_medium) > 20 ? mb_substr($item->utm_medium, 0, 20) . '...' : $item->utm_medium }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            utm_campaign:
-                                            <select id="utm_campaign" name="utm_campaign">
-                                                <option></option>
-                                                @foreach($utmFilter['campaign'] as $item)
-                                                    <option value="{{$item->utm_campaign}}">
-                                                        {{ mb_strlen($item->utm_campaign) > 20 ? mb_substr($item->utm_campaign, 0, 20) . '...' : $item->utm_campaign }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                </div>
 
                                 <table id="report" class="table table-bordered table-striped hover">
                                     <thead>

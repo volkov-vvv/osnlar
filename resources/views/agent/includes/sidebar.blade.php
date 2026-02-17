@@ -20,24 +20,20 @@
         </div>
 
         <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <nav class="mt-2" >
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="{{route('agent.main.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-home"></i>
-                        <p>
-                            Дашборд
-                        </p>
+                        <p>Дашборд</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('agent.report.index')}}" class="nav-link">
+                    <a href="{{route('agent.report.index')}}" class="nav-link" >
                         <i class="nav-icon fas fa-link"></i>
-                        <p>
-                            Отчеты
-                        </p>
+                        <p>Отчеты</p>
                     </a>
                 </li>
             </ul>

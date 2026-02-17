@@ -35,6 +35,7 @@ class StoreRequest extends FormRequest
             'course_id' => 'required|string',
             'lid_level_edu_id' => 'required|string',
             'region_id' => 'required|string',
+            'status_id' => 'required|string',
             'category_id' => 'required|string',
             'agent_id' => 'required|string',
             'politic' => 'required',
