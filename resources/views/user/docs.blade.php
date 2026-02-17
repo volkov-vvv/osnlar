@@ -20,6 +20,17 @@
                                             @csrf
                                             <input type="hidden" name="order_id" value="{{$order->id}}">
 
+
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                                                    <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                                                </div>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>
+                                                </div>
+                                            </div>
+
                                             @foreach($needDocs as $key => $needDoc)
                                                 <div class="mb-3 form-group">
                                                     <label for="exampleInputFile">
@@ -75,9 +86,14 @@
                                                 <div class="text-danger">{{$message}}</div>
                                                 @enderror
                                             </div>
-                                            <div class="mb-3 mt-5">
-                                                <button type="submit" class="btn btn-primary">Сохранить</button>
-                                                <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
+                                            <div class="row">
+                                                <div class="mb-3 mt-5 col-6">
+                                                    <button type="submit" name="action" value="save" class="btn btn-primary">Сохранить</button>
+                                                    <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>
+                                                </div>
+                                                <div class="mb-3 mt-5 col-6">
+                                                    <button type="submit" name="action" value="first_step_done" class="btn btn-primary">Отправить на проверку</button>
+                                                </div>
                                             </div>
 
                                         </form>

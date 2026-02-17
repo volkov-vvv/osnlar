@@ -13,6 +13,7 @@ class UploadStoreController extends Controller
     {
         $valArr = [
             'order_id' => 'required|numeric',
+            'action' => 'required|string',
         ];
         $needDocs = UserDocument::FIRST_STEP_DOCS;
         foreach ($needDocs as $key => $needDoc){
@@ -21,29 +22,46 @@ class UploadStoreController extends Controller
         //dump($valArr);
 //dd($request);
 
+
+
         $request->validate($valArr);
 
-        $message = '';
-        $files = $request->file('doc');
+        switch ($request->action) {
+            case 'save':
+                $message = '';
+                $files = $request->file('doc');
 
-            foreach ($files as $key => $file) {
-                $path = $file->store('user_docs', 'public');
+                if(!empty($files)){
+                    foreach ($files as $key => $file) {
+                        $path = $file->store('user_docs', 'public');
 
-                UserDocument::create([
-                    'user_id' => Auth::user()->id,
-                    'order_id' => $request->order_id,
-                    'title' => $file->getClientOriginalName(),
-                    'file' => $path,
-                    'type' => $key,
-                ]);
+                        UserDocument::create([
+                            'user_id' => Auth::user()->id,
+                            'order_id' => $request->order_id,
+                            'title' => $file->getClientOriginalName(),
+                            'file' => $path,
+                            'type' => $key,
+                        ]);
 
-                $message .= 'Файл загружен: ' . $path . '<br>';
-            }
+                        $message .= 'Файл загружен: ' . $path . '<br>';
+                    }
+                }
+                return $message;
+            case 'first_step_done':
+
+                $docsCollection = UserDocument::where('user_id', Auth::user()->id)->where('order_id', $request->order_id)->get();
+                dump($docsCollection);
+
+                foreach ($needDocs as $key => $needDoc){
+
+                    if($docsCollection->doesntContain('type', $key)) echo $needDoc['title'] . ' не загружен<br>';
+                }
+
+ //               echo "Проверяем, все ли документы загружены";
+                break;
+        }
 
 
-
-
-            return $message;
 
 
         //return view('user.upload');
