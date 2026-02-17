@@ -68,7 +68,7 @@
                                     <div class="col-12 col-lg-2">
                                         utm_medium:
                                         <select id="utm_medium" name="utm_medium"
-                                                class="form-control form-control-sm">
+                                                class="form-control form-control-sm select2">
                                             <option></option>
                                             @foreach($utmFilter['medium'] as $item)
                                                 <option value="{{$item->utm_medium}}">
@@ -80,7 +80,7 @@
                                     <div class="col-12 col-lg-3">
                                         utm_campaign:
                                         <select id="utm_campaign" name="utm_campaign"
-                                                class="form-control form-control-sm">
+                                                class="form-control form-control-sm select2">
                                             <option></option>
                                             @foreach($utmFilter['campaign'] as $item)
                                                 <option value="{{$item->utm_campaign}}">
