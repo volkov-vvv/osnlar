@@ -30,6 +30,7 @@ class UpdateRequest extends FormRequest
             'category_id' => '',
             'region_id' => '',
             'status_id' => 'required|string',
+            'course_id' => 'required|string',
             'responsible_id' => '',
         ];
     }
