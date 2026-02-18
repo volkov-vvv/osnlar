@@ -16,6 +16,11 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{{route('cc.lid.create')}}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
+                </div>
+            </div>
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 <div class="col">

@@ -6,6 +6,8 @@ use App\Exports\LidsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CC\Lid\StoreRequest;
 use App\Http\Requests\CC\Lid\UpdateRequest;
+use App\Mail\SendEmail;
+use App\Models\Agent;
 use App\Models\Category;
 use App\Models\Course;
 use App\Models\Leveledu;
@@ -50,7 +52,14 @@ class LidController extends Controller
      */
     public function create()
     {
-        return view('cc.lid.create');
+        $courses = Course::where('is_published', 1)->get();
+        $regions = Region::all();
+        $levelsedu = Leveledu::all();
+        $categories = Category::all();
+        $agents = Agent::all();
+        $statuses = Status::whereNull('type')->get();
+        $users = User::where('role', 3)->get();
+        return view('cc.lid.create', compact('levelsedu','regions','courses','categories','agents','statuses','users'));
     }
 
     /**
@@ -62,8 +71,25 @@ class LidController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        Lid::firstOrCreate($data);
+        $lid = Lid::firstOrCreate($data);
 
+        //Отправка письма
+        if($request->send_mail){
+            $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
+            if($links){
+                $link = $links->link;
+            }else{
+                $link = '';
+                $status = Status::all()->where('code', 'not-in-region')->first();
+                $data['status_id'] =  $status->id;
+            }
+            $data['link'] = $link;
+            $data['id'] = $lid->id;
+            $mailData = collect($data);
+            $mailData->subject = 'Ваша заявка на обучение принята';
+            $mailData->template = 'mails.template';
+            \Mail::to($data['email'])->send(new SendEmail($mailData));
+        }
         return redirect()->route('cc.lid.index');
     }
 
