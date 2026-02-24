@@ -28,6 +28,8 @@ class UpdateRequest extends FormRequest
             'name' => 'required|string',
             'middlename' => '',
             'email' => 'required|string|email|unique:users,email,' . $this->user_id,
+            'phone' => 'string',
+            'phone_prefix' => 'string',
             'user_id' => 'required|integer|exists:users,id',
             'role' => 'required|string',
             'company_id' => '',
@@ -37,9 +39,21 @@ class UpdateRequest extends FormRequest
         ];
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->has(['phone', 'phone_prefix'])) {
+            $cleanPhone = str_replace('+' . $this->phone_prefix, '', $this->phone);
+
+            $this->merge([
+                'phone' => $cleanPhone,
+            ]);
+        }
+    }
+
     protected function passedValidation()
     {
         $data = $this->validator->getData();
+
         if(!isset($data['utm'])){
             $this->validator->setData( [
                     'utm' => array(),

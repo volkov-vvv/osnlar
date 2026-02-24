@@ -13,12 +13,13 @@ class UpdateController extends Controller
     {
 
         $data = $request->validated();
+
         if(isset($data['password'])){
             $data['password'] = Hash::make($data['password']);
         }else{
             unset($data['password']);
         }
-//        dd($data);
+
         $user->update($data);
         if(!isset($data['agent_ids'])){
             $data['agent_ids'] = array();

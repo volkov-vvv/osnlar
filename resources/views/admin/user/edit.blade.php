@@ -52,6 +52,19 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label>Телефон</label>
+                        <div>
+                            <input name="phone" id="phone" type="tel" class="form-control"
+                                   value="{{$user->phone}}"
+                            >
+                            <input type="hidden" name="phone_prefix" id="phone_prefix" value="{{ $user->phone_prefix ? $user->phone_prefix : '7' }}">
+                        </div>
+
+                        @error('phone')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label>Пароль</label>
                         <input name="password" type="password" class="form-control">
                         @error('password')
@@ -148,5 +161,33 @@
                 $('#company-form').hide();
             }
         })
+
+
+        $(document).ready(function() {
+
+
+
+            $('[data-mask]').inputmask();
+
+            var input = document.querySelector("#phone");
+            const iti = window.intlTelInput(input, {
+                strictMode: true,
+                showSelectedDialCode: true,
+                nationalMode: false,
+                initialCountry:"ru",
+                onlyCountries: ["ru", "by"],
+                i18n: {
+                    // Country names
+                    ru: "Россия",
+                    by: "Беларусь",
+                },
+                hiddenInput: () => ({ phone: "phone"}),
+                utilsScript: "{{ asset('js/intlTelInput/utils.js')}}?1712939239769"
+            });
+
+            input.addEventListener('countrychange', () => {
+                $('#phone_prefix').val(iti.getSelectedCountryData().dialCode);
+            });
+        });
     </script>
 @endsection

@@ -33,6 +33,10 @@
     <!-- Daterange picker -->
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
 
+
+    <!-- Phone input -->
+    <link rel="stylesheet" href="{{ asset('css/intlTelInput.min.css') }}">
+
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
 
@@ -137,6 +141,10 @@
 <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
 <script src="https://kit.fontawesome.com/068a35c10e.js" crossorigin="anonymous"></script>
+
+<!-- Phone input -->
+<script src="{{ asset('js/intlTelInput/intlTelInput.min.js')}} "></script>
+<script src="{{ asset('js/intlTelInput/data.min.js')}} "></script>
 
 
 <script>

@@ -28,11 +28,22 @@ class StoreRequest extends FormRequest
             'name' => 'required|string',
             'middlename' => '',
             'email' => 'required|string|email|unique:users',
+            'phone_prefix' => 'string',
+            'phone' => 'string',
             'password' => 'required|string',
             'role' => 'required|string',
             'company_id' => '',
         ];
     }
+
+    protected function passedValidation() {
+        $data = $this->validator->getData();
+
+        $this->validator->setData( [
+                'phone' => explode('+' . $data['phone_prefix'], $data['phone'])[1],
+            ] + $data);
+    }
+
     public function messages()
     {
         return [
