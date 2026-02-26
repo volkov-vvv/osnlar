@@ -11,6 +11,7 @@ use App\Models\Lid;
 use App\Models\Link;
 use App\Models\Order;
 use App\Models\Status;
+use App\Models\TelegraphMessage;
 use App\Models\User;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Keyboard\Button;
@@ -75,11 +76,22 @@ class StoreNewController extends Controller
         foreach ($users as $user) {
             $chat = TelegraphChat::find($user->telegraph_chat_id);
             if($user->role == 3){
-                $chat->html((string)view('messages.new_lid', $data))->keyboard(
+                $response = $chat->html((string)view('messages.new_lid', $data))->keyboard(
                     Keyboard::make()->button('Принять заявку')->action('lid_responsible')->param('lid_id', $data['id'])
                 )->send();
             }else{
-                $chat->html((string)view('messages.new_lid', $data))->send();
+                $response = $chat->html((string)view('messages.new_lid', $data))->send();
+            }
+            $messageId = $response->telegraphMessageId();
+            if($messageId){
+                $messageData = [
+                    'chat_id' => $user->telegraph_chat_id,
+                    'message_id' => $messageId,
+                    'user_id' => $user->id,
+                    'lid_id' => $lid->id,
+                    'text' => (string) view('messages.new_lid', $data),
+                ];
+                TelegraphMessage::firstOrCreate($messageData);
             }
         }
 

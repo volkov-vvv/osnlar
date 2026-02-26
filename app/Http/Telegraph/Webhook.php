@@ -5,6 +5,7 @@ namespace App\Http\Telegraph;
 
 
 use App\Models\Lid;
+use App\Models\TelegraphMessage;
 use DefStudio\Telegraph\DTO\Message;
 use DefStudio\Telegraph\DTO\User;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
@@ -66,6 +67,21 @@ class Webhook extends WebhookHandler
             $lid->responsible_id = $user->id;
             $lid->save();
             $this->chat->html('Вы назначены ответсвенным за эту заявку')->send();
+        }
+
+        // Редактируем сообщения у всех пользователей
+        $users = \App\Models\User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
+        foreach ($users as $user) {
+            $message = TelegraphMessage::where('user_id', $user->id)->where('lid_id', $lidId)->first();
+            if($message){
+
+                $oldText = $message->text;
+                $additionalText = "\n\nДополнение к тексту";
+
+                $chat->edit($messageId)
+                    ->message($oldText . $additionalText)
+                    ->send(); // Кнопки также пропадут, так как они не указаны
+            }
         }
     }
 }
