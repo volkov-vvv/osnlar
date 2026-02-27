@@ -75,13 +75,14 @@ class StoreNewController extends Controller
         $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
 
         foreach ($users as $user) {
-            dd((string) view('messages.new_lid', $data));
+ //           dd((string) view('messages.new_lid', $data));
             $chat = TelegraphChat::find($user->telegraph_chat_id);
             if($user->role == 3){
                 $response = $chat->html((string)view('messages.new_lid', $data))->keyboard(
                     Keyboard::make()->button('Принять заявку')->action('lid_responsible')->param('lid_id', $data['id'])
                 )->send();
             }else{
+                dd($chat);
                 $response = $chat->html((string)view('messages.new_lid', $data))->send();
             }
             $messageId = $response->telegraphMessageId();
@@ -97,7 +98,7 @@ class StoreNewController extends Controller
             }
         }
 
-        return redirect()->route('lid.index');
+//        return redirect()->route('lid.index');
 
     }
 }
