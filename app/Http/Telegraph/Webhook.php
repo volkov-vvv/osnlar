@@ -79,7 +79,7 @@ class Webhook extends WebhookHandler
                 Log::debug($chat);
 
                 $oldText = $message->text;
-                $additionalText = "\n\nОтветственный: " . $lid->responsible->name;
+                $additionalText = "\nОтветственный: " . $lid->responsible->name;
 
                 $chat->edit($message->message_id)
                     ->message($oldText . $additionalText)
