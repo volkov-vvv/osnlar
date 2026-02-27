@@ -77,6 +77,9 @@ class StoreNewController extends Controller
         foreach ($users as $user) {
 
             $chat = TelegraphChat::find($user->telegraph_chat_id);
+
+            dd($chat);
+
             if($user->role == 3){
 
                 $response = $chat->html((string)view('messages.new_lid', $data))->keyboard(
