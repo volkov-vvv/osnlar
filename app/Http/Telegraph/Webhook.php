@@ -73,8 +73,10 @@ class Webhook extends WebhookHandler
         $users = \App\Models\User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
         foreach ($users as $user) {
             $message = TelegraphMessage::where('user_id', $user->id)->where('lid_id', $lidId)->first();
+            $chat = TelegraphChat::where('chat_id', $message->chat_id)->first();
             if($message){
                 Log::debug($message);
+                Log::debug($chat);
 
                 $oldText = $message->text;
                 $additionalText = "\n\nОтветстванный: " . $lid->responsible->name;
