@@ -74,6 +74,7 @@ class Webhook extends WebhookHandler
         foreach ($users as $user) {
             $message = TelegraphMessage::where('user_id', $user->id)->where('lid_id', $lidId)->first();
             if($message){
+                Log::debug($message);
 
                 $oldText = $message->text;
                 $additionalText = "\n\nОтветстванный: " . $lid->responsible->name;
