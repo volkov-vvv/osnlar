@@ -76,9 +76,9 @@ class Webhook extends WebhookHandler
             if($message){
 
                 $oldText = $message->text;
-                $additionalText = "\n\nДополнение к тексту";
+                $additionalText = "\n\nОтветстванный: " . $lid->responsible->name;
 
-                $chat->edit($messageId)
+                $chat->edit($message->message_id)
                     ->message($oldText . $additionalText)
                     ->send(); // Кнопки также пропадут, так как они не указаны
             }
