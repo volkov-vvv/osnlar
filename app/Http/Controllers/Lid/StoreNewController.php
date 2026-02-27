@@ -73,8 +73,9 @@ class StoreNewController extends Controller
         ];
 
         $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
-        dd($users);
+
         foreach ($users as $user) {
+            dd($data);
             $chat = TelegraphChat::find($user->telegraph_chat_id);
             if($user->role == 3){
                 $response = $chat->html((string)view('messages.new_lid', $data))->keyboard(
