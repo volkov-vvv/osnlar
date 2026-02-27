@@ -63,8 +63,8 @@ class Webhook extends WebhookHandler
             $this->chat->html('У этой заявки уже есть ответственный')->send();
         }else{
             $chat = TelegraphChat::where('chat_id', $this->chat->chat_id)->first();
-            $user = \App\Models\User::where('telegraph_chat_id', $chat->id)->first();
-            $lid->responsible_id = $user->id;
+            $responsible = \App\Models\User::where('telegraph_chat_id', $chat->id)->first();
+            $lid->responsible_id = $responsible->id;
             $lid->save();
             $this->chat->html('Вы назначены ответсвенным за эту заявку')->send();
         }
