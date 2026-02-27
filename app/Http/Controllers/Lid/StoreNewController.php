@@ -78,11 +78,12 @@ class StoreNewController extends Controller
  //           dd((string) view('messages.new_lid', $data));
             $chat = TelegraphChat::find($user->telegraph_chat_id);
             if($user->role == 3){
+                dd($chat);
                 $response = $chat->html((string)view('messages.new_lid', $data))->keyboard(
                     Keyboard::make()->button('Принять заявку')->action('lid_responsible')->param('lid_id', $data['id'])
                 )->send();
             }else{
-                dd($chat);
+ //               dd($chat);
                 $response = $chat->html((string)view('messages.new_lid', $data))->send();
             }
             $messageId = $response->telegraphMessageId();
