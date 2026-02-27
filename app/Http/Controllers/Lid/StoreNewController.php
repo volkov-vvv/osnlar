@@ -89,7 +89,7 @@ class StoreNewController extends Controller
             $messageId = $response->telegraphMessageId();
             if($messageId){
                 $messageData = [
-                    'chat_id' => $user->telegraph_chat_id,
+                    'chat_id' => $chat->id,
                     'message_id' => $messageId,
                     'user_id' => $user->id,
                     'lid_id' => $lid->id,
