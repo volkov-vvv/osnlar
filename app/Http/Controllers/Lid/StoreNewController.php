@@ -99,7 +99,7 @@ class StoreNewController extends Controller
             }
         }
 
-//        return redirect()->route('lid.index');
+        return redirect()->route('lid.index');
 
     }
 }
