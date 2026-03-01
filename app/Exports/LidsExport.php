@@ -17,10 +17,18 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 {
     use Exportable;
 
+    private $statuses;
+    private $users;
+    private $currentUserRole;
+    private $param;
+    private $columnSortName;
+    private $columnSortOrder;
+
     public function __construct()
     {
         $this->statuses = Status::all();
         $this->users = User::all();
+        $this->currentUserRole = auth()->user()->role;
     }
 
     public function Params($param)
@@ -54,22 +62,45 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
 
     public function headings(): array
     {
-        return [
-            '№',
-            'Ответственный',
-            'Агент',
-            'Курс',
-            'Регион',
-            'Фамилия',
-            'Имя',
-            'Отчество',
-            'Email',
-            'Телефон',
-            'Статус',
-            'Реакция',
-            'Активность',
-            'Дата создания'
-        ];
+        $result= array();
+        switch ($this->currentUserRole) {
+            case 1:
+                $result = [
+                    '№',
+                    'Ответственный',
+                    'Агент',
+                    'Курс',
+                    'Регион',
+                    'Фамилия',
+                    'Имя',
+                    'Отчество',
+                    'Email',
+                    'Телефон',
+                    'Статус',
+                    'Реакция',
+                    'Активность',
+                    'Дата создания'
+                ];
+                break;
+            case 3:
+                $result = [
+                    '№',
+                    'Ответственный',
+                    'Курс',
+                    'Регион',
+                    'Фамилия',
+                    'Имя',
+                    'Отчество',
+                    'Email',
+                    'Телефон',
+                    'Статус',
+                    'Реакция',
+                    'Активность',
+                    'Дата создания'
+                ];
+                break;
+        }
+        return $result;
     }
 
     public function map($lid): array
@@ -129,23 +160,46 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                 $activity .= "\n-------------\n\n";
             }
         }
+        $result = array();
+        switch ($this->currentUserRole) {
+            case 1:
+                $result = [
+                    $id,
+                    $responsible,
+                    $agent,
+                    $course,
+                    $region,
+                    $lastname,
+                    $firstname,
+                    $middlename,
+                    $email,
+                    $phone,
+                    $status,
+                    $interval,
+                    $activity,
+                    $created_at,
+                ];
+                break;
+            case 3:
+                $result = [
+                    $id,
+                    $responsible,
+                    $course,
+                    $region,
+                    $lastname,
+                    $firstname,
+                    $middlename,
+                    $email,
+                    $phone,
+                    $status,
+                    $interval,
+                    $activity,
+                    $created_at,
+                ];
+                break;
+        }
 
-        return [
-            $id,
-            $responsible,
-            $agent,
-            $course,
-            $region,
-            $lastname,
-            $firstname,
-            $middlename,
-            $email,
-            $phone,
-            $status,
-            $interval,
-            $activity,
-            $created_at,
-        ];
+        return $result;
     }
 
     public function defaultStyles(Style $defaultStyle)
