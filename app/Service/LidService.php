@@ -88,10 +88,12 @@ class LidService
 
             $course = $record->course_title;
             $region = $record->region_title;
+            $category = $record->category_title;
             $lastname = $record->lastname;
             $firstname = $record->firstname;
             $email = $record->email;
             $created_at = $record->created_at->toDateTimeString();
+            $updated_at = $record->updated_at->toDateTimeString();
 
             if($record->phone_prefix == '7'){
                 $phone = '8' . $record->phone;
@@ -124,6 +126,7 @@ class LidService
                 "agent" => $agent,
                 "course" => $course,
                 "region" => $region,
+                "category" => $category,
                 "lastname" => $lastname,
                 "firstname" => $firstname,
                 "email" => $email,
@@ -133,6 +136,7 @@ class LidService
                 "company" => $company,
                 "year" => $year,
                 "created_at" => $created_at,
+                "updated_at" => $updated_at,
                 "actions" => $actions,
             );
         }

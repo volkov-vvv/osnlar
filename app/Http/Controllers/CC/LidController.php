@@ -249,10 +249,12 @@ class LidController extends Controller
 
             $course = $record->course->title;
             $region = $record->region->title;
+            $category = $record->category_title;
             $lastname = $record->lastname;
             $firstname = $record->firstname;
             $email = $record->email;
             $created_at = $record->created_at->toDateTimeString();
+            $updated_at = $record->updated_at->toDateTimeString();
 
             if($record->phone_prefix == '7'){
                 $phone = '8' . $record->phone;
@@ -283,6 +285,7 @@ class LidController extends Controller
                 "agent" => $agent,
                 "course" => $course,
                 "region" => $region,
+                "category" => $category,
                 "lastname" => $lastname,
                 "firstname" => $firstname,
                 "email" => $email,
@@ -290,6 +293,7 @@ class LidController extends Controller
                 "status" => $status,
                 "interval" => $interval,
                 "created_at" => $created_at,
+                "updated_at" => $updated_at,
                 "year" => $year,
                 "actions" => $actions,
             );

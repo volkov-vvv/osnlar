@@ -116,6 +116,7 @@
                                         <th>Ответственный</th>
                                         <th>Курс</th>
                                         <th>Регион</th>
+                                        <th>Категория</th>
                                         <th>Фамилия</th>
                                         <th>Имя</th>
                                         <th>Email</th>
@@ -123,6 +124,7 @@
                                         <th>Статус</th>
                                         <th>Реакция</th>
                                         <th>Дата создания</th>
+                                        <th>Дата обновления</th>
                                         <th>Компания</th>
                                         <th>Год</th>
                                         <th>Действия</th>
@@ -194,10 +196,10 @@
             }, "colvis"],
             order: [[0, 'desc']],
             'columnDefs': [ {
-                'targets': [9,12], // column index (start from 0)
+                'targets': [10,14], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             },
-                { targets: [12], visible: false }
+                { targets: [4,14], visible: false }
             ],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -222,6 +224,7 @@
                 { data: 'responsible' },
                 { data: 'course' },
                 { data: 'region' },
+                { data: 'category' },
                 { data: 'lastname' },
                 { data: 'firstname' },
                 { data: 'email' },
@@ -229,6 +232,7 @@
                 { data: 'status' },
                 { data: 'interval' },
                 { data: 'created_at' },
+                { data: 'updated_at' },
                 { data: 'company' },
                 { data: 'year' },
                 { data: 'actions' },
@@ -266,7 +270,7 @@
         $('#status').on('change', function (e){
 
             table
-                .column(8)
+                .column(9)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -274,7 +278,7 @@
         $('#date').on('change', function (e){
 
             table
-                .column(10)
+                .column(11)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -282,7 +286,7 @@
         $('#company').on('change', function (e){
 
             table
-                .column(11)
+                .column(13)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -290,7 +294,7 @@
         $('#year').on('change', function (e){
 
             table
-                .column(12)
+                .column(14)
                 .search(this.value, {exact: true})
                 .draw();
         })

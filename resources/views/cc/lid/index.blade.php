@@ -94,6 +94,7 @@
                                     <th>Агент</th>
                                     <th>Курс</th>
                                     <th>Регион</th>
+                                    <th>Категория</th>
                                     <th>Фамилия</th>
                                     <th>Имя</th>
                                     <th>Email</th>
@@ -101,6 +102,7 @@
                                     <th>Статус</th>
                                     <th>Реакция</th>
                                     <th>Дата создания</th>
+                                    <th>Дата обновления</th>
                                     <th>Год</th>
                                     <th>Действия</th>
                                 </tr>
@@ -167,10 +169,10 @@
             }, "colvis"],
             order: [[0, 'desc']],
             'columnDefs': [{
-                'targets': [10, 12], // column index (start from 0)
+                'targets': [12, 14], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             },
-                {targets: [2, 12], visible: false}
+                {targets: [2, 5, 14], visible: false}
             ],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -196,6 +198,7 @@
                 {data: 'agent'},
                 {data: 'course'},
                 {data: 'region'},
+                {data: 'category'},
                 {data: 'lastname'},
                 {data: 'firstname'},
                 {data: 'email'},
@@ -203,6 +206,7 @@
                 {data: 'status'},
                 {data: 'interval'},
                 {data: 'created_at'},
+                {data: 'updated_at'},
                 {data: 'year'},
                 {data: 'actions'},
             ]
@@ -238,7 +242,7 @@
         $('#status').on('change', function (e) {
 
             table
-                .column(9)
+                .column(10)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -246,7 +250,7 @@
         $('#date').on('change', function (e) {
 
             table
-                .column(11)
+                .column(12)
                 .search(this.value, {exact: true})
                 .draw();
         })
@@ -254,7 +258,7 @@
         $('#year').on('change', function (e) {
 
             table
-                .column(12)
+                .column(14)
                 .search(this.value, {exact: true})
                 .draw();
         })

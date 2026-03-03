@@ -71,6 +71,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     'Агент',
                     'Курс',
                     'Регион',
+                    'Категория',
                     'Фамилия',
                     'Имя',
                     'Отчество',
@@ -79,7 +80,8 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     'Статус',
                     'Реакция',
                     'Активность',
-                    'Дата создания'
+                    'Дата создания',
+                    'Дата обновления'
                 ];
                 break;
             case 3:
@@ -88,6 +90,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     'Ответственный',
                     'Курс',
                     'Регион',
+                    'Категория',
                     'Фамилия',
                     'Имя',
                     'Отчество',
@@ -96,7 +99,8 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     'Статус',
                     'Реакция',
                     'Активность',
-                    'Дата создания'
+                    'Дата создания',
+                    'Дата обновления'
                 ];
                 break;
         }
@@ -120,11 +124,13 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
         }
         $course = $lid->course_title;
         $region = $lid->region_title;
+        $category = $lid->category_title;
         $lastname = $lid->lastname;
         $firstname = $lid->firstname;
         $middlename = $lid->middlename;
         $email = $lid->email;
         $created_at = $lid->created_at;
+        $updated_at = $lid->updated_at;
 
         if($lid->phone_prefix == '7'){
             $phone = '8' . $lid->phone;
@@ -169,6 +175,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     $agent,
                     $course,
                     $region,
+                    $category,
                     $lastname,
                     $firstname,
                     $middlename,
@@ -178,6 +185,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     $interval,
                     $activity,
                     $created_at,
+                    $updated_at,
                 ];
                 break;
             case 3:
@@ -186,6 +194,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     $responsible,
                     $course,
                     $region,
+                    $category,
                     $lastname,
                     $firstname,
                     $middlename,
@@ -195,6 +204,7 @@ class LidsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize
                     $interval,
                     $activity,
                     $created_at,
+                    $updated_at,
                 ];
                 break;
         }

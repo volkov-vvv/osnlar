@@ -93,6 +93,7 @@ class Lid extends Model
             'courses.title as course_title',
             'courses.years as course_years',
             'regions.title as region_title',
+            'categories.title as category_title',
             'agents.title as agent_title',
             'users.name as responsible_name',
             'companies.title as company_title',
