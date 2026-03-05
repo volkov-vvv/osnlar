@@ -42,6 +42,19 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label>Уровень образования</label>
+                        <select name="lid_level_edu_id" class="form-control select2">
+                            @foreach($levels_edu as $level)
+                                <option value="{{$level->id}}"
+                                    {{ $level->id == $lid->lid_level_edu_id ? ' selected' : '' }}
+                                >{{$level->title}}</option>
+                            @endforeach
+                        </select>
+                        @error('lid_level_edu_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label>Категория</label>
                         <select name="category_id" class="form-control select2">
                             @foreach($categories as $category)

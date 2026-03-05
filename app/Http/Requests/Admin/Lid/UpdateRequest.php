@@ -29,6 +29,7 @@ class UpdateRequest extends FormRequest
             'email' => '',
             'category_id' => '',
             'region_id' => '',
+            'lid_level_edu_id' => '',
             'status_id' => 'required|string',
             'course_id' => 'required|string',
             'responsible_id' => '',

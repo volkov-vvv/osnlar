@@ -151,8 +151,9 @@ class lidController extends Controller
         $regions = Region::all();
         $courses = Course::where('is_published', 1)->get();
         $categories = Category::all();
+        $levels_edu = Leveledu::all();
         $users = User::where('role', 3)->get();
-        return view('admin.lid.edit', compact('lid','statuses','users','regions','categories', 'courses'));
+        return view('admin.lid.edit', compact('lid','statuses','users','regions','categories', 'courses','levels_edu'));
     }
 
     /**
