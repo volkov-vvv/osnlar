@@ -56,6 +56,11 @@ class Lid extends Model
         return $this->belongsTo(Activity::class, 'id', 'subject_id')->where('description', '=', 'Изменение статуса');
     }
 
+    public function lastActivity()
+    {
+        return $this->belongsTo(Activity::class, 'id', 'subject_id')->orderBy('created_at', 'desc');
+    }
+
     public function getLidsCount($courseYear){
         $lidsCount = Lid::select('lids.id')
             ->leftjoin('courses', 'lids.course_id', '=', 'courses.id')

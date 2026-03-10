@@ -268,6 +268,7 @@ class LidController extends Controller
                 '</span>';
             if($record->activity){
                 $interval = dateDiff($record->activity->created_at, $record->created_at);
+                $updated_at = $record->lastActivity->created_at->toDateTimeString();
             }else{
                 $interval = '---';
             }
