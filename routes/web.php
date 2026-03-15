@@ -254,5 +254,13 @@ Route::group(['namespace' => 'Order', 'prefix' => 'order'],function (){
     Route::post('/create/finish', [\App\Http\Controllers\OrderController::class, 'store'])->name('order.store');
 });
 
+// Сохранение состояния фильтров
+Route::middleware(['auth'])->group(function () {
+    // Сохранение состояния
+    Route::post('/saved-filters/save', [\App\Http\Controllers\SavedFilterController::class, 'save'])->name('filters.save');
+    // Получение состояния
+    Route::get('/saved-filters/get', [\App\Http\Controllers\SavedFilterController::class, 'get'])->name('filters.get');
+});
+
 //Route::post('/webhook', 'WebhookController@index');
 

@@ -124,7 +124,37 @@
 
 @section('javascript')
     <script>
+        let stateSaveTimer; // Переменная для хранения таймера
         var table = new DataTable('#example2', {
+
+            stateSave: true,
+
+            stateSaveParams: function (settings, data) {
+                data.custom_filters = {
+                    year: $('#year').val(),
+                };
+            },
+
+            stateSaveCallback: function(settings, data) {
+                // Очищаем предыдущий таймер, если пользователь нажал что-то еще
+                clearTimeout(stateSaveTimer);
+
+                // Устанавливаем задержку 2 секунды (2000 мс)
+                stateSaveTimer = setTimeout(function() {
+                    $.ajax({
+                        url: "{{ route('filters.save') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            state: data
+                        },
+                        success: function() {
+                            console.log("Состояние сохранено в БД");
+                        }
+                    });
+                }, 2000);
+            },
+
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
