@@ -11,4 +11,8 @@ class SavedFilter extends Model
 
     protected $table = 'saved_filters';
     protected $guarded = false;
+
+    protected $casts = [
+        'settings' => 'array',
+    ];
 }

@@ -10,23 +10,24 @@ class SavedFilterController extends Controller
 {
     public function save(Request $request)
     {
-        // Валидация: проверяем, что state — это массив/json
-        $request->validate(['state' => 'required|array']);
-
-        $user = Auth::user();
-
-        dd($request['state']);
         SavedFilter::updateOrCreate(
-            ['user_id' => auth()->id(),
-            'page_url' => 'lid',
-            'filters' => json_encode($request['state'])]
+            [
+                'user_id' => auth()->id(),
+                'page_url' => $request->page_url
+            ],
+            [
+                'user_id' => auth()->id(),
+                'page_url' =>  $request->page_url,
+                'filters' => $request->state
+            ]
         );
 
         return response()->json(['status' => 'saved']);
     }
 
-    public function get()
+    public function get(Request $request)
     {
-        //return response()->json(Auth::user()->table_state ?? []);
+        $filters = SavedFilter::where('user_id', auth()->id())->where('page_url', $request['page_url'])->first();
+        return $filters->filters ?? [];
     }
 }

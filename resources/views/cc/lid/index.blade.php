@@ -127,12 +127,29 @@
         let stateSaveTimer; // Переменная для хранения таймера
         var table = new DataTable('#example2', {
 
+
             stateSave: true,
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
                     year: $('#year').val(),
+                    date: $('#date').val(),
+                    responsible: $('#responsible').val(),
+                    course: $('#course').val(),
+                    region: $('#region').val(),
+                    status: $('#status').val(),
                 };
+            },
+
+            stateLoadParams: function (settings, data) {
+                if (data) {
+                    $('#year').val(data.custom_filters.year);
+                    $('#date').val(data.custom_filters.date);
+                    $('#responsible').val(data.custom_filters.responsible);
+                    $('#course').val(data.custom_filters.course);
+                    $('#region').val(data.custom_filters.region);
+                    $('#status').val(data.custom_filters.status);
+                }
             },
 
             stateSaveCallback: function(settings, data) {
@@ -146,13 +163,26 @@
                         method: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",
-                            state: data
+                            page_url: "cc.lid.index",
+                            state: JSON.stringify(data)
                         },
                         success: function() {
                             console.log("Состояние сохранено в БД");
                         }
                     });
                 }, 2000);
+            },
+
+            stateLoadCallback: function(settings, callback) {
+                $.ajax({
+                    url: "{{ route('filters.get') }}",
+                    data: { page_url: "cc.lid.index" },
+                    dataType: "json",
+                    success: function(json) {
+                        // Передаем данные обратно в DataTables
+                        callback(json);
+                    }
+                });
             },
 
             "responsive": true,
@@ -221,6 +251,7 @@
             },
             processing: true,
             serverSide: true,
+
             ajax: "{{route('cc.lid.getLids')}}",
             columns: [
                 {data: 'id'},
