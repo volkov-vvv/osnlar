@@ -146,7 +146,7 @@
                     $('#year').val(data.custom_filters.year);
                     $('#date').val(data.custom_filters.date);
                     $('#responsible').val(data.custom_filters.responsible);
-                    $('#course').val(data.custom_filters.course);
+                    $('#course').val(data.custom_filters.course).trigger('change');
                     $('#region').val(data.custom_filters.region);
                     $('#status').val(data.custom_filters.status);
                 }
