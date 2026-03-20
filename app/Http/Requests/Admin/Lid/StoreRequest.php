@@ -40,6 +40,7 @@ class StoreRequest extends FormRequest
             'agent_id' => 'required|string',
             'politic' => 'required',
             'in_project' => '',
+            'type' => '',
             'utm_source' => '',
             'utm_medium' => '',
             'utm_campaign' => '',

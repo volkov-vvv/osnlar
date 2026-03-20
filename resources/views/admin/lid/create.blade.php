@@ -141,6 +141,16 @@
 
                     <div class="mb-3">
                         <div class="custom-control custom-checkbox">
+                            <input name="type" class="custom-control-input" type="checkbox" id="customCheckbox2" value="rr" checked>
+                            <label for="customCheckbox2" class="custom-control-label">Заявка с портала Работа России</label>
+                        </div>
+                        @error('send_mail')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="custom-control custom-checkbox">
                             <input name="send_mail" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1">
                             <label for="customCheckbox1" class="custom-control-label">Отправить письмо</label>
                         </div>

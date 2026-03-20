@@ -86,6 +86,12 @@ class LidService
                 $year = '';
             }
 
+            if($record->type == 'rr'){
+                $type = 'Заявка с портала Работа России';
+            }else{
+                $type = '';
+            }
+
             $course = $record->course_title;
             $region = $record->region_title;
             $category = $record->category_title;
@@ -138,6 +144,7 @@ class LidService
                 "year" => $year,
                 "created_at" => $created_at,
                 "updated_at" => $updated_at,
+                "type" => $type,
                 "actions" => $actions,
             );
         }

@@ -223,6 +223,7 @@ class lidController extends Controller
         $param['region'] = $request->get('filterRegion');
         $param['status'] = $request->get('filterStatus');
         $param['year'] = $request->get('filterYear');
+        $param['type'] = $request->get('filterType');
 
 
         return (new LidsExport)

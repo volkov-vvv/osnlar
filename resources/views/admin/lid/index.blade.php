@@ -60,6 +60,13 @@
                                             <option value="2024">2024</option>
                                         </select>
                                     </div>
+                                    <div class="col-12 col-lg-2">
+                                        Тип:
+                                        <select id="type" name="type" class="form-control form-control-sm">
+                                            <option></option>
+                                            <option value="rr">Заявка с портала Работа России</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="row pb-4">
                                     <div class="col-12 col-lg-1">
@@ -127,6 +134,7 @@
                                         <th>Дата обновления</th>
                                         <th>Компания</th>
                                         <th>Год</th>
+                                        <th>Тип</th>
                                         <th>Действия</th>
                                     </tr>
                                     </thead>
@@ -179,6 +187,7 @@
                             filterRegion: $('#region').val(),
                             filterStatus: $('#status').val(),
                             filterYear: $('#year').val(),
+                            filterType: $('#type').val(),
                         },
                         xhrFields:{
                             responseType: 'blob'
@@ -199,7 +208,7 @@
                 'targets': [10,14], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             },
-                { targets: [4,14], visible: false }
+                { targets: [4,14,15], visible: false }
             ],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -235,6 +244,7 @@
                 { data: 'updated_at' },
                 { data: 'company' },
                 { data: 'year' },
+                {data: 'type'},
                 { data: 'actions' },
             ]
         });
@@ -295,6 +305,14 @@
 
             table
                 .column(14)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#type').on('change', function (e) {
+
+            table
+                .column(15)
                 .search(this.value, {exact: true})
                 .draw();
         })
