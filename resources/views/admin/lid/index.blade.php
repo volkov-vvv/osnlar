@@ -156,8 +156,68 @@
 
 @section('javascript')
     <script>
-
+        let stateSaveTimer; // Переменная для хранения таймера
         var table = new DataTable('#example2', {
+
+            stateSave: true,
+
+            stateSaveParams: function (settings, data) {
+                data.custom_filters = {
+                    year: $('#year').val(),
+                    date: $('#date').val(),
+                    responsible: $('#responsible').val(),
+                    course: $('#course').val(),
+                    region: $('#region').val(),
+                    status: $('#status').val(),
+                    type: $('#type').val(),
+                };
+            },
+
+            stateLoadParams: function (settings, data) {
+                if (data) {
+                    $('#year').val(data.custom_filters.year);
+                    $('#date').val(data.custom_filters.date);
+                    $('#responsible').val(data.custom_filters.responsible);
+                    $('#course').val(data.custom_filters.course).trigger('change');
+                    $('#region').val(data.custom_filters.region);
+                    $('#status').val(data.custom_filters.status);
+                    $('#type').val(data.custom_filters.type);
+                }
+            },
+
+            stateSaveCallback: function(settings, data) {
+                // Очищаем предыдущий таймер, если пользователь нажал что-то еще
+                clearTimeout(stateSaveTimer);
+
+                // Устанавливаем задержку 2 секунды (2000 мс)
+                stateSaveTimer = setTimeout(function() {
+                    $.ajax({
+                        url: "{{ route('filters.save') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            page_url: "admin.lid.index",
+                            state: JSON.stringify(data)
+                        },
+                        success: function() {
+                            console.log("Состояние сохранено в БД");
+                        }
+                    });
+                }, 2000);
+            },
+
+            stateLoadCallback: function(settings, callback) {
+                $.ajax({
+                    url: "{{ route('filters.get') }}",
+                    data: { page_url: "admin.lid.index" },
+                    dataType: "json",
+                    success: function(json) {
+                        // Передаем данные обратно в DataTables
+                        callback(json);
+                    }
+                });
+            },
+
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
