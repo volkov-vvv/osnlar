@@ -32,7 +32,7 @@ class LinkController extends Controller
     public function create()
     {
         $regions = Region::all();
-        $courses = Course::all();
+        $courses = Course::where('is_published', 1)->get();
         return view('admin.link.create', compact('regions', 'courses'));
     }
 
