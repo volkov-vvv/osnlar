@@ -249,6 +249,12 @@ class LidController extends Controller
                 $year = '';
             }
 
+            if($record->type == 'rr'){
+                $type = 'Заявка с портала Работа России';
+            }else{
+                $type = '';
+            }
+
             $course = $record->course->title;
             $region = $record->region->title;
             $category = $record->category_title;
@@ -298,6 +304,7 @@ class LidController extends Controller
                 "created_at" => $created_at,
                 "updated_at" => $updated_at,
                 "year" => $year,
+                "type" => $type,
                 "actions" => $actions,
             );
         }
@@ -334,6 +341,7 @@ class LidController extends Controller
         $param['region'] = $request->get('filterRegion');
         $param['status'] = $request->get('filterStatus');
         $param['year'] = $request->get('filterYear');
+        $param['type'] = $request->get('filterType');
 
         return (new LidsExport)
             ->Params($param)

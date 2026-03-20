@@ -173,6 +173,10 @@ class Lid extends Model
             $query->where('lids.utm_campaign', 'like', $params['utm_campaign'] );
         }
 
+        if ( isset($params['type']) ) {
+            $query->where('lids.type', 'like', $params['type'] );
+        }
+
         if ( isset($params['created_at']) ) {
             $query->where('lids.created_at', 'like', '%' . $params['created_at'] . '%' );
         }

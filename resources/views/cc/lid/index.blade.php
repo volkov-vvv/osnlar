@@ -28,7 +28,7 @@
                         <div class="card-body">
                             <div class="container-fluid">
                                 <div class="row pb-2">
-                                    <div class="col col-lg-1">
+                                    <div class="col-12 col-lg-1">
                                         Год:
                                         <select id="year" name="year" class="form-control form-control-sm">
                                             <option value="2026">2026</option>
@@ -36,6 +36,15 @@
                                             <option value="2024">2024</option>
                                         </select>
                                     </div>
+
+                                    <div class="col-12 col-lg-2">
+                                        Тип:
+                                        <select id="type" name="type" class="form-control form-control-sm">
+                                            <option></option>
+                                            <option value="rr">Заявка с портала Работа России</option>
+                                        </select>
+                                    </div>
+
                                 </div>
                                 <div class="row pb-4">
                                     <div class="col-12 col-lg-1">
@@ -104,6 +113,7 @@
                                     <th>Дата создания</th>
                                     <th>Дата обновления</th>
                                     <th>Год</th>
+                                    <th>Тип</th>
                                     <th>Действия</th>
                                 </tr>
                                 </thead>
@@ -138,6 +148,7 @@
                     course: $('#course').val(),
                     region: $('#region').val(),
                     status: $('#status').val(),
+                    type: $('#type').val(),
                 };
             },
 
@@ -149,6 +160,7 @@
                     $('#course').val(data.custom_filters.course).trigger('change');
                     $('#region').val(data.custom_filters.region);
                     $('#status').val(data.custom_filters.status);
+                    $('#type').val(data.custom_filters.type);
                 }
             },
 
@@ -213,6 +225,7 @@
                             filterRegion: $('#region').val(),
                             filterStatus: $('#status').val(),
                             filterYear: $('#year').val(),
+                            filterType: $('#type').val(),
                         },
                         xhrFields: {
                             responseType: 'blob'
@@ -232,7 +245,7 @@
                 'targets': [12, 14], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             },
-                {targets: [2, 5, 14], visible: false}
+                {targets: [2, 5, 14, 15], visible: false}
             ],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -269,6 +282,7 @@
                 {data: 'created_at'},
                 {data: 'updated_at'},
                 {data: 'year'},
+                {data: 'type'},
                 {data: 'actions'},
             ]
         });
@@ -320,6 +334,14 @@
 
             table
                 .column(14)
+                .search(this.value, {exact: true})
+                .draw();
+        })
+
+        $('#type').on('change', function (e) {
+
+            table
+                .column(15)
                 .search(this.value, {exact: true})
                 .draw();
         })
