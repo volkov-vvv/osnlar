@@ -141,6 +141,16 @@
 
                     <div class="mb-3">
                         <div class="custom-control custom-checkbox">
+                            <input name="type" class="custom-control-input" type="checkbox" id="customCheckbox2" value="rr" checked>
+                            <label for="customCheckbox2" class="custom-control-label">Заявка с портала Работа России</label>
+                        </div>
+                        @error('send_mail')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="custom-control custom-checkbox">
                             <input name="send_mail" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1">
                             <label for="customCheckbox1" class="custom-control-label">Отправить письмо</label>
                         </div>
@@ -190,10 +200,10 @@
                         @enderror
                     </div>
                     <input type="hidden" name="politic" value="1">
-
-
-                    <button type="submit" class="btn btn-primary">Создать</button>
-                    <a class="btn btn-outline-secondary" href="{{route('cc.lid.index')}}">Назад</a>
+                    <div class="mb-5">
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                        <a class="btn btn-outline-secondary" href="{{route('cc.lid.index')}}">Назад</a>
+                    </div>
                 </form>
             </div>
 

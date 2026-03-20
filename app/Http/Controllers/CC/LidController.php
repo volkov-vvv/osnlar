@@ -71,6 +71,7 @@ class LidController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
+
         $lid = Lid::firstOrCreate($data);
 
         //Отправка письма

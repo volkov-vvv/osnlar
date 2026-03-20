@@ -16,6 +16,13 @@ class UpdateRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'type' => $this->has('type') ? $this->type : '',
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -33,6 +40,7 @@ class UpdateRequest extends FormRequest
             'lid_level_edu_id' => '',
             'status_id' => 'required|string',
             'responsible_id' => '',
+            'type' => 'nullable|string',
         ];
     }
 }

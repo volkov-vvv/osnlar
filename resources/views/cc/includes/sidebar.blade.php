@@ -48,6 +48,16 @@
                         </p>
                     </a>
                 </li>
+              <!--
+                <li class="nav-item">
+                    <a href="{{route('cc.lid.index', ['source' => 'rr'])}}" class="nav-link">
+                        <i class="nav-icon far fa-bell"></i>
+                        <p>
+                            Заявки (Работа России)
+                        </p>
+                    </a>
+                </li>
+                -->
                 <li class="nav-item">
                     <a href="{{route('cc.order.index')}}" class="nav-link">
                         <i class="nav-icon far fa-usd"></i>

@@ -94,6 +94,18 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <div class="custom-control custom-checkbox">
+                            <input name="type" class="custom-control-input" type="checkbox" id="customCheckbox2" value="rr"
+                                {{ $lid->type == 'rr' ? ' checked' : '' }}
+                            >
+                            <label for="customCheckbox2" class="custom-control-label">Заявка с портала Работа России</label>
+                        </div>
+                        @error('send_mail')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3 form-group alert alert-secondary">
                         <label>Ответственный</label>
                         <select name="responsible_id" class="form-control select2">
