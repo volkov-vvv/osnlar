@@ -43,7 +43,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row pb-2">
-                                    <div class="col col-lg-2">
+                                    <div class="col col-md-2">
                                         Компания:
                                         <select id="company" name="company" class="form-control form-control-sm">
                                             <option></option>
@@ -52,13 +52,17 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col col-lg-1">
+
+                                    <div class="col col-md-1">
                                         Год:
                                         <select id="year" name="year" class="form-control form-control-sm">
                                             <option value="2026">2026</option>
                                             <option value="2025">2025</option>
                                             <option value="2024">2024</option>
                                         </select>
+                                    </div>
+                                    <div class="col col-md-9 d-flex justify-content-end align-items-end">
+                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
                                     </div>
                                     <div class="col-12 col-lg-2">
                                         Тип:
@@ -376,6 +380,25 @@
                 .search(this.value, {exact: true})
                 .draw();
         })
+
+        $('#resetTable').on('click', function() {
+            // Очищаем сохраненное состояние в localStorage
+            table.state.clear();
+
+            // Сбрасываем визуальные и поисковые параметры
+            table
+                .search('')            // Очищаем общий поиск
+                .columns().search('')  // Очищаем поиск в каждой колонке (если есть)
+                .column('0:visible')   // Выбираем первую видимую колонку
+                .order('asc')     // Устанавливаем дефолтную сортировку
+                .page.len(10)          // Возвращаем количество строк на страницу по умолчанию
+                .page(0);               // Переходим на первую страницу
+ //               .draw();               // Применяем изменения и перерисовываем таблицу
+
+
+            $('#year').val('2026');
+            table.draw();
+        });
 
     </script>
 @endsection
