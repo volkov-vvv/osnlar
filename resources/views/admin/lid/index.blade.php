@@ -45,7 +45,7 @@
                                 <div class="row pb-2">
                                     <div class="col col-md-2">
                                         Компания:
-                                        <select id="company" name="company" class="form-control form-control-sm">
+                                        <select id="company" name="company" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             @foreach($companies as $company)
                                                 <option value="{{$company->title}}">{{$company->title}}</option>
@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="col-12 col-lg-2">
                                         Тип:
-                                        <select id="type" name="type" class="form-control form-control-sm">
+                                        <select id="type" name="type" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             <option value="rr">Заявка с портала Работа России</option>
                                         </select>
@@ -80,7 +80,7 @@
                                     <div class="col col-lg-2">
                                         Ответсвенный:
                                         <select id="responsible" name="responsible"
-                                                class="form-control form-control-sm">
+                                                class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             @foreach($users as $user)
                                                 <option value="{{$user->name}}">{{$user->name}}</option>
@@ -89,7 +89,7 @@
                                     </div>
                                     <div class="col-12 col-lg-5">
                                         Курс:
-                                        <select id="course" name="course" class="form-control form-control-sm select2">
+                                        <select id="course" name="course" class="form-control form-control-sm select2 custom-filters">
                                             <option></option>
                                             @foreach($courses as $course)
                                                 <option
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="col-12 col-lg-2">
                                         Регион:
-                                        <select id="region" name="region" class="form-control form-control-sm">
+                                        <select id="region" name="region" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             @foreach($regions as $region)
                                                 <option value="{{$region->title}}">{{$region->title}}</option>
@@ -108,7 +108,7 @@
                                     </div>
                                     <div class="col-12 col-lg-2">
                                         Статус:
-                                        <select id="status" name="status" class="form-control form-control-sm ">
+                                        <select id="status" name="status" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             @foreach($statuses as $status)
                                                 <option value="{{$status->title}}">{{$status->title}}</option>
@@ -269,7 +269,7 @@
             }, "colvis"],
             order: [[0, 'desc']],
             'columnDefs': [ {
-                'targets': [10,14], // column index (start from 0)
+                'targets': [10,16], // column index (start from 0)
                 'orderable': false, // set orderable false for selected columns
             },
                 { targets: [4,14,15], visible: false }
@@ -385,19 +385,26 @@
             // Очищаем сохраненное состояние в localStorage
             table.state.clear();
 
+            table.columns().visible(true);
+
+            table.columns([4,14,15]).visible(false);
+
             // Сбрасываем визуальные и поисковые параметры
             table
                 .search('')            // Очищаем общий поиск
                 .columns().search('')  // Очищаем поиск в каждой колонке (если есть)
+ //               .column(14).search($('#year').value, {exact: true})
                 .column('0:visible')   // Выбираем первую видимую колонку
-                .order('asc')     // Устанавливаем дефолтную сортировку
+                .order('desc')     // Устанавливаем дефолтную сортировку
                 .page.len(10)          // Возвращаем количество строк на страницу по умолчанию
-                .page(0);               // Переходим на первую страницу
- //               .draw();               // Применяем изменения и перерисовываем таблицу
+                .page(0)               // Переходим на первую страницу
+                .draw();               // Применяем изменения и перерисовываем таблицу
 
 
+            $('.custom-filters').not('#year, #course').val('');
             $('#year').val('2026');
-            table.draw();
+            $('#course').val(null).trigger('change');
+
         });
 
     </script>
