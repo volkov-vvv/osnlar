@@ -10,17 +10,19 @@ class SavedFilterController extends Controller
 {
     public function save(Request $request)
     {
-        SavedFilter::updateOrCreate(
-            [
-                'user_id' => auth()->id(),
-                'page_url' => $request->page_url
-            ],
-            [
-                'user_id' => auth()->id(),
-                'page_url' =>  $request->page_url,
-                'filters' => $request->state
-            ]
-        );
+        if (auth()->check()) {
+            SavedFilter::updateOrCreate(
+                [
+                    'user_id' => auth()->id(),
+                    'page_url' => $request->page_url
+                ],
+                [
+                    'user_id' => auth()->id(),
+                    'page_url' =>  $request->page_url,
+                    'filters' => $request->state
+                ]
+            );
+        }
 
         return response()->json(['status' => 'saved']);
     }

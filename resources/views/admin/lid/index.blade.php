@@ -61,15 +61,15 @@
                                             <option value="2024">2024</option>
                                         </select>
                                     </div>
-                                    <div class="col col-md-9 d-flex justify-content-end align-items-end">
-                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
-                                    </div>
-                                    <div class="col-12 col-lg-2">
+                                    <div class="col col-md-2">
                                         Тип:
                                         <select id="type" name="type" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             <option value="rr">Заявка с портала Работа России</option>
                                         </select>
+                                    </div>
+                                    <div class="col col-md-7 d-flex justify-content-end align-items-end">
+                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
                                     </div>
                                 </div>
                                 <div class="row pb-4">

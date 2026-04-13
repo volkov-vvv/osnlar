@@ -28,33 +28,36 @@
                         <div class="card-body">
                             <div class="container-fluid">
                                 <div class="row pb-2">
-                                    <div class="col-12 col-lg-1">
+                                    <div class="col col-md-1">
                                         Год:
-                                        <select id="year" name="year" class="form-control form-control-sm">
+                                        <select id="year" name="year" class="form-control form-control-sm custom-filters">
                                             <option value="2026">2026</option>
                                             <option value="2025">2025</option>
                                             <option value="2024">2024</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-12 col-lg-2">
+                                    <div class="col col-md-2">
                                         Тип:
-                                        <select id="type" name="type" class="form-control form-control-sm">
+                                        <select id="type" name="type" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             <option value="rr">Заявка с портала Работа России</option>
                                         </select>
+                                    </div>
+                                    <div class="col col-md-9 d-flex justify-content-end align-items-end">
+                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
                                     </div>
 
                                 </div>
                                 <div class="row pb-4">
                                     <div class="col-12 col-lg-1">
                                         Дата:
-                                        <input id="date" type="date" class="form-control form-control-sm">
+                                        <input id="date" type="date" class="form-control form-control-sm custom-filters">
                                     </div>
                                     <div class="col col-lg-2">
                                         Ответсвенный:
                                         <select id="responsible" name="responsible"
-                                                class="form-control form-control-sm ">
+                                                class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             @foreach($users as $user)
                                                 <option value="{{$user->name}}">{{$user->name}}</option>
@@ -73,7 +76,7 @@
                                     </div>
                                     <div class="col-12 col-lg-2">
                                         Регион:
-                                        <select id="region" name="region" class="form-control form-control-sm">
+                                        <select id="region" name="region" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             @foreach($regions as $region)
                                                 <option value="{{$region->title}}">{{$region->title}}</option>
@@ -82,7 +85,7 @@
                                     </div>
                                     <div class="col-12 col-lg-2">
                                         Статус:
-                                        <select id="status" name="status" class="form-control form-control-sm ">
+                                        <select id="status" name="status" class="form-control form-control-sm custom-filters">
                                             <option></option>
                                             @foreach($statuses as $status)
                                                 <option value="{{$status->title}}">{{$status->title}}</option>
@@ -345,6 +348,32 @@
                 .search(this.value, {exact: true})
                 .draw();
         })
+
+        $('#resetTable').on('click', function() {
+            // Очищаем сохраненное состояние в localStorage
+            table.state.clear();
+
+            table.columns().visible(true);
+
+            table.columns([4,14,15]).visible(false);
+
+            // Сбрасываем визуальные и поисковые параметры
+            table
+                .search('')            // Очищаем общий поиск
+                .columns().search('')  // Очищаем поиск в каждой колонке (если есть)
+                //               .column(14).search($('#year').value, {exact: true})
+                .column('0:visible')   // Выбираем первую видимую колонку
+                .order('desc')     // Устанавливаем дефолтную сортировку
+                .page.len(10)          // Возвращаем количество строк на страницу по умолчанию
+                .page(0)               // Переходим на первую страницу
+                .draw();               // Применяем изменения и перерисовываем таблицу
+
+
+            $('.custom-filters').not('#year, #course').val('');
+            $('#year').val('2026');
+            $('#course').val(null).trigger('change');
+
+        });
 
     </script>
 @endsection
