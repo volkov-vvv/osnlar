@@ -150,6 +150,9 @@ class lidController extends Controller
         $statuses = Status::all();
         $regions = Region::all();
         $courses = Course::where('is_published', 1)->get();
+        if(!$courses->contains('id', $lid->course_id)){
+            $courses = $courses->push($lid->course);
+        }
         $categories = Category::all();
         $levels_edu = Leveledu::all();
         $users = User::where('role', 3)->get();

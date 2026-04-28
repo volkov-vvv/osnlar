@@ -148,6 +148,9 @@ class LidController extends Controller
         $categories = Category::all();
         $users = User::where('role', 3)->get();
         $courses = Course::where('is_published', 1)->get();
+        if(!$courses->contains('id', $lid->course_id)){
+            $courses = $courses->push($lid->course);
+        }
         $levels_edu = Leveledu::all();
         return view('cc.lid.edit', compact('lid','statuses','users','categories','regions','courses','levels_edu'));
     }
