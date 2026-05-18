@@ -12,9 +12,16 @@ class MaxBotWebhookController extends Controller
     public function __invoke(Request $request, MaxBotService $maxBot): JsonResponse
     {
 
+        Log::info('MAX webhook пришёл', [
+            'headers' => $request->headers->all(),
+            'body' => $request->all(),
+        ]);
+
         $update = $request->all();
 
         Log::info('MAX webhook update', $update);
+
+
 
         $updateType = $update['update_type'] ?? null;
 
