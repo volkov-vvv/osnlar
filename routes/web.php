@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Middleware\SetUserCookie;
+use App\Http\Controllers\MaxBotWebhookController;
 
 
 /*
@@ -261,6 +262,9 @@ Route::middleware(['auth'])->group(function () {
     // Получение состояния
     Route::get('/saved-filters/get', [\App\Http\Controllers\SavedFilterController::class, 'get'])->name('filters.get');
 });
+
+Route::post('/max/webhook', MaxBotWebhookController::class)
+    ->name('max.webhook');
 
 //Route::post('/webhook', 'WebhookController@index');
 
