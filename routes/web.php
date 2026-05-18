@@ -263,7 +263,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/saved-filters/get', [\App\Http\Controllers\SavedFilterController::class, 'get'])->name('filters.get');
 });
 
-Route::post('/max/webhook', MaxBotWebhookController::class)
+Route::post('/max/webhook', 'MaxBotWebhookController')
     ->name('max.webhook');
 
 //Route::post('/webhook', 'WebhookController@index');
