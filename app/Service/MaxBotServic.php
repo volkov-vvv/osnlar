@@ -36,6 +36,8 @@ class MaxBotService
             'notify' => true,
         ]);
 
+        Log::debug($response);
+
         if (!$response->successful()) {
             Log::error('MAX API send message error', [
                 'status' => $response->status(),
