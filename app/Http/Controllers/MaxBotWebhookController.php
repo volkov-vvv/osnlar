@@ -49,6 +49,9 @@ class MaxBotWebhookController extends Controller
 
             if ($text === '/start' || mb_strtolower($text) === 'старт') {
                 $answer = 'Привет! Я бот MAX на Laravel.';
+
+
+
             } elseif ($text !== '') {
                 $answer = 'Вы написали: ' . $text;
             } else {
@@ -56,9 +59,27 @@ class MaxBotWebhookController extends Controller
             }
 
             if ($chatId) {
-                $maxBot->sendMessageToChat($chatId, $answer);
+                //$maxBot->sendMessageToChat($chatId, $answer);
+                $maxBot->sendToChat(
+                    $chatId,
+                    'Для продолжения поделитесь номером телефона:',
+                    [
+                        [
+                            MaxBotService::requestContactButton('Поделиться телефоном'),
+                        ],
+                    ]
+                );
             } elseif ($userId) {
-                $maxBot->sendMessageToUser($userId, $answer);
+               //$maxBot->sendMessageToUser($userId, $answer);
+                $maxBot->sendToChat(
+                    $chatId,
+                    'Для продолжения поделитесь номером телефона:',
+                    [
+                        [
+                            MaxBotService::requestContactButton('Поделиться телефоном'),
+                        ],
+                    ]
+                );
             }
         }
 
