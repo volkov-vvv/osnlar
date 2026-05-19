@@ -172,5 +172,37 @@ class MaxBotService
         ];
     }
 
+    private function extractPhoneFromMaxMessage(array $message): ?array
+    {
+        $attachments = $message['body']['attachments'] ?? [];
+
+        foreach ($attachments as $attachment) {
+            if (($attachment['type'] ?? '') !== 'contact') {
+                continue;
+            }
+
+            $payload = $attachment['payload'] ?? [];
+            $vcfInfo = $payload['vcf_info'] ?? '';
+            $hash = $payload['hash'] ?? null;
+
+            if ($vcfInfo === '') {
+                continue;
+            }
+
+            if (preg_match('/TEL[^:]*:\s*([+\d][\d\s().-]*)/iu', $vcfInfo, $matches)) {
+                $rawPhone = trim($matches[1]);
+                $phone = preg_replace('/[^\d+]/', '', $rawPhone);
+
+                return [
+                    'phone' => $phone,
+                    'vcf_info' => $vcfInfo,
+                    'hash' => $hash,
+                ];
+            }
+        }
+
+        return null;
+    }
+
 
 }
