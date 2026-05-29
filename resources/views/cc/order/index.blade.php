@@ -64,6 +64,7 @@
                                         <td>{{$order->status->title}}</td>
                                         <td>{{$order->created_at}}</td>
                                         <td>
+                                            <a  href="{{route('cc.order.show', $order->id)}}"><i class="far fa-eye"></i></a>&nbsp; &nbsp;
                                             <a  href="{{route('cc.order.edit', $order->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
                                         </td>
                                     </tr>

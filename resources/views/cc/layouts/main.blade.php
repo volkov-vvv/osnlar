@@ -187,7 +187,7 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
 
-        $('#lid-edit-submit').click(function() {
+        $('#form-submit').click(function() {
             $('#comment-modal').modal('show');
             return false;
         });
@@ -195,7 +195,7 @@
         $('#comment-submit').click(function(){
             var commitText=$('textarea[name=comment-text]').val();
             $('#comment').val(commitText);
-            $('#lid-edit-submit').parents('form:first').submit();
+            $('#form-submit').parents('form:first').submit();
         });
     });
 
