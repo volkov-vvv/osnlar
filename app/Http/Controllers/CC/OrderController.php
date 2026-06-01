@@ -22,7 +22,10 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::all();
-        return view('cc.order.index', compact('orders'));
+        $statuses = Status::where('type', 'order')->get();
+        $courses = Course::all();
+
+        return view('cc.order.index', compact('orders', 'statuses', 'courses'));
     }
 
     /**

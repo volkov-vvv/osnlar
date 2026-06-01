@@ -197,6 +197,7 @@
             $('#comment').val(commitText);
             $('#form-submit').parents('form:first').submit();
         });
+
     });
 
 
