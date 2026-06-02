@@ -28,6 +28,35 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
+                            <div class="container-fluid">
+                                <div class="row pb-2">
+                                    <div class="col col-md-2">
+                                        Статус:
+                                        <select id="status" name="status" class="form-control form-control-sm custom-filters">
+                                            <option></option>
+                                            @foreach($statuses as $status)
+                                                <option value="{{$status->title}}">{{$status->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col col-md-3">
+                                        Курс:
+                                        <select id="course" name="course" class="form-control form-control-sm select2">
+                                            <option></option>
+                                            @foreach($courses as $course)
+                                                <option
+                                                    value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col col-md-7 d-flex justify-content-end align-items-end">
+                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
                             <table id="order_table" class="table table-bordered table-striped hover">
                                 <thead>
                                 <tr>
@@ -88,7 +117,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a  href="{{route('admin.order.edit', $order->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
+                                            <a href="{{route('admin.order.show', $order->id)}}"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
+                                            <a href="{{route('admin.order.edit', $order->id)}}" class="text-success"><i class="fas fa-pen"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -105,4 +135,127 @@
 
         </div><!-- /.container-fluid -->
     </section>
+@endsection
+
+@section('javascript')
+    <script>
+        let stateSaveTimer; // Переменная для хранения таймера
+        var table = new DataTable('#order_table', {
+
+            stateSave: true,
+
+            stateSaveParams: function (settings, data) {
+                data.custom_filters = {
+                    course: $('#course').val(),
+                    status: $('#status').val(),
+                };
+            },
+
+            stateLoadParams: function (settings, data) {
+                if (data) {
+                    $('#course').val(data.custom_filters.course).trigger('change');
+                    $('#status').val(data.custom_filters.status);
+                }
+            },
+
+            stateSaveCallback: function(settings, data) {
+                // Очищаем предыдущий таймер, если пользователь нажал что-то еще
+                clearTimeout(stateSaveTimer);
+
+                // Устанавливаем задержку 2 секунды (2000 мс)
+                stateSaveTimer = setTimeout(function() {
+                    $.ajax({
+                        url: "{{ route('filters.save') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            page_url: "cc.lid.index",
+                            state: JSON.stringify(data)
+                        },
+                        success: function() {
+                            console.log("Состояние сохранено в БД");
+                        }
+                    });
+                }, 2000);
+            },
+
+            stateLoadCallback: function(settings, callback) {
+                $.ajax({
+                    url: "{{ route('filters.get') }}",
+                    data: { page_url: "cc.lid.index" },
+                    dataType: "json",
+                    success: function(json) {
+                        // Передаем данные обратно в DataTables
+                        callback(json);
+                    }
+                });
+            },
+
+            order: [[0, 'desc']],
+
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["excel", "pdf", "colvis"],
+
+            initComplete: function () {
+                this.api()
+                    .buttons()
+                    .container()
+                    .appendTo('#order_table_wrapper .col-md-6:eq(0)');
+            },
+
+            "language": {
+                info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                paginate: {
+                    "first": "Первая",
+                    "previous": "Предыдущая",
+                    "next": "Следующая",
+                    "last": "Последняя"
+                },
+                search: "Поиск:",
+                buttons: {
+                    colvis: 'Выбрать колонки',
+                    search: 'Поиск'
+                },
+            }
+        });
+
+        $('#status').on('change', function (e) {
+            table
+                .column(8)
+                .search(this.value, {exact: true})
+                .draw();
+        });
+
+        $('#course').on('change', function (e) {
+            table
+                .column(1)
+                .search(this.value, {exact: true})
+                .draw();
+        });
+
+        $('#resetTable').on('click', function() {
+            // Очищаем сохраненное состояние в localStorage
+            table.state.clear();
+
+            table.columns().visible(true);
+
+            // Сбрасываем визуальные и поисковые параметры
+            table
+                .search('')            // Очищаем общий поиск
+                .columns().search('')  // Очищаем поиск в каждой колонке (если есть)
+                .column('0:visible')   // Выбираем первую видимую колонку
+                .order('desc')     // Устанавливаем дефолтную сортировку
+                .page.len(10)          // Возвращаем количество строк на страницу по умолчанию
+                .page(0)               // Переходим на первую страницу
+                .draw();               // Применяем изменения и перерисовываем таблицу
+
+
+            $('.custom-filters').not('#course').val('');
+            $('#course').val(null).trigger('change');
+
+        });
+
+    </script>
 @endsection

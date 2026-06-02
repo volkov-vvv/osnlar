@@ -221,32 +221,6 @@
                 }
             }).buttons().container().appendTo('#link_table_wrapper .col-md-6:eq(0)');
 
-            $("#order_table").DataTable({
-                order: [[0, 'desc']],
-                'columnDefs': [
-                    { targets: [10, 11, 12], visible: false }
-                ],
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["excel", "pdf", "colvis"],
-                "language": {
-                    info: "Записи с _START_ до _END_ из _TOTAL_ записей",
-                    paginate: {
-                        "first": "Первая",
-                        "previous": "Предыдущая",
-                        "next": "Следующая",
-                        "last": "Последняя"
-                    },
-                    search: "Поиск:",
-                    buttons: {
-                        colvis: 'Выбрать колонки',
-                        search: 'Поиск'
-                    },
-                }
-            }).buttons().container().appendTo('#order_table_wrapper .col-md-6:eq(0)');
-
-
 
         });
 
