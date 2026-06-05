@@ -169,7 +169,7 @@
                         method: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",
-                            page_url: "cc.lid.index",
+                            page_url: "admin.order.index",
                             state: JSON.stringify(data)
                         },
                         success: function() {
@@ -182,7 +182,7 @@
             stateLoadCallback: function(settings, callback) {
                 $.ajax({
                     url: "{{ route('filters.get') }}",
-                    data: { page_url: "cc.lid.index" },
+                    data: { page_url: "admin.order.index" },
                     dataType: "json",
                     success: function(json) {
                         // Передаем данные обратно в DataTables
