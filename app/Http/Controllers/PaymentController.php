@@ -29,7 +29,12 @@ class PaymentController extends Controller
         $description = (string)$request->input('description');
 
         $order = Order::find($order_id);
-        $email = $order->user->email;
+//        $email = $order->user->email;
+        $customer = [
+            'email' => $order->user->email,
+            'phone' => '+' . $order->user->phone_prefix . $order->user->phone,
+            'full_name' => $order->user->lastname . ' ' . $order->user->name . ' ' . $order->user->middlename,
+        ];
 
         $items = array();
         $items[0] = [
@@ -53,7 +58,7 @@ class PaymentController extends Controller
 //        dd($transaction);
 
         if($transaction){
-            $link = $service->createPayment($amount, $description, $email, $items, [
+            $link = $service->createPayment($amount, $description, $customer, $items, [
                 'transaction_id' => $transaction->id
             ]);
 

@@ -14,7 +14,7 @@ class PaymentService
         return $client;
     }
 
-    public function createPayment(float $amount, string $description, string $email, array $items, array $options = [])
+    public function createPayment(float $amount, string $description, array $customer, array $items, array $options = [])
     {
         $client = $this->getClient();
         $payment = $client->createPayment([
@@ -33,7 +33,9 @@ class PaymentService
             'description' => $description,
             'receipt' => [
                 'customer' => [
-                    'email' => $email,
+                    "full_name" => $customer['full_name'],
+                    "phone" => $customer['phone'],
+                    'email' => $customer['email'],
                 ],
                 'items' => $items,
             ]
