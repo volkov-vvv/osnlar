@@ -9,6 +9,7 @@ class YandexSmartCaptcha implements Rule
 {
     public function passes($attribute, $value)
     {
+        dd($value);
         $response = Http::timeout(3)->get(
             'https://smartcaptcha.yandexcloud.net/validate',
             [
