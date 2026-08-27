@@ -2,18 +2,13 @@
 
 namespace App\Rules;
 
-use Closure;
-use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Http;
 
-class YandexSmartCaptcha implements ValidationRule
+class YandexSmartCaptcha implements Rule
 {
-    public function validate(
-        string $attribute,
-        mixed $value,
-        Closure $fail
-    ): void {
-
+    public function passes($attribute, $value)
+    {
         $response = Http::timeout(3)->get(
             'https://smartcaptcha.yandexcloud.net/validate',
             [
@@ -23,17 +18,18 @@ class YandexSmartCaptcha implements ValidationRule
             ]
         );
 
-        // Если сервер капчи недоступен
         if (!$response->successful()) {
-            // Вариант как у Яндекса:
-            // разрешаем доступ при ошибке сервера
-            return;
+            return false;
         }
 
         $result = $response->json();
 
-        if (($result['status'] ?? null) !== 'ok') {
-            $fail('Проверка капчи не пройдена.');
-        }
+        return ($result['status'] ?? null) === 'ok';
+    }
+
+
+    public function message()
+    {
+        return 'Проверка капчи не пройдена.';
     }
 }
