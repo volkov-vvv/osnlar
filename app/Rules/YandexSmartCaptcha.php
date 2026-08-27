@@ -18,11 +18,13 @@ class YandexSmartCaptcha implements Rule
             ]
         );
 
-        dd([
-            'token' => $value,
-            'status' => $response->status(),
-            'body' => $response->body(),
-        ]);
+        if (!$response->successful()) {
+            return false;
+        }
+
+        $result = $response->json();
+
+        return ($result['status'] ?? null) === 'ok';
     }
 
 
