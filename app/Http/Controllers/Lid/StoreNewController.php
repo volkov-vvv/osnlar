@@ -26,7 +26,7 @@ class StoreNewController extends Controller
 {
     public function __invoke(StoreNewRequest $request, Telegram $telegram)
     {
-        $data = $request->validated();
+        $data = $request->safe()->except('smart-token');
         $course_link = '';
         $mail_template = 'mails.lid_year';
         $course = Course::all()->where('id', $request->course_id)->first();
