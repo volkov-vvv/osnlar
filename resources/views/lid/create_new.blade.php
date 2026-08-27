@@ -180,31 +180,6 @@
                                         <label for="customCheckbox2" class="custom-control-label">&nbsp;&nbsp;Я никогда не обучался(-лась) в рамках проекта "Содействие занятости"</label>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div
-                                        style="height: 100px"
-                                        id="captcha-container"
-                                        class="smart-captcha"
-                                        data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
-                                    ></div>
-                                    @error('smart-token')
-                                    <div class="text-danger mt-2">
-                                        {{ $message }}
-                                    </div>
-                                    @enderror
-                                    @if ($errors->has('smart-token'))
-                                        <script>
-                                            document.addEventListener('DOMContentLoaded', function () {
-                                                document
-                                                    .querySelector('.smart-captcha')
-                                                    ?.scrollIntoView({
-                                                        behavior: 'smooth',
-                                                        block: 'center'
-                                                    });
-                                            });
-                                        </script>
-                                    @endif
-                                </div>
 
 
                                 <div class="mt-4">
@@ -267,6 +242,19 @@
                                     </div>
 
                                 </div>
+                                <div class="form-group">
+                                    <div
+                                        style="height: 100px"
+                                        id="captcha-container"
+                                        class="smart-captcha"
+                                        data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
+                                    ></div>
+                                    @error('smart-token')
+                                    <div class="text-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
 
                                 <div class="mt-4">
                                     <button class="btn btn-outline-secondary" onclick="stepper.previous(); return false">Назад</button>
@@ -322,6 +310,27 @@
 
     </div>
 
+    @if ($errors->has('smart-token'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+                const stepperElement = document.querySelector('.bs-stepper');
+
+                if (stepperElement) {
+                    const stepper = new Stepper(stepperElement);
+
+                    stepper.to(4);
+                }
+
+                document.querySelector('.smart-captcha')
+                    ?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+
+            });
+        </script>
+    @endif
 
 @endsection
 
