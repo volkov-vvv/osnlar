@@ -187,6 +187,11 @@
                                         class="smart-captcha"
                                         data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
                                     ></div>
+                                    @error('smart-token')
+                                    <div class="text-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
                                 </div>
 
 
