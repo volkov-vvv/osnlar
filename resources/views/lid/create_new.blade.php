@@ -180,6 +180,15 @@
                                         <label for="customCheckbox2" class="custom-control-label">&nbsp;&nbsp;Я никогда не обучался(-лась) в рамках проекта "Содействие занятости"</label>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <div
+                                        style="height: 100px"
+                                        id="captcha-container"
+                                        class="smart-captcha"
+                                        data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
+                                    ></div>
+                                </div>
+
 
                                 <div class="mt-4">
                                     <button class="btn btn-outline-secondary" onclick="stepper.previous(); return false">Назад</button>

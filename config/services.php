@@ -40,4 +40,10 @@ return [
         'api_url' => env('MAX_API_URL', 'https://platform-api.max.ru'),
     ],
 
+    'yandex' => [
+        'smartcaptcha' => [
+            'key' => env('YANDEX_SMARTCAPTCHA_KEY'),
+        ],
+    ],
+
 ];
