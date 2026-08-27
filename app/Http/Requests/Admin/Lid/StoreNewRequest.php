@@ -54,6 +54,13 @@ class StoreNewRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'smart-token.required' => 'Необходимо пройти проверку "Я не робот"',
+        ];
+    }
+
     protected function passedValidation() {
         $data = $this->validator->getData();
 
