@@ -192,6 +192,18 @@
                                         {{ $message }}
                                     </div>
                                     @enderror
+                                    @if ($errors->has('smart-token'))
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                document
+                                                    .querySelector('.smart-captcha')
+                                                    ?.scrollIntoView({
+                                                        behavior: 'smooth',
+                                                        block: 'center'
+                                                    });
+                                            });
+                                        </script>
+                                    @endif
                                 </div>
 
 
@@ -309,6 +321,7 @@
 
 
     </div>
+
 
 @endsection
 
