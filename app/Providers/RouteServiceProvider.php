@@ -22,11 +22,11 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * The controller namespace for the application.
      *
-     * When present, controller route declarations will automatically be prefixed with this namespace.
+     * Null: routes use fully-qualified controller class names.
      *
      * @var string|null
      */
-    protected $namespace = 'App\\Http\\Controllers';
+    protected $namespace = null;
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -58,6 +58,18 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+
+        RateLimiter::for('api-lids', function (Request $request) {
+            return Limit::perMinute(30)->by($request->ip());
+        });
+
+        RateLimiter::for('forms', function (Request $request) {
+            return Limit::perMinute(10)->by($request->ip());
+        });
+
+        RateLimiter::for('webhooks', function (Request $request) {
+            return Limit::perMinute(120)->by($request->ip());
         });
     }
 }

@@ -11,7 +11,7 @@
                         <div class="carousel-item active">
                             <div class="row">
                                 <div class="col-md-6 carousel-content-wrapper top-banner">
-                                    <h1>IT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
+                                    <h1>ITTTT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
                                     <p>которая специализируется на:</p>
                                     <ul>
                                         <li>создании цифрового образовательного контента</li>
