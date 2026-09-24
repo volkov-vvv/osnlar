@@ -86,7 +86,7 @@
                                                         class="far fa-eye"></i></a> &nbsp; &nbsp;
                                                 <a href="{{route('cc.org.edit', $org->id)}}" class="text-success"><i
                                                         class="fas fa-pen"></i></a>
-                                                {{--                                                <form method="post" action="{{route('cc.org.delete', $org->id)}}">--}}
+                                                {{--                                                <form method="post" action="{{route('cc.org.destroy', $org->id)}}">--}}
                                                 {{--                                                    @csrf--}}
                                                 {{--                                                    @method('DELETE')--}}
                                                 {{--                                                    <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>--}}

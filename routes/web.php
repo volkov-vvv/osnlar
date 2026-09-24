@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require base_path('routes/macros.php');
-
 /*
 |--------------------------------------------------------------------------
 | Legacy URI redirects (keep bookmarks / cached AJAX working)

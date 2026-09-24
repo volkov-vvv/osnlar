@@ -119,7 +119,7 @@ class LidService
 
 
 
-            $actions = '<a href="' . route('admin.' . $route_name[$data->commerce] . '.show', $record->id) . '}">
+            $actions = '<a href="' . route('admin.' . $route_name[$data->commerce] . '.show', $record->id) . '">
                             <i class="far fa-eye"></i>
                         </a> &nbsp; &nbsp;
                         <a href="' . route('admin.' . $route_name[$data->commerce] . '.edit', $record->id) . '" class="text-success">

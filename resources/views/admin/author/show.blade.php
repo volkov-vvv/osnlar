@@ -59,7 +59,7 @@
                 <div class="col-3">
                     <div class="d-flex justify-content-end">
                         <div>
-                            <form method="post" action="{{route('admin.author.delete', $author->id)}}">
+                            <form method="post" action="{{route('admin.author.destroy', $author->id)}}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger float-end" type="submit">Удалить</button>

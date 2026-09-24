@@ -124,7 +124,7 @@ class IndexController extends Controller
                 $interval = '---';
             }
 
-            $actions = '<a href="' . route('admin.lid.show', $record->id) . '}">
+            $actions = '<a href="' . route('admin.lid.show', $record->id) . '">
                             <i class="far fa-eye"></i>
                         </a> &nbsp; &nbsp;
                         <a href="' . route('admin.lid.edit', $record->id) . '" class="text-success">

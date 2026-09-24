@@ -73,7 +73,7 @@ class lidController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        $lid = Lid::firstOrCreate($data);
+        $lid = Lid::create($data);
 
         //Отправка письма
         if($request->send_mail){
@@ -93,8 +93,7 @@ class lidController extends Controller
             \Mail::to($data['email'])->send(new SendEmail($mailData));
         }
 
-
-        return redirect()->route('admin.lid.index');
+        return redirect()->route('admin.lid.show', $lid);
     }
 
     /**

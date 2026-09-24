@@ -80,7 +80,7 @@
                 <div class="col-3">
                     <div class="d-flex justify-content-end">
                         <div>
-                            <form method="post" action="{{route('admin.course.delete', $course->id)}}">
+                            <form method="post" action="{{route('admin.course.destroy', $course->id)}}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger float-end" type="submit">Удалить</button>

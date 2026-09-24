@@ -46,7 +46,7 @@
                                         <td><a  href="{{route('admin.author.show', $author->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.author.edit', $author->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.author.delete', $author->id)}}">
+                                            <form method="post" action="{{route('admin.author.destroy', $author->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

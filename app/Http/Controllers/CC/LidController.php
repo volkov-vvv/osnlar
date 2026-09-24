@@ -72,7 +72,7 @@ class LidController extends Controller
     {
         $data = $request->validated();
 
-        $lid = Lid::firstOrCreate($data);
+        $lid = Lid::create($data);
 
         //Отправка письма
         if($request->send_mail){
@@ -91,7 +91,7 @@ class LidController extends Controller
             $mailData->template = 'mails.lid_link';
             \Mail::to($data['email'])->send(new SendEmail($mailData));
         }
-        return redirect()->route('cc.lid.index');
+        return redirect()->route('cc.lid.show', $lid);
     }
 
     /**
@@ -280,7 +280,7 @@ class LidController extends Controller
                 $interval = '---';
             }
 
-            $actions = '<a href="' . route('cc.lid.show', $record->id) . '}">
+            $actions = '<a href="' . route('cc.lid.show', $record->id) . '">
                             <i class="far fa-eye"></i>
                         </a> &nbsp; &nbsp;
                         <a href="' . route('cc.lid.edit', $record->id) . '" class="text-success">

@@ -84,7 +84,7 @@
                                         <td class="d-flex"><a  href="{{route('admin.user.show', $user->id)}}"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
                                         <a  href="{{route('admin.user.edit', $user->id)}}" class="text-success"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
 
-                                            <form method="post" action="{{route('admin.user.delete', $user->id)}}">
+                                            <form method="post" action="{{route('admin.user.destroy', $user->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

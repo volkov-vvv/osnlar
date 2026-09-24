@@ -48,7 +48,7 @@
                                         <td><a  href="{{route('admin.document.show', $document->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.document.edit', $document->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.document.delete', $document->id)}}">
+                                            <form method="post" action="{{route('admin.document.destroy', $document->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

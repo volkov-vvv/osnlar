@@ -52,7 +52,7 @@
                                         <td><a  href="{{route('cc.status.show', $status->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('cc.status.edit', $status->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('cc.status.delete', $status->id)}}">
+                                            <form method="post" action="{{route('cc.status.destroy', $status->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

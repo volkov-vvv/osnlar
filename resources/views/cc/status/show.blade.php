@@ -69,7 +69,7 @@
                 <div class="col-3">
                     <div class="d-flex justify-content-end">
                         <div>
-                            <form method="post" action="{{route('cc.status.delete', $status->id)}}">
+                            <form method="post" action="{{route('cc.status.destroy', $status->id)}}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger float-end" type="submit">Удалить</button>

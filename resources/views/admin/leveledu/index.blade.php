@@ -46,7 +46,7 @@
                                         <td><a  href="{{route('admin.leveledu.show', $leveledu->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.leveledu.edit', $leveledu->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.leveledu.delete', $leveledu->id)}}">
+                                            <form method="post" action="{{route('admin.leveledu.destroy', $leveledu->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

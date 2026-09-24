@@ -46,7 +46,7 @@
                                         <td><a  href="{{route('admin.region.show', $region->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.region.edit', $region->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>
                                         <td>
-                                            <form method="post" action="{{route('admin.region.delete', $region->id)}}">
+                                            <form method="post" action="{{route('admin.region.destroy', $region->id)}}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>

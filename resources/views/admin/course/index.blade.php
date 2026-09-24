@@ -107,7 +107,7 @@
                                                    class="text-success"><i class="fas fa-pen"></i></a>
 
                                                 <form method="post"
-                                                      action="{{route('admin.course.delete', $course->id)}}"
+                                                      action="{{route('admin.course.destroy', $course->id)}}"
                                                       class="d-inline-block">
                                                     @csrf
                                                     @method('DELETE')
