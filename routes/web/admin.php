@@ -11,12 +11,12 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\LeveleduController;
 use App\Http\Controllers\Admin\LidController;
-use App\Http\Controllers\Admin\LinkController;
+use App\Http\Controllers\Common\LinkController;
+use App\Http\Controllers\Common\OrderController;
+use App\Http\Controllers\Common\StatusController;
 use App\Http\Controllers\Admin\Main\IndexController as MainIndexController;
-use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\Report\IndexController as ReportIndexController;
-use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 

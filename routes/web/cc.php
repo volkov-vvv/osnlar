@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\CC\DashboardController;
 use App\Http\Controllers\CC\LidController;
-use App\Http\Controllers\CC\LinkController;
 use App\Http\Controllers\CC\Main\IndexController as MainIndexController;
-use App\Http\Controllers\CC\OrderController;
 use App\Http\Controllers\CC\OrgController;
-use App\Http\Controllers\CC\StatusController;
+use App\Http\Controllers\Common\LinkController;
+use App\Http\Controllers\Common\OrderController;
+use App\Http\Controllers\Common\StatusController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', MainIndexController::class)->name('main.index');
