@@ -8228,3 +8228,36 @@ background-color: #4CAF50; /* Ваш цвет кнопки */
 .cookie-consent p{
     color: #fff;
 }
+
+@media (min-width: 992px) {
+    .edica-header .navbar {
+        align-items: center;
+    }
+
+    .edica-header .navbar-brand {
+        display: flex;
+        align-items: center;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .edica-header .navbar-brand img {
+        display: block;
+    }
+
+    .edica-header .navbar-collapse,
+    .edica-header .navbar-nav,
+    .edica-header .navbar-nav .nav-item {
+        align-items: center;
+    }
+
+    .edica-header .navbar-nav .nav-link {
+        display: flex;
+        align-items: center;
+    }
+}
+
+header.edica-header.sticky-top .navbar {
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+}

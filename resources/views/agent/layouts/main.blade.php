@@ -54,7 +54,15 @@
             </li>
         </ul>
         <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto align-items-center">
+            <li class="nav-item mr-2">
+                <a class="btn btn-outline-secondary d-inline-flex align-items-center" href="{{ route('profile.edit') }}">
+                    @if(auth()->user()->avatar)
+                        <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle mr-2" width="24" height="24" style="object-fit: cover;">
+                    @endif
+                    Профиль
+                </a>
+            </li>
             <form action="{{route('logout')}}" method="post">
                 @csrf
 {{--                <label><i class="fa-solid fa-right-from-bracket"></i></label>--}}

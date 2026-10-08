@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v3">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v7">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
 
@@ -131,7 +131,12 @@ sticky-top  bg-white bg-opacity-75
                     @if( isset(auth()->user()->id) )
 
                         <li class="nav-item dropdown ml-lg-5">
-                            <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
+                            <a class="nav-link dropdown-toggle d-inline-flex align-items-center" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle me-2" width="28" height="28" style="object-fit: cover;">
+                                @endif
+                                {{auth()->user()->name}}
+                            </a>
                             <div class="dropdown-menu" aria-labelledby="blogDropdown">
                                 <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
@@ -143,12 +148,13 @@ sticky-top  bg-white bg-opacity-75
                                     {{route('user.index')}}">Личный кабинет
                                     @endswitch
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <form action="{{route('logout')}}" method="post">
-                                        @csrf
-                                        <input class="btn btn-link" type="submit" value="Выйти">
-                                    </form>
-                                </a>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Профиль</a>
+                                <form action="{{route('logout')}}" method="post">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fas fa-sign-out-alt mr-2" aria-hidden="true"></i>Выйти
+                                    </button>
+                                </form>
                             </div>
                         </li>
 

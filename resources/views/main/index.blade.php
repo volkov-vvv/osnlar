@@ -121,11 +121,11 @@
             <header class="edica-header edica-landing-header">
                 <div class="container">
                     <div class="edica-landing-header-content">
-                        <div id="edicaLandingHeaderCarousel" class="carousel slide" data-ride="carousel">
+                        <div id="edicaReviewsCarousel" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
-                                <li data-target="#edicaLandingHeaderCarousel" data-slide-to="0" class="">.01</li>
-                                <li data-target="#edicaLandingHeaderCarousel" data-slide-to="1" class="">.02</li>
-                                <li data-target="#edicaLandingHeaderCarousel" data-slide-to="2" class="">.03</li>
+                                <li data-target="#edicaReviewsCarousel" data-slide-to="0">.01</li>
+                                <li data-target="#edicaReviewsCarousel" data-slide-to="1">.02</li>
+                                <li data-target="#edicaReviewsCarousel" data-slide-to="2" class="active">.03</li>
                             </ol>
                             <div class="carousel-inner" role="listbox">
                                 <div class="carousel-item">

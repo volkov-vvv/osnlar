@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v2">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v6">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
 
@@ -111,7 +111,12 @@
                 @if( isset(auth()->user()->id) )
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{auth()->user()->name}}</a>
+                            <a class="nav-link dropdown-toggle d-inline-flex align-items-center" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle me-2" width="28" height="28" style="object-fit: cover;">
+                                @endif
+                                {{auth()->user()->name}}
+                            </a>
                             <div class="dropdown-menu" aria-labelledby="blogDropdown">
                                 <!--
                                 <a class="dropdown-item btn btn-link" href="#">
@@ -130,6 +135,7 @@
                             ">
                                     Административная панель
                                 </a>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Профиль</a>
                                 <a class="dropdown-item" href="#">
                                     <form action="{{route('logout')}}" method="post">
                                         @csrf

@@ -4,6 +4,7 @@
     <div class="row pt-5 pb-5">
         <div class="col text-center">
             <h1>Мои заказы</h1>
+            <a class="btn btn-outline-primary mt-3" href="{{ route('profile.edit') }}">Редактировать профиль</a>
         </div>
     </div>
 

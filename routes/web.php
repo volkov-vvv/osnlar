@@ -5,6 +5,7 @@ use App\Http\Controllers\Lid\ExportTestController;
 use App\Http\Controllers\MaxBotWebhookController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SavedFilterController;
+use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -109,6 +110,8 @@ Route::middleware(['auth', 'user'])
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/saved-filters/save', [SavedFilterController::class, 'save'])->name('filters.save');
     Route::get('/saved-filters/get', [SavedFilterController::class, 'get'])->name('filters.get');
 });
