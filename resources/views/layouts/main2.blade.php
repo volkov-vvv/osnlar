@@ -26,9 +26,10 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v7">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v12">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
+    @stack('styles')
 
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
@@ -105,7 +106,7 @@ sticky-top  bg-white bg-opacity-75
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
                     <li class="nav-item dropdown
-                    @if(request()->is('course*') || request()->is('future*') || request()->is('commerce*') || request()->is('archive*'))
+                    @if(request()->is('course*') || request()->is('future*') || request()->is('commerce*') || request()->is('bioeconomy*') || request()->is('archive*'))
                         active
                     @endif
                         ">
@@ -114,6 +115,7 @@ sticky-top  bg-white bg-opacity-75
 {{--                            <a class="dropdown-item" href="{{route('future.index')}}">Код будущего</a>--}}
                             <a class="dropdown-item" href="{{route('course.index')}}">- Бесплатные курсы «Активные меры содействия занятости»</a>
                             <a class="dropdown-item" href="{{route('commerce.index')}}">- Софинансирование обучения «Профессии будущего»</a>
+                            <a class="dropdown-item" href="{{route('bioeconomy.index')}}">- Биоэкономика</a>
                             <a class="dropdown-item" href="{{route('archive.index')}}">- Архив</a>
                         </div>
                     </li>
@@ -272,6 +274,7 @@ sticky-top  bg-white bg-opacity-75
     });
 </script>
 
+@stack('scripts')
 @include('cookie-consent::index')
 </body>
 </html>

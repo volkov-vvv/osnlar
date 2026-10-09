@@ -46,17 +46,30 @@ class CreateNewController extends Controller
         $regions = Region::all();
         $authors = Author::all();
         $levelsedu = Leveledu::all();
-        $courses = Course::where('is_published', 1)->whereNull('price')->where(function ($query) {
-            $query->where('company_id', '=', 1)
-                ->orWhereNull('company_id');
-        })->get();
-        if(isset($selectedCourse)){
+        $courses = Course::where('is_published', 1)
+            ->whereNull('price')
+            ->where(function ($query) {
+                $query->where('company_id', '=', 1)
+                    ->orWhereNull('company_id');
+            })
+            ->where(function ($query) {
+                $query->whereNull('bioeconomy')->orWhere('bioeconomy', 0);
+            })
+            ->get();
+
+        if (isset($selectedCourse) && !$courses->contains('id', (int) $selectedCourse)) {
+            $selectedCourse = null;
+        }
+
+        if (isset($selectedCourse)) {
             $pageDescription = 'Подать заявку на обучение по курсу ' . $courses->where('id', $selectedCourse)->first()->title . 'в рамках проекта Содействие занятости';
-        }else{
+        } else {
             $pageDescription = 'Подать заявку на обучение в рамках проекта Содействие занятости';
         }
 
-        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'pageDescription', 'utm'));
+        $pageTitle = 'Заявка на обучение';
+
+        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'pageDescription', 'pageTitle', 'utm'));
     }
 
 }

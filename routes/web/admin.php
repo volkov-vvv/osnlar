@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\LeveleduController;
 use App\Http\Controllers\Admin\LidController;
 use App\Http\Controllers\Common\LinkController;
 use App\Http\Controllers\Common\OrderController;
+use App\Http\Controllers\Common\OrgController;
 use App\Http\Controllers\Common\StatusController;
 use App\Http\Controllers\Admin\Main\IndexController as MainIndexController;
 use App\Http\Controllers\Admin\RegionController;
@@ -51,5 +52,8 @@ Route::get('/commerciallid/getLids', [CommercialLidController::class, 'getLids']
 Route::resource('commerciallid', CommercialLidController::class)->whereNumber('commerciallid');
 
 Route::resource('order', OrderController::class)->whereNumber('order');
+Route::resource('org', OrgController::class)
+    ->except(['create', 'store'])
+    ->whereNumber('org');
 Route::resource('company', CompanyController::class)->whereNumber('company');
 Route::resource('link', LinkController::class)->whereNumber('link');

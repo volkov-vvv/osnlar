@@ -30,7 +30,7 @@
                         <div class="card-body">
 
                             <div class="container-fluid">
-                                <div class="row pb-2">
+                                <div class="row pb-3">
                                     <div class="col col-md-2">
                                         Статус:
                                         <select id="status" name="status" class="form-control form-control-sm custom-filters">
@@ -174,21 +174,18 @@
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-            "buttons": ["excel", "pdf", "colvis"],
-
-            initComplete: function () {
-                this.api()
-                    .buttons()
-                    .container()
-                    .appendTo('#order_table_wrapper .col-md-6:eq(0)');
-            },
+            "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            "buttons": ["excel", "colvis"],
 
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                infoFiltered: "(отфильтровано из _MAX_ записей)",
                 paginate: {
                     "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
+                    "previous": "<<",
+                    "next": ">>",
                     "last": "Последняя"
                 },
                 search: "Поиск:",
@@ -198,7 +195,6 @@
                 },
             }
         });
- //       table.buttons().container().appendTo('#order_table_wrapper .col-md-6:eq(0)');
 
         $('#status').on('change', function (e) {
             table

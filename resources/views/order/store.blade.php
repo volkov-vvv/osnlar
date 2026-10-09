@@ -1,5 +1,6 @@
-@extends('layouts.main-lid')
+@extends('layouts.main2')
 @section('content')
+
     <main>
         <div class="container">
             <div class="row">
@@ -9,7 +10,7 @@
                         <h5 class="edica-404-subtitle" data-aos="fade-up" data-aos-delay="100">Поздравляем!</h5>
                         <p class="edics-404-text" data-aos="fade-up" data-aos-delay="200">Скоро на указанный Вами телефон позвонит сотрудник Контакт центра. Ожидайте звонка.</p>
                         <p class="edics-404-text" data-aos="fade-up" data-aos-delay="200">Вы всегда можете написать нам на почту, или позвонить по телефону: +7 (499) 609-60-20.</p>
-                        <a href="{{route('main.index')}}" class="btn btn-primary" data-aos="fade-up" data-aos-delay="300">На главную</a>
+                        <a href="{{ route('main.index') }}" class="btn btn-primary" data-aos="fade-up" data-aos-delay="300">На главную</a>
                     </section>
                 </div>
             </div>

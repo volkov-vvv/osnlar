@@ -20,6 +20,7 @@ class OrderController extends Controller
     public function create(Request $request, Course $course)
     {
         $pageDescription = 'Заказ на обучение';
+        $pageTitle = 'Заказ на обучение';
         $regions = Region::all();
         $agents = Agent::where('active', 1)->get();
 
@@ -47,7 +48,7 @@ class OrderController extends Controller
             $utm['utm_campaign'] = $cookies['utm_campaign'];
         }
 
-        return view('order.create', compact('pageDescription', 'course', 'regions', 'agents', 'utm'));
+        return view('order.create', compact('pageDescription', 'pageTitle', 'course', 'regions', 'agents', 'utm'));
     }
 
     public function store(StoreRequest $request)

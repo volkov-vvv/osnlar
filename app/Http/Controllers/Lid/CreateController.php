@@ -21,7 +21,11 @@ class CreateController extends Controller
         $regions = Region::all();
         $authors = Author::all();
         $levelsedu = Leveledu::all();
-        $courses = Course::where('is_published', 1)->get();
+        $courses = Course::where('is_published', 1)
+            ->where(function ($query) {
+                $query->whereNull('bioeconomy')->orWhere('bioeconomy', 0);
+            })
+            ->get();
         return view('lid.create', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain'));
     }
 }

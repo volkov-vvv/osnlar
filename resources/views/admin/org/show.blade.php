@@ -161,7 +161,14 @@
             <div class="row mt-3">
                 <div class="col-auto">
                     <a class="btn btn-outline-primary mr-2" href="{{ route($panel . '.org.edit', $org->id) }}">Редактировать</a>
-                    <a class="btn btn-outline-secondary" href="{{ route($panel . '.org.index') }}">Назад</a>
+                    <a class="btn btn-outline-secondary mr-2" href="{{ route($panel . '.org.index') }}">Назад</a>
+                </div>
+                <div class="col-auto">
+                    <form method="post" action="{{ route($panel . '.org.destroy', $org->id) }}" onsubmit="return confirm('Удалить заявку организации?');">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Удалить</button>
+                    </form>
                 </div>
             </div>
         </div>

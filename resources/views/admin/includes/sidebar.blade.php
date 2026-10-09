@@ -144,6 +144,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.org.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>
+                            Заявки организаций
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.order.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-dollar-sign"></i>
                         <p>

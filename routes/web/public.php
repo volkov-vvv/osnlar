@@ -12,8 +12,10 @@ use App\Http\Controllers\Lid\IndexController as LidThankController;
 use App\Http\Controllers\Lid\StoreController as LidStoreController;
 use App\Http\Controllers\Lid\StoreNewController as LidStoreNewController;
 use App\Http\Controllers\Main\IndexController as MainIndexController;
+use App\Http\Controllers\Org\CreateBioeconomyController as OrgCreateBioeconomyController;
 use App\Http\Controllers\Org\CreateController as OrgCreateController;
 use App\Http\Controllers\Org\IndexController as OrgThankController;
+use App\Http\Controllers\Org\StoreBioeconomyController as OrgStoreBioeconomyController;
 use App\Http\Controllers\Org\StoreController as OrgStoreController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Page\GuideController;
@@ -37,6 +39,7 @@ Route::prefix('course')->name('course.')->group(function () {
 
 Route::get('/commerce', [CourseIndexController::class, 'commerce'])->name('commerce.index');
 Route::get('/future', [CourseIndexController::class, 'future'])->name('future.index');
+Route::get('/bioeconomy', [CourseIndexController::class, 'bioeconomy'])->name('bioeconomy.index');
 
 Route::prefix('archive')->name('archive.')->group(function () {
     Route::get('/', ArchiveIndexController::class)->name('index');
@@ -69,6 +72,8 @@ Route::prefix('lid')->name('lid.')->group(function () {
 Route::prefix('org')->name('org.')->group(function () {
     Route::get('/create', OrgCreateController::class)->name('create');
     Route::post('/', OrgStoreController::class)->middleware('throttle:forms')->name('store');
+    Route::get('/bioeconomy', OrgCreateBioeconomyController::class)->name('bioeconomy.create');
+    Route::post('/bioeconomy', OrgStoreBioeconomyController::class)->middleware('throttle:forms')->name('bioeconomy.store');
     Route::get('/thank', OrgThankController::class)->name('index');
 });
 

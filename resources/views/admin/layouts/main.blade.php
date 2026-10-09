@@ -176,16 +176,17 @@
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
-                "buttons": ["excel", "pdf", "colvis"],
-                // "language": {
-                //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
-                // },
+                "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                "buttons": ["excel", "colvis"],
                 "language": {
                     info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    infoFiltered: "(отфильтровано из _MAX_ записей)",
                     paginate: {
                         "first": "Первая",
-                        "previous": "Предыдущая",
-                        "next": "Следующая",
+                        "previous": "<<",
+                        "next": ">>",
                         "last": "Последняя"
                     },
                     search: "Поиск:",
@@ -194,23 +195,24 @@
                         search: 'Поиск'
                     },
                 }
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            });
 
             $("#link_table").DataTable({
                 order: [[0, 'desc']],
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
-                "buttons": ["excel", "pdf", "colvis"],
-                // "language": {
-                //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
-                // },
+                "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                "buttons": ["excel", "colvis"],
                 "language": {
                     info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    infoFiltered: "(отфильтровано из _MAX_ записей)",
                     paginate: {
                         "first": "Первая",
-                        "previous": "Предыдущая",
-                        "next": "Следующая",
+                        "previous": "<<",
+                        "next": ">>",
                         "last": "Последняя"
                     },
                     search: "Поиск:",
@@ -219,7 +221,7 @@
                         search: 'Поиск'
                     },
                 }
-            }).buttons().container().appendTo('#link_table_wrapper .col-md-6:eq(0)');
+            });
 
 
         });
@@ -244,6 +246,15 @@
 <style>
     .custom-file-input:lang(en) ~ .custom-file-label::after {
         content: "...";
+    }
+
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: left;
+    }
+
+    div.dataTables_wrapper div.dt-buttons {
+        float: none;
+        text-align: right;
     }
 </style>
 

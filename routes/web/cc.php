@@ -3,7 +3,7 @@
 use App\Http\Controllers\CC\DashboardController;
 use App\Http\Controllers\CC\LidController;
 use App\Http\Controllers\CC\Main\IndexController as MainIndexController;
-use App\Http\Controllers\CC\OrgController;
+use App\Http\Controllers\Common\OrgController;
 use App\Http\Controllers\Common\LinkController;
 use App\Http\Controllers\Common\OrderController;
 use App\Http\Controllers\Common\StatusController;

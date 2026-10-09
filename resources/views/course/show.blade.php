@@ -57,6 +57,7 @@
                     </div>
                 </div>
                 <div class="row pb-5">
+                    @if(!$course->bioeconomy)
                     <div class="row">
                         @if(isset($course->price) && $course->price != 0)
                             <div class="col-12 pt-5 text-center course-price">
@@ -74,6 +75,7 @@
                                 Записаться</a>
                         </div>
                     </div>
+                    @endif
                 <div class="row">
                     <div class="col-lg-9 mx-auto" data-aos="fade-up">
                         <div class="col"><img src="{{asset('assets/images/graf_edu.png')}}" alt="featured image"
@@ -117,6 +119,7 @@
                 </div>
             </div>
         </div>
+        @if(!$course->bioeconomy)
         <section class="edica-footer-banner-section">
             <div class="container">
                 <div class="footer-banner" data-aos="fade-up">
@@ -143,6 +146,7 @@
                 </div>
             </div>
         </section>
+        @endif
     </main>
 
 @endsection

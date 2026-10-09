@@ -54,15 +54,7 @@
             </li>
         </ul>
         <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto align-items-center">
-            <li class="nav-item mr-2">
-                <a class="btn btn-outline-secondary d-inline-flex align-items-center" href="{{ route('profile.edit') }}">
-                    @if(auth()->user()->avatar)
-                        <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle mr-2" width="24" height="24" style="object-fit: cover;">
-                    @endif
-                    Профиль
-                </a>
-            </li>
+        <ul class="navbar-nav ml-auto">
             <form action="{{route('logout')}}" method="post">
                 @csrf
 {{--                <label><i class="fa-solid fa-right-from-bracket"></i></label>--}}
@@ -173,16 +165,17 @@
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
-                "buttons": ["excel", "pdf", "colvis"],
-                // "language": {
-                //     url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/ru.json',
-                // },
+                "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                "buttons": ["excel", "colvis"],
                 "language": {
                     info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    infoFiltered: "(отфильтровано из _MAX_ записей)",
                     paginate: {
                         "first": "Первая",
-                        "previous": "Предыдущая",
-                        "next": "Следующая",
+                        "previous": "<<",
+                        "next": ">>",
                         "last": "Последняя"
                     },
                     search: "Поиск:",
@@ -192,7 +185,7 @@
                     },
 
                 }
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            });
         });
 
         $('#form-submit').click(function() {
@@ -213,6 +206,15 @@
 <style>
     .custom-file-input:lang(en) ~ .custom-file-label::after {
         content: "...";
+    }
+
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: left;
+    }
+
+    div.dataTables_wrapper div.dt-buttons {
+        float: none;
+        text-align: right;
     }
 </style>
 @yield('javascript')

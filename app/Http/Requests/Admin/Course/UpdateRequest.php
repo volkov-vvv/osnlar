@@ -35,6 +35,7 @@ class UpdateRequest extends FormRequest
             'is_published' => 'nullable',
             'open_registration' => 'nullable',
             'code_future' => 'nullable',
+            'bioeconomy' => 'nullable',
             'price' => 'nullable|numeric',
             'seo_title' => '',
             'seo_description' => '',

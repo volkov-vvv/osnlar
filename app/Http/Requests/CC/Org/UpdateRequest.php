@@ -24,18 +24,23 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'organization_title' => '',
-            'lastname' => '',
-            'firstname' => '',
-            'middlename' => '',
-            'phone' => '',
-            'email' => '',
-            'course_id' => '',
-            'region_id' => '',
-            'agent_id' => '',
-            'status_id' => '',
-            'politic' => '',
-            'responsible_id' => ''
+            'organization_title' => 'nullable|string|max:255',
+            'organization_full_title' => 'nullable|string|max:255',
+            'inn' => 'nullable|string|regex:/^\d{10}(\d{2})?$/',
+            'lastname' => 'nullable|string|max:255',
+            'firstname' => 'nullable|string|max:255',
+            'middlename' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:50',
+            'additional_phone' => 'nullable|string|max:50',
+            'email' => 'nullable|email|max:255',
+            'additional_email' => 'nullable|email|max:255',
+            'address' => 'nullable|string|max:1000',
+            'course_id' => 'nullable',
+            'region_id' => 'nullable',
+            'agent_id' => 'nullable',
+            'status_id' => 'nullable',
+            'politic' => 'nullable',
+            'responsible_id' => 'nullable',
         ];
     }
 }

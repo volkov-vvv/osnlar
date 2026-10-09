@@ -7497,6 +7497,39 @@ a.text-dark:hover, a.text-dark:focus {
     margin-right: 24px;
     margin-bottom: 24px; }
 
+.edica-landing-section.about-osnovanie .projects-carousel {
+    padding-bottom: 48px; }
+
+.edica-landing-section.about-osnovanie .projects-carousel .carousel-item > .row {
+    height: 100%; }
+
+.edica-landing-section.edica-landing-clients .reviews-carousel .carousel-item > .row {
+    height: 100%; }
+
+.edica-landing-section.about-osnovanie .projects-carousel .carousel-indicators {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+
+.edica-landing-section.about-osnovanie .projects-carousel .carousel-indicators li {
+    width: 12px;
+    height: 12px;
+    margin: 0 6px;
+    border: 0;
+    border-radius: 50%;
+    text-indent: -999px;
+    background-color: #bbc5d2;
+    opacity: 1;
+    transition: background-color 0.3s ease; }
+
+.edica-landing-section.about-osnovanie .projects-carousel .carousel-indicators li.active {
+    background-color: #f29431; }
+
   .edica-landing-section.edica-landing-clients .partners-wrapper img {
     margin: 20px; }
     .edica-landing-section.edica-landing-clients .partners-wrapper img:first-child {

@@ -63,6 +63,13 @@
                                         <option value="0">Бесплатный</option>
                                     </select>
                                 </div>
+                                <div class="col col-lg-2">
+                                    Источник:
+                                    <select id="source" name="source" class="form-control form-control-sm">
+                                        <option></option>
+                                        <option value="Биоэкономика">Биоэкономика</option>
+                                    </select>
+                                </div>
 
                             </div>
 
@@ -75,6 +82,7 @@
                                         <th>Год</th>
                                         <th>Компания</th>
                                         <th>Публикация</th>
+                                        <th>Источник</th>
                                         <th>Платный</th>
                                         <th>Дата создания</th>
                                         <th>Действия</th>
@@ -95,6 +103,9 @@
                                             </td>
                                             <td>
                                                 {{$course->is_published == 1 ? 'Опубликован' : 'Архив' }}
+                                            </td>
+                                            <td>
+                                                {{ $course->bioeconomy ? 'Биоэкономика' : '—' }}
                                             </td>
                                             <td>
                                                 {{isset($course->price) ? '1' : '0' }}
@@ -144,6 +155,7 @@
                         { data: 'years' },
                         { data: 'company' },
                         { data: 'is_publshed' },
+                        { data: 'source' },
                         { data: 'course_type' },
                         { data: 'created_at' },
                         { data: 'actions' },
@@ -151,12 +163,16 @@
                     "responsive": true,
                     "lengthChange": false,
                     "autoWidth": false,
-                    "buttons": ["excel", "pdf", "colvis"],
+                    "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    "buttons": ["excel", "colvis"],
                     'columnDefs': [
-                        { targets: [5], visible: false }
+                        { targets: [6], visible: false }
                     ],
                     "language": {
                         info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                        infoFiltered: "(отфильтровано из _MAX_ записей)",
                         paginate: {
                             "first": "Первая",
                             "previous": "<<",
@@ -170,8 +186,6 @@
                         },
                     }
                 });
-
-                table.buttons().container().appendTo('#course_table_wrapper .col-md-6:eq(0)');
 
                 $('#company').on('change', function (e) {
 
@@ -201,8 +215,16 @@
                 $('#course_type').on('change', function (e) {
 
                     table
-                        .column(5)
+                        .column(6)
                         .search(this.value, {exact: true, })
+                        .draw();
+                })
+
+                $('#source').on('change', function (e) {
+
+                    table
+                        .column(5)
+                        .search(this.value, {exact: true})
                         .draw();
                 })
 

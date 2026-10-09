@@ -136,7 +136,9 @@
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-            "dom": 'Bfrtip',
+            "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             "buttons": [{ extend: 'excel',
                 text: 'Excel',
                 action: function (e, dt, node, config)
@@ -181,6 +183,7 @@
             }],
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                infoFiltered: "(отфильтровано из _MAX_ записей)",
                 paginate: {
                     "first": "Первая",
                     "previous": "<<",
@@ -218,8 +221,6 @@
 
 
 
-
-        table.buttons().container().appendTo('#report_wrapper .col-md-6:eq(0)');
 
         $('#agent').on('change', function (e){
 

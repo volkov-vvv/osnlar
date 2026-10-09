@@ -170,6 +170,7 @@
             // },
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                infoFiltered: "(отфильтровано из _MAX_ записей)",
                 paginate: {
                     "first": "Первая",
                     "previous": "Предыдущая",

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin\Lid;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 use App\Rules\YandexSmartCaptcha;
 
 class StoreNewRequest extends FormRequest
@@ -33,7 +34,15 @@ class StoreNewRequest extends FormRequest
             'phone_prefix' => 'required|string',
             'phone' => 'required|string',
             'email' => 'required|string|email|unique:lids',
-            'course_id' => 'required|string',
+            'course_id' => [
+                'required',
+                Rule::exists('courses', 'id')->where(function ($query) {
+                    $query->where('is_published', 1)
+                        ->where(function ($q) {
+                            $q->whereNull('bioeconomy')->orWhere('bioeconomy', 0);
+                        });
+                }),
+            ],
             'lid_level_edu_id' => 'string',
             'region_id' => 'required|string',
             'category_id' => '',

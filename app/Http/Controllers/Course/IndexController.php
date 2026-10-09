@@ -17,6 +17,9 @@ class IndexController extends Controller
         })->where(function ($query) {
             $query->where('code_future', '!=', 1)
                 ->orWhereNull('code_future');
+        })->where(function ($query) {
+            $query->where('bioeconomy', '!=', 1)
+                ->orWhereNull('bioeconomy');
         })->get()->sortBy('order');
 
         $coursesS1 = Course::where('is_published', 1)->where('series', 1)->whereNull('price')->where(function ($query) {
@@ -25,6 +28,9 @@ class IndexController extends Controller
         })->where(function ($query) {
             $query->where('code_future', '!=', 1)
                 ->orWhereNull('code_future');
+        })->where(function ($query) {
+            $query->where('bioeconomy', '!=', 1)
+                ->orWhereNull('bioeconomy');
         })->get()->sortBy('order');
         $coursesS2 = Course::where('is_published', 1)->where('series', 2)->whereNull('price')->where(function ($query) {
             $query->where('company_id', '=', 1)
@@ -32,6 +38,9 @@ class IndexController extends Controller
         })->where(function ($query) {
             $query->where('code_future', '!=', 1)
                 ->orWhereNull('code_future');
+        })->where(function ($query) {
+            $query->where('bioeconomy', '!=', 1)
+                ->orWhereNull('bioeconomy');
         })->get()->sortBy('order');
         $coursesS3 = Course::where('is_published', 1)->where('series', 3)->whereNull('price')->where(function ($query) {
             $query->where('company_id', '=', 1)
@@ -39,6 +48,9 @@ class IndexController extends Controller
         })->where(function ($query) {
             $query->where('code_future', '!=', 1)
                 ->orWhereNull('code_future');
+        })->where(function ($query) {
+            $query->where('bioeconomy', '!=', 1)
+                ->orWhereNull('bioeconomy');
         })->get()->sortBy('order');
         $pageTitle = "Бесплатные курсы";
         $pageDescription = "Бесплатные курсы Учебного центра «Основание» по программам дополнительного профессионального образования в рамках реализации федерального проекта «Содействие занятости»";
@@ -67,6 +79,18 @@ class IndexController extends Controller
         $pageTitle = "Код будущего";
         $pageDescription = "Курсы Учебного центра «Основание» по программе «Код будущег»";
         return view('future.index',compact('courses', 'pageTitle', 'pageDescription'));
+    }
+
+    //Биоэкономика
+    public function bioeconomy()
+    {
+        $courses = Course::where('is_published', 1)->where('bioeconomy', 1)->where(function ($query) {
+            $query->where('company_id', '=', 1)
+                ->orWhereNull('company_id');
+        })->get()->sortBy('order');
+        $pageTitle = "Биоэкономика";
+        $pageDescription = "Курсы Учебного центра «Основание» в рамках национального проекта «Технологическое обеспечение биоэкономики»";
+        return view('bioeconomy.index', compact('courses', 'pageTitle', 'pageDescription'));
     }
 
 }

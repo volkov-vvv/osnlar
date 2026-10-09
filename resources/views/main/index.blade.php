@@ -11,7 +11,7 @@
                         <div class="carousel-item active">
                             <div class="row">
                                 <div class="col-md-6 carousel-content-wrapper top-banner">
-                                    <h1>ITTTT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
+                                    <h1>IT<span style="font-family: Soyuz Grotesk Bold">-компания,</span></h1>
                                     <p>которая специализируется на:</p>
                                     <ul>
                                         <li>создании цифрового образовательного контента</li>
@@ -48,22 +48,48 @@
     <section class="edica-landing-section about-osnovanie">
         <div class="container">
             <h4 class="edica-landing-section-subtitle-alt">Проекты</h4>
-            <div class="row">
-                <div class="col-md-6 img-wrapper" data-aos="fade-up-right">
-                    <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
-                         width="350px">
-                </div>
-                <div class="col-md-6" data-aos="fade-up-left">
-                    <h2>Федеральный проект «Активные меры содействия занятости»</h2>
-                    <p></p>
-                    <p>Учебный центр «Основание» открывает предварительную запись на <em>бесплатное</em> обучение по программам
-                        дополнительного профессионального образования отдельных категорий граждан в рамках
-                        реализации Федерального проекта «Активные меры содействия занятости» <a href="https://xn--80aapampemcchfmo7a3c9ehj.xn--p1ai/new-projects/kadry/" target="_blank">Национального проекта «Кадры»</a>.</p>
+            <div id="edicaProjectsCarousel" class="carousel slide projects-carousel" data-ride="carousel" data-interval="false">
+                <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-6 img-wrapper align-self-start">
+                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
+                                     width="350px">
+                            </div>
+                            <div class="col-md-6">
+                                <h2>Федеральный проект «Активные меры содействия занятости»</h2>
+                                <p>Учебный центр «Основание» открывает предварительную запись на <em>бесплатное</em> обучение по программам
+                                    дополнительного профессионального образования отдельных категорий граждан в рамках
+                                    реализации Федерального проекта «Активные меры содействия занятости» <a href="https://xn--80aapampemcchfmo7a3c9ehj.xn--p1ai/new-projects/kadry/" target="_blank">Национального проекта «Кадры»</a>.</p>
 
-                    <div class="carousel-content-btns">
-                        <a href="{{route('course.index')}}" class="button-main">Оставить заявку</a>
+                                <div class="carousel-content-btns">
+                                    <a href="{{route('course.index')}}" class="button-main">Оставить заявку</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h2>Национальный проект «Технологическое обеспечение биоэкономики» </h2>
+                                <p>Совместно с «Агентством развития профессионального мастерства» проводим <em>бесплатное</em> обучение по программам
+                                    дополнительного профессионального образования для сотрудников передовых органиция в области биоэкономики. Наши программы (BioTech & IT): управление цифровыми решениями, биоинформатика, использование ИИ для анализа данных в биологических исследованиях</p>
+
+                                <div class="carousel-content-btns">
+                                    <a href="{{route('bioeconomy.index')}}" class="button-main">Оставить заявку</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 img-wrapper align-self-start">
+                                <img src="{{asset('assets/images/биоэкономика-thumb.jpg')}}" alt="carousel-img" class="img-fluid"
+                                     width="350px">
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <ol class="carousel-indicators">
+                    <li data-target="#edicaProjectsCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#edicaProjectsCarousel" data-slide-to="1"></li>
+                </ol>
             </div>
         </div>
     </section>
@@ -121,7 +147,7 @@
             <header class="edica-header edica-landing-header">
                 <div class="container">
                     <div class="edica-landing-header-content">
-                        <div id="edicaReviewsCarousel" class="carousel slide" data-ride="carousel">
+                        <div id="edicaReviewsCarousel" class="carousel slide reviews-carousel" data-ride="carousel">
                             <ol class="carousel-indicators">
                                 <li data-target="#edicaReviewsCarousel" data-slide-to="0">.01</li>
                                 <li data-target="#edicaReviewsCarousel" data-slide-to="1">.02</li>
@@ -188,6 +214,73 @@
 
         </div>
     </section>
+
+    <script>
+        (function () {
+            var carouselIds = ['edicaProjectsCarousel', 'edicaReviewsCarousel'];
+
+            function equalizeCarousel(carouselId) {
+                var carousel = document.getElementById(carouselId);
+                if (!carousel) return;
+
+                var items = carousel.querySelectorAll('.carousel-item');
+                var maxHeight = 0;
+
+                items.forEach(function (item) {
+                    item.style.minHeight = '';
+                });
+
+                items.forEach(function (item) {
+                    var previousDisplay = item.style.display;
+                    var previousPosition = item.style.position;
+                    var previousVisibility = item.style.visibility;
+                    var previousWidth = item.style.width;
+
+                    item.style.display = 'block';
+                    item.style.position = 'absolute';
+                    item.style.visibility = 'hidden';
+                    item.style.width = carousel.offsetWidth + 'px';
+
+                    maxHeight = Math.max(maxHeight, item.offsetHeight);
+
+                    item.style.display = previousDisplay;
+                    item.style.position = previousPosition;
+                    item.style.visibility = previousVisibility;
+                    item.style.width = previousWidth;
+                });
+
+                items.forEach(function (item) {
+                    item.style.minHeight = maxHeight + 'px';
+                });
+            }
+
+            function equalizeAllCarousels() {
+                carouselIds.forEach(equalizeCarousel);
+            }
+
+            function runEqualize() {
+                equalizeAllCarousels();
+                carouselIds.forEach(function (carouselId) {
+                    var images = document.querySelectorAll('#' + carouselId + ' img');
+                    images.forEach(function (img) {
+                        if (!img.complete) {
+                            img.addEventListener('load', function () {
+                                equalizeCarousel(carouselId);
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (document.readyState === 'complete') {
+                runEqualize();
+            } else {
+                window.addEventListener('load', runEqualize);
+            }
+
+            window.addEventListener('resize', equalizeAllCarousels);
+        })();
+    </script>
 
     <section class="edica-landing-section edica-landing-clients">
         <div class="container">

@@ -181,6 +181,21 @@
                         </div>
                     </div>
 
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" name="bioeconomy" value="0">
+                                <input name="bioeconomy" type="checkbox" class="custom-control-input" id="customSwitchBioeconomy" value="1"
+                                    {{ $course->bioeconomy == 1 ? ' checked' : '' }}
+                                >
+                                <label class="custom-control-label" for="customSwitchBioeconomy">Биоэкономика</label>
+                            </div>
+                            @error('bioeconomy')
+                            <div class="text-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="mb-3 form-group">
                         <h5><b>Торговый каталог</b></h5>
                         <label>Стоимость обучения (руб.)</label>

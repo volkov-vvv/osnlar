@@ -126,6 +126,12 @@
                                             <a href="{{ route($panel . '.org.show', $org->id) }}"><i class="far fa-eye"></i></a>
                                             &nbsp;&nbsp;
                                             <a href="{{ route($panel . '.org.edit', $org->id) }}" class="text-success"><i class="fas fa-pen"></i></a>
+                                            &nbsp;&nbsp;
+                                            <form method="post" action="{{ route($panel . '.org.destroy', $org->id) }}" class="d-inline" onsubmit="return confirm('Удалить заявку организации?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="bg-transparent border-0 p-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

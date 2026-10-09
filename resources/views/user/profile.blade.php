@@ -1,7 +1,19 @@
 @extends('layouts.main2')
-@section('content')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
 
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+    <style>
+        .profile-form .form-control {
+            border-color: #dee2e6;
+        }
+        .profile-form .form-control:focus {
+            border-color: #ced4da;
+            box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.35);
+        }
+    </style>
+@endpush
+
+@section('content')
     <div class="row pt-5 pb-5">
         <div class="col text-center">
             <h1>Профиль</h1>
@@ -19,7 +31,7 @@
                                     <div class="alert alert-success">{{ session('success') }}</div>
                                 @endif
 
-                                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                                <form class="profile-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
 

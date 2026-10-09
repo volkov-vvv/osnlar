@@ -28,34 +28,30 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <div class="container-fluid">
-                                <div class="row pb-2">
-                                    <div class="col col-md-2">
-                                        Статус:
-                                        <select id="status" name="status" class="form-control form-control-sm custom-filters">
-                                            <option></option>
-                                            @foreach($statuses as $status)
-                                                <option value="{{$status->title}}">{{$status->title}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col col-md-3">
-                                        Курс:
-                                        <select id="course" name="course" class="form-control form-control-sm select2">
-                                            <option></option>
-                                            @foreach($courses as $course)
-                                                <option
-                                                    value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col col-md-7 d-flex justify-content-end align-items-end">
-                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
-                                    </div>
-
+                            <div class="row pb-3">
+                                <div class="col col-md-2">
+                                    Статус:
+                                    <select id="status" name="status" class="form-control form-control-sm custom-filters">
+                                        <option></option>
+                                        @foreach($statuses as $status)
+                                            <option value="{{$status->title}}">{{$status->title}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
+                                <div class="col col-md-3">
+                                    Курс:
+                                    <select id="course" name="course" class="form-control form-control-sm select2 custom-filters">
+                                        <option></option>
+                                        @foreach($courses as $course)
+                                            <option
+                                                value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col col-md-7 d-flex justify-content-end align-items-end">
+                                    <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
+                                </div>
                             </div>
                             <table id="order_table" class="table table-bordered table-striped hover">
                                 <thead>
@@ -196,21 +192,18 @@
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
-            "buttons": ["excel", "pdf", "colvis"],
-
-            initComplete: function () {
-                this.api()
-                    .buttons()
-                    .container()
-                    .appendTo('#order_table_wrapper .col-md-6:eq(0)');
-            },
+            "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            "buttons": ["excel", "colvis"],
 
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                infoFiltered: "(отфильтровано из _MAX_ записей)",
                 paginate: {
                     "first": "Первая",
-                    "previous": "Предыдущая",
-                    "next": "Следующая",
+                    "previous": "<<",
+                    "next": ">>",
                     "last": "Последняя"
                 },
                 search: "Поиск:",
