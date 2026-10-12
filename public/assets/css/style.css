@@ -7304,6 +7304,10 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 @media (max-width: 767.98px) {
+    .edica-header.edica-landing-header .carousel-content-wrapper.top-banner {
+        padding-top: 48px;
+    }
+
     .edica-header.edica-landing-header .carousel-content-wrapper .achievement {
         display: flex;
         flex-wrap: nowrap;
