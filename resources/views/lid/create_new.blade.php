@@ -23,6 +23,91 @@
             cursor: pointer;
             font-weight: 400;
         }
+
+        .lid-create-form,
+        .lid-create-form .bs-stepper,
+        .lid-create-form .bs-stepper-content,
+        .lid-create-form .content {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .lid-create-form .form-check-label,
+        .lid-create-form .category-label {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .lid-create-form .select2-container {
+            width: 100% !important;
+            max-width: 100%;
+        }
+
+        .lid-create-form .smart-captcha,
+        .lid-create-form #captcha-container {
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        @media (max-width: 767.98px) {
+            .lid-create-form .bs-stepper-header {
+                margin: 0;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                gap: 0;
+                overflow: visible;
+            }
+
+            .lid-create-form .bs-stepper .step {
+                flex: 1 1 0;
+                min-width: 0;
+            }
+
+            .lid-create-form .bs-stepper .line {
+                flex: 0 0 12px;
+                min-width: 12px;
+                max-width: 16px;
+            }
+
+            .lid-create-form .bs-stepper .step-trigger {
+                width: 100%;
+                padding: 8px 2px;
+                flex-direction: column;
+                white-space: normal;
+            }
+
+            .lid-create-form .bs-stepper-label {
+                display: block;
+                margin: 0.15rem 0 0;
+                font-size: 11px;
+                font-weight: 600;
+                line-height: 1.2;
+                white-space: normal;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+                max-width: 100%;
+            }
+
+            .lid-create-form .bs-stepper-circle {
+                margin: 0 auto;
+            }
+
+            .lid-create-form #information-part .ms-3 {
+                margin-left: 0 !important;
+            }
+
+            .lid-create-form .input-group {
+                flex-wrap: nowrap;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .lid-create-form .bs-stepper-label {
+                font-size: 10px;
+            }
+        }
     </style>
 @endpush
 
@@ -44,14 +129,20 @@
                     <div class="step" data-target="#courses-part">
                         <button type="button" class="step-trigger" role="tab" aria-controls="courses-part" id="courses-part-trigger">
                             <span class="bs-stepper-circle">1</span>
-                            <span class="bs-stepper-label">Выбор курса</span>
+                            <span class="bs-stepper-label">
+                                <span class="d-none d-md-inline">Выбор курса</span>
+                                <span class="d-md-none">Курс</span>
+                            </span>
                         </button>
                     </div>
                     <div class="line"></div>
                     <div class="step" data-target="#fio-part">
                         <button type="button" class="step-trigger" role="tab" aria-controls="fio-part" id="fio-part-trigger">
                             <span class="bs-stepper-circle">2</span>
-                            <span class="bs-stepper-label">ФИО и регион</span>
+                            <span class="bs-stepper-label">
+                                <span class="d-none d-md-inline">ФИО и регион</span>
+                                <span class="d-md-none">ФИО</span>
+                            </span>
                         </button>
                     </div>
                     <div class="line"></div>
@@ -65,7 +156,10 @@
                     <div class="step" data-target="#information-part">
                         <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
                             <span class="bs-stepper-circle">4</span>
-                            <span class="bs-stepper-label">Информация</span>
+                            <span class="bs-stepper-label">
+                                <span class="d-none d-md-inline">Информация</span>
+                                <span class="d-md-none">Инфо</span>
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -280,7 +374,9 @@
     <script src="{{ asset('js/intlTelInput/data.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js"></script>
     <script>
-        var stepper = new Stepper(document.querySelector('.bs-stepper'));
+        var stepper = new Stepper(document.querySelector('.bs-stepper'), {
+            linear: false
+        });
 
         $(document).ready(function () {
             $('[data-mask]').inputmask();
