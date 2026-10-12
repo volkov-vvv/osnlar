@@ -8290,6 +8290,83 @@ background-color: #4CAF50; /* Ваш цвет кнопки */
     }
 }
 
+.edica-header .navbar-nav .nav-socials {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.edica-header .navbar-nav .nav-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+}
+
+.edica-header .navbar-nav .nav-social-link img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 991.98px) {
+    .edica-header .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        text-align: center;
+    }
+
+    .edica-header .navbar-nav .nav-item {
+        padding: 0;
+        width: 100%;
+    }
+
+    .edica-header .navbar-nav .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        line-height: 1.3;
+        padding: 0.85rem 1rem;
+        min-height: 44px;
+    }
+
+    .edica-header .navbar-nav .nav-item-course .nav-link {
+        font-size: 18px;
+    }
+
+    .edica-header .navbar-nav .nav-item-social {
+        display: flex;
+        justify-content: center;
+    }
+
+    .edica-header .navbar-nav .nav-socials {
+        justify-content: center;
+        padding: 0.5rem 0;
+    }
+
+    .edica-header .navbar-nav .nav-social-link {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.5rem;
+    }
+
+    .edica-header .navbar-nav .dropdown-menu {
+        text-align: center;
+    }
+
+    .edica-header .navbar-nav .button-login,
+    .edica-header .navbar-nav .button-lid-create {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0.5rem auto;
+    }
+}
+
 header.edica-header.sticky-top .navbar {
     padding-top: 1.75rem;
     padding-bottom: 1.75rem;

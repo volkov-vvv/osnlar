@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v12">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v14">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
     @stack('styles')
@@ -105,7 +105,8 @@ sticky-top  bg-white bg-opacity-75
                     <li class="nav-item {{ request()->is('about*') ? 'active' : null }}">
                         <a class="nav-link" href="{{route('about.index')}}">О нас</a>
                     </li>
-                    <li class="nav-item dropdown
+                    {{-- Desktop: dropdown --}}
+                    <li class="nav-item dropdown d-none d-lg-block
                     @if(request()->is('course*') || request()->is('future*') || request()->is('commerce*') || request()->is('bioeconomy*') || request()->is('archive*'))
                         active
                     @endif
@@ -119,14 +120,24 @@ sticky-top  bg-white bg-opacity-75
                             <a class="dropdown-item" href="{{route('archive.index')}}">- Архив</a>
                         </div>
                     </li>
+                    {{-- Mobile: flat list --}}
+                    <li class="nav-item nav-item-course d-lg-none {{ request()->is('course*') ? 'active' : null }}">
+                        <a class="nav-link" href="{{route('course.index')}}">Бесплатные курсы (АМСЗ)</a>
+                    </li>
+                    <li class="nav-item nav-item-course d-lg-none {{ request()->is('commerce*') ? 'active' : null }}">
+                        <a class="nav-link" href="{{route('commerce.index')}}">Профессии будущего</a>
+                    </li>
+                    <li class="nav-item nav-item-course d-lg-none {{ request()->is('bioeconomy*') ? 'active' : null }}">
+                        <a class="nav-link" href="{{route('bioeconomy.index')}}">Биоэкономика</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
-                    <li class="nav-item pr-2 pl-2">
-                        <a href="{{url('https://max.ru/id7751117260_biz')}}"><img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28"  alt="Max"></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{url('https://t.me/osnovanie_study')}}"><img src="{{asset('assets/images/Telegram_Messenger.png')}}" width="28"  alt="Telegram"></a>
+                    <li class="nav-item nav-item-social pr-lg-2 pl-lg-2">
+                        <div class="nav-socials">
+                            <a href="{{url('https://max.ru/id7751117260_biz')}}" class="nav-social-link" aria-label="Max"><img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28" height="28" alt="Max"></a>
+                            <a href="{{url('https://t.me/osnovanie_study')}}" class="nav-social-link" aria-label="Telegram"><img src="{{asset('assets/images/Telegram_Messenger.png')}}" width="28" height="28" alt="Telegram"></a>
+                        </div>
                     </li>
 
 
@@ -162,7 +173,7 @@ sticky-top  bg-white bg-opacity-75
 
                     @else
 
-                        <li class="nav-item mr-lg-3 ml-lg-3">
+                        <li class="nav-item mr-lg-3 ml-lg-3 d-none d-lg-block">
                             <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
                         </li>
 
