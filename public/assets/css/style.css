@@ -78,6 +78,15 @@ body {
   text-align: left;
   background-color: #ffffff; }
 
+/* Clip AOS horizontal overflow without breaking sticky header.
+   Do not set overflow-x on .edica-landing-section: overflow-x:hidden
+   forces overflow-y:auto and creates nested scroll on mobile (e.g. «О нас»). */
+main,
+.edica-footer {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important; }
 
@@ -7294,6 +7303,32 @@ a.text-dark:hover, a.text-dark:focus {
     font-weight: bold;
 }
 
+@media (max-width: 767.98px) {
+    .edica-header.edica-landing-header .carousel-content-wrapper .achievement {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+        margin-top: 24px;
+        box-sizing: border-box;
+    }
+
+    .edica-header.edica-landing-header .carousel-content-wrapper .achievement div {
+        float: none;
+        flex: 1 1 0;
+        padding: 0 4px;
+        font-size: 15px;
+        text-align: center;
+        line-height: 1.25;
+    }
+
+    .edica-header.edica-landing-header .carousel-content-wrapper .achievement .achievement-bold {
+        font-size: 22px;
+    }
+}
+
 @media (min-width: 768px) and (max-width: 992px) {
     .edica-header.edica-landing-header .carousel-content-wrapper h1 {
         font-size: 50px;
@@ -7489,6 +7524,16 @@ a.text-dark:hover, a.text-dark:focus {
 .edica-landing-section.about-osnovanie .img-wrapper{
     text-align: center; }
 
+@media (max-width: 767.98px) {
+    .edica-landing-section.about-osnovanie .projects-carousel .img-wrapper {
+        margin-bottom: 1.5rem;
+    }
+
+    .edica-landing-section.about-osnovanie .projects-carousel .col-md-6 > h2 {
+        margin-top: 0.5rem;
+    }
+}
+
 .edica-landing-section.about-osnovanie .btn {
     padding: 18px 34px;
     font-size: 18px;
@@ -7536,6 +7581,22 @@ a.text-dark:hover, a.text-dark:focus {
       margin-left: 0; }
     .edica-landing-section.edica-landing-clients .partners-wrapper img:last-child {
       margin-right: 0; }
+
+@media (max-width: 767.98px) {
+    .edica-landing-section.edica-landing-clients .partners-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .edica-landing-section.edica-landing-clients .partners-wrapper img,
+    .edica-landing-section.edica-landing-clients .partners-wrapper img:first-child,
+    .edica-landing-section.edica-landing-clients .partners-wrapper img:last-child {
+        margin: 12px;
+    }
+}
   .edica-landing-section.edica-landing-services .landing-service-card {
     margin-bottom: 85px; }
     .edica-landing-section.edica-landing-services .landing-service-card .service-card-img {
@@ -8139,7 +8200,28 @@ label {
     background: url("../images/main_arrow.svg") top center no-repeat;
 }
 
+.edica-landing-section.edica-landing-blog .carousel-content-btns .button-main {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.edica-landing-section.edica-landing-blog .carousel-content-btns .button-main:before {
+    display: none;
+}
+
 @media (max-width: 992px) {
+    .button-main {
+        width: 100%;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .carousel-content-btns {
+        display: flex;
+        justify-content: center;
+    }
+
     .button-main:before {
         display: none;
     }

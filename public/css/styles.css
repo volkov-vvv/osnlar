@@ -32,6 +32,51 @@
     font-weight: 700;
 }
 
+/* AdminLTE: don't inherit public navbar paddings */
+.main-sidebar .nav-item,
+.main-sidebar .nav-treeview .nav-item,
+.main-header .nav-item {
+    padding: 0;
+    font-weight: normal;
+}
+
+html.admin-layout,
+body.sidebar-mini {
+    overflow-x: hidden;
+}
+
+@media (max-width: 767.98px) {
+    body.sidebar-mini {
+        overflow-x: hidden;
+    }
+
+    body.sidebar-mini .main-sidebar {
+        position: fixed !important;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        z-index: 1040;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.sidebar-mini.sidebar-open {
+        overflow: hidden;
+    }
+
+    body.sidebar-mini.sidebar-open .content-wrapper,
+    body.sidebar-mini.sidebar-open .main-header,
+    body.sidebar-mini.sidebar-open .main-footer {
+        margin-left: 0 !important;
+        transform: none !important;
+    }
+
+    body.sidebar-mini .wrapper {
+        overflow-x: hidden;
+    }
+}
+
 .nav-pills-custom .nav-link {
     color: #aaa;
     background: #fff;

@@ -113,8 +113,7 @@
             <div class="row mt-5">
 
                 <div class="carousel-content-btns mx-auto text-center">
-                    <a href="{{route('course.index')}}" type="button" class="btn btn-primary btn-lg px-5"> Все курсы </a>
-{{--                    <a href="{{route('course.index')}}" class="button-main ">Все курсы</a>--}}
+                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>
                 </div>
             </div>
         </div>
