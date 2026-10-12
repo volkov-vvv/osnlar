@@ -1,25 +1,67 @@
 @extends('layouts.main2')
+
+@push('styles')
+    <style>
+        .course-page-title {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            hyphens: auto;
+            line-height: 1.25;
+        }
+        .course-page-lead {
+            color: grey;
+            font-size: 20px;
+        }
+        @media (max-width: 767.98px) {
+            .course-page-title {
+                font-size: 1.6rem;
+            }
+            .course-page-lead {
+                font-size: 16px;
+            }
+
+            .course-tabs {
+                flex-direction: column;
+                align-items: stretch;
+                border-bottom: 0;
+            }
+
+            .course-tabs .nav-link {
+                width: 100%;
+                text-align: center;
+                border: 1px solid #dee2e6;
+                border-radius: 0.5rem;
+                margin-bottom: 0.5rem;
+                padding: 0.75rem 1rem;
+                white-space: normal;
+                line-height: 1.3;
+            }
+
+            .course-tabs .nav-link.active {
+                border-color: #007bff;
+                background-color: #007bff;
+                color: #fff;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
 
     <main class="blog">
         <div class="container">
 
-            <div class="row p-5"  data-aos="fade-up">
+            <div class="row px-3 px-md-5 py-4 py-md-5" data-aos="fade-up">
                 <div class="col">
-                    <h1 class="text-center">Запись на бесплатное обучение</h1>
-{{--                    <div class="d-none d-lg-block"><p class="text-center" style="color: grey; font-size: 20px">В рамках реализации федерального проекта «Активные меры содействия занятости»<br> национального проекта «Кадры». Предварительная запись на обучение в 2025 году</p>--}}
-{{--                    </div>--}}
-                    <div class="d-none d-lg-block"><p class="text-center" style="color: grey; font-size: 20px">Федеральный проект «Активные меры содействия занятости»</p>
-                    </div>
-{{--                    <p class="text-center" style="color: #3d444b; font-size: 20px">Оставьте заявку и пройдите обучение в числе первых.--}}
-{{--                        <br> Подпишитесь на наш <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i> Телеграм канал</a>, чтобы оставаться с нами на связи.</p>--}}
-
-                    <div class="d-lg-none pb-2"><p class="text-center" data-aos="fade-up" style="color: grey">В рамках реализации федерального проекта «Активные меры содействия занятости»</p></div>
+                    <h1 class="text-center course-page-title">Запись на бесплатное обучение</h1>
+                    <p class="text-center course-page-lead">
+                        В рамках реализации федерального проекта «Активные меры содействия занятости»
+                    </p>
                 </div>
             </div>
 
             <nav>
-                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <div class="nav nav-tabs nav-fill course-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Все</button>
                     <button class="nav-link" id="nav-digital-tab" data-toggle="tab" data-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false">Профессиональная переподготовка<br> (256 ч.)</button>
                     <button class="nav-link" id="nav-designed-tab" data-toggle="tab" data-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Повышение квалификации<br> (144 ч.)</button>

@@ -1,18 +1,42 @@
 @extends('layouts.main2')
+
+@push('styles')
+    <style>
+        .commerce-page-title {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            hyphens: auto;
+            line-height: 1.25;
+        }
+        .commerce-page-lead {
+            color: grey;
+            font-size: 20px;
+        }
+        @media (max-width: 767.98px) {
+            .commerce-page-title {
+                font-size: 1.6rem;
+            }
+            .commerce-page-lead {
+                font-size: 16px;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
 
     <main class="blog">
         <div class="container">
-            <div class="row p-5"  data-aos="fade-up">
+            <div class="row px-3 px-md-5 py-4 py-md-5" data-aos="fade-up">
                 <div class="col">
-
-                    <div class="col text-center"><img src="{{asset('assets/images/mosfuture2.png')}}"></div>
-                    <h1 class="text-center">Софинансирование обучения</h1>
-                    <p class="text-center" style="color: grey; font-size: 20px">   Предварительная запись на обучение в рамках проекта «Профессии Будущего»<br>
+                    <div class="text-center mb-3">
+                        <img src="{{asset('assets/images/mosfuture2.png')}}" class="img-fluid" alt="Профессии будущего">
+                    </div>
+                    <h1 class="text-center commerce-page-title">Софинансирование обучения</h1>
+                    <p class="text-center commerce-page-lead">
+                        Предварительная запись на обучение в рамках проекта «Профессии Будущего»<br>
                         программа профессионального обучения и дополнительного профессионального образования, реализуемая на условиях софинансирования при государственной поддержке.
                     </p>
-
-
                 </div>
             </div>
             <section class="featured-posts-section">

@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v14">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v28">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
     @stack('styles')
@@ -85,20 +85,21 @@ sticky-top  bg-white bg-opacity-75
         <nav class="navbar navbar-expand-lg navbar-light">
 
             <div class="d-none d-lg-block"> <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-invert.png')}}" width="220"  alt="Основание"></a></div>
-            <div class="d-lg-none">
-                <div class="row justify-content-center">
-                <div class="col-2"><a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-little.png')}}" width="40"  alt="Основание"></a></div>
-                <div class="col-10 pt-2"><a class="btn btn-danger" role="button" href="{{route('lid.create')}}">Оставить заявку</a></div>
-                </div>
-
+            @php $showMobileLidCta = request()->routeIs('main.index', 'course.index'); @endphp
+            <div class="d-lg-none mobile-header-bar{{ $showMobileLidCta ? ' mobile-header-bar--with-cta' : '' }}">
+                <a class="navbar-brand mobile-header-logo mb-0" href="{{route('main.index')}}">
+                    <img src="{{asset('assets/images/logo-main-little.png')}}" width="40" height="40" alt="Основание">
+                </a>
+                @if($showMobileLidCta)
+                    <a class="btn btn-danger mobile-header-cta" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
+                @endif
             </div>
-
 
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#edicaMainNav" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="edicaMainNav">
-                <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
+                <ul class="navbar-nav mt-2 mt-lg-0 edica-main-nav">
 {{--                    <li class="nav-item {{ request()->is('/') ? 'active' : null }}">--}}
 {{--                        <a class="nav-link" href="{{route('main.index')}}">Главная</a>--}}
 {{--                    </li>--}}
@@ -133,17 +134,23 @@ sticky-top  bg-white bg-opacity-75
                     <li class="nav-item">
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
-                    <li class="nav-item nav-item-social pr-lg-2 pl-lg-2">
-                        <div class="nav-socials">
-                            <a href="{{url('https://max.ru/id7751117260_biz')}}" class="nav-social-link" aria-label="Max"><img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28" height="28" alt="Max"></a>
-                            <a href="{{url('https://t.me/osnovanie_study')}}" class="nav-social-link" aria-label="Telegram"><img src="{{asset('assets/images/Telegram_Messenger.png')}}" width="28" height="28" alt="Telegram"></a>
-                        </div>
-                    </li>
 
+                    <li class="nav-item nav-item-social nav-item-social-first">
+                        <a class="nav-link" href="{{url('https://max.ru/id7751117260_biz')}}" target="_blank" rel="noopener noreferrer">
+                            <img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28" height="28" alt="Макс">
+                            <span class="d-lg-none">Макс</span>
+                        </a>
+                    </li>
+                    <li class="nav-item nav-item-social">
+                        <a class="nav-link" href="{{url('https://t.me/osnovanie_study')}}" target="_blank" rel="noopener noreferrer">
+                            <img src="{{asset('assets/images/Telegram_Messenger.png')}}" width="28" height="28" alt="Телеграмм">
+                            <span class="d-lg-none">Телеграмм</span>
+                        </a>
+                    </li>
 
                     @if( isset(auth()->user()->id) )
 
-                        <li class="nav-item dropdown ml-lg-5">
+                        <li class="nav-item dropdown ml-lg-3">
                             <a class="nav-link dropdown-toggle d-inline-flex align-items-center" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if(auth()->user()->avatar)
                                     <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle me-2" width="28" height="28" style="object-fit: cover;">
@@ -173,15 +180,15 @@ sticky-top  bg-white bg-opacity-75
 
                     @else
 
-                        <li class="nav-item mr-lg-3 ml-lg-3 d-none d-lg-block">
+                        <li class="nav-item nav-item-lid-create mr-lg-3 ml-lg-3">
                             <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="button-login" href="{{route('login')}}">Войти</a>
+                            <a class="nav-link d-lg-none" href="{{route('login')}}">Войти</a>
+                            <a class="button-login d-none d-lg-inline-flex" href="{{route('login')}}">Войти</a>
                         </li>
                     @endif
-
 
                 </ul>
 

@@ -19,17 +19,51 @@
         .lid-create-form .bs-stepper .step-trigger {
             padding: 10px 0;
         }
+        .lid-create-form .bs-stepper-header {
+            margin-bottom: 1.5rem;
+        }
+        .lid-create-form .bs-stepper-content {
+            padding-top: 0.5rem;
+        }
         .lid-create-form .category-label {
             cursor: pointer;
             font-weight: 400;
         }
+        .lid-create-form .step-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            text-align: center;
+        }
 
         .lid-create-form,
-        .lid-create-form .bs-stepper,
+        .lid-create-form .bs-stepper {
+            max-width: 100%;
+        }
+
         .lid-create-form .bs-stepper-content,
         .lid-create-form .content {
             max-width: 100%;
-            overflow-x: hidden;
+            overflow-x: visible;
+        }
+
+        .lid-create-form .form-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.55rem;
+            padding-left: 0;
+            min-height: auto;
+        }
+
+        .lid-create-form .form-check-input {
+            position: static;
+            float: none;
+            flex: 0 0 auto;
+            width: 1.15rem;
+            height: 1.15rem;
+            margin: 0.2rem 0 0;
         }
 
         .lid-create-form .form-check-label,
@@ -37,6 +71,8 @@
             overflow-wrap: anywhere;
             word-break: break-word;
             white-space: normal;
+            flex: 1 1 auto;
+            min-width: 0;
         }
 
         .lid-create-form .select2-container {
@@ -100,6 +136,11 @@
             .lid-create-form .input-group {
                 flex-wrap: nowrap;
                 max-width: 100%;
+            }
+
+            .lid-create-form .bs-stepper-content {
+                padding-left: 4px;
+                padding-right: 4px;
             }
         }
 
@@ -166,17 +207,17 @@
 
                 <div class="bs-stepper-content">
                     <div id="courses-part" class="content" role="tabpanel" aria-labelledby="courses-part-trigger">
-                        <label class="form-label"><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
+                        <label class="form-label d-block mb-3"><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
                         @foreach($courses as $course)
                             @if($course->title != '---')
-                                <div class="form-check mb-2">
+                                <div class="form-check mb-3">
                                     <input class="form-check-input" name="course_id" type="radio" id="course_id_{{ $course->id }}" value="{{ $course->id }}" {{ $course->id == $selectedCourse ? 'checked' : '' }}>
                                     <label class="form-check-label category-label" for="course_id_{{ $course->id }}">{{ $course->title }}</label>
                                 </div>
                             @endif
                         @endforeach
 
-                        <div class="mt-4 mb-4">
+                        <div class="mt-4 mb-4 step-actions">
                             <button type="button" class="btn btn-primary" onclick="stepper.next()">Дальше</button>
                         </div>
                     </div>
@@ -215,7 +256,7 @@
                             </select>
                         </div>
 
-                        <div class="mt-4 mb-4">
+                        <div class="mt-4 mb-4 step-actions">
                             <button type="button" class="btn btn-outline-secondary" onclick="stepper.previous()">Назад</button>
                             <button type="button" class="btn btn-primary" onclick="stepper.next()">Дальше</button>
                         </div>
@@ -252,7 +293,7 @@
                             <label for="inProjectCheckbox" class="form-check-label">Я никогда не обучался(-лась) в рамках проекта "Содействие занятости"</label>
                         </div>
 
-                        <div class="mt-4 mb-4">
+                        <div class="mt-4 mb-4 step-actions">
                             <button type="button" class="btn btn-outline-secondary" onclick="stepper.previous()">Назад</button>
                             <button type="button" class="btn btn-primary" onclick="stepper.next()">Дальше</button>
                         </div>
@@ -309,7 +350,7 @@
                             @enderror
                         </div>
 
-                        <div class="mt-4 mb-4">
+                        <div class="mt-4 mb-4 step-actions">
                             <button type="button" class="btn btn-outline-secondary" onclick="stepper.previous()">Назад</button>
                             <button type="submit" class="btn btn-primary">Отправить</button>
                         </div>
