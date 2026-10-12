@@ -14,6 +14,22 @@
         .org-bioeconomy-form .course-checkbox + .form-check-label {
             font-weight: 400;
         }
+
+        .org-bioeconomy-form .iti {
+            width: 100%;
+            display: block;
+        }
+
+        .org-bioeconomy-form .input-group .iti {
+            flex: 1 1 auto;
+            width: 1%;
+            min-width: 0;
+        }
+
+        .org-bioeconomy-form .iti .iti__tel-input,
+        .org-bioeconomy-form .iti input[type="tel"] {
+            width: 100%;
+        }
     </style>
 @endpush
 

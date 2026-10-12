@@ -1,6 +1,24 @@
 @extends('layouts.main-lid')
 @section('content')
 
+    <style>
+        .iti {
+            width: 100%;
+            display: block;
+        }
+
+        .input-group .iti {
+            flex: 1 1 auto;
+            width: 1%;
+            min-width: 0;
+        }
+
+        .iti .iti__tel-input,
+        .iti input[type="tel"] {
+            width: 100%;
+        }
+    </style>
+
     <div class="container">
         <div class="row mb-3">
             <div class="col">

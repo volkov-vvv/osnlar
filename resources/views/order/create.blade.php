@@ -14,6 +14,22 @@
             border-color: #ced4da;
             box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.35);
         }
+
+        .order-create-form .iti {
+            width: 100%;
+            display: block;
+        }
+
+        .order-create-form .input-group .iti {
+            flex: 1 1 auto;
+            width: 1%;
+            min-width: 0;
+        }
+
+        .order-create-form .iti .iti__tel-input,
+        .order-create-form .iti input[type="tel"] {
+            width: 100%;
+        }
     </style>
 @endpush
 

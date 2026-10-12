@@ -79,11 +79,11 @@ body {
   background-color: #ffffff; }
 
 /* Clip AOS horizontal overflow without breaking sticky header.
-   Do not set overflow-x on .edica-landing-section: overflow-x:hidden
-   forces overflow-y:auto and creates nested scroll on mobile (e.g. «О нас»). */
+   Use overflow-x:clip (not hidden): hidden forces overflow-y:auto and
+   creates a nested scrollbar on tall pages (e.g. course show on desktop). */
 main,
 .edica-footer {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 

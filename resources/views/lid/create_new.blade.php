@@ -80,6 +80,22 @@
             max-width: 100%;
         }
 
+        .lid-create-form .iti {
+            width: 100%;
+            display: block;
+        }
+
+        .lid-create-form .input-group .iti {
+            flex: 1 1 auto;
+            width: 1%;
+            min-width: 0;
+        }
+
+        .lid-create-form .iti .iti__tel-input,
+        .lid-create-form .iti input[type="tel"] {
+            width: 100%;
+        }
+
         .lid-create-form .smart-captcha,
         .lid-create-form #captcha-container {
             max-width: 100%;
@@ -418,6 +434,10 @@
         var stepper = new Stepper(document.querySelector('.bs-stepper'), {
             linear: false
         });
+
+        @if($selectedCourse && !$errors->has('smart-token'))
+            stepper.to(2);
+        @endif
 
         $(document).ready(function () {
             $('[data-mask]').inputmask();
