@@ -19,7 +19,7 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <a href="{{route('admin.document.create')}}" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Добавить</a>
+                    <a href="{{route('admin.document.create')}}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Добавить</a>
                 </div>
             </div>
 

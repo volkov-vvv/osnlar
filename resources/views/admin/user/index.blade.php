@@ -26,26 +26,21 @@
                 <div class="col">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body table-responsive p-0">
-
-                            <div class="container-fluid">
-                                <div class="row pb-2">
-                                    <div class="col col-md-2">
-                                        Роль:
-                                        <select id="role" name="role" class="form-control form-control-sm custom-filters">
-                                            <option></option>
-                                            <option value="Администратор">Администратор</option>
-                                            <option value="Агент">Агент</option>
-                                            <option value="Специалист КЦ">Специалист КЦ</option>
-                                            <option value="Пользователь">Пользователь</option>
-                                        </select>
-                                    </div>
-                                    <div class="col col-md-10 d-flex justify-content-end align-items-end">
-                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
-                                    </div>
-
+                        <div class="card-body">
+                            <div class="row pb-3">
+                                <div class="col col-md-2">
+                                    Роль:
+                                    <select id="role" name="role" class="form-control form-control-sm custom-filters">
+                                        <option></option>
+                                        <option value="Администратор">Администратор</option>
+                                        <option value="Агент">Агент</option>
+                                        <option value="Специалист КЦ">Специалист КЦ</option>
+                                        <option value="Пользователь">Пользователь</option>
+                                    </select>
                                 </div>
-
+                                <div class="col col-md-10 d-flex justify-content-end align-items-end">
+                                    <button id="resetTable" class="btn btn-secondary"><i class="fas fa-eraser mr-1"></i>Очистить фильтры</button>
+                                </div>
                             </div>
 
                             <table id="users_table" class="table table-hover text-nowrap">
@@ -167,9 +162,15 @@
             "lengthChange": false,
             "autoWidth": false,
             "dom": "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
-                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12'<'table-responsive'tr>>>" +
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-            "buttons": ["excel", "colvis"],
+            "buttons": [
+                "excel",
+                {
+                    extend: "colvis",
+                    align: "button-right"
+                }
+            ],
 
             "language": {
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",

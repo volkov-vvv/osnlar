@@ -196,3 +196,40 @@ body.sidebar-mini {
     border-color: #0062cc;
     text-decoration: none;
 }
+
+/* Native select arrow like Select2 (same as «Курс» filter) */
+body.sidebar-mini select.form-control:not([multiple]) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath fill='%23888888' d='M0 0l4 5 4-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    background-size: 8px 5px;
+    padding-right: 1.75rem;
+}
+
+body.sidebar-mini select.form-control-sm:not([multiple]) {
+    background-position: right 0.5rem center;
+    padding-right: 1.5rem;
+}
+
+body.sidebar-mini select.form-control:not([multiple])::-ms-expand {
+    display: none;
+}
+
+/* DataTables «Выбрать колонки»: don't let the dropdown create page/card scroll */
+body.sidebar-mini .dataTables_wrapper {
+    overflow: visible;
+}
+
+body.sidebar-mini .card-body.table-responsive {
+    overflow: visible;
+}
+
+body.sidebar-mini div.dt-button-collection {
+    z-index: 2001;
+    max-height: min(70vh, 420px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -45,7 +45,7 @@
                                         </select>
                                     </div>
                                     <div class="col col-md-9 d-flex justify-content-end align-items-end">
-                                        <button id="resetTable" class="btn btn-secondary">Очистить фильтры</button>
+                                        <button id="resetTable" class="btn btn-secondary"><i class="fas fa-eraser mr-1"></i>Очистить фильтры</button>
                                     </div>
 
                                 </div>
