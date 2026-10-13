@@ -454,25 +454,85 @@
 
             var input = document.querySelector('#phone');
             if (input && window.intlTelInput) {
-                var iti = window.intlTelInput(input, {
-                    strictMode: true,
-                    showSelectedDialCode: true,
-                    nationalMode: false,
-                    initialCountry: 'ru',
-                    onlyCountries: ['ru', 'by'],
-                    i18n: {
-                        ru: 'Россия',
-                        by: 'Беларусь'
-                    },
-                    hiddenInput: function () {
-                        return { phone: 'phone' };
-                    },
-                    utilsScript: "{{ asset('js/intlTelInput/utils.js') }}?1712939239769"
-                });
+                var utilsUrl = "{{ asset('js/intlTelInput/utils.js') }}?1712939239769";
+                var nationalMaxByIso = { ru: 10, by: 9 };
 
-                input.addEventListener('countrychange', function () {
+                function enforceNationalLength(itiInstance) {
+                    var iso = (itiInstance.getSelectedCountryData().iso2 || 'ru').toLowerCase();
+                    var maxDigits = nationalMaxByIso[iso] || 10;
+                    var digits = (input.value || '').replace(/\D/g, '');
+                    if (digits.length <= maxDigits) {
+                        return;
+                    }
+                    digits = digits.slice(0, maxDigits);
+                    if (window.intlTelInputUtils) {
+                        itiInstance.setNumber('+' + itiInstance.getSelectedCountryData().dialCode + digits);
+                    } else {
+                        input.value = digits;
+                    }
+                }
+
+                function initPhoneInput() {
+                    var iti = window.intlTelInput(input, {
+                        strictMode: true,
+                        showSelectedDialCode: true,
+                        nationalMode: false,
+                        formatAsYouType: true,
+                        initialCountry: 'ru',
+                        onlyCountries: ['ru', 'by'],
+                        i18n: {
+                            ru: 'Россия',
+                            by: 'Беларусь'
+                        },
+                        hiddenInput: function () {
+                            return { phone: 'phone' };
+                        },
+                        utilsScript: utilsUrl
+                    });
+
                     document.getElementById('phone_prefix').value = iti.getSelectedCountryData().dialCode;
-                });
+
+                    input.addEventListener('countrychange', function () {
+                        document.getElementById('phone_prefix').value = iti.getSelectedCountryData().dialCode;
+                        enforceNationalLength(iti);
+                    });
+
+                    input.addEventListener('input', function () {
+                        enforceNationalLength(iti);
+                    });
+
+                    input.addEventListener('blur', function () {
+                        enforceNationalLength(iti);
+                    });
+                }
+
+                function whenUtilsReady(done) {
+                    if (window.intlTelInputUtils) {
+                        done();
+                        return;
+                    }
+
+                    var loadPromise = window.intlTelInputGlobals
+                        && typeof window.intlTelInputGlobals.loadUtils === 'function'
+                        ? window.intlTelInputGlobals.loadUtils(utilsUrl)
+                        : null;
+
+                    if (loadPromise && typeof loadPromise.then === 'function') {
+                        loadPromise.then(done).catch(done);
+                        return;
+                    }
+
+                    var attempts = 0;
+                    var timer = setInterval(function () {
+                        attempts += 1;
+                        if (window.intlTelInputUtils || attempts >= 40) {
+                            clearInterval(timer);
+                            done();
+                        }
+                    }, 50);
+                }
+
+                whenUtilsReady(initPhoneInput);
             }
 
             $('input[name="category_main"]').on('change', function () {

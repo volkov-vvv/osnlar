@@ -53,9 +53,9 @@
 
             <div class="row px-3 px-md-5 py-4 py-md-5" data-aos="fade-up">
                 <div class="col">
-                    <h1 class="text-center course-page-title">Запись на бесплатное обучение</h1>
+                    <h1 class="text-center course-page-title">Запись на бесплатное обучение в 2027 году</h1>
                     <p class="text-center course-page-lead">
-                        В рамках реализации федерального проекта «Активные меры содействия занятости»
+                        В рамках реализации федерального проекта «Активные меры содействия занятости» проходит предварительная запись на бесплатное обучение в 2027 году. 
                     </p>
                 </div>
             </div>
