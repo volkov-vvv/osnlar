@@ -47,6 +47,7 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Аватар</th>
                                     <th>Фамилия</th>
                                     <th>Имя</th>
                                     <th>Отчество</th>
@@ -61,6 +62,23 @@
                                 @foreach($users as $user)
                                     <tr>
                                         <td>{{$user->id}}</td>
+                                        <td>
+                                            @if($user->avatar)
+                                                <img
+                                                    src="{{ url('storage/' . $user->avatar) }}"
+                                                    alt=""
+                                                    class="img-circle elevation-1"
+                                                    width="36"
+                                                    height="36"
+                                                    style="object-fit: cover;"
+                                                >
+                                            @else
+                                                <span
+                                                    class="d-inline-block rounded-circle"
+                                                    style="width: 36px; height: 36px; background-color: #d6d8db;"
+                                                ></span>
+                                            @endif
+                                        </td>
                                         <td>{{$user->lastname}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->middlename}}</td>
@@ -158,6 +176,10 @@
 
             order: [[0, 'desc']],
 
+            columnDefs: [
+                { orderable: false, searchable: false, targets: 1 }
+            ],
+
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
@@ -191,7 +213,7 @@
 
         $('#role').on('change', function (e) {
             table
-                .column(5)
+                .column(6)
                 .search(this.value, {exact: true})
                 .draw();
         });

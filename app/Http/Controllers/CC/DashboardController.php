@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CC;
 use App\Http\Controllers\Controller;
 use App\Models\Lid;
 use App\Models\User;
+use App\Models\Year;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -26,7 +27,7 @@ class DashboardController extends Controller
         if ( isset($param['year']) ) {
             $year = $param['year'];
         }else{
-            $year = 2026;
+            $year = Year::defaultValue();
         }
 
 

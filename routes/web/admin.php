@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Main\IndexController as MainIndexController;
 use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\Report\IndexController as ReportIndexController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\YearController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', MainIndexController::class)->name('main.index');
@@ -41,6 +42,7 @@ Route::resource('author', AuthorController::class)->whereNumber('author');
 Route::resource('agent', AgentController::class)->whereNumber('agent');
 Route::resource('leveledu', LeveleduController::class)->whereNumber('leveledu');
 Route::resource('region', RegionController::class)->whereNumber('region');
+Route::resource('year', YearController::class)->whereNumber('year');
 Route::resource('status', StatusController::class)->whereNumber('status');
 
 Route::get('/lid/getLids', [LidController::class, 'getLids'])->name('lid.getLids');

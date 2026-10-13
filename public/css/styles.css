@@ -233,3 +233,17 @@ body.sidebar-mini div.dt-button-collection {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+/* Course/company show: keep rich HTML description inside the card */
+.course-description {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.course-description img,
+.course-description table,
+.course-description iframe,
+.course-description video {
+    max-width: 100%;
+    height: auto;
+}

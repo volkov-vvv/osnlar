@@ -19,6 +19,7 @@ use App\Models\Lid;
 use App\Models\Status;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\User;
+use App\Models\Year;
 use App\Exports\LidsExport;
 use App\DTO\getLidsDTO;
 use Spatie\DataTransferObject\DataTransferObject;
@@ -42,9 +43,10 @@ class lidController extends Controller
         $users = User::where('role', 3)->get();
 
         $commerce = 0;
+        $years = Year::options();
+        $defaultYear = Year::defaultValue();
 
-
-        return view('admin.lid.index', compact('courses','users','regions','statuses', 'commerce', 'companies'));
+        return view('admin.lid.index', compact('courses','users','regions','statuses', 'commerce', 'companies', 'years', 'defaultYear'));
     }
 
     /**

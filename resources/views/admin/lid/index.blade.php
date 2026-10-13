@@ -56,9 +56,11 @@
                                     <div class="col col-md-1">
                                         Год:
                                         <select id="year" name="year" class="form-control form-control-sm">
-                                            <option value="2026">2026</option>
-                                            <option value="2025">2025</option>
-                                            <option value="2024">2024</option>
+                                            @include('partials.year-options', [
+                                                'yearOptions' => $years,
+                                                'defaultYear' => $defaultYear,
+                                                'selectDefault' => true,
+                                            ])
                                         </select>
                                     </div>
                                     <div class="col col-md-2">
@@ -401,7 +403,7 @@
 
 
             $('.custom-filters').not('#year, #course').val('');
-            $('#year').val('2026');
+            $('#year').val(@json($defaultYear));
             $('#course').val(null).trigger('change');
 
         });

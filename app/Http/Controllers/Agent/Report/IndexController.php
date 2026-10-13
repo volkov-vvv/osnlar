@@ -10,6 +10,7 @@ use App\Models\Lid;
 use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,9 @@ class IndexController extends Controller
         $agentsForFilter = $lids->unique('agent_id')->values();
         $sourcesForFilter = $lids->unique('utm_source')->values();
 
-        return view('agent.report.index', compact('lids','courses','statuses','users','regions','agentsForFilter','categories', 'sourcesForFilter'));
+        $years = Year::options();
+        $defaultYear = Year::defaultValue();
+
+        return view('agent.report.index', compact('lids','courses','statuses','users','regions','agentsForFilter','categories', 'sourcesForFilter', 'years', 'defaultYear'));
     }
 }

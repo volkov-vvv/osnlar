@@ -9,6 +9,7 @@ use App\Models\Author;
 use App\Models\Company;
 use App\Models\Course;
 use App\Models\CourseSeries;
+use App\Models\Year;
 use App\Service\CourseService;
 
 class CourseController extends Controller
@@ -21,8 +22,10 @@ class CourseController extends Controller
     {
         $courses = Course::all();
         $companies = Company::all();
+        $years = Year::options();
+        $defaultYear = Year::defaultValue();
 
-        return view('admin.course.index', compact('courses', 'companies'));
+        return view('admin.course.index', compact('courses', 'companies', 'years', 'defaultYear'));
     }
 
     public function create()
@@ -53,11 +56,7 @@ class CourseController extends Controller
         $authors = Author::all();
         $series = CourseSeries::all();
         $companies = Company::all();
-        $years = [
-            "1" => 2024,
-            "2" => 2025,
-            "3" => 2026,
-        ];
+        $years = Year::options();
         return view('admin.course.edit', compact('course', 'companies', 'authors','series','years'));
     }
 

@@ -15,6 +15,7 @@ use App\Models\Lid;
 use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 
@@ -40,9 +41,10 @@ class LidController extends Controller
         $statuses = Status::all();
         $regions = Region::all();
         $users = User::where('role', 3)->get();
+        $years = Year::options();
+        $defaultYear = Year::defaultValue();
 
-
-        return view('cc.lid.index', compact('courses', 'users','regions', 'statuses'));
+        return view('cc.lid.index', compact('courses', 'users','regions', 'statuses', 'years', 'defaultYear'));
     }
 
     /**

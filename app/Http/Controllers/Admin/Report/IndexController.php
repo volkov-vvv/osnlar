@@ -11,6 +11,7 @@ use App\Models\Lid;
 use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +30,10 @@ class IndexController extends Controller
         $utmFilter['medium'] = $lids->unique('utm_medium')->values()->all();
         $utmFilter['campaign'] = $lids->unique('utm_campaign')->values()->all();
 
-        return view('admin.report.index', compact('lids','courses','statuses','users','regions','agents','categories', 'utmFilter'));
+        $years = Year::options();
+        $defaultYear = Year::defaultValue();
+
+        return view('admin.report.index', compact('lids','courses','statuses','users','regions','agents','categories', 'utmFilter', 'years', 'defaultYear'));
     }
 
     public function getReport(Request $request)

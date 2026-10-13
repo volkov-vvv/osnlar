@@ -21,7 +21,7 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+                            <table class="table text-nowrap">
                                 <tbody>
                                 <tr>
                                     <td>ID</td>
@@ -33,8 +33,10 @@
                                 </tr>
                                 <tr>
                                     <td>Описание</td>
-                                    <td>
-                                        <p>{!! $course->description !!}</p>
+                                    <td style="white-space: normal; word-break: break-word; max-width: 0;">
+                                        <div class="course-description">
+                                            {!! $course->description !!}
+                                        </div>
                                     </td>
                                 </tr>
 {{--                                <tr>--}}
@@ -72,7 +74,7 @@
             </div>
 
             <!-- /.row -->
-            <div class="row">
+            <div class="row pb-4">
                 <div class="col-3">
                     <a class="btn btn-outline-primary mr-2" href="{{route('admin.course.edit', $course->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>

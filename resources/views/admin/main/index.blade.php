@@ -107,9 +107,11 @@
                                 <div class="card-body">
                                     Год:
                                     <select id="year" name="year" class="form-control form-control-sm filter-year">
-                                        <option value="2026">2026</option>
-                                        <option value="2025">2025</option>
-                                        <option value="2024">2024</option>
+                                        @include('partials.year-options', [
+                                            'yearOptions' => $years,
+                                            'defaultYear' => $defaultYear,
+                                            'selectDefault' => true,
+                                        ])
                                     </select>
                                     <table id="dashboard_table_ajax" class="table table-bordered table-striped hover">
                                         <thead>
