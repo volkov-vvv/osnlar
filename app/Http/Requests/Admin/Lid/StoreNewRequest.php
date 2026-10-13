@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin\Lid;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use App\Models\Setting;
 use App\Rules\YandexSmartCaptcha;
 
 class StoreNewRequest extends FormRequest
@@ -56,10 +57,9 @@ class StoreNewRequest extends FormRequest
             'utm_content' => '',
             'created_at' => 'nullable|string',
             'responsible_id' => 'nullable',
-            'smart-token' => [
-                'required',
-                new YandexSmartCaptcha(),
-            ],
+            'smart-token' => Setting::isLidCaptchaEnabled()
+                ? ['required', new YandexSmartCaptcha()]
+                : ['nullable'],
         ];
     }
 

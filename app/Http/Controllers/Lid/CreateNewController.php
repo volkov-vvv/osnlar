@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Course;
 use App\Models\Leveledu;
 use App\Models\Region;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 
@@ -68,8 +69,9 @@ class CreateNewController extends Controller
         }
 
         $pageTitle = 'Заявка на обучение';
+        $lidCaptchaEnabled = Setting::isLidCaptchaEnabled();
 
-        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'pageDescription', 'pageTitle', 'utm'));
+        return view('lid.create_new', compact('categories', 'authors','levelsedu','courses','regions','agents','categoriesMain', 'selectedCourse', 'pageDescription', 'pageTitle', 'utm', 'lidCaptchaEnabled'));
     }
 
 }

@@ -5,7 +5,9 @@
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/intlTelInput.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper/dist/css/bs-stepper.min.css">
-    <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
+    @if($lidCaptchaEnabled ?? true)
+        <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
+    @endif
     <style>
         .lid-create-form .form-control,
         .lid-create-form .input-group-text,
@@ -354,17 +356,19 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <div
-                                style="height: 100px"
-                                id="captcha-container"
-                                class="smart-captcha"
-                                data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
-                            ></div>
-                            @error('smart-token')
-                            <div class="text-danger mt-2">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @if($lidCaptchaEnabled ?? true)
+                            <div class="mb-3">
+                                <div
+                                    style="height: 100px"
+                                    id="captcha-container"
+                                    class="smart-captcha"
+                                    data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
+                                ></div>
+                                @error('smart-token')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endif
 
                         <div class="mt-4 mb-4 step-actions">
                             <button type="button" class="btn btn-outline-secondary" onclick="stepper.previous()">Назад</button>
