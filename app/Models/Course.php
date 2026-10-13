@@ -25,4 +25,13 @@ class Course extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function defaultStatus()
+    {
+        return $this->belongsTo(Status::class, 'default_status_id');
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->price !== null && $this->price !== '';
+    }
 }

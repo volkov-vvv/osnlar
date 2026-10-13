@@ -3,33 +3,25 @@
 namespace App\Http\Requests\Admin\Course;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
+        $isPaid = $this->filled('price');
+
         return [
             'title' => 'required|string',
             'description' => 'required|string',
             'prev_img' => 'required|file',
             'image' => 'required|file',
             'utp' => 'nullable|file',
-//            'category_id' => 'required|integer|exists:categories,id',
             'author_ids' => 'nullable|array',
             'author_ids.*' => 'nullable|integer|exists:authors,id',
             'seo_title' => 'nullable|string',
@@ -37,8 +29,20 @@ class StoreRequest extends FormRequest
             'company_id' => 'nullable|integer',
             'price' => 'nullable|numeric',
             'fast_pay' => 'nullable',
+            'default_status_id' => [
+                'required',
+                'integer',
+                Rule::exists('statuses', 'id')->where(function ($query) use ($isPaid) {
+                    if ($isPaid) {
+                        $query->where('type', 'order');
+                    } else {
+                        $query->whereNull('type');
+                    }
+                }),
+            ],
         ];
     }
+
     public function messages()
     {
         return [
@@ -50,13 +54,22 @@ class StoreRequest extends FormRequest
             'prev_img.file' => 'Необходимо выбрать файл',
             'image.required' => 'Это поле необходимо для заполнения',
             'image.file' => 'Необходимо выбрать файл',
-//            'category_id.required' => 'Это поле необходимо для заполнения',
-//            'category_id.integer' => 'ID категории должно быть числом',
-//            'category_id.exists' => 'ID категории должно быть в базе данных',
             'author_ids.array' => 'Необходимо отправить массив данных',
             'utp.sometimes' => 'Ошибка sometimes',
             'utp.file' => 'Ошибка file',
+            'default_status_id.required' => 'Выберите статус по умолчанию',
+            'default_status_id.exists' => 'Выбранный статус не подходит для типа курса',
         ];
     }
 
+    protected function prepareForValidation(): void
+    {
+        $price = $this->input('price');
+        $defaultStatusId = $this->input('default_status_id');
+
+        $this->merge([
+            'price' => ($price === '' || $price === null) ? null : $price,
+            'default_status_id' => ($defaultStatusId === '' || $defaultStatusId === null) ? null : $defaultStatusId,
+        ]);
+    }
 }

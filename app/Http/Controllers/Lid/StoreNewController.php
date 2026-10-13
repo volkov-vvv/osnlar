@@ -29,21 +29,26 @@ class StoreNewController extends Controller
         $data = $request->safe()->except('smart-token');
         $course_link = '';
         $mail_template = 'mails.lid_year';
-        $course = Course::all()->where('id', $request->course_id)->first();
+        $course = Course::query()->findOrFail($request->course_id);
         if($course->open_registration == 1){
             $mail_template = 'mails.lid_link';
             // Определение, доступен ли курс в регионе.
             $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
             if($links){
                 $course_link = $links->link;
+                if (!$course->default_status_id) {
+                    abort(422, 'У курса не задан статус по умолчанию');
+                }
+                $data['status_id'] = $course->default_status_id;
             }else{
                     $status = Status::all()->where('code', 'not-in-region')->first();
                     $data['status_id'] =  $status->id;
             }
         }else{
-            // Всем остальным заявкам присваиваем статус 'На 2026 год'
-            $status = Status::all()->where('title', 'На 2026 год')->first();
-            $data['status_id'] =  $status->id;
+            if (!$course->default_status_id) {
+                abort(422, 'У курса не задан статус по умолчанию');
+            }
+            $data['status_id'] = $course->default_status_id;
         }
 
         $lid = Lid::firstOrCreate($data);

@@ -166,6 +166,31 @@
                         </div>
                     </div>
 
+                    <div class="mb-3 form-group">
+                        <label>Статус по умолчанию</label>
+                        <select name="default_status_id" id="default_status_id" class="form-control">
+                            <option value=""></option>
+                            @foreach($freeStatuses as $status)
+                                <option
+                                    value="{{ $status->id }}"
+                                    data-course-type="free"
+                                    {{ (string) old('default_status_id', $course->default_status_id) === (string) $status->id ? 'selected' : '' }}
+                                >{{ $status->title }}</option>
+                            @endforeach
+                            @foreach($orderStatuses as $status)
+                                <option
+                                    value="{{ $status->id }}"
+                                    data-course-type="paid"
+                                    {{ (string) old('default_status_id', $course->default_status_id) === (string) $status->id ? 'selected' : '' }}
+                                >{{ $status->title }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Для бесплатного курса — статусы заявок, для платного — статусы заказов.</small>
+                        @error('default_status_id')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
@@ -301,4 +326,44 @@
 
 
 
+@endsection
+
+@section('javascript')
+    <script>
+        (function () {
+            var priceInput = document.querySelector('input[name="price"]');
+            var statusSelect = document.getElementById('default_status_id');
+            if (!priceInput || !statusSelect) {
+                return;
+            }
+
+            function syncStatusOptions() {
+                var isPaid = String(priceInput.value || '').trim() !== '';
+                var expectedType = isPaid ? 'paid' : 'free';
+                var selectedValue = statusSelect.value;
+                var selectedStillValid = false;
+
+                Array.prototype.forEach.call(statusSelect.options, function (option) {
+                    if (!option.value) {
+                        option.hidden = false;
+                        return;
+                    }
+                    var matches = option.getAttribute('data-course-type') === expectedType;
+                    option.hidden = !matches;
+                    option.disabled = !matches;
+                    if (matches && option.value === selectedValue) {
+                        selectedStillValid = true;
+                    }
+                });
+
+                if (!selectedStillValid) {
+                    statusSelect.value = '';
+                }
+            }
+
+            priceInput.addEventListener('input', syncStatusOptions);
+            priceInput.addEventListener('change', syncStatusOptions);
+            syncStatusOptions();
+        })();
+    </script>
 @endsection

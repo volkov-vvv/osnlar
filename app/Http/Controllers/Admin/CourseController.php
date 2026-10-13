@@ -9,6 +9,7 @@ use App\Models\Author;
 use App\Models\Company;
 use App\Models\Course;
 use App\Models\CourseSeries;
+use App\Models\Status;
 use App\Models\Year;
 use App\Service\CourseService;
 
@@ -32,7 +33,10 @@ class CourseController extends Controller
     {
         $authors = Author::all();
         $companies = Company::all();
-        return view('admin.course.create', compact('authors', 'companies'));
+        $freeStatuses = Status::whereNull('type')->orderBy('title')->get();
+        $orderStatuses = Status::where('type', 'order')->orderBy('title')->get();
+
+        return view('admin.course.create', compact('authors', 'companies', 'freeStatuses', 'orderStatuses'));
     }
 
     public function store(StoreRequest $request)
@@ -57,7 +61,10 @@ class CourseController extends Controller
         $series = CourseSeries::all();
         $companies = Company::all();
         $years = Year::options();
-        return view('admin.course.edit', compact('course', 'companies', 'authors','series','years'));
+        $freeStatuses = Status::whereNull('type')->orderBy('title')->get();
+        $orderStatuses = Status::where('type', 'order')->orderBy('title')->get();
+
+        return view('admin.course.edit', compact('course', 'companies', 'authors', 'series', 'years', 'freeStatuses', 'orderStatuses'));
     }
 
     public function update(UpdateRequest $request, Course $course)

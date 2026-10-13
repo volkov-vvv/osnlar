@@ -56,6 +56,10 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>Статус по умолчанию</td>
+                                    <td>{{ $course->defaultStatus->title ?? '—' }}</td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$course->created_at}}</td>
                                 </tr>

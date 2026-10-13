@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Lid;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Lid\StoreRequest;
+use App\Models\Course;
 use App\Models\Lid;
 use App\Models\Link;
 use App\Models\Status;
@@ -15,9 +16,14 @@ class StoreController extends Controller
     public function __invoke(StoreRequest $request)
     {
         $data = $request->validated();
+        $course = Course::query()->findOrFail($request->course_id);
         $links = Link::all()->where('region_id', $request->region_id)->where('course_id', $request->course_id)->last();
         if($links){
             $link = $links->link;
+            if (!$course->default_status_id) {
+                abort(422, 'У курса не задан статус по умолчанию');
+            }
+            $data['status_id'] = $course->default_status_id;
         }else{
             $link = '';
             $status = Status::all()->where('code', 'not-in-region')->first();

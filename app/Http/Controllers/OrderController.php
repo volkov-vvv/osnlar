@@ -84,17 +84,15 @@ class OrderController extends Controller
         //Проверяем наличие заказа и создаем, если его нет
         $order = Order::all()->where('customer_id', $customer->id)->where('course_id', $course->id)->last();
         if(!$order){
-            if($course->fast_pay == 1){
-                $status = Status::where('code', 'payment-allowed')->first();
-            }else{
-                $status = Status::where('code', 'waiting-payment')->first();
+            if (!$course->default_status_id) {
+                abort(422, 'У курса не задан статус по умолчанию');
             }
             $orderData = array(
                 'customer_id' => $customer->id,
                 'course_id' => $course->id,
                 'region_id' => $data['region_id'],
                 'amount' => $course->price,
-                'status_id' => $status->id,
+                'status_id' => $course->default_status_id,
                 'agent_id' => $data['agent_id'],
                 'utm_source' => $data['utm_source'],
                 'utm_medium' => $data['utm_medium'],

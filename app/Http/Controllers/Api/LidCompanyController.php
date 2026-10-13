@@ -8,7 +8,6 @@ use App\Mail\SendEmail;
 use App\Models\Course;
 use App\Models\Lid;
 use App\Models\Region;
-use App\Models\Status;
 use Illuminate\Http\Request;
 
 class LidCompanyController extends Controller
@@ -33,9 +32,11 @@ class LidCompanyController extends Controller
     {
         $data = $request->validated();
 
-        // Всем заявкам присваиваем статус 'На 2025 год'
-        $status = Status::all()->where('title', 'На 2025 год')->first();
-        $data['status_id'] =  $status->id;
+        $course = Course::query()->findOrFail($data['course_id']);
+        if (!$course->default_status_id) {
+            abort(422, 'У курса не задан статус по умолчанию');
+        }
+        $data['status_id'] = $course->default_status_id;
 
         $lid = Lid::firstOrCreate($data);
 
