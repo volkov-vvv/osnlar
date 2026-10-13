@@ -71,7 +71,10 @@ class StoreNewController extends Controller
                 ]
             ]
         ];
-
+/*
+ * Отключаем отправку сообщений через Телеграм
+ *
+ *
         $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
 
         foreach ($users as $user) {
@@ -99,6 +102,7 @@ class StoreNewController extends Controller
                 TelegraphMessage::firstOrCreate($messageData);
             }
         }
+        */
 
         return redirect()->route('lid.index');
 
