@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{$author->name}}</h1>
+                    <h1>{{ $author->full_name ?: $author->name }}</h1>
                 </div>
 
             </div><!-- /.row -->
@@ -22,15 +22,39 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap">
+                            <table class="table table-hover">
                                 <tbody>
                                 <tr>
                                     <td>ID</td>
                                     <td>{{$author->id}}</td>
                                 </tr>
                                 <tr>
-                                    <td>ФИО</td>
+                                    <td>Фамилия</td>
+                                    <td>{{ $author->lastname }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Имя</td>
+                                    <td>{{ $author->firstname }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Отчество</td>
+                                    <td>{{ $author->middlename }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Псевдоним</td>
                                     <td>{{$author->name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Фото</td>
+                                    <td>
+                                        @if($author->photo)
+                                            <img src="{{ url('storage/' . $author->photo) }}" alt="Фото автора" width="160" height="160" style="object-fit: cover;" class="rounded">
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Описание</td>
+                                    <td>{!! $author->description !!}</td>
                                 </tr>
                                 <tr>
                                     <td>Дата создания</td>
@@ -51,7 +75,7 @@
             </div>
 
             <!-- /.row -->
-            <div class="row">
+            <div class="row pb-4">
                 <div class="col-3">
                     <a class="btn btn-outline-primary mr-2" href="{{route('admin.author.edit', $author->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.author.index')}}">Назад</a>

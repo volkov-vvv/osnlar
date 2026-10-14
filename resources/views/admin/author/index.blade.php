@@ -41,7 +41,7 @@
                                 @foreach($authors as $author)
                                     <tr>
                                         <td>{{$author->id}}</td>
-                                        <td>{{$author->name}}</td>
+                                        <td>{{ $author->full_name ?: $author->name }}</td>
                                         <td>{{$author->created_at}}</td>
                                         <td><a  href="{{route('admin.author.show', $author->id)}}"><i class="far fa-eye"></i></a></td>
                                         <td><a  href="{{route('admin.author.edit', $author->id)}}" class="text-success"><i class="fas fa-pen"></i></a></td>

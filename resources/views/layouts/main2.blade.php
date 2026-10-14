@@ -85,13 +85,37 @@ sticky-top  bg-white bg-opacity-75
         <nav class="navbar navbar-expand-lg navbar-light">
 
             <div class="d-none d-lg-block"> <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-invert.png')}}" width="220"  alt="Основание"></a></div>
-            @php $showMobileLidCta = request()->routeIs('main.index', 'course.index'); @endphp
-            <div class="d-lg-none mobile-header-bar{{ $showMobileLidCta ? ' mobile-header-bar--with-cta' : '' }}">
+            @php
+                $mobileHeaderCta = null;
+                if (request()->routeIs('course.show') && isset($course) && empty($course->bioeconomy)) {
+                    $mobileHeaderCta = [
+                        'label' => 'Записаться',
+                        'url' => (isset($course->price) && $course->price != 0)
+                            ? route('order.create', $course->id)
+                            : route('lid.create', ['selectedCourse' => $course->id]),
+                        'class' => 'btn btn-primary',
+                        'icon' => true,
+                    ];
+                } elseif (request()->routeIs('main.index', 'course.index')) {
+                    $mobileHeaderCta = [
+                        'label' => 'Оставить заявку',
+                        'url' => route('lid.create'),
+                        'class' => 'btn btn-danger',
+                        'icon' => false,
+                    ];
+                }
+            @endphp
+            <div class="d-lg-none mobile-header-bar{{ $mobileHeaderCta ? ' mobile-header-bar--with-cta' : '' }}">
                 <a class="navbar-brand mobile-header-logo mb-0" href="{{route('main.index')}}">
                     <img src="{{asset('assets/images/logo-main-little.png')}}" width="40" height="40" alt="Основание">
                 </a>
-                @if($showMobileLidCta)
-                    <a class="btn btn-danger mobile-header-cta" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
+                @if($mobileHeaderCta)
+                    <a class="{{ $mobileHeaderCta['class'] }} mobile-header-cta" role="button" href="{{ $mobileHeaderCta['url'] }}">
+                        @if(!empty($mobileHeaderCta['icon']))
+                            <i class="fas fa-arrow-right mr-2"></i>
+                        @endif
+                        {{ $mobileHeaderCta['label'] }}
+                    </a>
                 @endif
             </div>
 
@@ -250,6 +274,7 @@ sticky-top  bg-white bg-opacity-75
                     {{--                    <a href="#!" class="nav-link">Цены и услуги</a>--}}
                     <a href="#!" class="nav-link">Условия сотрудничества</a>
                     <a href="#!" class="nav-link">Партнеры</a>
+                    <a href="{{ route('author.index') }}" class="nav-link">Авторы / Эксперты</a>
                 </nav>
             </div>
             <div class="col-md-3">

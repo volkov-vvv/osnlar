@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Author\StoreRequest;
 use App\Http\Requests\Admin\Author\UpdateRequest;
 use App\Models\Author;
+use Illuminate\Support\Facades\Storage;
 
 class AuthorController extends Controller
 {
@@ -23,7 +24,13 @@ class AuthorController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        Author::firstOrCreate($data);
+        unset($data['photo']);
+
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('authors', 'public');
+        }
+
+        Author::create($data);
 
         return redirect()->route('admin.author.index');
     }
@@ -41,6 +48,16 @@ class AuthorController extends Controller
     public function update(UpdateRequest $request, Author $author)
     {
         $data = $request->validated();
+        unset($data['photo']);
+
+        if ($request->hasFile('photo')) {
+            if ($author->photo) {
+                Storage::disk('public')->delete($author->photo);
+            }
+
+            $data['photo'] = $request->file('photo')->store('authors', 'public');
+        }
+
         $author->update($data);
 
         return redirect()->route('admin.author.show', compact('author'));

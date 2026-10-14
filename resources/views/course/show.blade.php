@@ -7,11 +7,9 @@
             <div class="d-lg-none pb-2"><h3 class="text-center pt-4" data-aos="fade-up" style="color: #094ca1">{{$course->title}}</h3></div>
 
             <p class="pb-lg-3 text-center" style="color: grey" data-aos="fade-up" data-aos-delay="200">Эксперты курса:
-
-                @foreach($authors as $author)
-                    {{ is_array($course->authors->pluck('id')->toArray()) && in_array($author->id, $course->authors->pluck('id')->toArray()) ? $author->name . ',' : ''  }}
+                @foreach($course->authors as $author)
+                    <a href="{{ route('author.show', $author) }}" style="color: #094ca1">{{ $author->display_name }}</a>@if(!$loop->last),@endif
                 @endforeach
-
             </p>
             <section class="blog-post-featured-img mb-1" data-aos="fade-up" data-aos-delay="300">
                 <div class="row">
@@ -42,12 +40,12 @@
             <section class="blog-post-featured-img" data-aos="fade-up" data-aos-delay="300">
 
                 <div class="row">
-                    <div class="col-lg-9 mx-auto" data-aos="fade-up">
+                    <div class="col-lg-9 mx-auto">
                         <p>{!! $course->description !!}</p>
                     </div>
                 </div>
                 <div class="row pt-5 pb-1">
-                    <div class="col-lg-9 mx-auto" data-aos="fade-up">
+                    <div class="col-lg-9 mx-auto">
                         <div class="alert alert-secondary" role="alert">
 
                                 <a href="{{ url('storage/' . $course->utp) }}" style="color: darkblue" target="_blank">

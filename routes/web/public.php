@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\About\IndexController as AboutIndexController;
+use App\Http\Controllers\Author\IndexController as AuthorIndexController;
+use App\Http\Controllers\Author\ShowController as AuthorShowController;
 use App\Http\Controllers\Archive\IndexController as ArchiveIndexController;
 use App\Http\Controllers\Archive\ShowController as ArchiveShowController;
 use App\Http\Controllers\Course\IndexController as CourseIndexController;
@@ -31,6 +33,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', MainIndexController::class)->name('main.index');
+
+Route::get('/author', AuthorIndexController::class)->name('author.index');
+Route::get('/author/{author}', AuthorShowController::class)->name('author.show')->whereNumber('author');
 
 Route::prefix('course')->name('course.')->group(function () {
     Route::get('/', [CourseIndexController::class, 'active'])->name('index');

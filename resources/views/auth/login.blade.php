@@ -1,5 +1,17 @@
 @extends('layouts.main2')
 
+@push('styles')
+<style>
+    .login-form .form-control {
+        border-color: #dee2e6;
+    }
+    .login-form .form-control:focus {
+        border-color: #ced4da;
+        box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.35);
+    }
+</style>
+@endpush
+
 @section('content')
 {{--<div class="container pt-5 pb-5">--}}
 {{--    <div class="row justify-content-center">--}}
@@ -86,7 +98,7 @@
                     <div class="card-header">Авторизуйтесь для входа в личный кабинет</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('login') }}" class="login-form">
                             @csrf
 
                             <div class="row mb-3">
