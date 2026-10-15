@@ -23,9 +23,9 @@
                                         <a href="{{route('course.index')}}" class="button-main">Выберите курс</a>
                                     </div>
                                     <div class="achievement">
-                                        <div><span class="achievement-bold">11 535</span><br>слушателей</div>
-                                        <div><span class="achievement-bold">60+</span><br>программ</div>
-                                        <div><span class="achievement-bold">85%</span><br>трудоустроились</div>
+                                        <div><span class="achievement-bold" data-count="{{ $listenersCount }}">{{ number_format($listenersCount, 0, '', ' ') }}</span><br>слушателей</div>
+                                        <div><span class="achievement-bold" data-count="{{ $programsCount }}">{{ number_format($programsCount, 0, '', ' ') }}</span><br>программ</div>
+                                        <div><span class="achievement-bold" data-count="85" data-suffix="%">85%</span><br>трудоустроились</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 carousel-img-wrapper top-banner">
@@ -427,3 +427,50 @@
 </main>
 
 @endsection
+
+@push('scripts')
+    <script>
+        (function () {
+            var nodes = document.querySelectorAll('.achievement [data-count]');
+
+            if (!nodes.length) {
+                return;
+            }
+
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                return;
+            }
+
+            function format(value) {
+                return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            }
+
+            nodes.forEach(function (node) {
+                var target = parseInt(node.getAttribute('data-count'), 10) || 0;
+                var suffix = node.getAttribute('data-suffix') || '';
+                var duration = 1600;
+                var start = null;
+
+                node.textContent = '0' + suffix;
+
+                function frame(timestamp) {
+                    if (!start) {
+                        start = timestamp;
+                    }
+
+                    var progress = Math.min((timestamp - start) / duration, 1);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    var current = Math.round(target * eased);
+
+                    node.textContent = format(current) + suffix;
+
+                    if (progress < 1) {
+                        window.requestAnimationFrame(frame);
+                    }
+                }
+
+                window.requestAnimationFrame(frame);
+            });
+        })();
+    </script>
+@endpush

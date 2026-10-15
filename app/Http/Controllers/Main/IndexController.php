@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Lid;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -19,6 +20,9 @@ class IndexController extends Controller
             $randomCourses = $allCourses;
         }
 
-        return view('main.index', compact('randomCourses'));
+        $listenersCount = Lid::query()->count();
+        $programsCount = Course::query()->count();
+
+        return view('main.index', compact('randomCourses', 'listenersCount', 'programsCount'));
     }
 }
