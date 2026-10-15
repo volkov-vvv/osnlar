@@ -148,8 +148,14 @@
             },
 
             stateLoadParams: function (settings, data) {
-                if (data) {
-                    $('#role').val(data.custom_filters.role).trigger('change');
+                if (!data || !data.custom_filters) {
+                    return;
+                }
+
+                $('#role').val(data.custom_filters.role);
+
+                if (data.columns && data.columns[6] && data.columns[6].search) {
+                    data.columns[6].search.search = data.custom_filters.role || '';
                 }
             },
 

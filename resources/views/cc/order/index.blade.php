@@ -130,10 +130,31 @@
             },
 
             stateLoadParams: function (settings, data) {
-                if (data) {
-                    $('#course').val(data.custom_filters.course).trigger('change');
-                    $('#status').val(data.custom_filters.status);
+                if (!data || !data.custom_filters) {
+                    return;
                 }
+
+                var filters = data.custom_filters;
+
+                $('#course').val(filters.course).trigger('change.select2');
+                $('#status').val(filters.status);
+
+                var columnFilters = {
+                    1: filters.course,
+                    7: filters.status
+                };
+
+                if (!data.columns) {
+                    return;
+                }
+
+                $.each(columnFilters, function (index, value) {
+                    if (!data.columns[index] || !data.columns[index].search) {
+                        return;
+                    }
+
+                    data.columns[index].search.search = value || '';
+                });
             },
 
             stateSaveCallback: function(settings, data) {

@@ -166,17 +166,41 @@
                     },
 
                     stateLoadParams: function (settings, data) {
-                        if (data && data.columns && data.columns[4]) {
+                        if (!data || !data.custom_filters) {
+                            return;
+                        }
+
+                        var filters = data.custom_filters;
+
+                        $('#year').val(filters.year);
+                        $('#author').val(filters.author);
+                        $('#is_published').val(filters.is_published);
+                        $('#course_type').val(filters.course_type);
+                        $('#source').val(filters.source);
+
+                        if (!data.columns) {
+                            return;
+                        }
+
+                        var columnFilters = {
+                            2: filters.author,
+                            3: filters.year,
+                            5: filters.is_published,
+                            6: filters.source,
+                            7: filters.course_type
+                        };
+
+                        if (data.columns[4] && data.columns[4].search) {
                             data.columns[4].search.search = '';
                         }
-                        if (data && data.custom_filters) {
-                            $('#year').val(data.custom_filters.year);
-                            $('#author').val(data.custom_filters.author);
-                            $('#is_published').val(data.custom_filters.is_published);
-                            $('#course_type').val(data.custom_filters.course_type);
-                            $('#source').val(data.custom_filters.source);
-                            $('#year, #author, #is_published, #course_type, #source').trigger('change');
-                        }
+
+                        $.each(columnFilters, function (index, value) {
+                            if (!data.columns[index] || !data.columns[index].search) {
+                                return;
+                            }
+
+                            data.columns[index].search.search = value || '';
+                        });
                     },
 
                     stateSaveCallback: function (settings, data) {

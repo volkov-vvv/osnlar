@@ -162,13 +162,37 @@
             },
 
             stateLoadParams: function (settings, data) {
-                if (data && data.custom_filters) {
-                    $('#date').val(data.custom_filters.date || '');
-                    $('#responsible').val(data.custom_filters.responsible || '');
-                    $('#course').val(data.custom_filters.course || null).trigger('change');
-                    $('#status').val(data.custom_filters.status || '');
-                    $('#source').val(data.custom_filters.source || '');
+                if (!data || !data.custom_filters) {
+                    return;
                 }
+
+                var filters = data.custom_filters;
+
+                $('#date').val(filters.date || '');
+                $('#responsible').val(filters.responsible || '');
+                $('#course').val(filters.course || null).trigger('change.select2');
+                $('#status').val(filters.status || '');
+                $('#source').val(filters.source || '');
+
+                var columnFilters = {
+                    1: filters.responsible,
+                    4: filters.course,
+                    10: filters.source,
+                    11: filters.status,
+                    12: filters.date
+                };
+
+                if (!data.columns) {
+                    return;
+                }
+
+                $.each(columnFilters, function (index, value) {
+                    if (!data.columns[index] || !data.columns[index].search) {
+                        return;
+                    }
+
+                    data.columns[index].search.search = value || '';
+                });
             },
 
             stateSaveCallback: function (settings, data) {

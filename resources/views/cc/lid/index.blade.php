@@ -156,15 +156,41 @@
             },
 
             stateLoadParams: function (settings, data) {
-                if (data) {
-                    $('#year').val(data.custom_filters.year);
-                    $('#date').val(data.custom_filters.date);
-                    $('#responsible').val(data.custom_filters.responsible);
-                    $('#course').val(data.custom_filters.course).trigger('change');
-                    $('#region').val(data.custom_filters.region);
-                    $('#status').val(data.custom_filters.status);
-                    $('#type').val(data.custom_filters.type);
+                if (!data || !data.custom_filters) {
+                    return;
                 }
+
+                var filters = data.custom_filters;
+
+                $('#year').val(filters.year);
+                $('#date').val(filters.date);
+                $('#responsible').val(filters.responsible);
+                $('#course').val(filters.course).trigger('change.select2');
+                $('#region').val(filters.region);
+                $('#status').val(filters.status);
+                $('#type').val(filters.type);
+
+                var columnFilters = {
+                    1: filters.responsible,
+                    3: filters.course,
+                    4: filters.region,
+                    10: filters.status,
+                    12: filters.date,
+                    14: filters.year,
+                    15: filters.type
+                };
+
+                if (!data.columns) {
+                    return;
+                }
+
+                $.each(columnFilters, function (index, value) {
+                    if (!data.columns[index] || !data.columns[index].search) {
+                        return;
+                    }
+
+                    data.columns[index].search.search = value || '';
+                });
             },
 
             stateSaveCallback: function(settings, data) {

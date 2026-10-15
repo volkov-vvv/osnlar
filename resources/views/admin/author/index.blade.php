@@ -150,8 +150,18 @@
             },
 
             stateLoadParams: function (settings, data) {
-                if (data && data.custom_filters) {
-                    $('#is_published').val(data.custom_filters.is_published).trigger('change');
+                if (!data || !data.custom_filters) {
+                    return;
+                }
+
+                var value = data.custom_filters.is_published || '';
+
+                $('#is_published').val(value);
+
+                if (data.columns && data.columns[10] && data.columns[10].search) {
+                    data.columns[10].search.search = value ? '^' + $.fn.dataTable.util.escapeRegex(value) + '$' : '';
+                    data.columns[10].search.regex = true;
+                    data.columns[10].search.smart = false;
                 }
             },
 
