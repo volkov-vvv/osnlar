@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v41">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v43">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
     @stack('styles')
@@ -80,11 +80,11 @@
 {{--box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 sticky-top  bg-white bg-opacity-75
 --}}
-<header class="edica-header sticky-top bg-opacity-75" style="background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+<header class="edica-header sticky-top bg-opacity-75{{ request()->routeIs('main.index') ? ' edica-header--home' : '' }}" style="background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
 
-            <div class="d-none d-lg-block"> <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-invert.png')}}" width="220"  alt="Основание"></a></div>
+            <div class="d-none d-lg-block"> <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-clear.png')}}" width="220"  alt="Основание"></a></div>
             @php
                 $mobileHeaderCta = null;
                 if (request()->routeIs('course.show') && isset($course) && empty($course->bioeconomy)) {
@@ -161,7 +161,7 @@ sticky-top  bg-white bg-opacity-75
 
                     <li class="nav-item nav-item-social nav-item-social-first">
                         <a class="nav-link" href="{{url('https://max.ru/id7751117260_biz')}}" target="_blank" rel="noopener noreferrer">
-                            <img src="{{asset('assets/images/Max_logo_2025.png')}}" width="28" height="28" alt="Макс">
+                            <img class="social-icon-max" src="{{asset('assets/images/Max_logo_2025.png')}}" width="25" height="25" alt="Макс">
                             <span class="d-lg-none">Макс</span>
                         </a>
                     </li>

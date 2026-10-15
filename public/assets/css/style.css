@@ -8421,6 +8421,11 @@ background-color: #4CAF50; /* Ваш цвет кнопки */
         align-items: center;
     }
 
+    .edica-header--home .navbar {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     .edica-header .navbar-brand {
         display: flex;
         align-items: center;
@@ -8478,6 +8483,11 @@ background-color: #4CAF50; /* Ваш цвет кнопки */
     object-fit: contain;
     display: block;
     flex-shrink: 0;
+}
+
+.edica-header .navbar-nav .nav-item-social .nav-link img.social-icon-max {
+    width: 25px;
+    height: 25px;
 }
 
 @media (max-width: 991.98px) {
