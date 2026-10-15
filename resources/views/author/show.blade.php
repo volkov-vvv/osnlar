@@ -1,7 +1,16 @@
 @extends('layouts.main2')
+
+@push('styles')
+    <style>
+        .author-page {
+            padding-bottom: 10rem;
+        }
+    </style>
+@endpush
+
 @section('content')
 
-    <main class="blog-post">
+    <main class="blog-post author-page">
         <div class="container">
             <div class="row pt-5 pb-4 align-items-center justify-content-center">
                 @if($author->photo)
