@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Author\StoreRequest;
 use App\Http\Requests\Admin\Author\UpdateRequest;
 use App\Models\Author;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AuthorController extends Controller
@@ -61,6 +62,21 @@ class AuthorController extends Controller
         $author->update($data);
 
         return redirect()->route('admin.author.show', compact('author'));
+    }
+
+    public function publish(Request $request, Author $author)
+    {
+        $author->update([
+            'is_published' => $request->boolean('is_published'),
+        ]);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'is_published' => $author->is_published,
+            ]);
+        }
+
+        return redirect()->route('admin.author.index');
     }
 
     public function destroy(Author $author)

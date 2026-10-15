@@ -12,6 +12,14 @@ class Author extends Model
     use SoftDeletes;
     protected $table = 'authors';
     protected $guarded = false;
+    protected $casts = [
+        'is_published' => 'boolean',
+    ];
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
 
     public function courses()
     {

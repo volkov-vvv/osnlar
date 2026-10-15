@@ -94,14 +94,16 @@
                                             @endif
                                         </td>
                                         <td>{{$user->created_at}}</td>
-                                        <td class="d-flex"><a  href="{{route('admin.user.show', $user->id)}}"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
-                                        <a  href="{{route('admin.user.edit', $user->id)}}" class="text-success"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
-
-                                            <form method="post" action="{{route('admin.user.destroy', $user->id)}}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
-                                            </form>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <a href="{{route('admin.user.show', $user->id)}}"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
+                                                <a href="{{route('admin.user.edit', $user->id)}}" class="text-success"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
+                                                <form method="post" action="{{route('admin.user.destroy', $user->id)}}" class="mb-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -123,6 +125,16 @@
 @endsection
 
 @section('javascript')
+    <style>
+        #users_table td {
+            vertical-align: middle;
+        }
+
+        #users_table img,
+        #users_table .rounded-circle {
+            vertical-align: middle;
+        }
+    </style>
     <script>
         let stateSaveTimer; // Переменная для хранения таймера
         var table = new DataTable('#users_table', {

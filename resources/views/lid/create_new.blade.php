@@ -175,7 +175,7 @@
     <div class="container pt-5" style="padding-bottom: 120px;">
         <div class="row mb-4">
             <div class="col">
-                <h2 class="text-center">Заявка на обучение в 2026 году</h2>
+                <h2 class="text-center">Заявка на обучение в 2027 году</h2>
                 <p class="text-center text-muted mb-0">сделайте первый шаг к востребованной профессии!</p>
             </div>
         </div>

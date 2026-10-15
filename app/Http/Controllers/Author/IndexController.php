@@ -12,7 +12,7 @@ class IndexController extends Controller
     {
         $collator = class_exists(Collator::class) ? new Collator('ru_RU') : null;
 
-        $authors = Author::all()->sort(function (Author $left, Author $right) use ($collator) {
+        $authors = Author::published()->get()->sort(function (Author $left, Author $right) use ($collator) {
             if ($collator) {
                 return $collator->compare($left->sort_name, $right->sort_name);
             }

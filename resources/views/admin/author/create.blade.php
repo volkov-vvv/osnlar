@@ -47,6 +47,28 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label>E-mail</label>
+                        <input name="email" type="email" class="form-control" value="{{ old('email') }}">
+                        @error('email')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label>Телефон</label>
+                        <input
+                            name="phone"
+                            type="tel"
+                            class="form-control"
+                            inputmode="tel"
+                            data-mask
+                            data-inputmask="'mask': '+7 (999) 999-99-99', 'clearIncomplete': true"
+                            value="{{ old('phone') }}"
+                        >
+                        @error('phone')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label>Описание</label>
                         <textarea class="summernote" name="description">{{ old('description') }}</textarea>
                         @error('description')

@@ -39,6 +39,9 @@ Route::resource('about', AboutController::class)->whereNumber('about');
 Route::resource('document', DocumentController::class)->whereNumber('document');
 Route::resource('course', CourseController::class)->whereNumber('course');
 Route::resource('category', CategoryController::class)->whereNumber('category');
+Route::patch('author/{author}/publish', [AuthorController::class, 'publish'])
+    ->whereNumber('author')
+    ->name('author.publish');
 Route::resource('author', AuthorController::class)->whereNumber('author');
 Route::resource('agent', AgentController::class)->whereNumber('agent');
 Route::resource('leveledu', LeveleduController::class)->whereNumber('leveledu');

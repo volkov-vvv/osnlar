@@ -9,6 +9,8 @@ class ShowController extends Controller
 {
     public function __invoke(Author $author)
     {
+        abort_unless($author->is_published, 404);
+
         $courses = $author->courses()
             ->where('is_published', '!=', 0)
             ->get()

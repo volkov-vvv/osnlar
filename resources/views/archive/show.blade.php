@@ -6,7 +6,11 @@
             <h1 class="edica-page-title" data-aos="fade-up">{{$course->title}}</h1>
             <p class="edica-blog-post-meta" data-aos="fade-up" data-aos-delay="200">Эксперты курса:
                 @foreach($course->authors as $author)
-                    <a href="{{ route('author.show', $author) }}">{{ $author->display_name }}</a>@if(!$loop->last),@endif
+                    @if($author->is_published)
+                        <a href="{{ route('author.show', $author) }}">{{ $author->display_name }}</a>@if(!$loop->last),@endif
+                    @else
+                        {{ $author->display_name }}@if(!$loop->last),@endif
+                    @endif
                 @endforeach
                 старт обучения: май 2024 года
             </p>

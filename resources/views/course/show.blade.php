@@ -8,7 +8,11 @@
 
             <p class="pb-lg-3 text-center" style="color: grey" data-aos="fade-up" data-aos-delay="200">Эксперты курса:
                 @foreach($course->authors as $author)
-                    <a href="{{ route('author.show', $author) }}" style="color: #094ca1">{{ $author->display_name }}</a>@if(!$loop->last),@endif
+                    @if($author->is_published)
+                        <a href="{{ route('author.show', $author) }}" style="color: #094ca1">{{ $author->display_name }}</a>@if(!$loop->last),@endif
+                    @else
+                        <span style="color: #094ca1">{{ $author->display_name }}</span>@if(!$loop->last),@endif
+                    @endif
                 @endforeach
             </p>
             <section class="blog-post-featured-img mb-1" data-aos="fade-up" data-aos-delay="300">
