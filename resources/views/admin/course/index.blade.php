@@ -39,11 +39,11 @@
                                     </select>
                                 </div>
                                 <div class="col col-lg-2">
-                                    Компания:
-                                    <select id="company" name="company" class="form-control form-control-sm">
+                                    Автор:
+                                    <select id="author" name="author" class="form-control form-control-sm">
                                         <option></option>
-                                        @foreach($companies as $company)
-                                            <option value="{{$company->title}}">{{$company->title}}</option>
+                                        @foreach($authors as $author)
+                                            <option value="{{ $author->display_name }}">{{ $author->display_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -70,6 +70,9 @@
                                         <option value="Биоэкономика">Биоэкономика</option>
                                     </select>
                                 </div>
+                                <div class="col d-flex justify-content-end align-items-end">
+                                    <button id="resetTable" type="button" class="btn btn-secondary"><i class="fas fa-eraser mr-1"></i>Очистить фильтры</button>
+                                </div>
 
                             </div>
 
@@ -79,6 +82,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Название</th>
+                                        <th>Автор</th>
                                         <th>Год</th>
                                         <th>Компания</th>
                                         <th>Публикация</th>
@@ -93,6 +97,7 @@
                                         <tr>
                                             <td>{{$course->id}}</td>
                                             <td>{{$course->title}}</td>
+                                            <td>{{ $course->authors->map->display_name->filter()->implode(', ') }}</td>
                                             <td>{{$course->years}}</td>
                                             <td>
                                                 @if(!empty($course->company))
@@ -146,12 +151,70 @@
     @section('javascript')
         <script>
             $(document).ready(function () {
+                let stateSaveTimer;
                 var table = new DataTable('#course_table', {
+                    stateSave: true,
+
+                    stateSaveParams: function (settings, data) {
+                        data.custom_filters = {
+                            year: $('#year').val(),
+                            author: $('#author').val(),
+                            is_published: $('#is_published').val(),
+                            course_type: $('#course_type').val(),
+                            source: $('#source').val(),
+                        };
+                    },
+
+                    stateLoadParams: function (settings, data) {
+                        if (data && data.columns && data.columns[4]) {
+                            data.columns[4].search.search = '';
+                        }
+                        if (data && data.custom_filters) {
+                            $('#year').val(data.custom_filters.year);
+                            $('#author').val(data.custom_filters.author);
+                            $('#is_published').val(data.custom_filters.is_published);
+                            $('#course_type').val(data.custom_filters.course_type);
+                            $('#source').val(data.custom_filters.source);
+                            $('#year, #author, #is_published, #course_type, #source').trigger('change');
+                        }
+                    },
+
+                    stateSaveCallback: function (settings, data) {
+                        clearTimeout(stateSaveTimer);
+
+                        stateSaveTimer = setTimeout(function () {
+                            $.ajax({
+                                url: "{{ route('filters.save') }}",
+                                method: "POST",
+                                data: {
+                                    _token: "{{ csrf_token() }}",
+                                    page_url: "admin.course.index",
+                                    state: JSON.stringify(data)
+                                },
+                                success: function () {
+                                    console.log("Состояние сохранено в БД");
+                                }
+                            });
+                        }, 2000);
+                    },
+
+                    stateLoadCallback: function (settings, callback) {
+                        $.ajax({
+                            url: "{{ route('filters.get') }}",
+                            data: { page_url: "admin.course.index" },
+                            dataType: "json",
+                            success: function (json) {
+                                callback(json);
+                            }
+                        });
+                    },
+
                     order: [[0, 'desc']],
                     paging: false,
                     columns: [
                         { data: 'id' },
                         { data: 'title' },
+                        { data: 'author' },
                         { data: 'years' },
                         { data: 'company' },
                         { data: 'is_publshed' },
@@ -168,7 +231,7 @@
                         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     "buttons": ["excel", "colvis"],
                     'columnDefs': [
-                        { targets: [6], visible: false }
+                        { targets: [4, 7], visible: false }
                     ],
                     "language": {
                         info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -187,7 +250,15 @@
                     }
                 });
 
-                $('#company').on('change', function (e) {
+                $('#author').on('change', function (e) {
+
+                    table
+                        .column(2)
+                        .search(this.value)
+                        .draw();
+                })
+
+                $('#year').on('change', function (e) {
 
                     table
                         .column(3)
@@ -195,19 +266,10 @@
                         .draw();
                 })
 
-
-                $('#year').on('change', function (e) {
-
-                    table
-                        .column(2)
-                        .search(this.value, {exact: true})
-                        .draw();
-                })
-
                 $('#is_published').on('change', function (e) {
 
                     table
-                        .column(4)
+                        .column(5)
                         .search(this.value, {exact: true})
                         .draw();
                 })
@@ -215,7 +277,7 @@
                 $('#course_type').on('change', function (e) {
 
                     table
-                        .column(6)
+                        .column(7)
                         .search(this.value, {exact: true, })
                         .draw();
                 })
@@ -223,10 +285,28 @@
                 $('#source').on('change', function (e) {
 
                     table
-                        .column(5)
+                        .column(6)
                         .search(this.value, {exact: true})
                         .draw();
                 })
+
+                $('#resetTable').on('click', function () {
+                    table.state.clear();
+
+                    table.columns().visible(true);
+                    table.columns([4, 7]).visible(false);
+
+                    table
+                        .search('')
+                        .columns().search('')
+                        .column('0:visible')
+                        .order('desc')
+                        .page.len(10)
+                        .page(0)
+                        .draw();
+
+                    $('#year, #author, #is_published, #course_type, #source').val(null).trigger('change');
+                });
 
             });
         </script>

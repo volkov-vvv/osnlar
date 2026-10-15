@@ -21,12 +21,15 @@ class CourseController extends Controller
 
     public function index()
     {
-        $courses = Course::all();
-        $companies = Company::all();
+        $courses = Course::with('authors')->get();
+        $authors = Author::all()
+            ->sortBy(fn (Author $author) => mb_strtolower($author->sort_name))
+            ->unique(fn (Author $author) => $author->display_name)
+            ->values();
         $years = Year::options();
         $defaultYear = Year::defaultValue();
 
-        return view('admin.course.index', compact('courses', 'companies', 'years', 'defaultYear'));
+        return view('admin.course.index', compact('courses', 'authors', 'years', 'defaultYear'));
     }
 
     public function create()
