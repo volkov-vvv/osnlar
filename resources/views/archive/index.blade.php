@@ -53,6 +53,10 @@
         box-shadow: 0 4px 10px rgba(0, 123, 255, 0.25);
     }
 
+    .archive-year-filter__btn:focus {
+        outline: none;
+    }
+
     .archive-year-filter__btn:focus-visible {
         outline: 2px solid #007bff;
         outline-offset: 2px;

@@ -161,7 +161,7 @@
                 margin: 0 auto;
             }
 
-            .lid-create-form #information-part .ms-3 {
+            .lid-create-form #information-part .ml-3 {
                 margin-left: 0 !important;
             }
 
@@ -350,7 +350,7 @@
                                 </div>
                             @endforeach
 
-                            <div id="category_all" class="ms-3 mt-2">
+                            <div id="category_all" class="ml-3 mt-2">
                                 <p class="mb-2">Все категории:</p>
                                 <select name="category_all" class="form-control select2">
                                     @foreach($categories as $category)

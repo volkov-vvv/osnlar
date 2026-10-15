@@ -20,13 +20,12 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v43">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v45">
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
     @stack('styles')
@@ -80,7 +79,7 @@
 {{--box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 sticky-top  bg-white bg-opacity-75
 --}}
-<header class="edica-header sticky-top bg-opacity-75{{ request()->routeIs('main.index') ? ' edica-header--home' : '' }}" style="background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+<header class="edica-header sticky-top bg-opacity-75" style="background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
 
@@ -177,7 +176,7 @@ sticky-top  bg-white bg-opacity-75
                         <li class="nav-item dropdown ml-lg-3">
                             <a class="nav-link dropdown-toggle d-inline-flex align-items-center" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if(auth()->user()->avatar)
-                                    <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle me-2" width="28" height="28" style="object-fit: cover;">
+                                    <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle mr-2" width="28" height="28" style="object-fit: cover;">
                                 @endif
                                 {{auth()->user()->name}}
                             </a>

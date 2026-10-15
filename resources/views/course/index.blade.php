@@ -12,6 +12,26 @@
             color: grey;
             font-size: 20px;
         }
+        .course-tabs > .nav-link {
+            flex: 1 1 auto;
+            margin-bottom: -1px;
+            text-align: center;
+            color: #0d6efd;
+            background-color: transparent;
+            white-space: normal;
+        }
+        .course-tabs > .nav-link:hover,
+        .course-tabs > .nav-link:focus {
+            color: #0a58ca;
+            outline: 0;
+        }
+        .course-tabs > .nav-link.active,
+        .course-tabs > .nav-link.active:hover,
+        .course-tabs > .nav-link.active:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
         @media (max-width: 767.98px) {
             .course-page-title {
                 font-size: 1.6rem;

@@ -7,6 +7,17 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
 
+    .about-page .nav-pills .nav-link:hover,
+    .about-page .nav-pills .nav-link:focus {
+        color: #0a58ca;
+        text-decoration: none;
+    }
+
+    .about-page .nav-pills .nav-link.active:hover,
+    .about-page .nav-pills .nav-link.active:focus {
+        color: #fff;
+    }
+
     .about-page .featured-posts-section {
         padding-bottom: 4rem;
     }
