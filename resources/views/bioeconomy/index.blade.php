@@ -16,6 +16,16 @@
             color: grey;
             font-size: 20px;
         }
+        .course-study-form {
+            margin-bottom: 8px;
+            color: #094ca1;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .course-study-form i {
+            margin-right: 0.4rem;
+        }
         .bioeconomy-apply {
             padding: 0.5rem 0 11rem;
         }
@@ -144,9 +154,8 @@
             <div class="row" data-aos="fade-up">
                 <div class="col bioeconomy-hero">
                     <img class="bioeconomy-logo" src="{{ asset('assets/images/биоэкономика-thumb.jpg') }}" alt="Национальный проект «Биоэкономика»">
-                    <h1>Биоэкономика</h1>
-                    <p class="bioeconomy-lead">Национальный проект «Технологическое обеспечение биоэкономики».<br>
-                        Совместно с «Агентством развития профессионального мастерства» проводим бесплатное обучение по программам дополнительного профессионального образования для сотрудников передовых организаций в области биоэкономики</p>
+                    <h1>Национальный проект </br>«Технологическое обеспечение биоэкономики»</h1>
+                    <p class="bioeconomy-lead">Совместно с «Агентством развития профессионального мастерства» проводим бесплатное обучение по программам дополнительного профессионального образования для сотрудников передовых организаций в области биоэкономики</p>
                 </div>
             </div>
             @if($documents->isNotEmpty())
@@ -172,7 +181,9 @@
                                         <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                     </a>
                                 </div>
-                                <p class="blog-post-category"></p>
+                                @if($course->studyFormLabel())
+                                    <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                @endif
                                 <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                     <h6 class="blog-post-title">{{$course->title}}</h6>
                                 </a>

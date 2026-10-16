@@ -19,6 +19,9 @@
             font-weight: 700;
             line-height: 1.2;
         }
+        .course-study-form i {
+            margin-right: 0.4rem;
+        }
         .course-tabs > .nav-link {
             flex: 1 1 auto;
             margin-bottom: -1px;
@@ -107,7 +110,7 @@
                                         </a>
                                     </div>
                                     @if($course->studyFormLabel())
-                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
@@ -128,7 +131,7 @@
                                         </a>
                                     </div>
                                     @if($course->studyFormLabel())
-                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
@@ -149,7 +152,7 @@
                                         </a>
                                     </div>
                                     @if($course->studyFormLabel())
-                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
@@ -170,7 +173,7 @@
                                         </a>
                                     </div>
                                     @if($course->studyFormLabel())
-                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
