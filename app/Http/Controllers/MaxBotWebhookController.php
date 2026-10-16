@@ -181,6 +181,12 @@ class MaxBotWebhookController extends Controller
                 ->get();
 
             if ($users->isEmpty()) {
+                Log::warning('MAX: Пользователь не найден в базе', [
+                    'max_user_id' => $maxUserId,
+                    'phone_prefix' => $phonePrefix,
+                    'phone_last4' => substr($phoneNumber, -4),
+                    'allowed_roles' => [1, 3],
+                ]);
                 return 'not_found';
             }
             if ($users->count() > 1) {
