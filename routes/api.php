@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\LidCompanyController;
+use App\Http\Controllers\MaxBotWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
