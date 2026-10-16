@@ -25,7 +25,20 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v45">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v46">
+    <style>
+        header.edica-header .navbar-light .navbar-nav .active > .nav-link,
+        header.edica-header .navbar-light .navbar-nav .nav-link.active {
+            color: #094ca1;
+        }
+        @media (max-width: 991.98px) {
+            header.edica-header .navbar-nav .nav-item.active .nav-link,
+            header.edica-header .navbar-nav .nav-link.active {
+                color: #094ca1;
+                border-color: #d0d5db;
+            }
+        }
+    </style>
     <script src="{{asset('assets/vendors/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('assets/js/loader.js')}}"></script>
     @stack('styles')
@@ -92,7 +105,7 @@ sticky-top  bg-white bg-opacity-75
                         'url' => (isset($course->price) && $course->price != 0)
                             ? route('order.create', $course->id)
                             : route('lid.create', ['selectedCourse' => $course->id]),
-                        'class' => 'btn btn-primary',
+                        'class' => 'mobile-header-cta--enroll',
                         'icon' => true,
                     ];
                 } elseif (request()->routeIs('main.index', 'course.index')) {
@@ -111,7 +124,7 @@ sticky-top  bg-white bg-opacity-75
                 @if($mobileHeaderCta)
                     <a class="{{ $mobileHeaderCta['class'] }} mobile-header-cta" role="button" href="{{ $mobileHeaderCta['url'] }}">
                         @if(!empty($mobileHeaderCta['icon']))
-                            <i class="fas fa-arrow-right mr-2"></i>
+                            <i class="fas fa-arrow-right" aria-hidden="true"></i>
                         @endif
                         {{ $mobileHeaderCta['label'] }}
                     </a>
