@@ -129,6 +129,17 @@ class MaxBotWebhookController extends Controller
                 if ($contact === null ||
                     ($contact['max_user_id'] !== null &&
                         (string) $contact['max_user_id'] !== (string) $maxUserId)) {
+
+                    Log::warning('MAX: Контакт пользователя не подтверждён', [
+                        'reason' => $contact === null
+                            ? 'Контакт отсутствует или не прошёл проверку'
+                            : 'MAX ID контакта не совпадает с ID отправителя',
+                        'max_user_id' => $maxUserId,
+                        'contact_max_user_id' => $contact['max_user_id'] ?? null,
+                        'contact_is_null' => $contact === null,
+                    ]);
+
+
                     $maxBot->requestPhone(
                         $maxUserId,
                         'Контакт не подтверждён. Нажмите кнопку, чтобы поделиться вашим номером MAX.'
