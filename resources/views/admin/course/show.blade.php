@@ -60,6 +60,18 @@
                                     <td>{{ $course->defaultStatus->title ?? '—' }}</td>
                                 </tr>
                                 <tr>
+                                    <td>Ближайший старт обучения</td>
+                                    <td>{{ $course->starts_at ? $course->starts_at->locale('ru')->translatedFormat('j F Y') : '—' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Форма обучения</td>
+                                    <td>{{ $course->studyFormLabel() ?? '—' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Сроки обучения</td>
+                                    <td>{{ $course->studyWeeksLabel() ?? '—' }}</td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$course->created_at}}</td>
                                 </tr>

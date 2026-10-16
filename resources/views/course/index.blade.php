@@ -12,6 +12,13 @@
             color: grey;
             font-size: 20px;
         }
+        .course-study-form {
+            margin-bottom: 8px;
+            color: #094ca1;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
         .course-tabs > .nav-link {
             flex: 1 1 auto;
             margin-bottom: -1px;
@@ -99,7 +106,9 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    <p class="blog-post-category"></p>
+                                    @if($course->studyFormLabel())
+                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                    @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
                                     </a>
@@ -118,7 +127,9 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    <p class="blog-post-category"></p>
+                                    @if($course->studyFormLabel())
+                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                    @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
                                     </a>
@@ -137,7 +148,9 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    <p class="blog-post-category"></p>
+                                    @if($course->studyFormLabel())
+                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                    @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
                                     </a>
@@ -156,7 +169,9 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    <p class="blog-post-category"></p>
+                                    @if($course->studyFormLabel())
+                                        <p class="course-study-form">{{ $course->studyFormLabel() }}</p>
+                                    @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
                                     </a>

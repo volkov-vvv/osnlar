@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin\Course;
 
+use App\Models\Course;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -28,6 +29,9 @@ class StoreRequest extends FormRequest
             'seo_description' => 'nullable|string',
             'company_id' => 'nullable|integer',
             'price' => 'nullable|numeric',
+            'starts_at' => 'nullable|date',
+            'study_form' => ['nullable', Rule::in(array_keys(Course::STUDY_FORMS))],
+            'study_weeks' => 'nullable|integer|min:1|max:104',
             'fast_pay' => 'nullable',
             'default_status_id' => [
                 'required',
@@ -59,6 +63,11 @@ class StoreRequest extends FormRequest
             'utp.file' => 'Ошибка file',
             'default_status_id.required' => 'Выберите статус по умолчанию',
             'default_status_id.exists' => 'Выбранный статус не подходит для типа курса',
+            'starts_at.date' => 'Укажите корректную дату старта',
+            'study_form.in' => 'Выберите форму обучения из списка',
+            'study_weeks.integer' => 'Укажите количество недель числом',
+            'study_weeks.min' => 'Срок обучения не может быть меньше 1 недели',
+            'study_weeks.max' => 'Срок обучения не может быть больше 104 недель',
         ];
     }
 
@@ -66,10 +75,16 @@ class StoreRequest extends FormRequest
     {
         $price = $this->input('price');
         $defaultStatusId = $this->input('default_status_id');
+        $startsAt = $this->input('starts_at');
+        $studyForm = $this->input('study_form');
+        $studyWeeks = $this->input('study_weeks');
 
         $this->merge([
             'price' => ($price === '' || $price === null) ? null : $price,
             'default_status_id' => ($defaultStatusId === '' || $defaultStatusId === null) ? null : $defaultStatusId,
+            'starts_at' => ($startsAt === '' || $startsAt === null) ? null : $startsAt,
+            'study_form' => ($studyForm === '' || $studyForm === null) ? null : $studyForm,
+            'study_weeks' => ($studyWeeks === '' || $studyWeeks === null) ? null : $studyWeeks,
         ]);
     }
 }

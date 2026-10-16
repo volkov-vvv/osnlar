@@ -136,6 +136,40 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3 form-group">
+                        <label for="starts_at">Ближайший старт обучения</label>
+                        <input name="starts_at" id="starts_at" type="date" class="form-control"
+                               value="{{ old('starts_at', optional($course->starts_at)->format('Y-m-d')) }}" style="max-width: 16rem;">
+                        <small class="form-text text-muted">Если дату очистить, блок на странице курса скроется.</small>
+                        @error('starts_at')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="study_form">Форма обучения</label>
+                        <select name="study_form" id="study_form" class="form-control" style="max-width: 16rem;">
+                            <option value="">Не указана</option>
+                            @foreach(\App\Models\Course::STUDY_FORMS as $value => $label)
+                                <option value="{{ $value }}" {{ old('study_form', $course->study_form) === $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Если не выбрать, блок на странице курса скроется.</small>
+                        @error('study_form')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="study_weeks">Сроки обучения, недель</label>
+                        <input name="study_weeks" id="study_weeks" type="number" min="1" max="104" class="form-control"
+                               value="{{ old('study_weeks', $course->study_weeks) }}" style="max-width: 16rem;">
+                        <small class="form-text text-muted">Если поле очистить, блок на странице курса скроется.</small>
+                        @error('study_weeks')
+                        <div class="text-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-3">
                         <div class="form-group">
                             <div class="custom-control custom-switch">
