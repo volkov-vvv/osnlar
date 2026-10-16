@@ -240,7 +240,9 @@
                 }
             ],
             language: {
+                emptyTable: "В таблице нет данных",
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                infoEmpty: "Записи с 0 до 0 из 0 записей",
                 infoFiltered: "(отфильтровано из _MAX_ записей)",
                 paginate: {
                     first: "Первая",

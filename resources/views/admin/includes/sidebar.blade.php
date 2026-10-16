@@ -188,6 +188,12 @@
                                 <p>Формы</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('admin.settings.bioeconomy.edit')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Биоэкономика</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

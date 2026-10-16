@@ -2,12 +2,34 @@
 
 @push('styles')
 <style>
+    main.login-page {
+        padding-bottom: 8rem;
+    }
     .login-form .form-control {
+        height: 45px;
+        padding: 0.5rem 0.75rem;
+        line-height: 1.5;
         border-color: #dee2e6;
     }
     .login-form .form-control:focus {
         border-color: #ced4da;
         box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.35);
+    }
+    .login-form .col-form-label {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: 45px;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    @media (max-width: 767.98px) {
+        .login-form .col-form-label {
+            justify-content: flex-start;
+            min-height: 0;
+            margin-bottom: 0.4rem;
+        }
     }
 </style>
 @endpush
@@ -90,10 +112,10 @@
 
 {{--</div>--}}
 
-<main class="blog">
+<main class="blog login-page">
     <div class="container">
-        <div class="row p-5">
-            <div class="col">
+        <div class="row justify-content-center py-5">
+            <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header">Авторизуйтесь для входа в личный кабинет</div>
 
@@ -157,10 +179,7 @@
                         </form>
 
                     </div>
-                    <div class="col"></div>
                 </div>
-                <div class="col p-5"></div>
-                <div class="col p-2"></div>
             </div>
         </div>
     </div>

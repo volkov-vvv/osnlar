@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -90,7 +91,16 @@ class IndexController extends Controller
         })->get()->sortBy('order');
         $pageTitle = "Биоэкономика";
         $pageDescription = "Курсы Учебного центра «Основание» в рамках национального проекта «Технологическое обеспечение биоэкономики»";
-        return view('bioeconomy.index', compact('courses', 'pageTitle', 'pageDescription'));
+        $documents = collect(Setting::bioeconomyDocuments())
+            ->map(function (array $document) {
+                $document['path'] = Setting::getValue($document['key']);
+
+                return $document;
+            })
+            ->filter(fn (array $document) => filled($document['path']))
+            ->values();
+
+        return view('bioeconomy.index', compact('courses', 'pageTitle', 'pageDescription', 'documents'));
     }
 
 }

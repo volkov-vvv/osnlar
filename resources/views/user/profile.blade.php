@@ -10,6 +10,32 @@
             border-color: #ced4da;
             box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.35);
         }
+        .profile-form input[type="file"].form-control {
+            height: 45px;
+            padding: 0;
+            line-height: 1.5;
+            overflow: hidden;
+        }
+        .profile-form input[type="file"].form-control::file-selector-button,
+        .profile-form input[type="file"].form-control::-webkit-file-upload-button {
+            height: 100%;
+            margin: 0;
+            margin-inline-end: 0.75rem;
+            padding: 0 0.9rem;
+            border: 0;
+            border-right: 1px solid #dee2e6;
+            border-radius: 0;
+            background-color: #e9ecef;
+            color: #212529;
+            font: inherit;
+            font-weight: 500;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+        .profile-form input[type="file"].form-control:hover:not(:disabled):not([readonly])::file-selector-button,
+        .profile-form input[type="file"].form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button {
+            background-color: #dde0e3;
+        }
     </style>
 @endpush
 
@@ -94,7 +120,6 @@
 
                                     <div class="mb-3 mt-4">
                                         <button type="submit" class="btn btn-primary">Сохранить</button>
-                                        <a class="btn btn-outline-secondary" href="{{ $homeUrl }}">Назад</a>
                                     </div>
                                 </form>
                             </div>

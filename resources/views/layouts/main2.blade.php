@@ -25,11 +25,16 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v46">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v48">
     <style>
         header.edica-header .navbar-light .navbar-nav .active > .nav-link,
         header.edica-header .navbar-light .navbar-nav .nav-link.active {
             color: #094ca1;
+        }
+        header.edica-header .bioeconomy-nav-leaf {
+            margin-right: 0.35rem;
+            color: #1f8a42;
+            font-size: 0.85em;
         }
         @media (max-width: 991.98px) {
             header.edica-header .navbar-nav .nav-item.active .nav-link,
@@ -108,6 +113,13 @@ sticky-top  bg-white bg-opacity-75
                         'class' => 'mobile-header-cta--enroll',
                         'icon' => true,
                     ];
+                } elseif (request()->routeIs('bioeconomy.index')) {
+                    $mobileHeaderCta = [
+                        'label' => 'Оставить заявку',
+                        'url' => route('org.bioeconomy.create'),
+                        'class' => 'mobile-header-cta--enroll',
+                        'icon' => false,
+                    ];
                 } elseif (request()->routeIs('main.index', 'course.index')) {
                     $mobileHeaderCta = [
                         'label' => 'Оставить заявку',
@@ -144,7 +156,7 @@ sticky-top  bg-white bg-opacity-75
                     </li>
                     {{-- Desktop: dropdown --}}
                     <li class="nav-item dropdown d-none d-lg-block
-                    @if(request()->is('course*') || request()->is('future*') || request()->is('commerce*') || request()->is('bioeconomy*') || request()->is('archive*'))
+                    @if(request()->is('course*') || request()->is('future*') || request()->is('commerce*') || request()->is('archive*'))
                         active
                     @endif
                         ">
@@ -153,7 +165,6 @@ sticky-top  bg-white bg-opacity-75
 {{--                            <a class="dropdown-item" href="{{route('future.index')}}">Код будущего</a>--}}
                             <a class="dropdown-item" href="{{route('course.index')}}">- Бесплатные курсы «Активные меры содействия занятости»</a>
                             <a class="dropdown-item" href="{{route('commerce.index')}}">- Софинансирование обучения «Профессии будущего»</a>
-                            <a class="dropdown-item" href="{{route('bioeconomy.index')}}">- Биоэкономика</a>
                             <a class="dropdown-item" href="{{route('archive.index')}}">- Архив</a>
                         </div>
                     </li>
@@ -164,8 +175,8 @@ sticky-top  bg-white bg-opacity-75
                     <li class="nav-item nav-item-course d-lg-none {{ request()->is('commerce*') ? 'active' : null }}">
                         <a class="nav-link" href="{{route('commerce.index')}}">Профессии будущего</a>
                     </li>
-                    <li class="nav-item nav-item-course d-lg-none {{ request()->is('bioeconomy*') ? 'active' : null }}">
-                        <a class="nav-link" href="{{route('bioeconomy.index')}}">Биоэкономика</a>
+                    <li class="nav-item {{ request()->is('bioeconomy*', 'org/bioeconomy*') ? 'active' : null }}">
+                        <a class="nav-link" href="{{route('bioeconomy.index')}}"><i class="fas fa-leaf bioeconomy-nav-leaf" aria-hidden="true"></i>Биоэкономика</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>

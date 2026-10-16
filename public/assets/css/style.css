@@ -8497,10 +8497,22 @@ background-color: #4CAF50; /* Ваш цвет кнопки */
     .edica-header .navbar-nav .nav-link {
         display: flex;
         align-items: center;
+        white-space: nowrap;
     }
 
     .edica-header .navbar-nav .nav-item-social-first {
         margin-left: auto;
+    }
+
+    @media (max-width: 1199.98px) {
+        .edica-header .navbar-expand-lg .navbar-nav .nav-link {
+            padding-right: 0.55rem;
+            padding-left: 0.55rem;
+        }
+
+        .edica-header .navbar-brand img {
+            width: 180px;
+        }
     }
 
     .edica-header .navbar-nav .nav-item-social .nav-link {
