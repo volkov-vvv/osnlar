@@ -89,9 +89,9 @@
             min-width: 0;
             margin: 0;
             padding: 1.1rem 1.15rem;
-            border: 1px solid #f3d7c4;
+            border: 1px solid #e3e6ea;
             border-radius: 1rem;
-            background: linear-gradient(135deg, #fff3e8 0%, #fff9f4 60%, #ffffff 100%);
+            background: linear-gradient(135deg, #f3f4f6 0%, #f8f9fa 60%, #ffffff 100%);
             color: inherit;
             text-decoration: none;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -100,8 +100,8 @@
         .bioeconomy-doc:focus {
             color: inherit;
             text-decoration: none;
-            border-color: #094ca1;
-            box-shadow: 0 6px 18px rgba(9, 76, 161, 0.1);
+            border-color: #1f8a42;
+            box-shadow: 0 6px 18px rgba(31, 138, 66, 0.16);
         }
         .bioeconomy-doc-icon {
             flex: 0 0 3.5rem;
@@ -159,9 +159,11 @@
                     @endforeach
                 </div>
             @endif
-            <section class="featured-posts-section">
+            <section class="featured-posts-section edica-landing-section edica-landing-blog">
+                @if(count($courses) != 0)
+                    <h4 class="edica-landing-section-subtitle-alt">Доступные курсы в рамках проекта</h4>
+                @endif
                 <div class="row">
-
                     @if(count($courses) != 0)
                         @foreach($courses as $course)
                             <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">

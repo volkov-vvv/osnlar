@@ -8312,6 +8312,19 @@ label {
         border-color: #bd2130;
         text-decoration: none;
     }
+
+    .edica-header .navbar-nav .button-lid-create.button-lid-create--bio {
+        background-color: #1f8a42;
+        border-color: #1f8a42;
+    }
+
+    .edica-header .navbar-nav .button-lid-create.button-lid-create--bio:hover,
+    .edica-header .navbar-nav .button-lid-create.button-lid-create--bio:focus {
+        color: #fff;
+        background-color: #176b33;
+        border-color: #176b33;
+        text-decoration: none;
+    }
 }
 
 .button-lid-create:hover {

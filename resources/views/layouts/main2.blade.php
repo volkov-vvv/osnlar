@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v48">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v49">
     <style>
         header.edica-header .navbar-light .navbar-nav .active > .nav-link,
         header.edica-header .navbar-light .navbar-nav .nav-link.active {
@@ -228,7 +228,7 @@ sticky-top  bg-white bg-opacity-75
                     @else
 
                         <li class="nav-item nav-item-lid-create mr-lg-3 ml-lg-3">
-                            <a class="button-lid-create" role="button" href="{{route('lid.create')}}">Оставить заявку</a>
+                            <a class="button-lid-create{{ request()->routeIs('bioeconomy.index') ? ' button-lid-create--bio' : '' }}" role="button" href="{{ request()->routeIs('bioeconomy.index') ? route('org.bioeconomy.create') : route('lid.create') }}">Оставить заявку</a>
                         </li>
 
                         <li class="nav-item">
