@@ -232,7 +232,11 @@ class MaxBotService
     public function extractPhoneFromMaxMessage(array $message): ?array
     {
         $attachments = data_get($message, 'body.attachments', []);
+
         if (!is_array($attachments)) {
+            Log::warning('MAX: контакт не обработан', [
+                'reason' => 'attachments_not_array',
+            ]);
             return null;
         }
 
@@ -243,38 +247,105 @@ class MaxBotService
 
             $payload = $attachment['payload'] ?? null;
             if (!is_array($payload)) {
+                Log::warning('MAX: контакт не обработан', [
+                    'reason' => 'missing_contact_payload',
+                ]);
                 return null;
             }
 
             $rawVcf = $payload['vcf_info'] ?? null;
             $hash = $payload['hash'] ?? null;
-            if (!is_string($rawVcf) || $rawVcf === '' || !is_string($hash) || $hash === '') {
+
+            if (!is_string($rawVcf) || $rawVcf === '') {
+                Log::warning('MAX: контакт не обработан', [
+                    'reason' => 'missing_vcf_info',
+                ]);
                 return null;
             }
 
-            // MAX требует заменить буквальные \r\n на настоящие переносы перед HMAC.
-            $vcf = str_replace(['\\r\\n', '\\n'], ["\r\n", "\n"], $rawVcf);
-            $hmacBytes = hash_hmac('sha256', $vcf, $this->token, true);
+            if (!is_string($hash) || trim($hash) === '') {
+                Log::warning('MAX: контакт не обработан', [
+                    'reason' => 'missing_hash',
+                    'note' => 'Контакт должен быть отправлен кнопкой request_contact',
+                ]);
+                return null;
+            }
+
             $received = trim($hash);
+            $isHexHash = preg_match('/^[a-f0-9]{64}$/iD', $received) === 1;
+            $base64Hash = base64_decode(strtr($received, '-_', '+/'), true);
 
-            // Допустим обе стандартные сериализации SHA-256 — hex и base64.
-            $validHex = preg_match('/^[a-fA-F0-9]{64}$/D', $received) === 1
-                && hash_equals(bin2hex($hmacBytes), strtolower($received));
+            // Сохраняем исходные байты и проверяем распространённые варианты
+            // переноса строк. НИКОГДА не отключаем проверку HMAC.
+            $restoredVcf = str_replace(
+                ['\\r\\n', '\\n', '\\r'],
+                ["\r\n", "\n", "\r"],
+                $rawVcf
+            );
 
-            $decoded = base64_decode(strtr($received, '-_', '+/'), true);
-            $validBase64 = $decoded !== false && hash_equals($hmacBytes, $decoded);
+            $candidates = [
+                'raw' => $rawVcf,
+                'escaped_restored' => $restoredVcf,
+                'raw_lf' => str_replace(["\r\n", "\r"], "\n", $rawVcf),
+                'restored_lf' => str_replace(["\r\n", "\r"], "\n", $restoredVcf),
+            ];
 
-            if (!$validHex && !$validBase64) {
+            $verifiedVcf = null;
+            $verifiedVariant = null;
+
+            foreach ($candidates as $variant => $vcf) {
+                $mac = hash_hmac('sha256', $vcf, $this->token, true);
+
+                $validHex = $isHexHash && hash_equals(bin2hex($mac), strtolower($received));
+                $validBase64 = $base64Hash !== false && hash_equals($mac, $base64Hash);
+
+                if ($validHex || $validBase64) {
+                    $verifiedVcf = $vcf;
+                    $verifiedVariant = $variant;
+                    break;
+                }
+            }
+
+            if ($verifiedVcf === null) {
+                Log::warning('MAX: контакт не обработан', [
+                    'reason' => 'invalid_contact_hash',
+                    'hash_length' => strlen($received),
+                    'vcf_has_real_crlf' => str_contains($rawVcf, "\r\n"),
+                    'vcf_has_escaped_crlf' => str_contains($rawVcf, '\\r\\n'),
+                    'token_configured' => $this->token !== '',
+                ]);
                 return null;
             }
 
-            preg_match_all('/^TEL(?:;[^:\r\n]*)?:[ \t]*([^\r\n]+)/mi', $vcf, $matches);
+            // Для извлечения телефона нормализуем переносы ПОСЛЕ проверки подписи.
+            $vcfForPhone = str_replace(
+                ['\\r\\n', '\\n', '\\r'],
+                ["\n", "\n", "\n"],
+                $verifiedVcf
+            );
+            $vcfForPhone = str_replace(["\r\n", "\r"], "\n", $vcfForPhone);
+
+            preg_match_all(
+                '/^(?:[a-z0-9_-]+\\.)?TEL(?:;[^:\\r\\n]*)?:[ \\t]*([^\\r\\n]+)/mi',
+                $vcfForPhone,
+                $matches
+            );
+
             if (count($matches[1]) !== 1) {
+                Log::warning('MAX: контакт не обработан', [
+                    'reason' => 'invalid_tel_count',
+                    'tel_count' => count($matches[1]),
+                    'verified_variant' => $verifiedVariant,
+                ]);
                 return null;
             }
 
-            $phone = self::normalizeRussianPhone($matches[1][0]);
+            $phone = self::normalizeRussianPhone(trim($matches[1][0]));
             if ($phone === null) {
+                Log::warning('MAX: контакт не обработан', [
+                    'reason' => 'phone_normalization_failed',
+                    'verified_variant' => $verifiedVariant,
+                ]);
                 return null;
             }
 
@@ -284,6 +355,9 @@ class MaxBotService
             ];
         }
 
+        Log::warning('MAX: контакт не обработан', [
+            'reason' => 'no_contact_attachment',
+        ]);
         return null;
     }
 
