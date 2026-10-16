@@ -169,8 +169,13 @@ class MaxBotWebhookController extends Controller
     ): void {
         $result = DB::transaction(function () use ($maxUserId, $chatId, $phone): string {
             // users.phone должен храниться в таком же формате: 79991234567.
+            $phonePrefix = 7;
+            $phoneNumber = substr($phone, 1);
+
             $users = User::query()
-                ->where('phone', $phone)
+                ->where('phone_prefix', $phonePrefix)
+                ->where('phone', $phoneNumber)
+                ->whereIn('role', [1, 3])
                 ->limit(2)
                 ->lockForUpdate()
                 ->get();
