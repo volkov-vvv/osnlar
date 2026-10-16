@@ -37,6 +37,7 @@ return [
 
     'max' => [
         'token' => env('MAX_BOT_TOKEN'),
+        'webhook_secret' => env('MAX_WEBHOOK_SECRET'),
         'api_url' => env('MAX_API_URL', 'https://platform-api.max.ru'),
     ],
 

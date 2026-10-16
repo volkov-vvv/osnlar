@@ -18,3 +18,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/lids', [LidCompanyController::class, 'store'])
     ->middleware('throttle:api-lids')
     ->name('lids.store');
+
+Route::post('/max/webhook', MaxBotWebhookController::class);
