@@ -126,6 +126,17 @@ class MaxBotWebhookController extends Controller
                 }
 
                 $contact = $maxBot->extractPhoneFromMaxMessage($message);
+
+// Получаем номер непосредственно из контакта MAX
+                $vcf = $attachment['payload']['vcf_info'] ?? '';
+                $vcf = str_replace(['\\r\\n', '\\n'], ["\r\n", "\n"], $vcf);
+
+                $phoneFromMax = null;
+
+                if (preg_match('/^TEL(?:;[^:\r\n]*)?:[ \t]*([^\r\n]+)/mi', $vcf, $matches)) {
+                    $phoneFromMax = trim($matches[1]);
+                }
+
                 if ($contact === null ||
                     ($contact['max_user_id'] !== null &&
                         (string) $contact['max_user_id'] !== (string) $maxUserId)) {
@@ -134,16 +145,19 @@ class MaxBotWebhookController extends Controller
                         'reason' => $contact === null
                             ? 'Контакт отсутствует или не прошёл проверку'
                             : 'MAX ID контакта не совпадает с ID отправителя',
+
                         'max_user_id' => $maxUserId,
                         'contact_max_user_id' => $contact['max_user_id'] ?? null,
                         'contact_is_null' => $contact === null,
+                        'phone_from_max' => $phoneFromMax,
+                        'normalized_phone' => $contact['phone'] ?? null,
                     ]);
-
 
                     $maxBot->requestPhone(
                         $maxUserId,
                         'Контакт не подтверждён. Нажмите кнопку, чтобы поделиться вашим номером MAX.'
                     );
+
                     return;
                 }
 
