@@ -22,25 +22,59 @@
         .course-study-form i {
             margin-right: 0.4rem;
         }
-        .course-tabs > .nav-link {
-            flex: 1 1 auto;
-            margin-bottom: -1px;
-            text-align: center;
-            color: #0d6efd;
-            background-color: transparent;
-            white-space: normal;
+        .course-tabs.nav-tabs {
+            border-bottom: 0;
+            gap: 0.75rem;
         }
-        .course-tabs > .nav-link:hover,
-        .course-tabs > .nav-link:focus {
-            color: #0a58ca;
+        .course-tabs.nav-tabs > .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            flex: 1 1 auto;
+            margin-bottom: 0;
+            padding: 0.9rem 1rem;
+            border: 1px solid #e3e6ea;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            color: #6c757d;
+            font-weight: 700;
+            line-height: 1.3;
+            text-align: center;
+            white-space: normal;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+        .course-tab-hours {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            background: #fff;
+            color: #094ca1;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+            box-shadow: 0 2px 8px rgba(9, 76, 161, 0.08);
+        }
+        .course-tab-hours i {
+            margin-right: 0.35rem;
+        }
+        .course-tabs.nav-tabs > .nav-link:hover,
+        .course-tabs.nav-tabs > .nav-link:focus {
+            color: #495057;
+            background: linear-gradient(135deg, #f3f4f6 0%, #f8f9fa 100%);
+            border-color: #d5d8dc;
             outline: 0;
         }
-        .course-tabs > .nav-link.active,
-        .course-tabs > .nav-link.active:hover,
-        .course-tabs > .nav-link.active:focus {
-            color: #495057;
-            background-color: #fff;
-            border-color: #dee2e6 #dee2e6 #fff;
+        .course-tabs.nav-tabs > .nav-link.active,
+        .course-tabs.nav-tabs > .nav-link.active:hover,
+        .course-tabs.nav-tabs > .nav-link.active:focus {
+            color: #063a7a;
+            background: linear-gradient(135deg, #c5ddf8 0%, #dcecfc 55%, #eef6ff 100%);
+            border-color: #094ca1;
+            box-shadow: 0 6px 18px rgba(9, 76, 161, 0.1);
+            outline: 0;
         }
         @media (max-width: 767.98px) {
             .course-page-title {
@@ -49,28 +83,12 @@
             .course-page-lead {
                 font-size: 16px;
             }
-
-            .course-tabs {
+            .course-tabs.nav-tabs {
                 flex-direction: column;
                 align-items: stretch;
-                border-bottom: 0;
             }
-
-            .course-tabs .nav-link {
+            .course-tabs.nav-tabs > .nav-link {
                 width: 100%;
-                text-align: center;
-                border: 1px solid #dee2e6;
-                border-radius: 0.5rem;
-                margin-bottom: 0.5rem;
-                padding: 0.75rem 1rem;
-                white-space: normal;
-                line-height: 1.3;
-            }
-
-            .course-tabs .nav-link.active {
-                border-color: #007bff;
-                background-color: #007bff;
-                color: #fff;
             }
         }
     </style>
@@ -93,9 +111,9 @@
             <nav>
                 <div class="nav nav-tabs nav-fill course-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Все</button>
-                    <button class="nav-link" id="nav-digital-tab" data-toggle="tab" data-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false">Профессиональная переподготовка<br> (256 ч.)</button>
-                    <button class="nav-link" id="nav-designed-tab" data-toggle="tab" data-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false">Повышение квалификации<br> (144 ч.)</button>
-                    <button class="nav-link" id="nav-business-tab" data-toggle="tab" data-target="#nav-business" type="button" role="tab" aria-controls="nav-business" aria-selected="false">Повышение квалификации<br> (72 ч.)</button>
+                    <button class="nav-link" id="nav-digital-tab" data-toggle="tab" data-target="#nav-digital" type="button" role="tab" aria-controls="nav-digital" aria-selected="false"><span class="course-tab-title">Профессиональная переподготовка</span><span class="course-tab-hours"><i class="fas fa-clock" aria-hidden="true"></i>256 ч.</span></button>
+                    <button class="nav-link" id="nav-designed-tab" data-toggle="tab" data-target="#nav-designed" type="button" role="tab" aria-controls="nav-designed" aria-selected="false"><span class="course-tab-title">Повышение квалификации</span><span class="course-tab-hours"><i class="fas fa-clock" aria-hidden="true"></i>144 ч.</span></button>
+                    <button class="nav-link" id="nav-business-tab" data-toggle="tab" data-target="#nav-business" type="button" role="tab" aria-controls="nav-business" aria-selected="false"><span class="course-tab-title">Повышение квалификации</span><span class="course-tab-hours"><i class="fas fa-clock" aria-hidden="true"></i>72 ч.</span></button>
                 </div>
             </nav>
             <div class="pt-5 tab-content" id="nav-tabContent">
@@ -121,7 +139,7 @@
                     </section>
                 </div>
                 <div class="tab-pane fade" id="nav-digital" role="tabpanel" aria-labelledby="nav-digital-tab" tabindex="0">
-                    <section class="featured-posts-section pt-5">
+                    <section class="featured-posts-section">
                         <div class="row">
                             @foreach($coursesS1 as $course)
                                 <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
@@ -142,7 +160,7 @@
                     </section>
                 </div>
                 <div class="tab-pane fade" id="nav-designed" role="tabpanel" aria-labelledby="nav-designed-tab" tabindex="0">
-                    <section class="featured-posts-section pt-5">
+                    <section class="featured-posts-section">
                         <div class="row">
                             @foreach($coursesS2 as $course)
                                 <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
@@ -163,7 +181,7 @@
                     </section>
                 </div>
                 <div class="tab-pane fade" id="nav-business" role="tabpanel" aria-labelledby="nav-business-tab" tabindex="0">
-                    <section class="featured-posts-section pt-5">
+                    <section class="featured-posts-section">
                         <div class="row">
                             @foreach($coursesS3 as $course)
                                 <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
