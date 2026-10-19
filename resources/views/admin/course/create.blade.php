@@ -21,7 +21,7 @@
                     <div class="row mb-3">
                         <div class="col-4">
                             <div class="form-group mb-0">
-                                <label>Выберите компанию:</label>
+                                <label>Компания</label>
                                 <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
                                     @foreach($companies as $company)
                                         <option
@@ -36,7 +36,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-5">
                             <div class="form-group mb-0">
                                 <label>Серия</label>
                                 <select name="series" class="form-control select2" style="width: 100%;" data-placeholder="Не выбрана">
@@ -52,7 +52,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-group mb-0">
                                 <label>Год</label>
                                 <select name="years" class="form-control select2" style="width: 100%;" data-placeholder="Не выбран">
@@ -118,7 +118,7 @@
                         </div>
                     </div>
                     <div class="mb-3 form-group">
-                        <label>Выберите автора/ов:</label>
+                        <label>Выберите автора/ов</label>
                         <select name="author_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">
                             @foreach($authors as $author)
                                 <option
@@ -150,7 +150,7 @@
                     <div class="row mb-3">
                         <div class="col-3">
                             <div class="form-group mb-0">
-                                <label for="starts_at">Ближайший старт обучения</label>
+                                <label for="starts_at">Cтарт обучения</label>
                                 <input name="starts_at" id="starts_at" type="date" class="form-control" value="{{ old('starts_at') }}">
                                 <small class="form-text text-muted">Если дату не указать, блок на странице курса не показывается.</small>
                                 @error('starts_at')

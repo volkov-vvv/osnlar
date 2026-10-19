@@ -31,14 +31,6 @@
                                     <td>Название</td>
                                     <td>{{$course->title}}</td>
                                 </tr>
-                                <tr>
-                                    <td>Описание</td>
-                                    <td style="white-space: normal; word-break: break-word; max-width: 0;">
-                                        <div class="course-description">
-                                            {!! $course->description !!}
-                                        </div>
-                                    </td>
-                                </tr>
 {{--                                <tr>--}}
 {{--                                    <td>Категория</td>--}}
 {{--                                    <td>--}}
