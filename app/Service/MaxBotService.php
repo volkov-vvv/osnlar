@@ -313,6 +313,11 @@ class MaxBotService
                     'vcf_has_real_crlf' => str_contains($rawVcf, "\r\n"),
                     'vcf_has_escaped_crlf' => str_contains($rawVcf, '\\r\\n'),
                     'token_configured' => $this->token !== '',
+                    'token_fingerprint' => substr(
+                        hash('sha256', $this->token),
+                        0,
+                        12
+                    ),
                 ]);
                 return null;
             }
