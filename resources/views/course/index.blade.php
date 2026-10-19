@@ -12,15 +12,45 @@
             color: grey;
             font-size: 20px;
         }
-        .course-study-form {
-            margin-bottom: 8px;
+        .featured-posts-section .course-study-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 10px;
+        }
+        .featured-posts-section .course-study-form {
+            margin: 0;
             color: #094ca1;
             font-size: 0.95rem;
             font-weight: 700;
             line-height: 1.2;
         }
-        .course-study-form i {
+        .featured-posts-section .course-study-form i {
             margin-right: 0.4rem;
+            color: #094ca1;
+        }
+        .featured-posts-section .course-study-hours {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0 0 0 auto;
+            padding: 0.28rem 0.7rem;
+            border: 1px solid rgba(9, 76, 161, 0.18);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #eaf2fb 0%, #f7fbff 100%);
+            color: #094ca1;
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(9, 76, 161, 0.08);
+        }
+        .featured-posts-section .course-study-hours i {
+            font-size: 0.8em;
+            color: #094ca1;
+            opacity: 0.9;
         }
         .course-tabs.nav-tabs {
             border-bottom: 0;
@@ -127,8 +157,15 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    @if($course->studyFormLabel())
-                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                    @if($course->studyFormLabel() || $course->studyHoursLabel())
+                                        <div class="course-study-meta">
+                                            @if($course->studyFormLabel())
+                                                <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                            @endif
+                                            @if($course->studyHoursLabel())
+                                                <p class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</p>
+                                            @endif
+                                        </div>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
@@ -148,8 +185,15 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    @if($course->studyFormLabel())
-                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                    @if($course->studyFormLabel() || $course->studyHoursLabel())
+                                        <div class="course-study-meta">
+                                            @if($course->studyFormLabel())
+                                                <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                            @endif
+                                            @if($course->studyHoursLabel())
+                                                <p class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</p>
+                                            @endif
+                                        </div>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
@@ -169,8 +213,15 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    @if($course->studyFormLabel())
-                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                    @if($course->studyFormLabel() || $course->studyHoursLabel())
+                                        <div class="course-study-meta">
+                                            @if($course->studyFormLabel())
+                                                <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                            @endif
+                                            @if($course->studyHoursLabel())
+                                                <p class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</p>
+                                            @endif
+                                        </div>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>
@@ -190,8 +241,15 @@
                                             <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
                                         </a>
                                     </div>
-                                    @if($course->studyFormLabel())
-                                        <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                    @if($course->studyFormLabel() || $course->studyHoursLabel())
+                                        <div class="course-study-meta">
+                                            @if($course->studyFormLabel())
+                                                <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                            @endif
+                                            @if($course->studyHoursLabel())
+                                                <p class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</p>
+                                            @endif
+                                        </div>
                                     @endif
                                     <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
                                         <h6 class="blog-post-title">{{$course->title}}</h6>

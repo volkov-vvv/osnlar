@@ -72,6 +72,10 @@
                                     <td>{{ $course->studyWeeksLabel() ?? '—' }}</td>
                                 </tr>
                                 <tr>
+                                    <td>Учебные часы</td>
+                                    <td>{{ $course->studyHoursLabel() ?? '—' }}</td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$course->created_at}}</td>
                                 </tr>

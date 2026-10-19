@@ -76,4 +76,13 @@ class Course extends Model
 
         return $weeks.' '.$word;
     }
+
+    public function studyHoursLabel(): ?string
+    {
+        if ($this->study_hours === null || $this->study_hours === '') {
+            return null;
+        }
+
+        return ((int) $this->study_hours).' ак.ч.';
+    }
 }

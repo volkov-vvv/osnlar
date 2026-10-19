@@ -36,10 +36,12 @@ class CourseController extends Controller
     {
         $authors = Author::all();
         $companies = Company::all();
+        $series = CourseSeries::all();
+        $years = Year::options();
         $freeStatuses = Status::whereNull('type')->orderBy('title')->get();
         $orderStatuses = Status::where('type', 'order')->orderBy('title')->get();
 
-        return view('admin.course.create', compact('authors', 'companies', 'freeStatuses', 'orderStatuses'));
+        return view('admin.course.create', compact('authors', 'companies', 'series', 'years', 'freeStatuses', 'orderStatuses'));
     }
 
     public function store(StoreRequest $request)

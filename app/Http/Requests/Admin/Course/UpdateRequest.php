@@ -33,6 +33,7 @@ class UpdateRequest extends FormRequest
             'starts_at' => 'nullable|date',
             'study_form' => ['nullable', Rule::in(array_keys(Course::STUDY_FORMS))],
             'study_weeks' => 'nullable|integer|min:1|max:104',
+            'study_hours' => 'nullable|integer|min:1|max:5000',
             'seo_title' => '',
             'seo_description' => '',
             'series' => '',
@@ -74,6 +75,9 @@ class UpdateRequest extends FormRequest
             'study_weeks.integer' => 'Укажите количество недель числом',
             'study_weeks.min' => 'Срок обучения не может быть меньше 1 недели',
             'study_weeks.max' => 'Срок обучения не может быть больше 104 недель',
+            'study_hours.integer' => 'Укажите количество учебных часов числом',
+            'study_hours.min' => 'Количество учебных часов не может быть меньше 1',
+            'study_hours.max' => 'Количество учебных часов не может быть больше 5000',
         ];
     }
 
@@ -84,6 +88,9 @@ class UpdateRequest extends FormRequest
         $startsAt = $this->input('starts_at');
         $studyForm = $this->input('study_form');
         $studyWeeks = $this->input('study_weeks');
+        $studyHours = $this->input('study_hours');
+        $series = $this->input('series');
+        $years = $this->input('years');
 
         $this->merge([
             'price' => ($price === '' || $price === null) ? null : $price,
@@ -91,6 +98,9 @@ class UpdateRequest extends FormRequest
             'starts_at' => ($startsAt === '' || $startsAt === null) ? null : $startsAt,
             'study_form' => ($studyForm === '' || $studyForm === null) ? null : $studyForm,
             'study_weeks' => ($studyWeeks === '' || $studyWeeks === null) ? null : $studyWeeks,
+            'study_hours' => ($studyHours === '' || $studyHours === null) ? null : $studyHours,
+            'series' => ($series === '' || $series === null) ? null : $series,
+            'years' => ($years === '' || $years === null) ? null : $years,
         ]);
     }
 }
