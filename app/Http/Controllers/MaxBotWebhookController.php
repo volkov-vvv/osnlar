@@ -128,102 +128,22 @@ class MaxBotWebhookController extends Controller
                 $contact = $maxBot->extractPhoneFromMaxMessage($message);
 
                 if ($contact === null) {
-                    $mid = data_get($message, 'body.mid');
-
-                    if ($mid) {
-                        $apiResponse = \Illuminate\Support\Facades\Http::withOptions([
-                            'verify' => '/etc/ssl/certs/ca-certificates.crt',
-                        ])->withHeaders([
-                            'Authorization' => config('services.max.token'),
-                        ])->get('https://platform-api2.max.ru/messages', [
-                            'message_ids' => $mid,
-                        ]);
-
-                        $webhookAttachment = collect(
-                            data_get($message, 'body.attachments', [])
-                        )->firstWhere('type', 'contact');
-
-                        $apiAttachment = collect(
-                            $apiResponse->json('messages.0.body.attachments', [])
-                        )->firstWhere('type', 'contact');
-
-                        $webhookVcf = data_get($webhookAttachment, 'payload.vcf_info');
-                        $apiVcf = data_get($apiAttachment, 'payload.vcf_info');
-
-                        $webhookHash = data_get($webhookAttachment, 'payload.hash');
-                        $apiHash = data_get($apiAttachment, 'payload.hash');
-
-                        $checkHash = static function ($vcf, $hash): ?bool {
-                            if (!is_string($vcf) || !is_string($hash)) {
-                                return null;
-                            }
-
-                            return hash_equals(
-                                hash_hmac(
-                                    'sha256',
-                                    $vcf,
-                                    config('services.max.token')
-                                ),
-                                strtolower($hash)
-                            );
-                        };
-
-                        Log::warning('MAX: диагностика подписи контакта', [
-                            'message_id' => $mid,
-                            'api_status' => $apiResponse->status(),
-
-                            'vcf_same' => is_string($webhookVcf)
-                                && is_string($apiVcf)
-                                && $webhookVcf === $apiVcf,
-
-                            'hash_same' => is_string($webhookHash)
-                                && is_string($apiHash)
-                                && hash_equals($webhookHash, $apiHash),
-
-                            'webhook_hmac_valid' => $checkHash(
-                                $webhookVcf,
-                                $webhookHash
-                            ),
-
-                            'api_hmac_valid' => $checkHash(
-                                $apiVcf,
-                                $apiHash
-                            ),
-                        ]);
-                    }
-                }
-
-// Получаем номер непосредственно из контакта MAX
-                $vcf = $attachment['payload']['vcf_info'] ?? '';
-                $vcf = str_replace(['\\r\\n', '\\n'], ["\r\n", "\n"], $vcf);
-
-                $phoneFromMax = null;
-
-                if (preg_match('/^TEL(?:;[^:\r\n]*)?:[ \t]*([^\r\n]+)/mi', $vcf, $matches)) {
-                    $phoneFromMax = trim($matches[1]);
+                    // VCF в webhook и API может отличаться. Запрашиваем каноническое
+                    // сообщение и снова проверяем HMAC. Без проверки подписки не будет.
+                    $contact = $maxBot->extractVerifiedContactViaApi(
+                        $message,
+                        $maxUserId,
+                        $chatId
+                    );
                 }
 
                 if ($contact === null ||
                     ($contact['max_user_id'] !== null &&
                         (string) $contact['max_user_id'] !== (string) $maxUserId)) {
-
-                    Log::warning('MAX: Контакт пользователя не подтверждён', [
-                        'reason' => $contact === null
-                            ? 'Контакт отсутствует или не прошёл проверку'
-                            : 'MAX ID контакта не совпадает с ID отправителя',
-
-                        'max_user_id' => $maxUserId,
-                        'contact_max_user_id' => $contact['max_user_id'] ?? null,
-                        'contact_is_null' => $contact === null,
-                        'phone_from_max' => $phoneFromMax,
-                        'normalized_phone' => $contact['phone'] ?? null,
-                    ]);
-
                     $maxBot->requestPhone(
                         $maxUserId,
                         'Контакт не подтверждён. Нажмите кнопку, чтобы поделиться вашим номером MAX.'
                     );
-
                     return;
                 }
 
@@ -259,7 +179,8 @@ class MaxBotWebhookController extends Controller
         MaxBotService $maxBot
     ): void {
         $result = DB::transaction(function () use ($maxUserId, $chatId, $phone): string {
-            // users.phone должен храниться в таком же формате: 79991234567.
+            // MAX отдаёт нормализованный российский номер 79991234567,
+            // но в users код страны (+7) и десять цифр номера хранятся отдельно.
             $phonePrefix = 7;
             $phoneNumber = substr($phone, 1);
 
@@ -272,12 +193,6 @@ class MaxBotWebhookController extends Controller
                 ->get();
 
             if ($users->isEmpty()) {
-                Log::warning('MAX: Пользователь не найден в базе', [
-                    'max_user_id' => $maxUserId,
-                    'phone_prefix' => $phonePrefix,
-                    'phone_last4' => substr($phoneNumber, -4),
-                    'allowed_roles' => [1, 3],
-                ]);
                 return 'not_found';
             }
             if ($users->count() > 1) {

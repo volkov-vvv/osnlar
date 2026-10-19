@@ -313,11 +313,6 @@ class MaxBotService
                     'vcf_has_real_crlf' => str_contains($rawVcf, "\r\n"),
                     'vcf_has_escaped_crlf' => str_contains($rawVcf, '\\r\\n'),
                     'token_configured' => $this->token !== '',
-                    'token_fingerprint' => substr(
-                        hash('sha256', $this->token),
-                        0,
-                        12
-                    ),
                 ]);
                 return null;
             }
@@ -364,6 +359,110 @@ class MaxBotService
             'reason' => 'no_contact_attachment',
         ]);
         return null;
+    }
+
+    /**
+     * Повторная проверка подписанного контакта по каноническому сообщению MAX API.
+     * Использовать только для webhook с contact, если HMAC исходного VCF не сошёлся.
+     * Номер возвращается ТОЛЬКО после проверки HMAC методом extractPhoneFromMaxMessage().
+     *
+     * @return array{phone:string, max_user_id:int|string|null}|null
+     */
+    public function extractVerifiedContactViaApi(
+        array $webhookMessage,
+        int|string $expectedUserId,
+        int|string|null $expectedChatId
+    ): ?array {
+        $mid = data_get($webhookMessage, 'body.mid');
+        if (!is_string($mid) || $mid === '') {
+            Log::warning('MAX: повторная проверка невозможна', ['reason' => 'missing_message_id']);
+            return null;
+        }
+
+        // Нельзя принимать произвольный контакт без hash от request_contact.
+        $webhookAttachments = data_get($webhookMessage, 'body.attachments', []);
+        if (!is_array($webhookAttachments)) {
+            return null;
+        }
+        $webhookHash = null;
+        foreach ($webhookAttachments as $attachment) {
+            if (is_array($attachment) && ($attachment['type'] ?? null) === 'contact') {
+                $webhookHash = data_get($attachment, 'payload.hash');
+                break;
+            }
+        }
+        if (!is_string($webhookHash) || $webhookHash === '') {
+            return null;
+        }
+
+        $request = Http::withHeaders(['Authorization' => $this->token])->timeout(10);
+        // На Ubuntu используется то же доверенное CA-хранилище, что и у системного curl.
+        // Опционально задаётся MAX_CA_BUNDLE (services.max.ca_bundle).
+        $caBundle = (string) config('services.max.ca_bundle', '/etc/ssl/certs/ca-certificates.crt');
+        if ($caBundle !== '') {
+            $request = $request->withOptions(['verify' => $caBundle]);
+        }
+
+        $response = $request->get($this->apiUrl . '/messages', ['message_ids' => $mid]);
+        // Ошибки API/сети нельзя трактовать как «неподтверждённый номер»:
+        // выдаём ошибку, чтобы MAX мог повторно доставить webhook.
+        $response->throw();
+
+        $messages = $response->json('messages');
+        if (!is_array($messages) || count($messages) !== 1 || !is_array($messages[0])) {
+            Log::warning('MAX: повторная проверка невозможна', [
+                'reason' => 'api_message_not_found',
+                'message_id' => $mid,
+            ]);
+            return null;
+        }
+
+        $apiMessage = $messages[0];
+        $apiMid = data_get($apiMessage, 'body.mid');
+        $apiUserId = data_get($apiMessage, 'sender.user_id');
+        $apiChatId = data_get($apiMessage, 'recipient.chat_id');
+        $apiChatType = data_get($apiMessage, 'recipient.chat_type');
+
+        // Защита от подмены/связывания контакта другого пользователя или чата.
+        if (!is_string($apiMid) || !hash_equals($mid, $apiMid)
+            || $apiUserId === null || (string) $apiUserId !== (string) $expectedUserId
+            || ($expectedChatId !== null && (
+                $apiChatId === null || (string) $apiChatId !== (string) $expectedChatId
+            ))
+            || ($apiChatType !== null && $apiChatType !== 'dialog')) {
+            Log::warning('MAX: повторная проверка отклонена', [
+                'reason' => 'message_context_mismatch',
+                'message_id' => $mid,
+            ]);
+            return null;
+        }
+
+        $apiAttachments = data_get($apiMessage, 'body.attachments', []);
+        $apiHash = null;
+        if (is_array($apiAttachments)) {
+            foreach ($apiAttachments as $attachment) {
+                if (is_array($attachment) && ($attachment['type'] ?? null) === 'contact') {
+                    $apiHash = data_get($attachment, 'payload.hash');
+                    break;
+                }
+            }
+        }
+
+        if (!is_string($apiHash) || !hash_equals($webhookHash, $apiHash)) {
+            Log::warning('MAX: повторная проверка отклонена', [
+                'reason' => 'contact_hash_mismatch',
+                'message_id' => $mid,
+            ]);
+            return null;
+        }
+
+        // Здесь проверяется настоящая подпись VCF, полученного непосредственно из MAX API.
+        $contact = $this->extractPhoneFromMaxMessage($apiMessage);
+        if ($contact !== null) {
+            Log::info('MAX: контакт успешно проверен через API', ['message_id' => $mid]);
+        }
+
+        return $contact;
     }
 
     public static function normalizeRussianPhone(string $phone): ?string
