@@ -127,6 +127,72 @@ class MaxBotWebhookController extends Controller
 
                 $contact = $maxBot->extractPhoneFromMaxMessage($message);
 
+                if ($contact === null) {
+                    $mid = data_get($message, 'body.mid');
+
+                    if ($mid) {
+                        $apiResponse = \Illuminate\Support\Facades\Http::withOptions([
+                            'verify' => '/etc/ssl/certs/ca-certificates.crt',
+                        ])->withHeaders([
+                            'Authorization' => config('services.max.token'),
+                        ])->get('https://platform-api2.max.ru/messages', [
+                            'message_ids' => $mid,
+                        ]);
+
+                        $webhookAttachment = collect(
+                            data_get($message, 'body.attachments', [])
+                        )->firstWhere('type', 'contact');
+
+                        $apiAttachment = collect(
+                            $apiResponse->json('messages.0.body.attachments', [])
+                        )->firstWhere('type', 'contact');
+
+                        $webhookVcf = data_get($webhookAttachment, 'payload.vcf_info');
+                        $apiVcf = data_get($apiAttachment, 'payload.vcf_info');
+
+                        $webhookHash = data_get($webhookAttachment, 'payload.hash');
+                        $apiHash = data_get($apiAttachment, 'payload.hash');
+
+                        $checkHash = static function ($vcf, $hash): ?bool {
+                            if (!is_string($vcf) || !is_string($hash)) {
+                                return null;
+                            }
+
+                            return hash_equals(
+                                hash_hmac(
+                                    'sha256',
+                                    $vcf,
+                                    config('services.max.token')
+                                ),
+                                strtolower($hash)
+                            );
+                        };
+
+                        Log::warning('MAX: диагностика подписи контакта', [
+                            'message_id' => $mid,
+                            'api_status' => $apiResponse->status(),
+
+                            'vcf_same' => is_string($webhookVcf)
+                                && is_string($apiVcf)
+                                && $webhookVcf === $apiVcf,
+
+                            'hash_same' => is_string($webhookHash)
+                                && is_string($apiHash)
+                                && hash_equals($webhookHash, $apiHash),
+
+                            'webhook_hmac_valid' => $checkHash(
+                                $webhookVcf,
+                                $webhookHash
+                            ),
+
+                            'api_hmac_valid' => $checkHash(
+                                $apiVcf,
+                                $apiHash
+                            ),
+                        ]);
+                    }
+                }
+
 // Получаем номер непосредственно из контакта MAX
                 $vcf = $attachment['payload']['vcf_info'] ?? '';
                 $vcf = str_replace(['\\r\\n', '\\n'], ["\r\n", "\n"], $vcf);
