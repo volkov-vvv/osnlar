@@ -17,6 +17,48 @@
         .iti input[type="tel"] {
             width: 100%;
         }
+
+        .org-course-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.55rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .org-course-option .form-check-input {
+            margin-top: 0.35rem;
+        }
+
+        .org-course-option .form-check-label {
+            font-weight: 400;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .org-course-option .course-study-hours {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0 0 0 0.55rem;
+            padding: 0.22rem 0.65rem;
+            border: 1px solid rgba(9, 76, 161, 0.18);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #eaf2fb 0%, #f7fbff 100%);
+            color: #094ca1;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            vertical-align: middle;
+            box-shadow: 0 2px 8px rgba(9, 76, 161, 0.08);
+        }
+
+        .org-course-option .course-study-hours i {
+            font-size: 0.8em;
+            color: #094ca1;
+            opacity: 0.9;
+        }
     </style>
 
     <div class="container">
@@ -124,16 +166,27 @@
 
             <div class="row mt-1">
                 <div class="col">
-                    <label>Выберите курс, который Вас заинтересовал</label>
-                    <div class="form-group">
-                        <select name="course_id" class="form-control select2">
-                            @foreach($courses as $course)
-                                <option value="{{$course->id}}"
-                                    {{ $course->id == old('course_id') ? ' selected' : '' }}
-                                >{{$course->title}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <label class="d-block mb-3">Выберите курс, который Вас заинтересовал</label>
+                    @forelse($courses as $course)
+                        <div class="form-check org-course-option">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="course_id"
+                                id="course_id_{{ $course->id }}"
+                                value="{{ $course->id }}"
+                                {{ (string) $course->id === (string) old('course_id', $courses->first()->id) ? 'checked' : '' }}
+                            >
+                            <label class="form-check-label" for="course_id_{{ $course->id }}">
+                                {{ $course->title }}
+                                @if($course->studyHoursLabel())
+                                    <span class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</span>
+                                @endif
+                            </label>
+                        </div>
+                    @empty
+                        <p class="text-muted mb-0">Сейчас нет доступных курсов.</p>
+                    @endforelse
                     @error('course_id')
                     <div class="text-danger">{{$message}}</div>
                     @enderror

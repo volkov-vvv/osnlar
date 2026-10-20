@@ -75,6 +75,7 @@
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+                    @include('admin.author._requisites', ['author' => null])
                     @include('admin.author._photo', ['photo' => null])
                     <button type="submit" class="btn btn-primary">Создать</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.author.index')}}">Назад</a>

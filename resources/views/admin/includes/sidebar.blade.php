@@ -88,6 +88,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.contract.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-file-contract"></i>
+                        <p>
+                            Договоры
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.category.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-list"></i>
                         <p>

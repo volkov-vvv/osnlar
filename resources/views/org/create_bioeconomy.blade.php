@@ -13,6 +13,33 @@
         }
         .org-bioeconomy-form .course-checkbox + .form-check-label {
             font-weight: 400;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .org-bioeconomy-form .course-study-hours {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0 0 0 0.55rem;
+            padding: 0.22rem 0.65rem;
+            border: 1px solid rgba(9, 76, 161, 0.18);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #eaf2fb 0%, #f7fbff 100%);
+            color: #094ca1;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            vertical-align: middle;
+            box-shadow: 0 2px 8px rgba(9, 76, 161, 0.08);
+        }
+
+        .org-bioeconomy-form .course-study-hours i {
+            font-size: 0.8em;
+            color: #094ca1;
+            opacity: 0.9;
         }
 
         .org-bioeconomy-form .iti {
@@ -131,7 +158,12 @@
                                     value="{{ $course->id }}"
                                     {{ in_array($course->id, old('course_ids', [])) ? 'checked' : '' }}
                                 >
-                                <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->title }}</label>
+                                <label class="form-check-label" for="course_{{ $course->id }}">
+                                    {{ $course->title }}
+                                    @if($course->studyHoursLabel())
+                                        <span class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</span>
+                                    @endif
+                                </label>
                             </div>
                         @endforeach
                     @endif

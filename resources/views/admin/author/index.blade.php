@@ -98,12 +98,13 @@
                                                 >
                                                 <label class="custom-control-label font-weight-normal" for="author-publish-{{ $author->id }}">Публикация</label>
                                             </div>
-                                            <a href="{{route('admin.author.show', $author->id)}}"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
-                                            <a href="{{route('admin.author.edit', $author->id)}}" class="text-success"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
+                                            <a href="{{route('admin.author.show', $author->id)}}" title="Просмотр"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
+                                            <a href="{{route('admin.author.edit', $author->id)}}" class="text-success" title="Редактировать"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
+                                            <a href="{{route('admin.author.exportPdf', $author->id)}}" class="text-danger" title="Экспорт в PDF"><i class="fas fa-file-pdf"></i></a>&nbsp;&nbsp;
                                             <form method="post" action="{{route('admin.author.destroy', $author->id)}}" class="mb-0">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
+                                                <button class="bg-transparent border-0" type="submit" title="Удалить"><i class="fas fa-trash text-danger" role="button"></i></button>
                                             </form>
                                             </div>
                                         </td>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommercialLidController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
@@ -43,7 +44,28 @@ Route::resource('category', CategoryController::class)->whereNumber('category');
 Route::patch('author/{author}/publish', [AuthorController::class, 'publish'])
     ->whereNumber('author')
     ->name('author.publish');
+Route::get('author/{author}/export-pdf', [AuthorController::class, 'exportPdf'])
+    ->whereNumber('author')
+    ->name('author.exportPdf');
 Route::resource('author', AuthorController::class)->whereNumber('author');
+Route::get('contract', [ContractController::class, 'index'])->name('contract.index');
+Route::get('contract/create', [ContractController::class, 'create'])->name('contract.create');
+Route::post('contract', [ContractController::class, 'store'])->name('contract.store');
+Route::get('contract/{contract}/generate', [ContractController::class, 'generate'])
+    ->whereNumber('contract')
+    ->name('contract.generate');
+Route::get('contract/{contract}', [ContractController::class, 'show'])
+    ->whereNumber('contract')
+    ->name('contract.show');
+Route::get('contract/{contract}/edit', [ContractController::class, 'edit'])
+    ->whereNumber('contract')
+    ->name('contract.edit');
+Route::patch('contract/{contract}', [ContractController::class, 'update'])
+    ->whereNumber('contract')
+    ->name('contract.update');
+Route::delete('contract/{contract}', [ContractController::class, 'destroy'])
+    ->whereNumber('contract')
+    ->name('contract.destroy');
 Route::resource('agent', AgentController::class)->whereNumber('agent');
 Route::resource('leveledu', LeveleduController::class)->whereNumber('leveledu');
 Route::resource('region', RegionController::class)->whereNumber('region');

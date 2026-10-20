@@ -73,6 +73,8 @@
                             @enderror
                         </div>
 
+                        @include('admin.author._requisites', ['author' => $author])
+
                         <button type="submit" class="btn btn-primary">Обновить</button>
                         <a class="btn btn-outline-secondary" href="{{route('admin.author.index')}}">Назад</a>
                     </div>

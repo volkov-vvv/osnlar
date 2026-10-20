@@ -91,6 +91,35 @@
             min-width: 0;
         }
 
+        .lid-create-form .course-option-label {
+            display: inline;
+        }
+
+        .lid-create-form .course-study-hours {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0 0 0 0.55rem;
+            padding: 0.22rem 0.65rem;
+            border: 1px solid rgba(9, 76, 161, 0.18);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #eaf2fb 0%, #f7fbff 100%);
+            color: #094ca1;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            vertical-align: middle;
+            box-shadow: 0 2px 8px rgba(9, 76, 161, 0.08);
+        }
+
+        .lid-create-form .course-study-hours i {
+            font-size: 0.8em;
+            color: #094ca1;
+            opacity: 0.9;
+        }
+
         .lid-create-form .select2-container {
             width: 100% !important;
             max-width: 100%;
@@ -244,7 +273,7 @@
                             @if($course->title != '---')
                                 <div class="form-check mb-3">
                                     <input class="form-check-input" name="course_id" type="radio" id="course_id_{{ $course->id }}" value="{{ $course->id }}" {{ $course->id == $selectedCourse ? 'checked' : '' }}>
-                                    <label class="form-check-label category-label" for="course_id_{{ $course->id }}">{{ $course->title }}</label>
+                                    <label class="form-check-label category-label course-option-label" for="course_id_{{ $course->id }}">{{ $course->title }}@if($course->studyHoursLabel()) <span class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</span>@endif</label>
                                 </div>
                             @endif
                         @endforeach
