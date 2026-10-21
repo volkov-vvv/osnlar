@@ -31,6 +31,7 @@ class UpdateRequest extends FormRequest
             'bioeconomy' => 'nullable',
             'price' => 'nullable|numeric',
             'starts_at' => 'nullable|date',
+            'type' => ['nullable', Rule::in(array_keys(Course::TYPES))],
             'study_form' => ['nullable', Rule::in(array_keys(Course::STUDY_FORMS))],
             'study_weeks' => 'nullable|integer|min:1|max:104',
             'study_hours' => 'nullable|integer|min:1|max:5000',
@@ -71,6 +72,7 @@ class UpdateRequest extends FormRequest
             'default_status_id.required' => 'Для опубликованного курса нужно выбрать статус по умолчанию',
             'default_status_id.exists' => 'Выбранный статус не подходит для типа курса',
             'starts_at.date' => 'Укажите корректную дату старта',
+            'type.in' => 'Выберите тип курса из списка',
             'study_form.in' => 'Выберите форму обучения из списка',
             'study_weeks.integer' => 'Укажите количество недель числом',
             'study_weeks.min' => 'Срок обучения не может быть меньше 1 недели',
@@ -86,6 +88,7 @@ class UpdateRequest extends FormRequest
         $price = $this->input('price');
         $defaultStatusId = $this->input('default_status_id');
         $startsAt = $this->input('starts_at');
+        $type = $this->input('type');
         $studyForm = $this->input('study_form');
         $studyWeeks = $this->input('study_weeks');
         $studyHours = $this->input('study_hours');
@@ -96,6 +99,7 @@ class UpdateRequest extends FormRequest
             'price' => ($price === '' || $price === null) ? null : $price,
             'default_status_id' => ($defaultStatusId === '' || $defaultStatusId === null) ? null : $defaultStatusId,
             'starts_at' => ($startsAt === '' || $startsAt === null) ? null : $startsAt,
+            'type' => ($type === '' || $type === null) ? null : $type,
             'study_form' => ($studyForm === '' || $studyForm === null) ? null : $studyForm,
             'study_weeks' => ($studyWeeks === '' || $studyWeeks === null) ? null : $studyWeeks,
             'study_hours' => ($studyHours === '' || $studyHours === null) ? null : $studyHours,

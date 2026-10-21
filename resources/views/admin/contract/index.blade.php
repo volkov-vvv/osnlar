@@ -30,12 +30,21 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div class="row pb-3">
+                                <div class="col col-md-2">
+                                    Проект:
+                                    <select id="project" name="project" class="form-control form-control-sm custom-filters">
+                                        <option></option>
+                                        @foreach($projects as $project)
+                                            <option value="{{ $project->short_title }}">{{ $project->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="col col-md-3">
                                     Автор:
                                     <select id="author" name="author" class="form-control form-control-sm custom-filters">
                                         <option></option>
                                         @foreach($authors as $author)
-                                            <option value="{{ $author->full_name ?: $author->name }}">{{ $author->full_name ?: $author->name }}</option>
+                                            <option value="{{ $author->name }}">{{ $author->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -48,7 +57,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col col-md-6 d-flex justify-content-end align-items-end">
+                                <div class="col col-md-4 d-flex justify-content-end align-items-end">
                                     <button id="resetTable" class="btn btn-secondary"><i class="fas fa-eraser mr-1"></i>Очистить фильтры</button>
                                 </div>
                             </div>
@@ -58,7 +67,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Номер договора</th>
-                                    <th>Шаблон</th>
+                                    <th>Проект</th>
                                     <th>Автор</th>
                                     <th>Курс</th>
                                     <th>Дата подписания</th>
@@ -72,8 +81,8 @@
                                     <tr>
                                         <td>{{ $contract->id }}</td>
                                         <td>{{ $contract->number }}</td>
-                                        <td>{{ $contract->template_title }}</td>
-                                        <td>{{ $contract->author->full_name ?: $contract->author->name }}</td>
+                                        <td>{{ $contract->project->short_title ?? '—' }}</td>
+                                        <td>{{ $contract->author->name }}</td>
                                         <td>{{ $contract->course->title ?? '—' }}</td>
                                         <td>{{ $contract->signed_at ? $contract->signed_at->format('d.m.Y') : '—' }}</td>
                                         <td>{{ $contract->ends_at ? $contract->ends_at->format('d.m.Y') : '—' }}</td>
@@ -123,6 +132,7 @@
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
+                    project: $('#project').val(),
                     author: $('#author').val(),
                     course: $('#course').val(),
                 };
@@ -133,9 +143,13 @@
                     return;
                 }
 
+                $('#project').val(data.custom_filters.project || '');
                 $('#author').val(data.custom_filters.author || '');
                 $('#course').val(data.custom_filters.course || '');
 
+                if (data.columns && data.columns[2] && data.columns[2].search) {
+                    data.columns[2].search.search = data.custom_filters.project || '';
+                }
                 if (data.columns && data.columns[3] && data.columns[3].search) {
                     data.columns[3].search.search = data.custom_filters.author || '';
                 }
@@ -213,6 +227,13 @@
             }
         });
 
+        $('#project').on('change', function () {
+            table
+                .column(2)
+                .search(this.value, {exact: true})
+                .draw();
+        });
+
         $('#author').on('change', function () {
             table
                 .column(3)
@@ -241,6 +262,7 @@
                 .page(0)
                 .draw();
 
+            $('#project').val(null).trigger('change');
             $('#author').val(null).trigger('change');
             $('#course').val(null).trigger('change');
         });

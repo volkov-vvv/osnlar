@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-6">
                     <div class="row mb-3">
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-group mb-0">
                                 <label>Компания</label>
                                 <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
@@ -36,7 +36,21 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-5">
+                        <div class="col-3">
+                            <div class="form-group mb-0">
+                                <label for="type">Тип</label>
+                                <select name="type" id="type" class="form-control select2" style="width: 100%;" data-placeholder="Не выбран">
+                                    <option value="">Не выбран</option>
+                                    @foreach(\App\Models\Course::TYPES as $value => $label)
+                                        <option value="{{ $value }}" {{ old('type') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                @error('type')
+                                <div class="text-danger">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-3">
                             <div class="form-group mb-0">
                                 <label>Серия</label>
                                 <select name="series" class="form-control select2" style="width: 100%;" data-placeholder="Не выбрана">

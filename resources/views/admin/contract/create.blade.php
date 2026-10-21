@@ -32,6 +32,21 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="project_id">Проект</label>
+                        <select name="project_id" id="project_id" class="form-control select2" style="width: 100%;" required>
+                            <option value="">Выберите проект</option>
+                            @foreach($projects as $project)
+                                <option value="{{ $project->id }}" {{ (string) old('project_id') === (string) $project->id ? 'selected' : '' }}>
+                                    {{ $project->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('project_id')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
                         <label for="author_id">Автор</label>
                         <select name="author_id" id="author_id" class="form-control select2" style="width: 100%;" required>
                             <option value="">Выберите автора</option>

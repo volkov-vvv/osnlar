@@ -9,16 +9,43 @@
 <div class="row">
     <div class="col-md-3 mb-3">
         <label for="passport_series">Серия паспорта</label>
-        <input name="passport_series" id="passport_series" type="text" class="form-control" maxlength="10"
-               value="{{ old('passport_series', $author->passport_series ?? '') }}">
+        @php
+            $passportSeries = old('passport_series', $author->passport_series ?? '');
+            $passportSeriesDigits = preg_replace('/\D+/', '', (string) $passportSeries);
+            if (strlen($passportSeriesDigits) === 4) {
+                $passportSeries = substr($passportSeriesDigits, 0, 2).' '.substr($passportSeriesDigits, 2, 2);
+            }
+        @endphp
+        <input
+            name="passport_series"
+            id="passport_series"
+            type="text"
+            class="form-control"
+            inputmode="numeric"
+            maxlength="5"
+            placeholder="** **"
+            data-mask
+            data-inputmask="'mask': '99 99', 'placeholder': '** **', 'clearIncomplete': true"
+            value="{{ $passportSeries }}"
+        >
         @error('passport_series')
         <div class="text-danger">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-3 mb-3">
         <label for="passport_number">Номер паспорта</label>
-        <input name="passport_number" id="passport_number" type="text" class="form-control" maxlength="20"
-               value="{{ old('passport_number', $author->passport_number ?? '') }}">
+        <input
+            name="passport_number"
+            id="passport_number"
+            type="text"
+            class="form-control"
+            inputmode="numeric"
+            maxlength="6"
+            placeholder="******"
+            data-mask
+            data-inputmask="'mask': '999999', 'placeholder': '******', 'clearIncomplete': true"
+            value="{{ old('passport_number', $author->passport_number ?? '') }}"
+        >
         @error('passport_number')
         <div class="text-danger">{{ $message }}</div>
         @enderror
@@ -33,8 +60,25 @@
     </div>
     <div class="col-md-3 mb-3">
         <label for="passport_department_code">Код подразделения</label>
-        <input name="passport_department_code" id="passport_department_code" type="text" class="form-control" maxlength="20"
-               value="{{ old('passport_department_code', $author->passport_department_code ?? '') }}">
+        @php
+            $passportDepartmentCode = old('passport_department_code', $author->passport_department_code ?? '');
+            $passportDepartmentDigits = preg_replace('/\D+/', '', (string) $passportDepartmentCode);
+            if (strlen($passportDepartmentDigits) === 6) {
+                $passportDepartmentCode = substr($passportDepartmentDigits, 0, 3).'–'.substr($passportDepartmentDigits, 3, 3);
+            }
+        @endphp
+        <input
+            name="passport_department_code"
+            id="passport_department_code"
+            type="text"
+            class="form-control"
+            inputmode="numeric"
+            maxlength="7"
+            placeholder="***–***"
+            data-mask
+            data-inputmask="'mask': '999–999', 'placeholder': '***–***', 'clearIncomplete': true"
+            value="{{ $passportDepartmentCode }}"
+        >
         @error('passport_department_code')
         <div class="text-danger">{{ $message }}</div>
         @enderror
@@ -91,16 +135,36 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <label for="bank_bik">БИК</label>
-        <input name="bank_bik" id="bank_bik" type="text" class="form-control" maxlength="20"
-               value="{{ old('bank_bik', $author->bank_bik ?? '') }}">
+        <input
+            name="bank_bik"
+            id="bank_bik"
+            type="text"
+            class="form-control"
+            inputmode="numeric"
+            maxlength="9"
+            placeholder="*********"
+            data-mask
+            data-inputmask="'mask': '999999999', 'placeholder': '*********', 'clearIncomplete': true"
+            value="{{ old('bank_bik', $author->bank_bik ?? '') }}"
+        >
         @error('bank_bik')
         <div class="text-danger">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
         <label for="bank_correspondent_account">Корреспондентский счёт</label>
-        <input name="bank_correspondent_account" id="bank_correspondent_account" type="text" class="form-control" maxlength="34"
-               value="{{ old('bank_correspondent_account', $author->bank_correspondent_account ?? '') }}">
+        <input
+            name="bank_correspondent_account"
+            id="bank_correspondent_account"
+            type="text"
+            class="form-control"
+            inputmode="numeric"
+            maxlength="20"
+            placeholder="********************"
+            data-mask
+            data-inputmask="'mask': '99999999999999999999', 'placeholder': '********************', 'clearIncomplete': true"
+            value="{{ old('bank_correspondent_account', $author->bank_correspondent_account ?? '') }}"
+        >
         @error('bank_correspondent_account')
         <div class="text-danger">{{ $message }}</div>
         @enderror

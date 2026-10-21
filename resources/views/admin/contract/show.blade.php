@@ -35,6 +35,10 @@
                                     <td>{{ $contract->template_title }}</td>
                                 </tr>
                                 <tr>
+                                    <td>Проект</td>
+                                    <td>{{ $contract->project->title ?? '—' }}</td>
+                                </tr>
+                                <tr>
                                     <td>Автор</td>
                                     <td>{{ $contract->author->full_name ?: $contract->author->name }}</td>
                                 </tr>

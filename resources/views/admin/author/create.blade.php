@@ -15,76 +15,88 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="col-8">
-                <form action="{{route('admin.author.store')}}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-3">
-                        <label>Фамилия</label>
-                        <input name="lastname" type="text" class="form-control" value="{{ old('lastname') }}">
-                        @error('lastname')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
+            <form action="{{route('admin.author.store')}}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="row pb-4">
+                    <div class="col-6">
+                        @include('admin.author._photo', ['photo' => null])
+
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label>Фамилия</label>
+                                <input name="lastname" type="text" class="form-control" value="{{ old('lastname') }}">
+                                @error('lastname')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Имя</label>
+                                <input name="firstname" type="text" class="form-control" value="{{ old('firstname') }}">
+                                @error('firstname')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Отчество</label>
+                                <input name="middlename" type="text" class="form-control" value="{{ old('middlename') }}">
+                                @error('middlename')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Псевдоним</label>
+                                <input name="name" type="text" class="form-control bg-light" aria-describedby="Иванов И.И." value="{{ old('name') }}" readonly tabindex="-1">
+                                @error('name')
+                                <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>E-mail</label>
+                                <input name="email" type="email" class="form-control" value="{{ old('email') }}">
+                                @error('email')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Телефон</label>
+                                <input
+                                    name="phone"
+                                    type="tel"
+                                    class="form-control"
+                                    inputmode="tel"
+                                    data-mask
+                                    data-inputmask="'mask': '+7 (999) 999-99-99', 'clearIncomplete': true"
+                                    value="{{ old('phone') }}"
+                                >
+                                @error('phone')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        @include('admin.author._requisites', ['author' => null])
+
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                        <a class="btn btn-outline-secondary" href="{{route('admin.author.index')}}">Назад</a>
                     </div>
-                    <div class="mb-3">
-                        <label>Имя</label>
-                        <input name="firstname" type="text" class="form-control" value="{{ old('firstname') }}">
-                        @error('firstname')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label>Описание</label>
+                            <textarea class="summernote" name="description">{{ old('description') }}</textarea>
+                            @error('description')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Отчество</label>
-                        <input name="middlename" type="text" class="form-control" value="{{ old('middlename') }}">
-                        @error('middlename')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Псевдоним</label>
-                        <input name="name" type="text" class="form-control" aria-describedby="Иванов И.И." value="{{ old('name') }}">
-                        @error('name')
-                        <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>E-mail</label>
-                        <input name="email" type="email" class="form-control" value="{{ old('email') }}">
-                        @error('email')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Телефон</label>
-                        <input
-                            name="phone"
-                            type="tel"
-                            class="form-control"
-                            inputmode="tel"
-                            data-mask
-                            data-inputmask="'mask': '+7 (999) 999-99-99', 'clearIncomplete': true"
-                            value="{{ old('phone') }}"
-                        >
-                        @error('phone')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Описание</label>
-                        <textarea class="summernote" name="description">{{ old('description') }}</textarea>
-                        @error('description')
-                        <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    @include('admin.author._requisites', ['author' => null])
-                    @include('admin.author._photo', ['photo' => null])
-                    <button type="submit" class="btn btn-primary">Создать</button>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.author.index')}}">Назад</a>
-                </form>
-            </div>
+                </div>
+            </form>
         </div><!-- /.container-fluid -->
     </section>
 @endsection
 
 @section('javascript')
     @include('admin.author._photo_script')
+    @include('admin.author._pseudonym_script')
 @endsection

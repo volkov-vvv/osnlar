@@ -22,55 +22,59 @@
                     <div class="col-6">
                         @include('admin.author._photo', ['photo' => $author->photo])
 
-                        <div class="mb-3">
-                            <label>Фамилия</label>
-                            <input name="lastname" type="text" class="form-control" value="{{ old('lastname', $author->lastname) }}">
-                            @error('lastname')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label>Фамилия</label>
+                                <input name="lastname" type="text" class="form-control" value="{{ old('lastname', $author->lastname) }}">
+                                @error('lastname')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Имя</label>
+                                <input name="firstname" type="text" class="form-control" value="{{ old('firstname', $author->firstname) }}">
+                                @error('firstname')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Отчество</label>
+                                <input name="middlename" type="text" class="form-control" value="{{ old('middlename', $author->middlename) }}">
+                                @error('middlename')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label>Псевдоним</label>
+                                <input name="name" type="text" class="form-control" aria-describedby="Название" value="{{ old('name', $author->name) }}">
+                                @error('name')
+                                <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
+                                @enderror
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label>Имя</label>
-                            <input name="firstname" type="text" class="form-control" value="{{ old('firstname', $author->firstname) }}">
-                            @error('firstname')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Отчество</label>
-                            <input name="middlename" type="text" class="form-control" value="{{ old('middlename', $author->middlename) }}">
-                            @error('middlename')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Псевдоним</label>
-                            <input name="name" type="text" class="form-control" aria-describedby="Название" value="{{ old('name', $author->name) }}">
-                            @error('name')
-                            <div class="text-danger">Это поле необходимо для заполнения "{{$message}}"</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>E-mail</label>
-                            <input name="email" type="email" class="form-control" value="{{ old('email', $author->email) }}">
-                            @error('email')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label>Телефон</label>
-                            <input
-                                name="phone"
-                                type="tel"
-                                class="form-control"
-                                inputmode="tel"
-                                data-mask
-                                data-inputmask="'mask': '+7 (999) 999-99-99', 'clearIncomplete': true"
-                                value="{{ old('phone', $author->phone) }}"
-                            >
-                            @error('phone')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>E-mail</label>
+                                <input name="email" type="email" class="form-control" value="{{ old('email', $author->email) }}">
+                                @error('email')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Телефон</label>
+                                <input
+                                    name="phone"
+                                    type="tel"
+                                    class="form-control"
+                                    inputmode="tel"
+                                    data-mask
+                                    data-inputmask="'mask': '+7 (999) 999-99-99', 'clearIncomplete': true"
+                                    value="{{ old('phone', $author->phone) }}"
+                                >
+                                @error('phone')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         @include('admin.author._requisites', ['author' => $author])
@@ -95,4 +99,5 @@
 
 @section('javascript')
     @include('admin.author._photo_script')
+    @include('admin.author._pseudonym_script')
 @endsection

@@ -34,6 +34,7 @@ class StoreRequest extends FormRequest
             'series' => '',
             'years' => '',
             'company_id' => 'nullable|integer',
+            'type' => ['nullable', Rule::in(array_keys(Course::TYPES))],
             'price' => 'nullable|numeric',
             'starts_at' => 'nullable|date',
             'study_form' => ['nullable', Rule::in(array_keys(Course::STUDY_FORMS))],
@@ -71,6 +72,7 @@ class StoreRequest extends FormRequest
             'default_status_id.required' => 'Выберите статус по умолчанию',
             'default_status_id.exists' => 'Выбранный статус не подходит для типа курса',
             'starts_at.date' => 'Укажите корректную дату старта',
+            'type.in' => 'Выберите тип курса из списка',
             'study_form.in' => 'Выберите форму обучения из списка',
             'study_weeks.integer' => 'Укажите количество недель числом',
             'study_weeks.min' => 'Срок обучения не может быть меньше 1 недели',
@@ -86,6 +88,7 @@ class StoreRequest extends FormRequest
         $price = $this->input('price');
         $defaultStatusId = $this->input('default_status_id');
         $startsAt = $this->input('starts_at');
+        $type = $this->input('type');
         $studyForm = $this->input('study_form');
         $studyWeeks = $this->input('study_weeks');
         $studyHours = $this->input('study_hours');
@@ -96,6 +99,7 @@ class StoreRequest extends FormRequest
             'price' => ($price === '' || $price === null) ? null : $price,
             'default_status_id' => ($defaultStatusId === '' || $defaultStatusId === null) ? null : $defaultStatusId,
             'starts_at' => ($startsAt === '' || $startsAt === null) ? null : $startsAt,
+            'type' => ($type === '' || $type === null) ? null : $type,
             'study_form' => ($studyForm === '' || $studyForm === null) ? null : $studyForm,
             'study_weeks' => ($studyWeeks === '' || $studyWeeks === null) ? null : $studyWeeks,
             'study_hours' => ($studyHours === '' || $studyHours === null) ? null : $studyHours,

@@ -191,6 +191,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{route('admin.project.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Проекты</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{route('admin.settings.forms.edit')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Формы</p>

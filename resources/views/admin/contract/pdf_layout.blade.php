@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title>@yield('title', 'Договор')</title>
     <style>
+        @page {
+            margin: 14mm 18mm 14mm 28mm;
+        }
         body {
             font-family: "Times New Roman", Times, serif;
             font-size: 12px;
@@ -44,7 +47,15 @@
         .signatures td {
             width: 50%;
             vertical-align: top;
-            padding-right: 16px;
+            padding: 12px 16px;
+            border: 1px solid #555;
+        }
+        .signatures tr:first-child td {
+            text-align: center;
+            font-weight: bold;
+        }
+        .signatures tr:last-child td {
+            border: none;
         }
         .placeholder {
             display: inline-block;

@@ -21,6 +21,11 @@ class Contract extends Model
         'ends_at' => 'date',
     ];
 
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(Author::class);

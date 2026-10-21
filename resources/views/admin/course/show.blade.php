@@ -48,6 +48,10 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>Тип</td>
+                                    <td>{{ $course->typeLabel() ?? '—' }}</td>
+                                </tr>
+                                <tr>
                                     <td>Статус по умолчанию</td>
                                     <td>{{ $course->defaultStatus->title ?? '—' }}</td>
                                 </tr>

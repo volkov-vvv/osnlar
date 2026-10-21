@@ -17,6 +17,12 @@ class Course extends Model
         'online' => 'Онлайн',
     ];
 
+    public const TYPES = [
+        'advanced_training' => 'Повышение квалификации',
+        'professional_retraining' => 'Профессиональная переподготовка',
+        'professional_education' => 'Профессиональное обучение',
+    ];
+
     protected $table = 'courses';
     protected $guarded = false;
 
@@ -54,6 +60,25 @@ class Course extends Model
         return self::STUDY_FORMS[$this->study_form] ?? null;
     }
 
+    public function typeLabel(): ?string
+    {
+        if (! is_string($this->type)) {
+            return null;
+        }
+
+        return self::TYPES[$this->type] ?? null;
+    }
+
+    public function programTypePhrase(): ?string
+    {
+        return match ($this->type) {
+            'professional_retraining' => 'дополнительной профессиональной программы профессиональной переподготовки',
+            'advanced_training' => 'дополнительной программы повышения квалификации',
+            'professional_education' => 'программы профессионального обучения',
+            default => null,
+        };
+    }
+
     public function studyWeeksLabel(): ?string
     {
         if ($this->study_weeks === null || $this->study_weeks === '') {
@@ -84,5 +109,28 @@ class Course extends Model
         }
 
         return ((int) $this->study_hours).' ак.ч.';
+    }
+
+    public function studyHoursFullLabel(): ?string
+    {
+        if ($this->study_hours === null || $this->study_hours === '') {
+            return null;
+        }
+
+        $hours = (int) $this->study_hours;
+        $mod100 = $hours % 100;
+        $mod10 = $hours % 10;
+
+        if ($mod100 >= 11 && $mod100 <= 14) {
+            $word = 'часов';
+        } elseif ($mod10 === 1) {
+            $word = 'час';
+        } elseif ($mod10 >= 2 && $mod10 <= 4) {
+            $word = 'часа';
+        } else {
+            $word = 'часов';
+        }
+
+        return $hours.' '.$word;
     }
 }

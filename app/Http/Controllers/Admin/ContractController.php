@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Contract;
 use App\Models\Course;
+use App\Models\Project;
 use Barryvdh\DomPDF\PDF as DomPdfWrapper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,23 +17,25 @@ class ContractController extends Controller
     public function index()
     {
         $contracts = Contract::query()
-            ->with(['author', 'course'])
+            ->with(['author', 'course', 'project'])
             ->latest()
             ->get();
 
         $authors = $this->authorsList();
         $courses = $this->coursesList();
+        $projects = $this->projectsList();
 
-        return view('admin.contract.index', compact('contracts', 'authors', 'courses'));
+        return view('admin.contract.index', compact('contracts', 'authors', 'courses', 'projects'));
     }
 
     public function create()
     {
         $templates = $this->templatesList();
+        $projects = $this->projectsList();
         $authors = $this->authorsList();
         $courses = $this->coursesList();
 
-        return view('admin.contract.create', compact('templates', 'authors', 'courses'));
+        return view('admin.contract.create', compact('templates', 'projects', 'authors', 'courses'));
     }
 
     public function store(Request $request)
@@ -49,7 +52,7 @@ class ContractController extends Controller
 
     public function show(Contract $contract)
     {
-        $contract->load(['author', 'course']);
+        $contract->load(['author', 'course', 'project']);
 
         return view('admin.contract.show', compact('contract'));
     }
@@ -57,10 +60,11 @@ class ContractController extends Controller
     public function edit(Contract $contract)
     {
         $templates = $this->templatesList();
+        $projects = $this->projectsList();
         $authors = $this->authorsList();
         $courses = $this->coursesList();
 
-        return view('admin.contract.edit', compact('contract', 'templates', 'authors', 'courses'));
+        return view('admin.contract.edit', compact('contract', 'templates', 'projects', 'authors', 'courses'));
     }
 
     public function update(Request $request, Contract $contract)
@@ -83,7 +87,7 @@ class ContractController extends Controller
                 ->withErrors(['template' => 'Шаблон договора не найден']);
         }
 
-        $contract->loadMissing(['author', 'course']);
+        $contract->loadMissing(['author', 'course', 'project']);
         $author = $contract->author;
         $filename = 'dogovor-'.$contract->template.'-'.$author->id;
         $nameSlug = Str::slug($author->full_name ?: $author->name);
@@ -95,13 +99,36 @@ class ContractController extends Controller
         $pdf = app('dompdf.wrapper');
         $this->registerContractFonts($pdf);
 
-        return $pdf->loadView($view, [
+        $pdf->loadView($view, [
             'author' => $author,
             'course' => $contract->course,
+            'project' => $contract->project,
             'contract' => $contract,
-        ])
-            ->setPaper('a4')
-            ->download($filename.'.pdf');
+        ])->setPaper('a4');
+
+        $this->addCenteredPageNumbers($pdf);
+
+        return $pdf->download($filename.'.pdf');
+    }
+
+    private function addCenteredPageNumbers(DomPdfWrapper $pdf): void
+    {
+        $pdf->getDomPDF()->setCallbacks([
+            [
+                'event' => 'end_document',
+                'f' => function (int $pageNumber, int $pageCount, $canvas, $fontMetrics): void {
+                    $text = (string) $pageNumber;
+                    $font = $fontMetrics->getFont('Times New Roman')
+                        ?: $fontMetrics->getFont('DejaVu Sans');
+                    $size = 10;
+                    $width = $fontMetrics->getTextWidth($text, $font, $size);
+                    $x = ($canvas->get_width() - $width) / 2;
+                    $y = $canvas->get_height() - 42;
+
+                    $canvas->text($x, $y, $text, $font, $size);
+                },
+            ],
+        ]);
     }
 
     private function registerContractFonts(DomPdfWrapper $pdf): void
@@ -147,6 +174,7 @@ class ContractController extends Controller
 
         $data = $request->validate([
             'template' => ['required', 'string', Rule::in($templateSlugs)],
+            'project_id' => ['required', 'integer', 'exists:projects,id'],
             'author_id' => ['required', 'integer', 'exists:authors,id'],
             'course_id' => ['required', 'integer', 'exists:courses,id'],
             'signed_at' => ['nullable', 'date'],
@@ -155,6 +183,8 @@ class ContractController extends Controller
         ], [
             'template.required' => 'Выберите шаблон договора',
             'template.in' => 'Выбранный шаблон не найден',
+            'project_id.required' => 'Выберите проект',
+            'project_id.exists' => 'Выбранный проект не найден',
             'author_id.required' => 'Выберите автора',
             'author_id.exists' => 'Выбранный автор не найден',
             'course_id.required' => 'Выберите курс',
@@ -182,6 +212,13 @@ class ContractController extends Controller
                 'title' => $template['title'] ?? $slug,
             ])
             ->values();
+    }
+
+    private function projectsList()
+    {
+        return Project::query()
+            ->orderBy('id')
+            ->get();
     }
 
     private function authorsList()
