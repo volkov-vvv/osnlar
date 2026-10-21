@@ -198,7 +198,7 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label"><span class="text-danger">* </span>Образование</label>
+                <label class="form-label"><span class="text-danger">* </span>Образование и реквизиты документа об образовании (название, серия, номер и дата выдачи)</label>
                 <textarea
                     name="education"
                     class="form-control"
