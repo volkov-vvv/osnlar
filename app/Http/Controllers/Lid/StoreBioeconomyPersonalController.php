@@ -20,7 +20,7 @@ class StoreBioeconomyPersonalController extends Controller
         try {
             $mailData = collect($data);
             $mailData->subject = 'Ваша заявка на обучение принята';
-            $mailData->template = 'mails.template';
+            $mailData->template = 'mails.bioeconomy';
             Mail::to($data['email'])->send(new SendEmail($mailData));
         } catch (\Throwable $e) {
             report($e);
