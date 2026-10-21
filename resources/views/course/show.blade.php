@@ -481,7 +481,23 @@
 
 
         </div>
-        @if(!$course->bioeconomy)
+        @if($course->bioeconomy)
+        <section class="course-apply">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 mx-auto">
+                        <div class="course-apply-card" data-aos="fade-up">
+                            <h2 class="course-apply-title">Персональная запись на курс</h2>
+                            <p class="course-apply-price">Национальный проект «Технологическое обеспечение биоэкономики»</p>
+                            <a href="{{ route('lid.bioeconomy.personal.create', $course->id) }}" class="course-apply-btn">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>Персональная запись на курс
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @else
         <section class="course-apply">
             <div class="container">
                 <div class="row">

@@ -152,6 +152,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.biolid.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-leaf"></i>
+                        <p>
+                            Заявки по БИО
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.org.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-building"></i>
                         <p>

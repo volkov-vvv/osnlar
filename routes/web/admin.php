@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AgentController;
 use App\Http\Controllers\Admin\AuthorController;
+use App\Http\Controllers\Admin\BioLidController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommercialLidController;
 use App\Http\Controllers\Admin\CompanyController;
@@ -81,6 +82,14 @@ Route::resource('status', StatusController::class)->whereNumber('status');
 Route::get('/lid/getLids', [LidController::class, 'getLids'])->name('lid.getLids');
 Route::get('/lid/getLidsExcel', [LidController::class, 'getLidsExcel'])->name('lid.getLidsExcel');
 Route::resource('lid', LidController::class)->whereNumber('lid');
+
+Route::get('biolid', [BioLidController::class, 'index'])->name('biolid.index');
+Route::get('biolid/{biolid}', [BioLidController::class, 'show'])
+    ->whereNumber('biolid')
+    ->name('biolid.show');
+Route::delete('biolid/{biolid}', [BioLidController::class, 'destroy'])
+    ->whereNumber('biolid')
+    ->name('biolid.destroy');
 
 Route::get('/commerciallid/getLids', [CommercialLidController::class, 'getLids'])
     ->name('commerciallid.getLids');

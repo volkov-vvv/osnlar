@@ -8,9 +8,11 @@ use App\Http\Controllers\Archive\ShowController as ArchiveShowController;
 use App\Http\Controllers\Course\IndexController as CourseIndexController;
 use App\Http\Controllers\Course\ShowController as CourseShowController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Lid\CreateBioeconomyPersonalController as LidCreateBioeconomyPersonalController;
 use App\Http\Controllers\Lid\CreateController as LidCreateController;
 use App\Http\Controllers\Lid\CreateNewController as LidCreateNewController;
 use App\Http\Controllers\Lid\IndexController as LidThankController;
+use App\Http\Controllers\Lid\StoreBioeconomyPersonalController as LidStoreBioeconomyPersonalController;
 use App\Http\Controllers\Lid\StoreController as LidStoreController;
 use App\Http\Controllers\Lid\StoreNewController as LidStoreNewController;
 use App\Http\Controllers\Main\IndexController as MainIndexController;
@@ -68,6 +70,13 @@ Route::prefix('lid')->name('lid.')->group(function () {
     Route::get('/create/{selectedCourse?}', LidCreateNewController::class)->name('create');
     Route::post('/', LidStoreNewController::class)->middleware('throttle:forms')->name('store_new');
     Route::get('/thank', LidThankController::class)->name('index');
+
+    Route::get('/bioeconomy/{course}', LidCreateBioeconomyPersonalController::class)
+        ->whereNumber('course')
+        ->name('bioeconomy.personal.create');
+    Route::post('/bioeconomy', LidStoreBioeconomyPersonalController::class)
+        ->middleware('throttle:forms')
+        ->name('bioeconomy.personal.store');
 
     // Legacy form (create.blade.php still posts here)
     Route::get('/create-old', LidCreateController::class)->name('create_old');
