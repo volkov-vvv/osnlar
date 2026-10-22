@@ -145,9 +145,15 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
+        'is_blocked',
         'utm',
         'company_id'
     ];
+
+    public function isBlocked(): bool
+    {
+        return (bool) $this->is_blocked;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -167,5 +173,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'utm' => 'array',
+        'is_blocked' => 'boolean',
     ];
 }

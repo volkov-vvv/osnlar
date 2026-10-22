@@ -9,6 +9,7 @@ use App\Models\Agent;
 use App\Models\Company;
 use App\Models\Lid;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -71,6 +72,40 @@ class UserController extends Controller
         }
         $user->agents()->sync($data['agent_ids']);
         return redirect()->route('admin.user.show', compact('user'));
+    }
+
+    public function block(Request $request, User $user)
+    {
+        if ($user->id === auth()->id()) {
+            $message = 'Нельзя заблокировать собственный аккаунт.';
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message], 422);
+            }
+
+            return redirect()
+                ->route('admin.user.index')
+                ->with('error', $message);
+        }
+
+        $user->update([
+            'is_blocked' => $request->boolean('is_blocked'),
+        ]);
+
+        $message = $user->is_blocked
+            ? 'Пользователь заблокирован.'
+            : 'Пользователь разблокирован.';
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'is_blocked' => $user->is_blocked,
+                'message' => $message,
+            ]);
+        }
+
+        return redirect()
+            ->route('admin.user.index')
+            ->with('success', $message);
     }
 
     public function destroy(User $user)

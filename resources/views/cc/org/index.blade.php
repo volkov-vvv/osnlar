@@ -144,6 +144,7 @@
         let stateSaveTimer;
         var table = new DataTable('#org_table', {
             stateSave: true,
+            stateDuration: 0,
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {

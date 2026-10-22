@@ -16,6 +16,8 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
 
+            <div id="user-action-alerts"></div>
+
             <div class="row mb-3">
                 <div class="col">
                     <a href="{{route('admin.user.create')}}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
@@ -60,7 +62,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($users as $user)
-                                    <tr>
+                                    <tr @if($user->is_blocked) class="text-muted" @endif>
                                         <td>{{$user->id}}</td>
                                         <td>
                                             @if($user->avatar)
@@ -82,7 +84,10 @@
                                         <td>{{$user->lastname}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->middlename}}</td>
-                                        <td>{{$user->email}}</td>
+                                        <td>
+                                            <span class="user-email">{{$user->email}}</span>
+                                            <span class="badge badge-secondary ml-1 user-blocked-badge" @if(!$user->is_blocked) style="display: none;" @endif>Заблокирован</span>
+                                        </td>
                                         <td>
                                             @foreach($roles as $id => $role)
                                                 {{ $id == $user->role ? $role : '' }}
@@ -96,12 +101,23 @@
                                         <td>{{$user->created_at}}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="{{route('admin.user.show', $user->id)}}"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
-                                                <a href="{{route('admin.user.edit', $user->id)}}" class="text-success"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
+                                                <a href="{{route('admin.user.show', $user->id)}}" title="Просмотр"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
+                                                <a href="{{route('admin.user.edit', $user->id)}}" class="text-success" title="Редактировать"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
+                                                @if($user->id !== auth()->id())
+                                                    <button
+                                                        type="button"
+                                                        class="bg-transparent border-0 p-0 user-block-btn"
+                                                        data-url="{{ route('admin.user.block', $user->id) }}"
+                                                        data-blocked="{{ $user->is_blocked ? 1 : 0 }}"
+                                                        title="{{ $user->is_blocked ? 'Разблокировать' : 'Заблокировать' }}"
+                                                    >
+                                                        <i class="fas {{ $user->is_blocked ? 'fa-unlock text-success' : 'fa-ban text-warning' }}" role="button"></i>
+                                                    </button>&nbsp;&nbsp;
+                                                @endif
                                                 <form method="post" action="{{route('admin.user.destroy', $user->id)}}" class="mb-0">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="bg-transparent border-0" type="submit"><i class="fas fa-trash text-danger" role="button"></i></button>
+                                                    <button class="bg-transparent border-0" type="submit" title="Удалить"><i class="fas fa-trash text-danger" role="button"></i></button>
                                                 </form>
                                             </div>
                                         </td>
@@ -140,6 +156,7 @@
         var table = new DataTable('#users_table', {
 
             stateSave: true,
+            stateDuration: 0,
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
@@ -256,6 +273,68 @@
 
             $('#role').val(null).trigger('change');
 
+        });
+
+        function showUserActionAlert(message, type) {
+            type = type || 'success';
+            var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            var $alert = $(
+                '<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+                    $('<div>').text(message).html() +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                        '<span aria-hidden="true">&times;</span>' +
+                    '</button>' +
+                '</div>'
+            );
+
+            $('#user-action-alerts').html($alert);
+        }
+
+        $(document).on('click', '.user-block-btn', function () {
+            var $btn = $(this);
+            var isBlocked = $btn.data('blocked') == 1;
+            var confirmText = isBlocked
+                ? 'Разблокировать этого пользователя?'
+                : 'Заблокировать этого пользователя?';
+
+            if (!confirm(confirmText)) {
+                return;
+            }
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: $btn.data('url'),
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                data: {
+                    is_blocked: isBlocked ? 0 : 1
+                }
+            }).done(function (response) {
+                var blocked = !!response.is_blocked;
+                var $row = $btn.closest('tr');
+                var $icon = $btn.find('i');
+
+                $btn.data('blocked', blocked ? 1 : 0);
+                $btn.attr('title', blocked ? 'Разблокировать' : 'Заблокировать');
+                $icon
+                    .toggleClass('fa-ban text-warning', !blocked)
+                    .toggleClass('fa-unlock text-success', blocked);
+                $row.toggleClass('text-muted', blocked);
+                $row.find('.user-blocked-badge').toggle(blocked);
+
+                showUserActionAlert(response.message, 'success');
+            }).fail(function (xhr) {
+                var message = (xhr.responseJSON && xhr.responseJSON.message)
+                    ? xhr.responseJSON.message
+                    : 'Не удалось изменить статус пользователя.';
+                showUserActionAlert(message, 'danger');
+            }).always(function () {
+                $btn.prop('disabled', false);
+            });
         });
 
     </script>

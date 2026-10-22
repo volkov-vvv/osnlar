@@ -13,6 +13,6 @@ class SavedFilter extends Model
     protected $guarded = false;
 
     protected $casts = [
-        'settings' => 'array',
+        'filters' => 'array',
     ];
 }

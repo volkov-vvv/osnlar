@@ -40,20 +40,25 @@ class LoginController extends Controller
     }
     protected function authenticated(Request $request, $user)
     {
+        if ($user->isBlocked()) {
+            auth()->logout();
+
+            return redirect()->back()->withErrors([
+                'email' => 'Ваш аккаунт заблокирован.',
+            ]);
+        }
 
         if ($user->role == 1) {
             return redirect('/admin');
-        }elseif ($user->role == 2) {
+        } elseif ($user->role == 2) {
             return redirect('/agent/report');
-        }elseif ($user->role == 3) {
+        } elseif ($user->role == 3) {
             return redirect('/cc/lid');
-        }elseif ($user->role == 10) {
+        } elseif ($user->role == 10) {
             return redirect('/user');
         }
-        else {
-            return redirect('/');
-        }
 
+        return redirect('/');
     }
 
 }

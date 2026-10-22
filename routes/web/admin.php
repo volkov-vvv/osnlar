@@ -38,6 +38,9 @@ Route::prefix('report')->name('report.')->group(function () {
     Route::get('/getReportExcel', [ReportIndexController::class, 'getReportExcel'])->name('getReportExcel');
 });
 
+Route::patch('user/{user}/block', [UserController::class, 'block'])
+    ->whereNumber('user')
+    ->name('user.block');
 Route::resource('user', UserController::class)->whereNumber('user');
 Route::resource('about', AboutController::class)->whereNumber('about');
 Route::resource('document', DocumentController::class)->whereNumber('document');
