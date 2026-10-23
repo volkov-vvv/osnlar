@@ -92,7 +92,7 @@
 
 
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <div class="edica-loader"></div>
 {{--box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 sticky-top  bg-white bg-opacity-75
@@ -216,6 +216,9 @@ sticky-top  bg-white bg-opacity-75
                                     @endswitch
                                 </a>
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">Профиль</a>
+                                @if((int) auth()->user()->role === 10)
+                                    <a class="dropdown-item" href="{{ route('user.documents') }}">Документы</a>
+                                @endif
                                 <form action="{{route('logout')}}" method="post">
                                     @csrf
                                     <button type="submit" class="dropdown-item">
@@ -245,9 +248,9 @@ sticky-top  bg-white bg-opacity-75
     </div>
 </header>
 
+<div class="flex-grow-1 w-100">
 @yield('content')
-
-
+</div>
 
 {{--<section class="edica-footer-banner-section">--}}
 {{--    <div class="container">--}}
@@ -261,7 +264,7 @@ sticky-top  bg-white bg-opacity-75
 {{--        </div>--}}
 {{--    </div>--}}
 {{--</section>--}}
-<footer class="edica-footer" data-aos="fade-up">
+<footer class="edica-footer mt-auto" data-aos="fade-up">
     <div class="container">
         <div class="row footer-widget-area">
             <div class="col-md-3">

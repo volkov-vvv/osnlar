@@ -34,6 +34,8 @@ class UpdateRequest extends FormRequest
             'role' => 'required|string',
             'company_id' => '',
             'agent_ids' => 'array',
+            'study_group_ids' => 'nullable|array',
+            'study_group_ids.*' => 'integer|exists:study_groups,id',
             'utm' => 'array',
             'password' => '',
         ];

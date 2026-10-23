@@ -30,12 +30,106 @@ class Course extends Model
         'starts_at' => 'date',
     ];
 
+    protected static function booted()
+    {
+        static::saving(function (Course $course) {
+            $course->short_title = self::makeShortTitle((string) $course->title, $course->years);
+        });
+    }
+
+    /**
+     * Предлоги, которые не участвуют в кратком названии.
+     */
+    public const SHORT_TITLE_SKIP_WORDS = [
+        'без', 'в', 'во', 'для', 'до', 'за', 'из', 'к', 'ко', 'между', 'на', 'над',
+        'о', 'об', 'обо', 'около', 'от', 'перед', 'по', 'под', 'подо', 'при', 'про',
+        'против', 'с', 'со', 'среди', 'у', 'через',
+    ];
+
+    /**
+     * Краткое название: первые буквы русских слов (по сегментам через точку) + последние 2 цифры года.
+     * Предлоги, латиница и текст в скобках не учитываются.
+     * Пример: «Азбука цифры. Нейросети в SMM-маркетинге» + 2027 → «АЦ-НМ-27».
+     */
+    public static function makeShortTitle(string $title, $years = null): string
+    {
+        // Текст в скобках не участвует в кратком названии.
+        $title = preg_replace('/\([^()]*\)/u', ' ', $title) ?? $title;
+        $title = preg_replace('/\s+/u', ' ', $title) ?? $title;
+
+        $parts = preg_split('/\./u', $title) ?: [];
+        $abbrParts = [];
+        $skipWords = array_fill_keys(self::SHORT_TITLE_SKIP_WORDS, true);
+        $wordsUsed = 0;
+        $maxWords = 6;
+
+        foreach ($parts as $part) {
+            if ($wordsUsed >= $maxWords) {
+                break;
+            }
+
+            $part = trim($part);
+            if ($part === '') {
+                continue;
+            }
+
+            $words = preg_split('/\s+/u', $part, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            $letters = '';
+
+            foreach ($words as $word) {
+                if ($wordsUsed >= $maxWords) {
+                    break;
+                }
+
+                $word = preg_replace('/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/u', '', $word) ?? '';
+                if ($word === '') {
+                    continue;
+                }
+
+                if (! preg_match('/\p{Cyrillic}/u', $word)) {
+                    continue;
+                }
+
+                $normalized = mb_strtolower($word, 'UTF-8');
+                if (isset($skipWords[$normalized])) {
+                    continue;
+                }
+
+                if (! preg_match('/\p{Cyrillic}/u', $word, $cyrillicMatch)) {
+                    continue;
+                }
+
+                $letters .= mb_strtoupper($cyrillicMatch[0], 'UTF-8');
+                $wordsUsed++;
+            }
+
+            if ($letters !== '') {
+                $abbrParts[] = $letters;
+            }
+        }
+
+        $yearDigits = preg_replace('/\D+/', '', (string) $years) ?? '';
+        $yearSuffix = $yearDigits !== '' ? substr($yearDigits, -2) : '';
+
+        if ($yearSuffix !== '') {
+            $abbrParts[] = $yearSuffix;
+        }
+
+        return implode('-', $abbrParts);
+    }
+
     public function authors(){
         return $this->belongsToMany(Author::class, 'course_authors', 'course_id', 'author_id');
     }
     public function links(){
         return $this->hasMany(Link::class );
     }
+
+    public function studyGroups()
+    {
+        return $this->hasMany(StudyGroup::class);
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);

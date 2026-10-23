@@ -69,7 +69,7 @@
                         <div class="col-3">
                             <div class="form-group mb-0">
                                 <label>Год</label>
-                                <select name="years" class="form-control select2" style="width: 100%;" data-placeholder="Не выбран">
+                                <select name="years" id="course_years" class="form-control select2" style="width: 100%;" data-placeholder="Не выбран">
                                     <option value="">Не выбран</option>
                                     @foreach($years as $year)
                                         <option value="{{$year}}"
@@ -83,13 +83,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Название курса <span class="text-danger">*</span></label>
-                        <input name="title" type="text" class="form-control" aria-describedby="Название"
-                               value="{{old('title')}}">
-                        @error('title')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
+                    <div class="row mb-3">
+                        <div class="col-8">
+                            <div class="form-group mb-0">
+                                <label>Название курса <span class="text-danger">*</span></label>
+                                <input name="title" id="course_title" type="text" class="form-control" aria-describedby="Название"
+                                       value="{{old('title')}}">
+                                @error('title')
+                                <div class="text-danger">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group mb-0">
+                                <label>Краткое название</label>
+                                <input
+                                    type="text"
+                                    id="short_title_preview"
+                                    class="form-control"
+                                    value=""
+                                    readonly
+                                    tabindex="-1"
+                                >
+                                <small class="form-text text-muted">Формируется автоматически</small>
+                            </div>
+                        </div>
                     </div>
                     <div class="row mb-3 align-items-stretch">
                         <div class="col-6 d-flex">
@@ -403,6 +421,82 @@
             priceInput.addEventListener('input', syncStatusOptions);
             priceInput.addEventListener('change', syncStatusOptions);
             syncStatusOptions();
+        })();
+
+        (function () {
+            function makeShortTitle(title, years) {
+                var skipWords = {
+                    'без': true, 'в': true, 'во': true, 'для': true, 'до': true, 'за': true,
+                    'из': true, 'к': true, 'ко': true, 'между': true, 'на': true, 'над': true,
+                    'о': true, 'об': true, 'обо': true, 'около': true, 'от': true, 'перед': true,
+                    'по': true, 'под': true, 'подо': true, 'при': true, 'про': true, 'против': true,
+                    'с': true, 'со': true, 'среди': true, 'у': true, 'через': true
+                };
+                title = String(title || '').replace(/\([^()]*\)/g, ' ').replace(/\s+/g, ' ');
+                var parts = title.split('.');
+                var abbrParts = [];
+                var wordsUsed = 0;
+                var maxWords = 6;
+
+                parts.forEach(function (part) {
+                    if (wordsUsed >= maxWords) {
+                        return;
+                    }
+
+                    part = part.trim();
+                    if (!part) {
+                        return;
+                    }
+
+                    var letters = '';
+                    part.split(/\s+/).forEach(function (word) {
+                        if (wordsUsed >= maxWords) {
+                            return;
+                        }
+
+                        word = word.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+                        if (!word) {
+                            return;
+                        }
+                        var cyrillicMatch = word.match(/\p{Script=Cyrillic}/u);
+                        if (!cyrillicMatch) {
+                            return;
+                        }
+                        if (skipWords[word.toLocaleLowerCase('ru-RU')]) {
+                            return;
+                        }
+                        letters += cyrillicMatch[0].toLocaleUpperCase('ru-RU');
+                        wordsUsed++;
+                    });
+
+                    if (letters) {
+                        abbrParts.push(letters);
+                    }
+                });
+
+                var yearDigits = String(years || '').replace(/\D+/g, '');
+                var yearSuffix = yearDigits ? yearDigits.slice(-2) : '';
+                if (yearSuffix) {
+                    abbrParts.push(yearSuffix);
+                }
+
+                return abbrParts.join('-');
+            }
+
+            function updateShortTitlePreview() {
+                var titleInput = document.getElementById('course_title');
+                var yearsSelect = document.getElementById('course_years');
+                var preview = document.getElementById('short_title_preview');
+                if (!titleInput || !preview) {
+                    return;
+                }
+
+                preview.value = makeShortTitle(titleInput.value, yearsSelect ? yearsSelect.value : '');
+            }
+
+            $('#course_title').on('input', updateShortTitlePreview);
+            $('#course_years').on('change', updateShortTitlePreview);
+            updateShortTitlePreview();
         })();
     </script>
 @endsection

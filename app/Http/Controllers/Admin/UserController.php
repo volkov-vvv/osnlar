@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\User\UpdateRequest;
 use App\Models\Agent;
 use App\Models\Company;
 use App\Models\Lid;
+use App\Models\StudyGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,7 @@ class UserController extends Controller
     {
         $user = new User();
         $roles = $user->getRoles();
-        $users = User::all();
+        $users = User::with('studyGroups')->get();
         return view('admin.user.index', compact('users','roles'));
     }
 
@@ -27,14 +28,19 @@ class UserController extends Controller
         $user = new User();
         $roles = $user->getRoles();
         $companies = Company::all();
-        return view('admin.user.create', compact('roles', 'companies'));
+        $studyGroups = StudyGroup::orderBy('title')->get();
+        return view('admin.user.create', compact('roles', 'companies', 'studyGroups'));
     }
 
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
+        $studyGroupIds = $data['study_group_ids'] ?? [];
+        unset($data['study_group_ids']);
+
         $data['password'] = Hash::make($data['password']);
-        User::firstOrCreate($data);
+        $user = User::create($data);
+        $user->studyGroups()->sync($studyGroupIds);
 
         return redirect()->route('admin.user.index');
     }
@@ -42,6 +48,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $roles = $user->getRoles();
+        $user->load('studyGroups');
         return view('admin.user.show', compact('user','roles'));
     }
 
@@ -50,10 +57,12 @@ class UserController extends Controller
         $roles = $user->getRoles();
         $agents = Agent::all();
         $companies = Company::all();
+        $studyGroups = StudyGroup::orderBy('title')->get();
         $utm_marks = Lid::all()->unique('utm_source')->values();
         $utm_sources = $utm_marks->pluck('utm_source');
+        $user->load('studyGroups');
 
-        return view('admin.user.edit', compact('user','roles', 'agents', 'utm_marks', 'utm_sources', 'companies'));
+        return view('admin.user.edit', compact('user','roles', 'agents', 'utm_marks', 'utm_sources', 'companies', 'studyGroups'));
     }
 
     public function update(UpdateRequest $request, User $user)
@@ -66,11 +75,15 @@ class UserController extends Controller
             unset($data['password']);
         }
 
+        $studyGroupIds = $data['study_group_ids'] ?? [];
+        unset($data['study_group_ids']);
+
         $user->update($data);
         if(!isset($data['agent_ids'])){
             $data['agent_ids'] = array();
         }
         $user->agents()->sync($data['agent_ids']);
+        $user->studyGroups()->sync($studyGroupIds);
         return redirect()->route('admin.user.show', compact('user'));
     }
 

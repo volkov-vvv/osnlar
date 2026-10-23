@@ -33,6 +33,8 @@ class StoreRequest extends FormRequest
             'password' => 'required|string',
             'role' => 'required|string',
             'company_id' => '',
+            'study_group_ids' => 'nullable|array',
+            'study_group_ids.*' => 'integer|exists:study_groups,id',
         ];
     }
 

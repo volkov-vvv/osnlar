@@ -55,7 +55,7 @@
                                     <th>Отчество</th>
                                     <th>Email</th>
                                     <th>Роль</th>
-                                    <th>Компания</th>
+                                    <th>Учебные группы</th>
                                     <th>Дата создания</th>
                                     <th>Действия</th>
                                 </tr>
@@ -94,9 +94,11 @@
                                             @endforeach
                                         </td>
                                         <td>
-                                            @if(!empty($user->company))
-                                                {{$user->company->title}}
-                                            @endif
+                                            @forelse($user->studyGroups as $studyGroup)
+                                                <a href="{{ route('admin.studygroup.show', $studyGroup->id) }}">{{ $studyGroup->short_title ?: $studyGroup->title }}</a>@if(!$loop->last), @endif
+                                            @empty
+                                                —
+                                            @endforelse
                                         </td>
                                         <td>{{$user->created_at}}</td>
                                         <td>

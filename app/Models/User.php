@@ -21,6 +21,12 @@ class User extends Authenticatable
     const ROLE_CONTACT = 3;
     const ROLE_USER = 10;
 
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            $user->bioLids()->update(['user_id' => null]);
+        });
+    }
 
     public function getRoles()
     {
@@ -37,11 +43,20 @@ class User extends Authenticatable
         return $this->belongsToMany(Agent::class)->withPivot('user_id','agent_id');
     }
 
+    public function studyGroups()
+    {
+        return $this->belongsToMany(StudyGroup::class)->withTimestamps();
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
+    public function bioLids()
+    {
+        return $this->hasMany(BioLid::class);
+    }
 
     public function getLids()
     {

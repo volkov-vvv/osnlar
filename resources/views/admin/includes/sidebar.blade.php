@@ -80,6 +80,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{route('admin.studygroup.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                        <p>
+                            Учебные группы
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('admin.author.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>

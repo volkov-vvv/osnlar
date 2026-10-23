@@ -120,7 +120,7 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-                    <div class="d-flex justify-content-between align-items-center pb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <a class="btn btn-outline-primary mr-2" href="{{route('admin.author.edit', $author->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.author.index')}}">Назад</a>

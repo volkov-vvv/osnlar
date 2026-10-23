@@ -45,6 +45,16 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>Учебные группы</td>
+                                    <td>
+                                        @forelse($user->studyGroups as $studyGroup)
+                                            <a href="{{ route('admin.studygroup.show', $studyGroup->id) }}">{{ $studyGroup->short_title ?: $studyGroup->title }}</a>@if(!$loop->last), @endif
+                                        @empty
+                                            —
+                                        @endforelse
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Дата создания</td>
                                     <td>{{$user->created_at}}</td>
                                 </tr>
@@ -63,7 +73,7 @@
             </div>
 
             <!-- /.row -->
-            <div class="row">
+            <div class="row mb-4">
                 <div class="col-3">
                     <a class="btn btn-outline-primary mr-2" href="{{route('admin.user.edit', $user->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.user.index')}}">Назад</a>

@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\Main\IndexController as MainIndexController;
 use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\Report\IndexController as ReportIndexController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StudyGroupController;
 use App\Http\Controllers\Admin\YearController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BioeconomySettingController;
@@ -42,6 +43,7 @@ Route::patch('user/{user}/block', [UserController::class, 'block'])
     ->whereNumber('user')
     ->name('user.block');
 Route::resource('user', UserController::class)->whereNumber('user');
+Route::resource('studygroup', StudyGroupController::class)->whereNumber('studygroup');
 Route::resource('about', AboutController::class)->whereNumber('about');
 Route::resource('document', DocumentController::class)->whereNumber('document');
 Route::resource('course', CourseController::class)->whereNumber('course');
@@ -87,9 +89,23 @@ Route::get('/lid/getLidsExcel', [LidController::class, 'getLidsExcel'])->name('l
 Route::resource('lid', LidController::class)->whereNumber('lid');
 
 Route::get('biolid', [BioLidController::class, 'index'])->name('biolid.index');
+Route::get('biolid/questionnaire', [BioLidController::class, 'questionnaire'])
+    ->name('biolid.questionnaire');
+Route::get('biolid/{biolid}/edit', [BioLidController::class, 'edit'])
+    ->whereNumber('biolid')
+    ->name('biolid.edit');
 Route::get('biolid/{biolid}', [BioLidController::class, 'show'])
     ->whereNumber('biolid')
     ->name('biolid.show');
+Route::patch('biolid/{biolid}', [BioLidController::class, 'update'])
+    ->whereNumber('biolid')
+    ->name('biolid.update');
+Route::post('biolid/{biolid}/create-user', [BioLidController::class, 'createUser'])
+    ->whereNumber('biolid')
+    ->name('biolid.create-user');
+Route::post('biolid/{biolid}/send-credentials', [BioLidController::class, 'sendCredentials'])
+    ->whereNumber('biolid')
+    ->name('biolid.send-credentials');
 Route::delete('biolid/{biolid}', [BioLidController::class, 'destroy'])
     ->whereNumber('biolid')
     ->name('biolid.destroy');

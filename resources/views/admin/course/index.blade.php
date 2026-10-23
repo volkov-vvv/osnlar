@@ -1,5 +1,46 @@
 @extends('admin.layouts.main')
 @section('content')
+    <style>
+        .course-short-title-hint {
+            display: inline-flex;
+            align-items: center;
+            cursor: help;
+        }
+
+        .course-short-title-popup {
+            position: fixed;
+            z-index: 2000;
+            max-width: 360px;
+            padding: 0.45rem 0.65rem;
+            border-radius: 0.35rem;
+            background: #343a40;
+            color: #fff;
+            font-size: 0.8rem;
+            line-height: 1.35;
+            white-space: normal;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        #course_table thead th {
+            vertical-align: middle;
+        }
+
+        #course_table.dataTable > thead .sorting:before,
+        #course_table.dataTable > thead .sorting:after,
+        #course_table.dataTable > thead .sorting_asc:before,
+        #course_table.dataTable > thead .sorting_asc:after,
+        #course_table.dataTable > thead .sorting_desc:before,
+        #course_table.dataTable > thead .sorting_desc:after,
+        #course_table.dataTable > thead .sorting_asc_disabled:before,
+        #course_table.dataTable > thead .sorting_asc_disabled:after,
+        #course_table.dataTable > thead .sorting_desc_disabled:before,
+        #course_table.dataTable > thead .sorting_desc_disabled:after {
+            bottom: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -82,6 +123,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Название</th>
+                                        <th class="text-nowrap">Академ. ч.</th>
+                                        <th>Краткое название</th>
                                         <th>Автор</th>
                                         <th>Год</th>
                                         <th>Компания</th>
@@ -97,6 +140,23 @@
                                         <tr>
                                             <td>{{$course->id}}</td>
                                             <td>{{$course->title}}</td>
+                                            <td>{{ $course->study_hours !== null && $course->study_hours !== '' ? (int) $course->study_hours : '—' }}</td>
+                                            <td>
+                                                @if($course->short_title)
+                                                    <span class="d-inline-flex align-items-center">
+                                                        {{ $course->short_title }}
+                                                        <span
+                                                            class="course-short-title-hint ml-1"
+                                                            data-full-title="{{ $course->title }}"
+                                                            aria-label="{{ $course->title }}"
+                                                        >
+                                                            <i class="fas fa-question-circle text-muted" aria-hidden="true"></i>
+                                                        </span>
+                                                    </span>
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
                                             <td>{{ $course->authors->map->display_name->filter()->implode(', ') }}</td>
                                             <td>{{$course->years}}</td>
                                             <td>
@@ -184,15 +244,15 @@
                         }
 
                         var columnFilters = {
-                            2: filters.author,
-                            3: filters.year,
-                            5: filters.is_published,
-                            6: filters.source,
-                            7: filters.course_type
+                            4: filters.author,
+                            5: filters.year,
+                            7: filters.is_published,
+                            8: filters.source,
+                            9: filters.course_type
                         };
 
-                        if (data.columns[4] && data.columns[4].search) {
-                            data.columns[4].search.search = '';
+                        if (data.columns[6] && data.columns[6].search) {
+                            data.columns[6].search.search = '';
                         }
 
                         $.each(columnFilters, function (index, value) {
@@ -239,6 +299,8 @@
                     columns: [
                         { data: 'id' },
                         { data: 'title' },
+                        { data: 'study_hours' },
+                        { data: 'short_title' },
                         { data: 'author' },
                         { data: 'years' },
                         { data: 'company' },
@@ -256,7 +318,7 @@
                         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                     "buttons": ["excel", "colvis"],
                     'columnDefs': [
-                        { targets: [4, 7], visible: false }
+                        { targets: [6, 9], visible: false }
                     ],
                     "language": {
                         info: "Записи с _START_ до _END_ из _TOTAL_ записей",
@@ -275,10 +337,52 @@
                     }
                 });
 
+                (function () {
+                    var $popup = null;
+
+                    function hidePopup() {
+                        if ($popup) {
+                            $popup.remove();
+                            $popup = null;
+                        }
+                    }
+
+                    $(document).on('mouseenter', '.course-short-title-hint', function () {
+                        hidePopup();
+                        var title = $(this).attr('data-full-title');
+                        if (!title) {
+                            return;
+                        }
+
+                        var rect = this.getBoundingClientRect();
+                        $popup = $('<div class="course-short-title-popup"></div>').text(title).appendTo('body');
+
+                        var popupWidth = $popup.outerWidth();
+                        var popupHeight = $popup.outerHeight();
+                        var left = rect.left + (rect.width / 2) - (popupWidth / 2);
+                        var top = rect.top - popupHeight - 8;
+
+                        if (left < 8) {
+                            left = 8;
+                        }
+                        if (left + popupWidth > window.innerWidth - 8) {
+                            left = window.innerWidth - popupWidth - 8;
+                        }
+                        if (top < 8) {
+                            top = rect.bottom + 8;
+                        }
+
+                        $popup.css({ left: left + 'px', top: top + 'px' });
+                    });
+
+                    $(document).on('mouseleave', '.course-short-title-hint', hidePopup);
+                    $(window).on('scroll.courseShortTitleHint resize.courseShortTitleHint', hidePopup);
+                })();
+
                 $('#author').on('change', function (e) {
 
                     table
-                        .column(2)
+                        .column(4)
                         .search(this.value)
                         .draw();
                 })
@@ -286,7 +390,7 @@
                 $('#year').on('change', function (e) {
 
                     table
-                        .column(3)
+                        .column(5)
                         .search(this.value, {exact: true})
                         .draw();
                 })
@@ -294,7 +398,7 @@
                 $('#is_published').on('change', function (e) {
 
                     table
-                        .column(5)
+                        .column(7)
                         .search(this.value, {exact: true})
                         .draw();
                 })
@@ -302,7 +406,7 @@
                 $('#course_type').on('change', function (e) {
 
                     table
-                        .column(7)
+                        .column(9)
                         .search(this.value, {exact: true, })
                         .draw();
                 })
@@ -310,7 +414,7 @@
                 $('#source').on('change', function (e) {
 
                     table
-                        .column(6)
+                        .column(8)
                         .search(this.value, {exact: true})
                         .draw();
                 })
@@ -319,7 +423,7 @@
                     table.state.clear();
 
                     table.columns().visible(true);
-                    table.columns([4, 7]).visible(false);
+                    table.columns([6, 9]).visible(false);
 
                     table
                         .search('')

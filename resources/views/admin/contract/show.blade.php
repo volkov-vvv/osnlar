@@ -71,7 +71,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex align-items-center pb-4">
+                    <div class="d-flex align-items-center mb-4">
                         <a class="btn btn-outline-primary mr-2" href="{{ route('admin.contract.edit', $contract->id) }}">Редактировать</a>
                         <a class="btn btn-outline-danger mr-2" href="{{ route('admin.contract.generate', $contract->id) }}">
                             <i class="fas fa-file-pdf mr-1"></i> PDF

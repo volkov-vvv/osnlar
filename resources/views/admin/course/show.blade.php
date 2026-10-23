@@ -31,6 +31,10 @@
                                     <td>Название</td>
                                     <td>{{$course->title}}</td>
                                 </tr>
+                                <tr>
+                                    <td>Краткое название</td>
+                                    <td>{{ $course->short_title ?: '—' }}</td>
+                                </tr>
 {{--                                <tr>--}}
 {{--                                    <td>Категория</td>--}}
 {{--                                    <td>--}}
@@ -90,7 +94,7 @@
             </div>
 
             <!-- /.row -->
-            <div class="row pb-4">
+            <div class="row mb-4">
                 <div class="col-3">
                     <a class="btn btn-outline-primary mr-2" href="{{route('admin.course.edit', $course->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>

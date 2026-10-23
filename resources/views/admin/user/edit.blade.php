@@ -132,6 +132,22 @@
                         </div>
                     </div>
 
+                    <div class="mb-3 form-group">
+                        <label>Учебные группы</label>
+                        @php
+                            $selectedStudyGroupIds = old('study_group_ids', $user->studyGroups->pluck('id')->all());
+                        @endphp
+                        <select name="study_group_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите группы" style="width: 100%;">
+                            @foreach($studyGroups as $studyGroup)
+                                <option value="{{ $studyGroup->id }}"
+                                    {{ in_array($studyGroup->id, $selectedStudyGroupIds) ? 'selected' : '' }}
+                                >{{ $studyGroup->short_title ?: $studyGroup->title }}</option>
+                            @endforeach
+                        </select>
+                        @error('study_group_ids')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <button type="submit" class="btn btn-primary">Обновить</button>
                     <a class="btn btn-outline-secondary" href="{{route('admin.user.index')}}">Назад</a>
