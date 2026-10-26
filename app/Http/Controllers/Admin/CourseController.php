@@ -68,8 +68,18 @@ class CourseController extends Controller
         $years = Year::options();
         $freeStatuses = Status::whereNull('type')->orderBy('title')->get();
         $orderStatuses = Status::where('type', 'order')->orderBy('title')->get();
+        $studyGroups = $course->studyGroups()->orderBy('title')->get();
 
-        return view('admin.course.edit', compact('course', 'companies', 'authors', 'series', 'years', 'freeStatuses', 'orderStatuses'));
+        return view('admin.course.edit', compact(
+            'course',
+            'companies',
+            'authors',
+            'series',
+            'years',
+            'freeStatuses',
+            'orderStatuses',
+            'studyGroups'
+        ));
     }
 
     public function update(UpdateRequest $request, Course $course)

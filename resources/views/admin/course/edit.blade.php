@@ -343,6 +343,66 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div id="biolidAutomationSettings" class="mt-3 pt-3 border-top" style="{{ (string) old('bioeconomy', $course->bioeconomy) === '1' ? '' : 'display:none;' }}">
+                            <h6 class="mb-3">Автоматизация заявок для курсов по Биоэкономике</h6>
+
+                            <div class="mb-3 form-group">
+                                <label for="biolid_study_group_id">Учебная группа для заявок</label>
+                                <select name="biolid_study_group_id" id="biolid_study_group_id" class="form-control">
+                                    <option value="">Не назначать</option>
+                                    @foreach($studyGroups as $studyGroup)
+                                        <option
+                                            value="{{ $studyGroup->id }}"
+                                            {{ (string) old('biolid_study_group_id', $course->biolid_study_group_id) === (string) $studyGroup->id ? 'selected' : '' }}
+                                        >{{ $studyGroup->short_title ? $studyGroup->short_title.' — '.$studyGroup->title : $studyGroup->title }}</option>
+                                    @endforeach
+                                </select>
+                                <small class="form-text text-muted">Слушатель будет добавлен в выбранную группу при создании заявки.</small>
+                                @error('biolid_study_group_id')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="custom-control custom-switch">
+                                    <input type="hidden" name="biolid_auto_create_user" value="0">
+                                    <input name="biolid_auto_create_user" type="checkbox" class="custom-control-input" id="biolidAutoCreateUser" value="1"
+                                        {{ (string) old('biolid_auto_create_user', $course->biolid_auto_create_user ? 1 : 0) === '1' ? ' checked' : '' }}
+                                    >
+                                    <label class="custom-control-label" for="biolidAutoCreateUser">Создавать пользователя</label>
+                                </div>
+                                @error('biolid_auto_create_user')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="custom-control custom-switch">
+                                    <input type="hidden" name="biolid_send_confirmation_email" value="0">
+                                    <input name="biolid_send_confirmation_email" type="checkbox" class="custom-control-input" id="biolidSendConfirmationEmail" value="1"
+                                        {{ (string) old('biolid_send_confirmation_email', $course->biolid_send_confirmation_email ? 1 : 0) === '1' ? ' checked' : '' }}
+                                    >
+                                    <label class="custom-control-label" for="biolidSendConfirmationEmail">Письмо «заявка принята»</label>
+                                </div>
+                                @error('biolid_send_confirmation_email')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-0">
+                                <div class="custom-control custom-switch">
+                                    <input type="hidden" name="biolid_send_credentials_email" value="0">
+                                    <input name="biolid_send_credentials_email" type="checkbox" class="custom-control-input" id="biolidSendCredentialsEmail" value="1"
+                                        {{ (string) old('biolid_send_credentials_email', $course->biolid_send_credentials_email ? 1 : 0) === '1' ? ' checked' : '' }}
+                                    >
+                                    <label class="custom-control-label" for="biolidSendCredentialsEmail">Письмо с логином и паролем</label>
+                                </div>
+                                @error('biolid_send_credentials_email')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mt-3 mb-0">
@@ -423,6 +483,42 @@
 
 @section('javascript')
     <script>
+        (function () {
+            var bioeconomySwitch = document.getElementById('customSwitchBioeconomy');
+            var settingsBlock = document.getElementById('biolidAutomationSettings');
+            var groupSelect = document.getElementById('biolid_study_group_id');
+            var createUserSwitch = document.getElementById('biolidAutoCreateUser');
+            var credentialsSwitch = document.getElementById('biolidSendCredentialsEmail');
+
+            if (!bioeconomySwitch || !settingsBlock) {
+                return;
+            }
+
+            function syncBiolidSettingsVisibility() {
+                settingsBlock.style.display = bioeconomySwitch.checked ? '' : 'none';
+            }
+
+            function ensureCreateUserEnabled() {
+                if (!createUserSwitch) {
+                    return;
+                }
+                var groupSelected = groupSelect && String(groupSelect.value || '').trim() !== '';
+                var credentialsOn = credentialsSwitch && credentialsSwitch.checked;
+                if (groupSelected || credentialsOn) {
+                    createUserSwitch.checked = true;
+                }
+            }
+
+            bioeconomySwitch.addEventListener('change', syncBiolidSettingsVisibility);
+            if (groupSelect) {
+                groupSelect.addEventListener('change', ensureCreateUserEnabled);
+            }
+            if (credentialsSwitch) {
+                credentialsSwitch.addEventListener('change', ensureCreateUserEnabled);
+            }
+            syncBiolidSettingsVisibility();
+        })();
+
         (function () {
             var priceInput = document.querySelector('input[name="price"]');
             var statusSelect = document.getElementById('default_status_id');

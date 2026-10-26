@@ -24,11 +24,57 @@ class BioLid extends Model
     protected $casts = [
         'birth_date' => 'date',
         'politic' => 'boolean',
+        'data_submitted_at' => 'datetime',
+        'data_reviewed_at' => 'datetime',
     ];
 
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(UserDocument::class);
+    }
+
+    public function dataReviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'data_reviewed_by');
+    }
+
+    public function dataReviewStatusLabel(): string
+    {
+        if ($this->data_review_status === null) {
+            return 'Не отправлено';
+        }
+
+        return UserDocument::REVIEW_STATUSES[$this->data_review_status] ?? $this->data_review_status;
+    }
+
+    public function dataReviewStatusBadgeClass(): string
+    {
+        return match ($this->data_review_status) {
+            UserDocument::REVIEW_APPROVED => 'badge badge-success',
+            UserDocument::REVIEW_REJECTED => 'badge badge-danger',
+            UserDocument::REVIEW_PENDING => 'badge badge-warning',
+            default => 'badge badge-secondary',
+        };
+    }
+
+    public function isDataPendingReview(): bool
+    {
+        return $this->data_review_status === UserDocument::REVIEW_PENDING;
+    }
+
+    public function isDataApproved(): bool
+    {
+        return $this->data_review_status === UserDocument::REVIEW_APPROVED;
+    }
+
+    public function isDataRejected(): bool
+    {
+        return $this->data_review_status === UserDocument::REVIEW_REJECTED;
     }
 
     public function status(): BelongsTo

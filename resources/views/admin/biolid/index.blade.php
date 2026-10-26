@@ -22,8 +22,20 @@
             pointer-events: none;
         }
 
-        .dt-buttons .biolid-questionnaire-btn {
-            margin-right: 0.75rem;
+        #biolids_table_wrapper .dt-buttons.btn-group {
+            gap: 1px;
+            background-color: #fff;
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+
+        #biolids_table_wrapper .dt-buttons.btn-group > .btn,
+        #biolids_table_wrapper .dt-buttons.btn-group > .btn-group {
+            margin-left: 0 !important;
+        }
+
+        #biolids_table_wrapper .dt-buttons.btn-group > .btn-group {
+            background-color: transparent;
         }
     </style>
     <div class="content-header">
@@ -39,7 +51,33 @@
     <section class="content">
         <div class="container-fluid">
             @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+            @if(session('error_details'))
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Детали ошибок:</strong>
+                    <ul class="mb-0 mt-2 pl-3">
+                        @foreach((array) session('error_details') as $detail)
+                            <li>{{ $detail }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             @endif
 
             <div class="row">
@@ -202,11 +240,129 @@
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="createUsersBulkModal" tabindex="-1" role="dialog" aria-labelledby="createUsersBulkModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="createUsersBulkModalLabel">Создать пользователей</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2">
+                        Будут созданы или привязаны учётные записи для заявок по текущим фильтрам:
+                        <strong id="createUsersBulkCount">0</strong>.
+                    </p>
+                    <p class="text-muted mb-3">Письма с доступом отправляться не будут.</p>
+
+                    <div class="form-group mb-0">
+                        <label for="createUsersBulkStudyGroup">Учебная группа для записи</label>
+                        <select id="createUsersBulkStudyGroup" class="form-control">
+                            <option value="">Не назначать</option>
+                            @foreach($studyGroups as $studyGroup)
+                                <option value="{{ $studyGroup->id }}">
+                                    {{ $studyGroup->short_title ? $studyGroup->short_title.' — '.$studyGroup->title : $studyGroup->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">Если группа выбрана, слушатели будут добавлены в неё.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="createUsersBulkSubmit">
+                        <i class="fas fa-user-plus mr-1"></i>Создать
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('javascript')
     <script>
+        var createUsersBulkIds = [];
+        var stateSaveTimer;
+
         var table = new DataTable('#biolids_table', {
+            stateSave: true,
+            stateDuration: 0,
+
+            stateSaveParams: function (settings, data) {
+                data.custom_filters = {
+                    organization: $('#organization').val(),
+                    course: $('#course').val(),
+                    studygroup: $('#studygroup').val(),
+                    responsible: $('#responsible').val(),
+                    status: $('#status').val(),
+                };
+            },
+
+            stateLoadParams: function (settings, data) {
+                if (!data || !data.custom_filters) {
+                    return;
+                }
+
+                var filters = data.custom_filters;
+
+                $('#organization').val(filters.organization || '');
+                $('#course').val(filters.course || '');
+                $('#studygroup').val(filters.studygroup || '');
+                $('#responsible').val(filters.responsible || '');
+                $('#status').val(filters.status || '');
+
+                var columnFilters = {
+                    1: filters.responsible,
+                    2: filters.organization,
+                    8: filters.course,
+                    9: filters.studygroup,
+                    10: filters.status
+                };
+
+                if (!data.columns) {
+                    return;
+                }
+
+                $.each(columnFilters, function (index, value) {
+                    if (!data.columns[index] || !data.columns[index].search) {
+                        return;
+                    }
+
+                    data.columns[index].search.search = value || '';
+                });
+            },
+
+            stateSaveCallback: function (settings, data) {
+                clearTimeout(stateSaveTimer);
+                stateSaveTimer = setTimeout(function () {
+                    $.ajax({
+                        url: @json(route('filters.save')),
+                        method: 'POST',
+                        data: {
+                            _token: @json(csrf_token()),
+                            page_url: 'admin.biolid.index',
+                            state: JSON.stringify(data)
+                        }
+                    });
+                }, 2000);
+            },
+
+            stateLoadCallback: function (settings, callback) {
+                $.ajax({
+                    url: @json(route('filters.get')),
+                    data: { page_url: 'admin.biolid.index' },
+                    dataType: 'json',
+                    success: function (json) {
+                        callback(json);
+                    },
+                    error: function () {
+                        callback(null);
+                    }
+                });
+            },
+
             order: [[0, 'desc']],
             columnDefs: [
                 { orderable: false, searchable: false, targets: 13 }
@@ -219,8 +375,8 @@
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             buttons: [
                 {
-                    text: 'Сформировать анкету для группы',
-                    className: 'btn-success biolid-questionnaire-btn',
+                    text: '<i class="fas fa-file-excel mr-1"></i>Сформировать анкету для группы',
+                    className: 'btn-secondary',
                     action: function (e, dt) {
                         var ids = [];
                         dt.rows({ search: 'applied' }).every(function () {
@@ -240,6 +396,76 @@
                         }).join('&');
 
                         window.location.href = @json(route('admin.biolid.questionnaire')) + '?' + params;
+                    }
+                },
+                {
+                    text: '<i class="fas fa-user-plus mr-1"></i>Создать пользователей',
+                    className: 'btn-secondary',
+                    action: function (e, dt) {
+                        var ids = [];
+                        dt.rows({ search: 'applied' }).every(function () {
+                            var id = $(this.node()).data('id');
+                            if (id) {
+                                ids.push(id);
+                            }
+                        });
+
+                        if (!ids.length) {
+                            alert('Нет заявок для создания пользователей по текущим фильтрам');
+                            return;
+                        }
+
+                        createUsersBulkIds = ids;
+                        $('#createUsersBulkCount').text(ids.length);
+                        $('#createUsersBulkStudyGroup').val('');
+                        $('#createUsersBulkModal').modal('show');
+                    }
+                },
+                {
+                    text: '<i class="fas fa-envelope mr-1"></i>Отправить письмо',
+                    className: 'btn-secondary',
+                    action: function (e, dt) {
+                        var ids = [];
+                        dt.rows({ search: 'applied' }).every(function () {
+                            var id = $(this.node()).data('id');
+                            if (id) {
+                                ids.push(id);
+                            }
+                        });
+
+                        if (!ids.length) {
+                            alert('Нет заявок для отправки по текущим фильтрам');
+                            return;
+                        }
+
+                        if (!confirm(
+                            'Будет отправлено писем с логином и паролем: ' + ids.length + '.\n' +
+                            'При необходимости будет создана учётная запись, пароль будет обновлён. Продолжить?'
+                        )) {
+                            return;
+                        }
+
+                        var form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = @json(route('admin.biolid.send-credentials-bulk'));
+                        form.style.display = 'none';
+
+                        var csrf = document.createElement('input');
+                        csrf.type = 'hidden';
+                        csrf.name = '_token';
+                        csrf.value = @json(csrf_token());
+                        form.appendChild(csrf);
+
+                        ids.forEach(function (id) {
+                            var input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = 'ids[]';
+                            input.value = id;
+                            form.appendChild(input);
+                        });
+
+                        document.body.appendChild(form);
+                        form.submit();
                     }
                 },
                 "excel",
@@ -263,6 +489,41 @@
             }
         });
 
+        $('#createUsersBulkSubmit').on('click', function () {
+            if (!createUsersBulkIds.length) {
+                alert('Нет заявок для создания пользователей по текущим фильтрам');
+                return;
+            }
+
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = @json(route('admin.biolid.create-users-bulk'));
+            form.style.display = 'none';
+
+            var csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = @json(csrf_token());
+            form.appendChild(csrf);
+
+            createUsersBulkIds.forEach(function (id) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = id;
+                form.appendChild(input);
+            });
+
+            var studyGroupInput = document.createElement('input');
+            studyGroupInput.type = 'hidden';
+            studyGroupInput.name = 'study_group_id';
+            studyGroupInput.value = $('#createUsersBulkStudyGroup').val() || '';
+            form.appendChild(studyGroupInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+
         $('#organization').on('change', function () {
             table.column(2).search(this.value, {exact: true}).draw();
         });
@@ -284,6 +545,8 @@
         });
 
         $('#resetTable').on('click', function () {
+            table.state.clear();
+            table.columns().visible(true);
             table.search('').columns().search('').order([[0, 'desc']]).draw();
             $('#course').val(null).trigger('change');
             $('#organization').val(null).trigger('change');

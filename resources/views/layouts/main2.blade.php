@@ -182,6 +182,7 @@ sticky-top  bg-white bg-opacity-75
                         <a class="nav-link" href="https://lms.osnovanie.info/login/index.php">Платформа</a>
                     </li>
 
+                    @guest
                     <li class="nav-item nav-item-social nav-item-social-first">
                         <a class="nav-link" href="{{url('https://max.ru/id7751117260_biz')}}" target="_blank" rel="noopener noreferrer">
                             <img class="social-icon-max" src="{{asset('assets/images/Max_logo_2025.png')}}" width="25" height="25" alt="Макс">
@@ -194,17 +195,18 @@ sticky-top  bg-white bg-opacity-75
                             <span class="d-lg-none">Телеграмм</span>
                         </a>
                     </li>
+                    @endguest
 
                     @if( isset(auth()->user()->id) )
 
-                        <li class="nav-item dropdown ml-lg-3">
+                        <li class="nav-item dropdown ml-lg-auto">
                             <a class="nav-link dropdown-toggle d-inline-flex align-items-center" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if(auth()->user()->avatar)
                                     <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle mr-2" width="28" height="28" style="object-fit: cover;">
                                 @endif
                                 {{auth()->user()->name}}
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                            <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="blogDropdown">
                                 <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
                                 @case(1) {{route('admin.main.index')}}">Административная панель

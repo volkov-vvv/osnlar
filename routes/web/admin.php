@@ -91,6 +91,10 @@ Route::resource('lid', LidController::class)->whereNumber('lid');
 Route::get('biolid', [BioLidController::class, 'index'])->name('biolid.index');
 Route::get('biolid/questionnaire', [BioLidController::class, 'questionnaire'])
     ->name('biolid.questionnaire');
+Route::post('biolid/send-credentials-bulk', [BioLidController::class, 'sendCredentialsBulk'])
+    ->name('biolid.send-credentials-bulk');
+Route::post('biolid/create-users-bulk', [BioLidController::class, 'createUsersBulk'])
+    ->name('biolid.create-users-bulk');
 Route::get('biolid/{biolid}/edit', [BioLidController::class, 'edit'])
     ->whereNumber('biolid')
     ->name('biolid.edit');
@@ -106,6 +110,13 @@ Route::post('biolid/{biolid}/create-user', [BioLidController::class, 'createUser
 Route::post('biolid/{biolid}/send-credentials', [BioLidController::class, 'sendCredentials'])
     ->whereNumber('biolid')
     ->name('biolid.send-credentials');
+Route::post('biolid/{biolid}/review-data', [BioLidController::class, 'reviewData'])
+    ->whereNumber('biolid')
+    ->name('biolid.review-data');
+Route::post('biolid/{biolid}/documents/{document}/review', [BioLidController::class, 'reviewDocument'])
+    ->whereNumber('biolid')
+    ->whereNumber('document')
+    ->name('biolid.review-document');
 Route::delete('biolid/{biolid}', [BioLidController::class, 'destroy'])
     ->whereNumber('biolid')
     ->name('biolid.destroy');

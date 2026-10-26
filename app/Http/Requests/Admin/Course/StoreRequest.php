@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin\Course;
 use App\Models\Course;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class StoreRequest extends FormRequest
 {
@@ -29,6 +30,10 @@ class StoreRequest extends FormRequest
             'open_registration' => 'nullable',
             'code_future' => 'nullable',
             'bioeconomy' => 'nullable',
+            'biolid_study_group_id' => 'nullable',
+            'biolid_auto_create_user' => 'nullable|boolean',
+            'biolid_send_confirmation_email' => 'nullable|boolean',
+            'biolid_send_credentials_email' => 'nullable|boolean',
             'seo_title' => 'nullable|string',
             'seo_description' => 'nullable|string',
             'series' => '',
@@ -53,6 +58,26 @@ class StoreRequest extends FormRequest
                 }),
             ],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            if ($this->filled('biolid_study_group_id')) {
+                $validator->errors()->add(
+                    'biolid_study_group_id',
+                    'Учебную группу можно выбрать после создания курса'
+                );
+            }
+
+            $needsUser = (int) $this->input('biolid_send_credentials_email') === 1;
+            if ($needsUser && (int) $this->input('biolid_auto_create_user') !== 1) {
+                $validator->errors()->add(
+                    'biolid_auto_create_user',
+                    'Для письма с доступом нужно включить создание пользователя'
+                );
+            }
+        });
     }
 
     public function messages()
@@ -94,6 +119,7 @@ class StoreRequest extends FormRequest
         $studyHours = $this->input('study_hours');
         $series = $this->input('series');
         $years = $this->input('years');
+        $biolidStudyGroupId = $this->input('biolid_study_group_id');
 
         $this->merge([
             'price' => ($price === '' || $price === null) ? null : $price,
@@ -105,6 +131,10 @@ class StoreRequest extends FormRequest
             'study_hours' => ($studyHours === '' || $studyHours === null) ? null : $studyHours,
             'series' => ($series === '' || $series === null) ? null : $series,
             'years' => ($years === '' || $years === null) ? null : $years,
+            'biolid_study_group_id' => ($biolidStudyGroupId === '' || $biolidStudyGroupId === null) ? null : $biolidStudyGroupId,
+            'biolid_auto_create_user' => (int) $this->input('biolid_auto_create_user') === 1 ? 1 : 0,
+            'biolid_send_confirmation_email' => $this->boolean('biolid_send_confirmation_email', true) ? 1 : 0,
+            'biolid_send_credentials_email' => (int) $this->input('biolid_send_credentials_email') === 1 ? 1 : 0,
         ]);
     }
 }

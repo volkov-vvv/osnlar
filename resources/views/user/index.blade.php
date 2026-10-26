@@ -130,6 +130,61 @@
             text-decoration: none;
             box-shadow: 0 5px 12px rgba(23, 107, 51, 0.26);
         }
+        .lk-rejected {
+            margin-bottom: 2.5rem;
+        }
+        .lk-rejected-card {
+            padding: 1.35rem 1.5rem;
+            border: 1px solid #f1b0b7;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 65%);
+        }
+        .lk-rejected-title {
+            margin: 0 0 0.85rem;
+            color: #b02a37;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .lk-rejected-list {
+            margin: 0 0 1rem;
+            padding-left: 1.15rem;
+        }
+        .lk-rejected-list li {
+            margin-bottom: 0.65rem;
+            color: #3d444b;
+        }
+        .lk-rejected-list li:last-child {
+            margin-bottom: 0;
+        }
+        .lk-rejected-meta {
+            display: block;
+            margin-top: 0.2rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .lk-rejected-reason {
+            color: #b02a37;
+        }
+        .lk-btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 1rem;
+            border: 1px solid #b02a37;
+            border-radius: 0.65rem;
+            background: #fff;
+            color: #b02a37;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+            text-decoration: none;
+        }
+        .lk-btn-outline:hover,
+        .lk-btn-outline:focus {
+            background: #b02a37;
+            color: #fff;
+            text-decoration: none;
+        }
         @media (max-width: 575.98px) {
             .lk-hero {
                 padding: 1.75rem 0 1.5rem;
@@ -194,6 +249,36 @@
                     </div>
                 </div>
             </div>
+
+            @if($rejectedDocuments->isNotEmpty())
+                <section class="lk-rejected" data-aos="fade-up">
+                    <div class="row">
+                        <div class="col-lg-10 mx-auto">
+                            <div class="lk-rejected-card">
+                                <h3 class="lk-rejected-title">Отклонённые документы</h3>
+                                <ul class="lk-rejected-list">
+                                    @foreach($rejectedDocuments as $item)
+                                        <li>
+                                            <strong>{{ $item['title'] }}</strong>
+                                            @if(!empty($item['rejected_at']))
+                                                <span class="lk-rejected-meta">
+                                                    Дата отклонения: {{ $item['rejected_at']->format('d.m.Y H:i') }}
+                                                </span>
+                                            @endif
+                                            @if(!empty($item['comment']))
+                                                <span class="lk-rejected-meta lk-rejected-reason">
+                                                    Причина: {{ $item['comment'] }}
+                                                </span>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <a class="lk-btn-outline" href="{{ route('user.documents') }}">Перейти к документам</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            @endif
 
             @if($userOrders->isNotEmpty())
                 <section class="lk-orders" data-aos="fade-up">

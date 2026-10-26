@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin\Course;
 use App\Models\Course;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class UpdateRequest extends FormRequest
 {
@@ -16,6 +17,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         $isPaid = $this->filled('price');
+        $course = $this->route('course');
 
         return [
             'title' => 'required|string',
@@ -29,6 +31,18 @@ class UpdateRequest extends FormRequest
             'open_registration' => 'nullable',
             'code_future' => 'nullable',
             'bioeconomy' => 'nullable',
+            'biolid_study_group_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('study_groups', 'id')->where(function ($query) use ($course) {
+                    if ($course) {
+                        $query->where('course_id', $course->id)->whereNull('deleted_at');
+                    }
+                }),
+            ],
+            'biolid_auto_create_user' => 'nullable|boolean',
+            'biolid_send_confirmation_email' => 'nullable|boolean',
+            'biolid_send_credentials_email' => 'nullable|boolean',
             'price' => 'nullable|numeric',
             'starts_at' => 'nullable|date',
             'type' => ['nullable', Rule::in(array_keys(Course::TYPES))],
@@ -56,6 +70,21 @@ class UpdateRequest extends FormRequest
         ];
     }
 
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $needsUser = $this->filled('biolid_study_group_id')
+                || (int) $this->input('biolid_send_credentials_email') === 1;
+
+            if ($needsUser && (int) $this->input('biolid_auto_create_user') !== 1) {
+                $validator->errors()->add(
+                    'biolid_auto_create_user',
+                    'Для учебной группы или письма с доступом нужно включить создание пользователя'
+                );
+            }
+        });
+    }
+
     public function messages()
     {
         return [
@@ -80,6 +109,7 @@ class UpdateRequest extends FormRequest
             'study_hours.integer' => 'Укажите количество учебных часов числом',
             'study_hours.min' => 'Количество учебных часов не может быть меньше 1',
             'study_hours.max' => 'Количество учебных часов не может быть больше 5000',
+            'biolid_study_group_id.exists' => 'Выберите учебную группу этого курса',
         ];
     }
 
@@ -94,6 +124,7 @@ class UpdateRequest extends FormRequest
         $studyHours = $this->input('study_hours');
         $series = $this->input('series');
         $years = $this->input('years');
+        $biolidStudyGroupId = $this->input('biolid_study_group_id');
 
         $this->merge([
             'price' => ($price === '' || $price === null) ? null : $price,
@@ -105,6 +136,10 @@ class UpdateRequest extends FormRequest
             'study_hours' => ($studyHours === '' || $studyHours === null) ? null : $studyHours,
             'series' => ($series === '' || $series === null) ? null : $series,
             'years' => ($years === '' || $years === null) ? null : $years,
+            'biolid_study_group_id' => ($biolidStudyGroupId === '' || $biolidStudyGroupId === null) ? null : $biolidStudyGroupId,
+            'biolid_auto_create_user' => (int) $this->input('biolid_auto_create_user') === 1 ? 1 : 0,
+            'biolid_send_confirmation_email' => (int) $this->input('biolid_send_confirmation_email') === 1 ? 1 : 0,
+            'biolid_send_credentials_email' => (int) $this->input('biolid_send_credentials_email') === 1 ? 1 : 0,
         ]);
     }
 }

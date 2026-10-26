@@ -28,6 +28,9 @@ class Course extends Model
 
     protected $casts = [
         'starts_at' => 'date',
+        'biolid_auto_create_user' => 'boolean',
+        'biolid_send_confirmation_email' => 'boolean',
+        'biolid_send_credentials_email' => 'boolean',
     ];
 
     protected static function booted()
@@ -128,6 +131,11 @@ class Course extends Model
     public function studyGroups()
     {
         return $this->hasMany(StudyGroup::class);
+    }
+
+    public function biolidStudyGroup()
+    {
+        return $this->belongsTo(StudyGroup::class, 'biolid_study_group_id');
     }
 
     public function company()
