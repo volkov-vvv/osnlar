@@ -57,17 +57,9 @@ class SyncMaxLidMessages implements ShouldQueue
             ) {
                 foreach ($messages as $message) {
 
-                    // Не добавляем ответственного повторно
-                    if (str_contains(
-                        (string) $message->text,
-                        $marker
-                    )) {
-                        continue;
-                    }
-
-                    $newText = rtrim(
-                            (string) $message->text
-                        ) . $suffix;
+                    $newText = str_contains((string) $message->text, $marker)
+                        ? (string) $message->text
+                        : rtrim((string) $message->text) . $suffix;
 
                     // Проверяем длину сообщения
                     if (mb_strlen(strip_tags($newText)) > 4000) {

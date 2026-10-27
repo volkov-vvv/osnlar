@@ -517,35 +517,41 @@ class MaxBotService
 
     public function answerCallback(
         string $callbackId,
-        string $notification
+        string $text
     ): array {
         $response = Http::withHeaders([
             'Authorization' => $this->token,
         ])
             ->asJson()
-            ->timeout(10)
+            ->timeout(15)
             ->post(
                 $this->apiUrl . '/answers?' . http_build_query([
                     'callback_id' => $callbackId,
                 ]),
                 [
-                    'notification' => $notification,
+                    'message' => [
+                        'text' => $text,
+                        'format' => 'html',
+                        'attachments' => [],
+                        'notify' => false,
+                    ],
                 ]
             );
 
+        Log::info('MAX: ответ на callback', [
+            'status' => $response->status(),
+            'result' => $response->json(),
+        ]);
+
         $response->throw();
 
-        $result = $response->json();
-
-        if (!is_array($result) ||
-            ($result['success'] ?? false) !== true) {
+        if ($response->json('success') !== true) {
             throw new \RuntimeException(
-                'MAX не подтвердил ответ на callback: '
-                . $response->body()
+                'MAX callback error: ' . $response->body()
             );
         }
 
-        return $result;
+        return $response->json();
     }
 
 }

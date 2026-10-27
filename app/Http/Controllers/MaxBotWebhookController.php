@@ -254,116 +254,44 @@ class MaxBotWebhookController extends Controller
         });
 
 // Записываем результат в лог
-        Log::info('MAX: результат принятия заявки', [
-            'lid_id' => $lidId,
-            'user_id' => $user->id,
-            'result' => $result,
-            'responsible_id' => Lid::whereKey($lidId)
-                ->value('responsible_id'),
-        ]);
-
         $notification = match ($result) {
             'accepted' => 'Вы назначены ответственным за эту заявку.',
             'already_assigned' => 'У этой заявки уже есть ответственный.',
-            'not_found' => 'Заявка не найдена.',
+            default => 'Заявка не найдена.',
         };
 
-// Обновляем ранее отправленные сообщения
+// Сначала ставим в очередь обновление сообщений.
+// Ошибка callback не должна препятствовать этому.
         if ($result === 'accepted') {
-            SyncMaxLidMessages::dispatch($lidId, (int) $user->id);
+            SyncMaxLidMessages::dispatch(
+                $lidId,
+                (int) $user->id
+            );
+
+            Log::info('MAX: обновление сообщений поставлено в очередь', [
+                'lid_id' => $lidId,
+                'responsible_id' => $user->id,
+            ]);
         }
 
-// Отвечаем на нажатие кнопки
-        $maxBot->answerCallback($callbackId, $notification);
-    }
+        try {
+            // Подтверждаем нажатие кнопки
+            $maxBot->answerCallback(
+                $callbackId,
+                e($notification)
+            );
 
-    private function requestPhoneIfNeeded(int|string $maxUserId, MaxBotService $maxBot): void
-    {
-        $active = MaxSubscription::query()
-            ->where('max_user_id', $maxUserId)
-            ->active()
-            ->exists();
+            // Отдельное сообщение пользователю в чат MAX
+            $maxBot->sendToUser(
+                $maxUserId,
+                $notification
+            );
 
-        if ($active) {
-            $maxBot->sendToUser($maxUserId, 'Уведомления уже подключены.');
-        } else {
-            $maxBot->requestPhone($maxUserId);
+        } catch (\Throwable $e) {
+            Log::error('MAX: ошибка ответа на принятие заявки', [
+                'lid_id' => $lidId,
+                'error' => $e->getMessage(),
+            ]);
         }
-    }
-
-    private function subscribe(
-        int|string $maxUserId,
-        int|string|null $chatId,
-        string $phone,
-        MaxBotService $maxBot
-    ): void {
-        $result = DB::transaction(function () use ($maxUserId, $chatId, $phone): string {
-            $phonePrefix = 7;
-            $phoneNumber = substr($phone, 1);
-
-            $users = User::query()
-                ->where('phone_prefix', $phonePrefix)
-                ->where('phone', $phoneNumber)
-                ->whereIn('role', [1, 3])
-                ->limit(2)
-                ->lockForUpdate()
-                ->get();
-
-            if ($users->isEmpty()) {
-                return 'not_found';
-            }
-            if ($users->count() > 1) {
-                return 'ambiguous';
-            }
-
-            $user = $users->first();
-            $subscriptionByMaxId = MaxSubscription::query()
-                ->where('max_user_id', $maxUserId)
-                ->lockForUpdate()
-                ->first();
-
-            if ($subscriptionByMaxId !== null &&
-                (string) $subscriptionByMaxId->user_id !== (string) $user->getKey()) {
-                return 'conflict';
-            }
-
-            $subscription = MaxSubscription::query()
-                ->where('user_id', $user->getKey())
-                ->lockForUpdate()
-                ->first();
-
-            if ($subscription !== null &&
-                (string) $subscription->max_user_id !== (string) $maxUserId) {
-                return 'conflict';
-            }
-
-            if ($subscription === null) {
-                MaxSubscription::query()->create([
-                    'user_id' => $user->getKey(),
-                    'max_user_id' => $maxUserId,
-                    'chat_id' => $chatId,
-                    'subscribed_at' => now(),
-                ]);
-                return 'subscribed';
-            }
-
-            $alreadyActive = $subscription->subscribed_at !== null;
-            if ($chatId !== null) {
-                $subscription->chat_id = $chatId;
-            }
-            $subscription->subscribed_at = $subscription->subscribed_at ?? now();
-            $subscription->save();
-            return $alreadyActive ? 'already_subscribed' : 'subscribed';
-        });
-
-        $message = match ($result) {
-            'subscribed' => 'Телефон подтверждён. Подписка на уведомления активирована.',
-            'already_subscribed' => 'Вы уже подписаны на уведомления.',
-            'not_found' => 'Пользователь с таким номером не найден в базе данных.',
-            'ambiguous' => 'Найдено несколько пользователей с таким номером. Обратитесь в поддержку.',
-            default => 'Этот аккаунт уже привязан к другому MAX ID или пользователю. Обратитесь в поддержку.',
-        };
-
-        $maxBot->sendToUser($maxUserId, $message);
     }
 }
