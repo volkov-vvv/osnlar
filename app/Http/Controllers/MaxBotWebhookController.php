@@ -179,8 +179,6 @@ class MaxBotWebhookController extends Controller
         MaxBotService $maxBot
     ): void {
         $result = DB::transaction(function () use ($maxUserId, $chatId, $phone): string {
-            // MAX отдаёт нормализованный российский номер 79991234567,
-            // но в users код страны (+7) и десять цифр номера хранятся отдельно.
             $phonePrefix = 7;
             $phoneNumber = substr($phone, 1);
 

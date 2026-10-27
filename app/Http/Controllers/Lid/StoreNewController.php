@@ -21,10 +21,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\Lid\StoreNewRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Service\MaxBotService;
 
 class StoreNewController extends Controller
 {
-    public function __invoke(StoreNewRequest $request, Telegram $telegram)
+    public function __invoke(StoreNewRequest $request, MaxBotService $maxBot)
     {
         $data = $request->safe()->except('smart-token');
         $course_link = '';
@@ -76,6 +77,18 @@ class StoreNewController extends Controller
                 ]
             ]
         ];
+
+        //Отправка сообщений в МАХ
+
+        $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
+        foreach ($users as $user) {
+
+        }
+        $maxBot->sendNotificationToUser(
+            localUserId: $lid->user_id,
+            text: "Создана новая заявка №{$lid->id}",
+            lidId: $lid->id
+        );
 /*
  * Отключаем отправку сообщений через Телеграм
  *
@@ -109,6 +122,30 @@ class StoreNewController extends Controller
         }
         */
 
+        // Отправка сообщения в MAX
+
+        $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
+
+        $message = view('messages.new_lid',$data)->render();
+
+        $buttons = [
+            [
+                MaxBotService::callbackButton(
+                    'Принять заявку',
+                    'accept_lid:' . $lid->id
+                ),
+            ],
+        ];
+
+        foreach ($users as $user) {
+            $maxBot->sendNotificationToUser(
+                localUserId: $user->id,
+                text: trim($message),
+                lidId: $lid->id,
+                options: ['format' => 'html'],
+                buttons: $buttons
+            );
+        }
         return redirect()->route('lid.index');
 
     }

@@ -166,7 +166,8 @@ class MaxBotService
         int $localUserId,
         string $text,
         ?int $lidId = null,
-        array $options = []
+        array $options = [],
+        array $buttons = []
     ): array
     {
         $subscription = MaxSubscription::query()
