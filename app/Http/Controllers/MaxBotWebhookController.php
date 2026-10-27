@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+use App\Models\Lid;
+use App\Jobs\SyncMaxLidMessages;
+
 
 class MaxBotWebhookController extends Controller
 {
@@ -202,6 +205,13 @@ class MaxBotWebhookController extends Controller
                 ->exists();
 
         if (!$allowed) {
+            Log::warning('MAX: отказ в принятии заявки', [
+                'lid_id' => $lidId,
+                'max_user_id' => $maxUserId,
+                'message_id' => $messageId,
+                'subscription_found' => $subscription !== null,
+            ]);
+
             $maxBot->answerCallback(
                 $callbackId,
                 'Нет доступа к этой заявке.'
@@ -209,14 +219,62 @@ class MaxBotWebhookController extends Controller
             return;
         }
 
-        // Здесь необходимо проверить право пользователя
-        // принимать заявку и обновить её статус в вашей БД.
+// Получаем пользователя сайта
+        $user = User::find($subscription->user_id);
 
-        Log::info('MAX: запрос на принятие заявки', [
+// Проверяем роль пользователя
+        if (!$user || !in_array((int) $user->role, [1, 3], true)) {
+            $maxBot->answerCallback(
+                $callbackId,
+                'Недостаточно прав для принятия заявки.'
+            );
+            return;
+        }
+
+// Назначаем ответственного
+        $result = DB::transaction(function () use ($lidId, $user) {
+
+            $lid = Lid::query()
+                ->whereKey($lidId)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$lid) {
+                return 'not_found';
+            }
+
+            if ($lid->responsible_id !== null) {
+                return 'already_assigned';
+            }
+
+            $lid->responsible_id = $user->id;
+            $lid->save();
+
+            return 'accepted';
+        });
+
+// Записываем результат в лог
+        Log::info('MAX: результат принятия заявки', [
             'lid_id' => $lidId,
-            'user_id' => $subscription->user_id,
-            'max_user_id' => $maxUserId,
+            'user_id' => $user->id,
+            'result' => $result,
+            'responsible_id' => Lid::whereKey($lidId)
+                ->value('responsible_id'),
         ]);
+
+        $notification = match ($result) {
+            'accepted' => 'Вы назначены ответственным за эту заявку.',
+            'already_assigned' => 'У этой заявки уже есть ответственный.',
+            'not_found' => 'Заявка не найдена.',
+        };
+
+// Обновляем ранее отправленные сообщения
+        if ($result === 'accepted') {
+            SyncMaxLidMessages::dispatch($lidId, (int) $user->id);
+        }
+
+// Отвечаем на нажатие кнопки
+        $maxBot->answerCallback($callbackId, $notification);
     }
 
     private function requestPhoneIfNeeded(int|string $maxUserId, MaxBotService $maxBot): void
