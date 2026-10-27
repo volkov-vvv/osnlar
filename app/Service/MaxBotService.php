@@ -477,4 +477,75 @@ class MaxBotService
 
         return preg_match('/^7\d{10}$/D', $digits) ? $digits : null;
     }
+
+
+    public function editMessage(
+        string $messageId,
+        string $text
+    ): array {
+        $response = Http::withHeaders([
+            'Authorization' => $this->token,
+        ])
+            ->asJson()
+            ->timeout(15)
+            ->put(
+                $this->apiUrl . '/messages?' . http_build_query([
+                    'message_id' => $messageId,
+                ]),
+                [
+                    'text' => $text,
+                    'format' => 'html',
+                    'attachments' => [], // Удаляем кнопки
+                    'notify' => false,
+                ]
+            );
+
+        $response->throw();
+
+        $result = $response->json();
+
+        if (!is_array($result) ||
+            ($result['success'] ?? false) !== true) {
+            throw new \RuntimeException(
+                'MAX не подтвердил редактирование сообщения: '
+                . $response->body()
+            );
+        }
+
+        return $result;
+    }
+
+    public function answerCallback(
+        string $callbackId,
+        string $notification
+    ): array {
+        $response = Http::withHeaders([
+            'Authorization' => $this->token,
+        ])
+            ->asJson()
+            ->timeout(10)
+            ->post(
+                $this->apiUrl . '/answers?' . http_build_query([
+                    'callback_id' => $callbackId,
+                ]),
+                [
+                    'notification' => $notification,
+                ]
+            );
+
+        $response->throw();
+
+        $result = $response->json();
+
+        if (!is_array($result) ||
+            ($result['success'] ?? false) !== true) {
+            throw new \RuntimeException(
+                'MAX не подтвердил ответ на callback: '
+                . $response->body()
+            );
+        }
+
+        return $result;
+    }
+
 }

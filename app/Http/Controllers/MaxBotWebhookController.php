@@ -51,6 +51,7 @@ class MaxBotWebhookController extends Controller
                 'bot_started' => $this->onBotStarted($update, $maxBot),
                 'bot_stopped', 'dialog_removed' => $this->onBotStopped($update),
                 'message_created' => $this->onMessageCreated($update, $maxBot),
+                'message_callback' => $this->onMessageCallback($update, $maxBot),
                 default => null,
             };
         } catch (Throwable $e) {
@@ -156,6 +157,58 @@ class MaxBotWebhookController extends Controller
         if ($text !== '') {
             $this->requestPhoneIfNeeded($maxUserId, $maxBot);
         }
+    }
+
+    private function onMessageCallback(
+        array $update,
+        MaxBotService $maxBot
+    ): void {
+        $payload = data_get($update, 'callback.payload');
+        $callbackId = data_get($update, 'callback.callback_id');
+        $maxUserId = data_get($update, 'callback.user.user_id');
+        $messageId = data_get($update, 'message.body.mid');
+
+        if (!is_string($payload) ||
+            !preg_match('/^accept_lid:([1-9][0-9]*)$/D', $payload, $matches)) {
+            return;
+        }
+
+        if (!$callbackId || !$maxUserId || !$messageId) {
+            Log::warning('MAX: некорректный callback заявки');
+            return;
+        }
+
+        $lidId = (int) $matches[1];
+
+        $subscription = MaxSubscription::query()
+            ->where('max_user_id', $maxUserId)
+            ->active()
+            ->first();
+
+        $allowed = $subscription !== null &&
+            \App\Models\MaxSentMessage::query()
+                ->where('message_id', $messageId)
+                ->where('lid_id', $lidId)
+                ->where('user_id', $subscription->user_id)
+                ->where('max_user_id', $maxUserId)
+                ->exists();
+
+        if (!$allowed) {
+            $maxBot->answerCallback(
+                $callbackId,
+                'Нет доступа к этой заявке.'
+            );
+            return;
+        }
+
+        // Здесь необходимо проверить право пользователя
+        // принимать заявку и обновить её статус в вашей БД.
+
+        Log::info('MAX: запрос на принятие заявки', [
+            'lid_id' => $lidId,
+            'user_id' => $subscription->user_id,
+            'max_user_id' => $maxUserId,
+        ]);
     }
 
     private function requestPhoneIfNeeded(int|string $maxUserId, MaxBotService $maxBot): void
