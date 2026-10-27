@@ -59,7 +59,10 @@
             </li>
         </ul>
         <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto align-items-center">
+            <li class="nav-item mr-2">
+                <a class="btn btn-outline-secondary" href="{{ route('help.index') }}">Справка</a>
+            </li>
             <form action="{{route('logout')}}" method="post">
                 @csrf
 {{--                <label><i class="fa-solid fa-right-from-bracket"></i></label>--}}

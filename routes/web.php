@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\Lid\ExportController;
 use App\Http\Controllers\Lid\ExportTestController;
 use App\Http\Controllers\MaxBotWebhookController;
@@ -114,6 +115,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/saved-filters/save', [SavedFilterController::class, 'save'])->name('filters.save');
     Route::get('/saved-filters/get', [SavedFilterController::class, 'get'])->name('filters.get');
+
+    Route::get('/help', [HelpController::class, 'index'])->name('help.index');
+    Route::get('/help/images/{path}', [HelpController::class, 'image'])
+        ->where('path', '.*')
+        ->name('help.image');
+    Route::get('/help/{page}', [HelpController::class, 'show'])
+        ->where('page', '[a-z0-9\-]+')
+        ->name('help.show');
 });
 
 /*

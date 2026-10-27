@@ -221,6 +221,7 @@ sticky-top  bg-white bg-opacity-75
                                 @if((int) auth()->user()->role === 10)
                                     <a class="dropdown-item" href="{{ route('user.documents') }}">Документы</a>
                                 @endif
+                                <a class="dropdown-item" href="{{ route('help.index') }}">Справка</a>
                                 <form action="{{route('logout')}}" method="post">
                                     @csrf
                                     <button type="submit" class="dropdown-item">
