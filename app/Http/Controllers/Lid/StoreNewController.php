@@ -78,17 +78,6 @@ class StoreNewController extends Controller
             ]
         ];
 
-        //Отправка сообщений в МАХ
-
-        $users = User::whereIn('role', [1,3])->whereNotNull('telegraph_chat_id')->get();
-        foreach ($users as $user) {
-
-        }
-        $maxBot->sendNotificationToUser(
-            localUserId: $lid->user_id,
-            text: "Создана новая заявка №{$lid->id}",
-            lidId: $lid->id
-        );
 /*
  * Отключаем отправку сообщений через Телеграм
  *
