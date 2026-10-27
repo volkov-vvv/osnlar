@@ -113,7 +113,12 @@ class StoreNewController extends Controller
 
         // Отправка сообщения в MAX
 
-        $users = User::whereIn('role', [1,3])->whereNotNull('max_subscriptions')->get();
+        $users = User::query()
+            ->whereHas('maxSubscription', function ($query) {
+                $query->whereNotNull('subscribed_at');
+            })
+            ->get();
+
         dd($users);
 
         $message = view('messages.new_lid',$data)->render();
