@@ -163,6 +163,14 @@ class MaxBotWebhookController extends Controller
         array $update,
         MaxBotService $maxBot
     ): void {
+
+        Log::info('MAX: нажата кнопка', [
+            'payload' => data_get($update, 'callback.payload'),
+            'max_user_id' => data_get($update, 'callback.user.user_id'),
+            'message_id' => data_get($update, 'message.body.mid'),
+        ]);
+
+
         $payload = data_get($update, 'callback.payload');
         $callbackId = data_get($update, 'callback.callback_id');
         $maxUserId = data_get($update, 'callback.user.user_id');
