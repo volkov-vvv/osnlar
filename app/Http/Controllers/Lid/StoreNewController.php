@@ -119,8 +119,6 @@ class StoreNewController extends Controller
             })
             ->get();
 
-        dd($users);
-
         $message = view('messages.new_lid',$data)->render();
 
         $buttons = [
