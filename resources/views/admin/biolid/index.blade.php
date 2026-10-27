@@ -1,4 +1,4 @@
-@extends('admin.layouts.main')
+@extends($panel . '.layouts.main')
 @section('content')
     <style>
         .course-short-title-hint {
@@ -23,10 +23,13 @@
         }
 
         #biolids_table_wrapper .dt-buttons.btn-group {
+            display: inline-flex;
+            flex-wrap: nowrap;
+            align-items: stretch;
             gap: 1px;
             background-color: #fff;
             border-radius: 0.25rem;
-            overflow: hidden;
+            max-width: 100%;
         }
 
         #biolids_table_wrapper .dt-buttons.btn-group > .btn,
@@ -36,6 +39,13 @@
 
         #biolids_table_wrapper .dt-buttons.btn-group > .btn-group {
             background-color: transparent;
+            display: inline-flex;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        #biolids_table_wrapper .dt-buttons .btn {
+            white-space: nowrap;
         }
     </style>
     <div class="content-header">
@@ -169,13 +179,19 @@
                                             <span class="d-inline-flex align-items-center">
                                                 {{ $bioLid->lastname }}
                                                 @if($bioLid->user)
-                                                    <a
-                                                        href="{{ route('admin.user.show', $bioLid->user->id) }}"
-                                                        class="ml-1 text-info"
-                                                        title="Учётная запись создана"
-                                                    >
-                                                        <i class="fas fa-user-circle" aria-hidden="true"></i>
-                                                    </a>
+                                                    @if($panel === 'admin')
+                                                        <a
+                                                            href="{{ route('admin.user.show', $bioLid->user->id) }}"
+                                                            class="ml-1 text-info"
+                                                            title="Учётная запись создана"
+                                                        >
+                                                            <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                                        </a>
+                                                    @else
+                                                        <span class="ml-1 text-info" title="Учётная запись создана">
+                                                            <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                                        </span>
+                                                    @endif
                                                 @endif
                                             </span>
                                         </td>
@@ -201,7 +217,11 @@
                                         </td>
                                         <td>
                                             @forelse($bioLid->user?->studyGroups ?? [] as $studyGroup)
-                                                <a href="{{ route('admin.studygroup.show', $studyGroup->id) }}">{{ $studyGroup->short_title ?: $studyGroup->title }}</a>@if(!$loop->last), @endif
+                                                @if($panel === 'admin')
+                                                    <a href="{{ route('admin.studygroup.show', $studyGroup->id) }}">{{ $studyGroup->short_title ?: $studyGroup->title }}</a>@if(!$loop->last), @endif
+                                                @else
+                                                    {{ $studyGroup->short_title ?: $studyGroup->title }}@if(!$loop->last), @endif
+                                                @endif
                                             @empty
                                                 —
                                             @endforelse
@@ -221,9 +241,9 @@
                                         <td>{{ $bioLid->updated_at }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="{{ route('admin.biolid.show', $bioLid->id) }}" title="Просмотр"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
-                                                <a href="{{ route('admin.biolid.edit', $bioLid->id) }}" title="Редактировать"><i class="fas fa-pencil-alt text-success"></i></a>&nbsp;&nbsp;
-                                                <form method="post" action="{{ route('admin.biolid.destroy', $bioLid->id) }}" class="mb-0" onsubmit="return confirm('Удалить заявку?');">
+                                                <a href="{{ route($panel . '.biolid.show', $bioLid->id) }}" title="Просмотр"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
+                                                <a href="{{ route($panel . '.biolid.edit', $bioLid->id) }}" title="Редактировать"><i class="fas fa-pencil-alt text-success"></i></a>&nbsp;&nbsp;
+                                                <form method="post" action="{{ route($panel . '.biolid.destroy', $bioLid->id) }}" class="mb-0" onsubmit="return confirm('Удалить заявку?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="bg-transparent border-0" type="submit" title="Удалить"><i class="fas fa-trash text-danger" role="button"></i></button>
@@ -282,9 +302,9 @@
 @endsection
 
 @section('javascript')
+    @include('partials.datatable-filter-persist', ['pageUrl' => $panel . '.biolid.index'])
     <script>
         var createUsersBulkIds = [];
-        var stateSaveTimer;
 
         var table = new DataTable('#biolids_table', {
             stateSave: true,
@@ -335,32 +355,11 @@
             },
 
             stateSaveCallback: function (settings, data) {
-                clearTimeout(stateSaveTimer);
-                stateSaveTimer = setTimeout(function () {
-                    $.ajax({
-                        url: @json(route('filters.save')),
-                        method: 'POST',
-                        data: {
-                            _token: @json(csrf_token()),
-                            page_url: 'admin.biolid.index',
-                            state: JSON.stringify(data)
-                        }
-                    });
-                }, 2000);
+                window.OsnlarFilterPersist.scheduleSave(data);
             },
 
             stateLoadCallback: function (settings, callback) {
-                $.ajax({
-                    url: @json(route('filters.get')),
-                    data: { page_url: 'admin.biolid.index' },
-                    dataType: 'json',
-                    success: function (json) {
-                        callback(json);
-                    },
-                    error: function () {
-                        callback(null);
-                    }
-                });
+                window.OsnlarFilterPersist.load(callback);
             },
 
             order: [[0, 'desc']],
@@ -370,10 +369,11 @@
             responsive: true,
             lengthChange: false,
             autoWidth: false,
-            dom: "<'row mb-3'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6 text-md-right'B>>" +
+            dom: "<'row mb-3 align-items-center'<'col-sm-12 col-lg-3'f><'col-sm-12 col-lg-9 text-lg-right'B>>" +
                 "<'row'<'col-sm-12'<'table-responsive'tr>>>" +
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             buttons: [
+                @if($panel === 'admin')
                 {
                     text: '<i class="fas fa-file-excel mr-1"></i>Сформировать анкету для группы',
                     className: 'btn-secondary',
@@ -395,7 +395,7 @@
                             return 'ids[]=' + encodeURIComponent(id);
                         }).join('&');
 
-                        window.location.href = @json(route('admin.biolid.questionnaire')) + '?' + params;
+                        window.location.href = @json(route($panel . '.biolid.questionnaire')) + '?' + params;
                     }
                 },
                 {
@@ -447,7 +447,7 @@
 
                         var form = document.createElement('form');
                         form.method = 'POST';
-                        form.action = @json(route('admin.biolid.send-credentials-bulk'));
+                        form.action = @json(route($panel . '.biolid.send-credentials-bulk'));
                         form.style.display = 'none';
 
                         var csrf = document.createElement('input');
@@ -468,6 +468,7 @@
                         form.submit();
                     }
                 },
+                @endif
                 "excel",
                 { extend: "colvis", align: "button-right" }
             ],
@@ -497,7 +498,7 @@
 
             var form = document.createElement('form');
             form.method = 'POST';
-            form.action = @json(route('admin.biolid.create-users-bulk'));
+            form.action = @json(route($panel . '.biolid.create-users-bulk'));
             form.style.display = 'none';
 
             var csrf = document.createElement('input');

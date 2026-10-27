@@ -4,7 +4,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>{{$order->user->lastname . ' ' . $order->user->name . ' ' . $order->user->middlename}}</h1>
+                    <h1>
+                        @if($order->user)
+                            {{ trim($order->user->lastname . ' ' . $order->user->name . ' ' . $order->user->middlename) }}
+                        @else
+                            Заказ №{{ $order->id }}
+                        @endif
+                    </h1>
                 </div>
 
             </div><!-- /.row -->
@@ -43,11 +49,11 @@
                                 </tr>
                                 <tr>
                                     <td>Email</td>
-                                    <td>{{$order->user->email}}</td>
+                                    <td>{{ $order->user->email ?? '—' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Телефон</td>
-                                    <td>{{$order->user->phone}}</td>
+                                    <td>{{ $order->user->phone ?? '—' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Регион</td>

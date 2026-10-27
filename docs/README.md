@@ -41,7 +41,7 @@
 | --- | --- | --- | --- |
 | [Курсы](modules/courses.md) | `modules/courses.md` | Админ | Готово |
 | [Учебные группы](modules/study-groups.md) | `modules/study-groups.md` | Админ | Готово |
-| [Заявки по БИО](modules/biolids.md) | `modules/biolids.md` | Админ | Готово |
+| [Заявки по БИО](modules/biolids.md) | `modules/biolids.md` | Админ, КЦ | Готово |
 | [Заявки (слушатели)](modules/lids.md) | `modules/lids.md` | Админ, КЦ | Готово |
 | [Заявки организаций](modules/orgs.md) | `modules/orgs.md` | Админ, КЦ | Готово |
 | [Заказы](modules/orders.md) | `modules/orders.md` | Админ, КЦ | Готово |

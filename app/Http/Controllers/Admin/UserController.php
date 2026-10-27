@@ -12,6 +12,7 @@ use App\Models\StudyGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -76,7 +77,15 @@ class UserController extends Controller
         }
 
         $studyGroupIds = $data['study_group_ids'] ?? [];
-        unset($data['study_group_ids']);
+        unset($data['study_group_ids'], $data['avatar']);
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
 
         $user->update($data);
         if(!isset($data['agent_ids'])){

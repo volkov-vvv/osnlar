@@ -59,6 +59,14 @@
                 </li>
                 -->
                 <li class="nav-item">
+                    <a href="{{route('cc.biolid.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-leaf"></i>
+                        <p>
+                            Заявки по БИО
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('cc.order.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-dollar-sign"></i>
                         <p>
@@ -68,7 +76,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('cc.org.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-building-columns fa-landmark"></i>
+                        <i class="nav-icon fas fa-building"></i>
                         <p>
                             Заявки организации
                         </p>

@@ -79,15 +79,21 @@
                                     <tr>
                                         <td>{{$order->id}}</td>
                                         <td>{{$order->course->title}}</td>
-                                        <td>{{$order->user->lastname}} {{$order->user->name}} {{$order->user->middlename}}</td>
+                                        <td>
+                                            @if($order->user)
+                                                {{ trim($order->user->lastname . ' ' . $order->user->name . ' ' . $order->user->middlename) }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
                                         <td>
                                             @if(isset($order->region))
                                                 {{$order->region->title}}
                                             @endif
                                         </td>
-                                        <td>{{$order->user->email}}</td>
+                                        <td>{{ $order->user->email ?? '—' }}</td>
                                         <td>
-                                            @if(isset($order->user->phone))
+                                            @if($order->user?->phone)
                                                 8{{$order->user->phone}}
                                             @endif
                                         </td>
@@ -116,8 +122,8 @@
 @endsection
 
 @section('javascript')
+    @include('partials.datatable-filter-persist', ['pageUrl' => 'cc.order.index'])
     <script>
-        let stateSaveTimer; // Переменная для хранения таймера
         var table = new DataTable('#order_table', {
 
             stateSave: true,
@@ -159,36 +165,11 @@
             },
 
             stateSaveCallback: function(settings, data) {
-                // Очищаем предыдущий таймер, если пользователь нажал что-то еще
-                clearTimeout(stateSaveTimer);
-
-                // Устанавливаем задержку 2 секунды (2000 мс)
-                stateSaveTimer = setTimeout(function() {
-                    $.ajax({
-                        url: "{{ route('filters.save') }}",
-                        method: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            page_url: "cc.order.index",
-                            state: JSON.stringify(data)
-                        },
-                        success: function() {
-                            console.log("Состояние сохранено в БД");
-                        }
-                    });
-                }, 2000);
+                window.OsnlarFilterPersist.scheduleSave(data);
             },
 
             stateLoadCallback: function(settings, callback) {
-                $.ajax({
-                    url: "{{ route('filters.get') }}",
-                    data: { page_url: "cc.order.index" },
-                    dataType: "json",
-                    success: function(json) {
-                        // Передаем данные обратно в DataTables
-                        callback(json);
-                    }
-                });
+                window.OsnlarFilterPersist.load(callback);
             },
 
             order: [[0, 'desc']],

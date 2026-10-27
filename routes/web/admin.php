@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AgentController;
 use App\Http\Controllers\Admin\AuthorController;
-use App\Http\Controllers\Admin\BioLidController;
+use App\Http\Controllers\Common\BioLidController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommercialLidController;
 use App\Http\Controllers\Admin\CompanyController;

@@ -140,8 +140,8 @@
 @endsection
 
 @section('javascript')
+    @include('partials.datatable-filter-persist', ['pageUrl' => $panel . '.org.index'])
     <script>
-        let stateSaveTimer;
         var table = new DataTable('#org_table', {
             stateSave: true,
             stateDuration: 0,
@@ -191,29 +191,11 @@
             },
 
             stateSaveCallback: function (settings, data) {
-                clearTimeout(stateSaveTimer);
-                stateSaveTimer = setTimeout(function () {
-                    $.ajax({
-                        url: "{{ route('filters.save') }}",
-                        method: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            page_url: "{{ $panel }}.org.index",
-                            state: JSON.stringify(data)
-                        }
-                    });
-                }, 2000);
+                window.OsnlarFilterPersist.scheduleSave(data);
             },
 
             stateLoadCallback: function (settings, callback) {
-                $.ajax({
-                    url: "{{ route('filters.get') }}",
-                    data: { page_url: "{{ $panel }}.org.index" },
-                    dataType: "json",
-                    success: function (json) {
-                        callback(json);
-                    }
-                });
+                window.OsnlarFilterPersist.load(callback);
             },
 
             order: [[0, 'desc']],

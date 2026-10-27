@@ -16,13 +16,14 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
-            <div  class="col-4">
-                <form action="{{route('admin.user.update', $user->id)}}" method="post">
+            <div  class="col-6">
+                <form action="{{route('admin.user.update', $user->id)}}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
                         <input type="hidden" name="user_id" value="{{$user->id}}">
                     </div>
+                    @include('admin.user._avatar', ['avatar' => $user->avatar])
                     <div class="mb-3">
                         <label>Фамилия</label>
                         <input name="lastname" type="text" class="form-control" aria-describedby="Фамилия" value="{{$user->lastname}}">
@@ -163,6 +164,7 @@
 @endsection
 
 @section('javascript')
+    @include('admin.user._avatar_script')
     <script>
         $('#role').on('change', function (e){
             if($('#role option:selected').val() == 2){

@@ -29,6 +29,26 @@
                                     <td>{{$user->id}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Фото</td>
+                                    <td>
+                                        @if($user->avatar)
+                                            <img
+                                                src="{{ url('storage/' . $user->avatar) }}"
+                                                alt="Фото"
+                                                class="img-circle elevation-1"
+                                                width="200"
+                                                height="200"
+                                                style="object-fit: cover;"
+                                            >
+                                        @else
+                                            <span
+                                                class="d-inline-block rounded-circle"
+                                                style="width: 200px; height: 200px; background-color: #d6d8db;"
+                                            ></span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Имя</td>
                                     <td>{{$user->name}}</td>
                                 </tr>

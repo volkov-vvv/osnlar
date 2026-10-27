@@ -34,7 +34,7 @@ return [
             'title' => 'Заявки по БИО',
             'group' => 'Модули',
             'file' => 'modules/biolids.md',
-            'roles' => [User::ROLE_ADMIN],
+            'roles' => [User::ROLE_ADMIN, User::ROLE_CONTACT],
         ],
         [
             'slug' => 'lids',

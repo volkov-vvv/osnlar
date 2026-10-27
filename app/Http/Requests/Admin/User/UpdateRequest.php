@@ -38,6 +38,7 @@ class UpdateRequest extends FormRequest
             'study_group_ids.*' => 'integer|exists:study_groups,id',
             'utm' => 'array',
             'password' => '',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
     }
 
@@ -74,6 +75,9 @@ class UpdateRequest extends FormRequest
             'email.unique' => 'Почта с таким email уже существует',
             'role.required' => 'Это поле необходимо для заполнения',
             'role.string' => 'Роль должно быть строкой',
+            'avatar.image' => 'Аватар должен быть изображением',
+            'avatar.mimes' => 'Допустимые форматы: jpg, jpeg, png, webp',
+            'avatar.max' => 'Размер аватарки не должен превышать 2 МБ',
         ];
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Common;
 
 use App\Exports\BioLidsQuestionnaireExport;
+use App\Http\Controllers\Concerns\ResolvesPanel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BioLid\UpdateRequest;
 use App\Models\BioLid;
@@ -22,6 +23,8 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BioLidController extends Controller
 {
+    use ResolvesPanel;
+
     public function __construct(private BioLidAutomationService $automation)
     {
     }
@@ -49,13 +52,16 @@ class BioLidController extends Controller
         $users = User::where('role', User::ROLE_CONTACT)->get();
         $studyGroups = StudyGroup::query()->orderBy('title')->get();
 
+        $panel = $this->panel();
+
         return view('admin.biolid.index', compact(
             'bioLids',
             'courses',
             'organizations',
             'statuses',
             'users',
-            'studyGroups'
+            'studyGroups',
+            'panel'
         ));
     }
 
@@ -87,6 +93,7 @@ class BioLidController extends Controller
             'needDocs' => UserDocument::BIO_DOCS,
             'documents' => $documents,
             'reviewStatuses' => UserDocument::REVIEW_STATUSES,
+            'panel' => $this->panel(),
         ]);
     }
 
@@ -105,8 +112,7 @@ class BioLidController extends Controller
         ]);
 
         if (! $biolid->data_submitted_at && $biolid->data_review_status === null) {
-            return redirect()
-                ->route('admin.biolid.show', $biolid)
+            return $this->panelRedirect('biolid.show', $biolid)
                 ->with('error', 'Пользователь ещё не отправил данные на проверку');
         }
 
@@ -135,8 +141,7 @@ class BioLidController extends Controller
             ])
             ->log('Проверка данных заявки');
 
-        return redirect()
-            ->route('admin.biolid.show', $biolid)
+        return $this->panelRedirect('biolid.show', $biolid)
             ->with('success', 'Статус проверки данных обновлён');
     }
 
@@ -147,8 +152,7 @@ class BioLidController extends Controller
         }
 
         if (! isset(UserDocument::BIO_DOCS[$document->type])) {
-            return redirect()
-                ->route('admin.biolid.show', $biolid)
+            return $this->panelRedirect('biolid.show', $biolid)
                 ->with('error', 'Неизвестный тип документа');
         }
 
@@ -194,8 +198,7 @@ class BioLidController extends Controller
             ])
             ->log('Проверка документа');
 
-        return redirect()
-            ->route('admin.biolid.show', $biolid)
+        return $this->panelRedirect('biolid.show', $biolid)
             ->with('success', 'Статус проверки документа обновлён');
     }
 
@@ -215,6 +218,7 @@ class BioLidController extends Controller
             'genders' => BioLid::GENDERS,
             'statuses' => $statuses,
             'users' => $users,
+            'panel' => $this->panel(),
         ]);
     }
 
@@ -238,15 +242,14 @@ class BioLidController extends Controller
             ])
             ->log($actionDescription);
 
-        return redirect()->route('admin.biolid.show', $biolid);
+        return $this->panelRedirect('biolid.show', $biolid);
     }
 
     public function destroy(BioLid $biolid)
     {
         $biolid->delete();
 
-        return redirect()
-            ->route('admin.biolid.index')
+        return $this->panelRedirect('biolid.index')
             ->with('success', 'Заявка удалена');
     }
 
@@ -265,16 +268,14 @@ class BioLidController extends Controller
     public function createUser(BioLid $biolid): RedirectResponse
     {
         if ($biolid->user) {
-            return redirect()
-                ->route('admin.biolid.show', $biolid)
+            return $this->panelRedirect('biolid.show', $biolid)
                 ->with('error', 'Учётка уже привязана');
         }
 
         try {
             $result = $this->automation->ensureUser($biolid);
         } catch (\InvalidArgumentException $e) {
-            return redirect()
-                ->route('admin.biolid.show', $biolid)
+            return $this->panelRedirect('biolid.show', $biolid)
                 ->with('error', $e->getMessage());
         }
 
@@ -292,8 +293,7 @@ class BioLidController extends Controller
             ])
             ->log($created ? 'Создание учётной записи' : 'Привязка учётной записи');
 
-        return redirect()
-            ->route('admin.biolid.show', $biolid)
+        return $this->panelRedirect('biolid.show', $biolid)
             ->with(
                 'success',
                 $created
@@ -307,8 +307,7 @@ class BioLidController extends Controller
         $biolid->loadMissing('user');
 
         if (! $biolid->user) {
-            return redirect()
-                ->route('admin.biolid.show', $biolid)
+            return $this->panelRedirect('biolid.show', $biolid)
                 ->with('error', 'Сначала создайте или привяжите учётную запись');
         }
 
@@ -317,8 +316,7 @@ class BioLidController extends Controller
         } catch (\Throwable $e) {
             report($e);
 
-            return redirect()
-                ->route('admin.biolid.show', $biolid)
+            return $this->panelRedirect('biolid.show', $biolid)
                 ->with('error', 'Не удалось отправить письмо. Пароль обновлён, попробуйте ещё раз.');
         }
 
@@ -333,8 +331,7 @@ class BioLidController extends Controller
             ])
             ->log('Отправка письма с доступом');
 
-        return redirect()
-            ->route('admin.biolid.show', $biolid)
+        return $this->panelRedirect('biolid.show', $biolid)
             ->with('success', 'Письмо с доступом отправлено');
     }
 
@@ -347,8 +344,7 @@ class BioLidController extends Controller
         $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
 
         if ($ids === []) {
-            return redirect()
-                ->route('admin.biolid.index')
+            return $this->panelRedirect('biolid.index')
                 ->with('error', 'Нет заявок для отправки по текущим фильтрам');
         }
 
@@ -390,8 +386,7 @@ class BioLidController extends Controller
         }
 
         if ($sent === 0) {
-            return redirect()
-                ->route('admin.biolid.index')
+            return $this->panelRedirect('biolid.index')
                 ->with('error', 'Не удалось отправить письма (ошибок: '.$failed.')');
         }
 
@@ -400,8 +395,7 @@ class BioLidController extends Controller
             $message .= '. Не отправлено: '.$failed;
         }
 
-        return redirect()
-            ->route('admin.biolid.index')
+        return $this->panelRedirect('biolid.index')
             ->with('success', $message);
     }
 
@@ -414,8 +408,7 @@ class BioLidController extends Controller
         $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
 
         if ($ids === []) {
-            return redirect()
-                ->route('admin.biolid.index')
+            return $this->panelRedirect('biolid.index')
                 ->with('error', 'Нет заявок для создания пользователей по текущим фильтрам');
         }
 
@@ -423,8 +416,7 @@ class BioLidController extends Controller
         $studyGroupId = ($studyGroupId === '' || $studyGroupId === null) ? null : (int) $studyGroupId;
 
         if ($studyGroupId !== null && ! StudyGroup::query()->whereKey($studyGroupId)->exists()) {
-            return redirect()
-                ->route('admin.biolid.index')
+            return $this->panelRedirect('biolid.index')
                 ->with('error', 'Выбранная учебная группа не найдена');
         }
 
@@ -503,7 +495,7 @@ class BioLidController extends Controller
             $summary = 'Новых учёток нет: у всех выбранных заявок пользователь уже привязан ('.$skipped.')';
         }
 
-        $redirect = redirect()->route('admin.biolid.index');
+        $redirect = $this->panelRedirect('biolid.index');
 
         if ($failed > 0 && $created === 0 && $linked === 0 && $enrolled === 0) {
             return $redirect

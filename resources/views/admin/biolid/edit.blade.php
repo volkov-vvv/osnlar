@@ -1,4 +1,4 @@
-@extends('admin.layouts.main')
+@extends($panel . '.layouts.main')
 @section('content')
     <div class="content-header">
         <div class="container-fluid">
@@ -13,7 +13,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="col-xl-6">
-                <form action="{{ route('admin.biolid.update', $bioLid->id) }}" method="post">
+                <form action="{{ route($panel . '.biolid.update', $bioLid->id) }}" method="post">
                     @csrf
                     @method('PATCH')
 
@@ -200,7 +200,7 @@
 
                     <div class="mb-4">
                         <button type="submit" id="form-submit" class="btn btn-primary">Обновить</button>
-                        <a class="btn btn-outline-secondary" href="{{ route('admin.biolid.show', $bioLid->id) }}">Назад</a>
+                        <a class="btn btn-outline-secondary" href="{{ route($panel . '.biolid.show', $bioLid->id) }}">Назад</a>
                     </div>
                 </form>
             </div>
