@@ -179,7 +179,7 @@ class MaxBotService
             throw new RuntimeException('У пользователя нет активной подписки на MAX.');
         }
 
-        return $this->sendToUser($subscription->max_user_id, $text, [], array_merge($options, [
+        return $this->sendToUser($subscription->max_user_id, $text, $buttons, array_merge($options, [
             'local_user_id' => $localUserId,
             'lid_id' => $lidId,
         ]));
