@@ -16,6 +16,11 @@ class Org extends Model
     protected $table = 'orgs';
     protected $guarded = false;
 
+    protected $casts = [
+        'is_published' => 'boolean',
+        'politic' => 'boolean',
+    ];
+
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'course_org');

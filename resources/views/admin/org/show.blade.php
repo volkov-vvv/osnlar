@@ -41,6 +41,16 @@
                                     <td>{{ $org->inn ?: '—' }}</td>
                                 </tr>
                                 <tr>
+                                    <td>Письмо о назначении ответственного</td>
+                                    <td>
+                                        @if($org->appointment_letter)
+                                            <a href="{{ url('storage/' . $org->appointment_letter) }}" target="_blank" rel="noopener">Открыть файл</a>
+                                        @else
+                                            —
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>Адрес</td>
                                     <td style="white-space: normal;">{{ $org->address ?: '—' }}</td>
                                 </tr>

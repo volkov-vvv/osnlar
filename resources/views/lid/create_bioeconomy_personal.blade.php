@@ -59,6 +59,84 @@
         .bio-personal-form .iti input[type="tel"] {
             width: 100%;
         }
+
+        .bio-personal-form .org-name-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .bio-personal-form .org-name-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: #dc3545;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .bio-personal-form .org-name-help:hover,
+        .bio-personal-form .org-name-help:focus {
+            color: #a71d2a;
+            outline: none;
+        }
+
+        .bio-personal-form .org-name-help i {
+            font-size: 1.05em;
+            line-height: 1;
+        }
+
+        #orgMissingModal .modal-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        #orgMissingModal .bioeconomy-apply-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 14rem;
+            margin: 0.75rem 0 1rem;
+            padding: 0.9rem 1.75rem;
+            border-radius: 0.8rem;
+            background: #1f8a42;
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.2;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(31, 138, 66, 0.22);
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        #orgMissingModal .bioeconomy-apply-btn i {
+            margin-right: 0.6rem;
+            color: #fff;
+            font-size: 0.95em;
+        }
+
+        #orgMissingModal .bioeconomy-apply-btn:hover,
+        #orgMissingModal .bioeconomy-apply-btn:focus {
+            background: #176b33;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 8px 16px rgba(23, 107, 51, 0.28);
+        }
+
+        .bio-personal-form .btn-submit {
+            background-color: #094ca1;
+            border-color: #094ca1;
+            color: #fff;
+        }
+
+        .bio-personal-form .btn-submit:hover,
+        .bio-personal-form .btn-submit:focus {
+            background-color: #073a7a;
+            border-color: #073a7a;
+            color: #fff;
+        }
     </style>
 @endpush
 
@@ -81,45 +159,6 @@
         <form class="bio-personal-form" action="{{ route('lid.bioeconomy.personal.store') }}" method="post">
             @csrf
             <input type="hidden" name="course_id" value="{{ $course->id }}">
-
-            <div class="row">
-                <div class="col-md-8">
-                    <label class="form-label"><span class="text-danger">* </span>Полное наименование организации</label>
-                    <select name="org_id" id="org_id" class="form-control mb-3" required>
-                        <option value="">Выберите</option>
-                        @foreach($organizations as $organization)
-                            <option
-                                value="{{ $organization->id }}"
-                                data-inn="{{ $organization->inn }}"
-                                {{ (string) old('org_id') === (string) $organization->id ? 'selected' : '' }}
-                            >{{ $organization->organization_title }}</option>
-                        @endforeach
-                    </select>
-                    @error('org_id')
-                    <div class="text-danger mb-2">{{ $message }}</div>
-                    @enderror
-                    @error('organization_title')
-                    <div class="text-danger mb-2">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label"><span class="text-danger">* </span>ИНН организации</label>
-                    <input
-                        type="text"
-                        id="organization_inn_display"
-                        class="form-control mb-3"
-                        value=""
-                        readonly
-                        tabindex="-1"
-                        aria-readonly="true"
-                        placeholder="Выберите организацию"
-                    >
-                    <input type="hidden" name="organization_inn" id="organization_inn" value="{{ old('organization_inn') }}">
-                    @error('organization_inn')
-                    <div class="text-danger mb-2">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-md-4">
@@ -178,6 +217,56 @@
                         required
                     >
                     @error('snils')
+                    <div class="text-danger mb-2">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <label class="form-label org-name-label" for="org_id">
+                        <span><span class="text-danger">* </span>Полное наименование организации</span>
+                        <button
+                            type="button"
+                            class="org-name-help"
+                            data-toggle="modal"
+                            data-target="#orgMissingModal"
+                            aria-label="Информация об отсутствии организации в списке"
+                        >
+                            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                        </button>
+                    </label>
+                    <select name="org_id" id="org_id" class="form-control mb-3" required>
+                        <option value="">Выберите</option>
+                        @foreach($organizations as $organization)
+                            <option
+                                value="{{ $organization->id }}"
+                                data-inn="{{ $organization->inn }}"
+                                {{ (string) old('org_id') === (string) $organization->id ? 'selected' : '' }}
+                            >{{ $organization->organization_title }}</option>
+                        @endforeach
+                    </select>
+                    @error('org_id')
+                    <div class="text-danger mb-2">{{ $message }}</div>
+                    @enderror
+                    @error('organization_title')
+                    <div class="text-danger mb-2">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label"><span class="text-danger">* </span>ИНН организации</label>
+                    <input
+                        type="text"
+                        id="organization_inn_display"
+                        class="form-control mb-3"
+                        value=""
+                        readonly
+                        tabindex="-1"
+                        aria-readonly="true"
+                        placeholder="Выберите организацию"
+                    >
+                    <input type="hidden" name="organization_inn" id="organization_inn" value="{{ old('organization_inn') }}">
+                    @error('organization_inn')
                     <div class="text-danger mb-2">{{ $message }}</div>
                     @enderror
                 </div>
@@ -251,12 +340,40 @@
             </div>
 
             <div class="mb-4">
-                <button type="submit" class="btn btn-primary">Отправить</button>
+                <button type="submit" class="btn btn-submit">Отправить</button>
                 <a class="btn btn-outline-secondary" href="{{ route('course.show', $course->id) }}">Назад</a>
             </div>
         </form>
     </div>
 </main>
+
+<div class="modal fade" id="orgMissingModal" tabindex="-1" role="dialog" aria-labelledby="orgMissingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orgMissingModalLabel">Организация отсутствует в списке</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Если в списке нет Вашей организации, значит организация еще не подала официальную заявку.
+                    Для подачи заявки от организации (как юридическое лицо) необходимо перейти по ссылке:
+                </p>
+                <a class="bioeconomy-apply-btn" href="{{ route('org.bioeconomy.create') }}">
+                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>Подать заявку от организации
+                </a>
+                <p>
+                    Обращаем внимание, что необходимо назначить ответственное лицо, написать письмо по образцу, подписать и прикрепить скан-копию.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')

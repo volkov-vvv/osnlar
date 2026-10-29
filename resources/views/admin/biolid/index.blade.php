@@ -60,6 +60,11 @@
 
     <section class="content">
         <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="{{ route($panel . '.biolid.create') }}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
+                </div>
+            </div>
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}

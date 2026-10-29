@@ -47,6 +47,7 @@ class BioeconomyPersonalStoreRequest extends FormRequest
 
         $org = Org::query()
             ->where('source', 'bioeconomy')
+            ->where('is_published', true)
             ->whereKey($this->input('org_id'))
             ->first();
 
@@ -87,7 +88,9 @@ class BioeconomyPersonalStoreRequest extends FormRequest
                 'required',
                 'integer',
                 Rule::exists('orgs', 'id')->where(function ($query) {
-                    $query->where('source', 'bioeconomy')->whereNull('deleted_at');
+                    $query->where('source', 'bioeconomy')
+                        ->where('is_published', true)
+                        ->whereNull('deleted_at');
                 }),
             ],
             'lastname' => 'required|string|max:255',

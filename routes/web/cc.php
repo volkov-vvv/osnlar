@@ -16,6 +16,9 @@ Route::get('/getDashboard', [DashboardController::class, 'getDashboard'])
     ->name('dashboard.getDashboard');
 
 Route::resource('status', StatusController::class)->whereNumber('status');
+Route::patch('org/{org}/publish', [OrgController::class, 'publish'])
+    ->whereNumber('org')
+    ->name('org.publish');
 Route::resource('org', OrgController::class)
     ->except(['create', 'store'])
     ->whereNumber('org');
@@ -25,6 +28,8 @@ Route::get('/lid/getLidsExcel', [LidController::class, 'getLidsExcel'])->name('l
 Route::resource('lid', LidController::class)->whereNumber('lid');
 
 Route::get('biolid', [BioLidController::class, 'index'])->name('biolid.index');
+Route::get('biolid/create', [BioLidController::class, 'create'])->name('biolid.create');
+Route::post('biolid', [BioLidController::class, 'store'])->name('biolid.store');
 Route::get('biolid/questionnaire', [BioLidController::class, 'questionnaire'])
     ->name('biolid.questionnaire');
 Route::post('biolid/send-credentials-bulk', [BioLidController::class, 'sendCredentialsBulk'])

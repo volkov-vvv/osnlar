@@ -20,6 +20,7 @@ class CreateBioeconomyPersonalController extends Controller
         $genders = BioLid::GENDERS;
         $organizations = Org::query()
             ->where('source', 'bioeconomy')
+            ->where('is_published', true)
             ->whereNotNull('organization_title')
             ->where('organization_title', '!=', '')
             ->orderByDesc('id')

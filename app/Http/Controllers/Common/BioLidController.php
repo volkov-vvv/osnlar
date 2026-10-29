@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Common;
 use App\Exports\BioLidsQuestionnaireExport;
 use App\Http\Controllers\Concerns\ResolvesPanel;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\BioLid\StoreRequest;
 use App\Http\Requests\Admin\BioLid\UpdateRequest;
 use App\Models\BioLid;
 use App\Models\Course;
+use App\Models\Org;
 use App\Models\Status;
 use App\Models\StudyGroup;
 use App\Models\User;
@@ -200,6 +202,67 @@ class BioLidController extends Controller
 
         return $this->panelRedirect('biolid.show', $biolid)
             ->with('success', 'Статус проверки документа обновлён');
+    }
+
+    public function create()
+    {
+        $courses = Course::query()
+            ->where('bioeconomy', 1)
+            ->orderBy('title')
+            ->get();
+
+        $organizations = Org::query()
+            ->where('source', 'bioeconomy')
+            ->where('is_published', true)
+            ->whereNotNull('organization_title')
+            ->where('organization_title', '!=', '')
+            ->orderByDesc('id')
+            ->get(['id', 'organization_title', 'inn'])
+            ->unique(function (Org $org) {
+                return mb_strtolower(trim($org->organization_title));
+            })
+            ->sortBy(function (Org $org) {
+                return mb_strtolower($org->organization_title);
+            }, SORT_NATURAL)
+            ->values();
+
+        $statuses = Status::all();
+        $users = User::where('role', User::ROLE_CONTACT)->get();
+
+        return view('admin.biolid.create', [
+            'courses' => $courses,
+            'organizations' => $organizations,
+            'genders' => BioLid::GENDERS,
+            'statuses' => $statuses,
+            'users' => $users,
+            'panel' => $this->panel(),
+        ]);
+    }
+
+    public function store(StoreRequest $request): RedirectResponse
+    {
+        $data = $request->safe()->except(['org_id']);
+        $data['politic'] = true;
+
+        $bioLid = BioLid::create($data);
+        $course = Course::query()->find($bioLid->course_id);
+
+        if ($course) {
+            $this->automation->processAfterCreate($bioLid, $course);
+        }
+
+        activity()
+            ->causedBy(auth()->user())
+            ->performedOn($bioLid)
+            ->withProperties([
+                'status_id_old' => null,
+                'status_id' => $bioLid->status_id,
+                'comment' => 'Создание заявки',
+            ])
+            ->log('Создание заявки');
+
+        return $this->panelRedirect('biolid.show', $bioLid)
+            ->with('success', 'Заявка создана');
     }
 
     public function edit(BioLid $biolid)

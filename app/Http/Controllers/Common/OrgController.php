@@ -10,7 +10,9 @@ use App\Models\Org;
 use App\Models\Region;
 use App\Models\Status;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Spatie\Activitylog\Models\Activity;
@@ -74,6 +76,21 @@ class OrgController extends Controller
             ->log($actionDescription);
 
         return $this->panelRedirect('org.show', compact('org'));
+    }
+
+    public function publish(Request $request, Org $org): JsonResponse|RedirectResponse
+    {
+        $org->update([
+            'is_published' => $request->boolean('is_published'),
+        ]);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'is_published' => (bool) $org->is_published,
+            ]);
+        }
+
+        return $this->panelRedirect('org.index');
     }
 
     public function destroy(Org $org): RedirectResponse

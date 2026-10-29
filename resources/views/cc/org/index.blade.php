@@ -122,10 +122,22 @@
                                         </td>
                                         <td>{{ optional($org->created_at)->format('Y-m-d H:i:s') }}</td>
                                         <td>{{ optional($org->updated_at)->format('Y-m-d H:i:s') }}</td>
-                                        <td>
-                                            <a href="{{ route($panel . '.org.show', $org->id) }}"><i class="far fa-eye"></i></a>
-                                            &nbsp;&nbsp;
-                                            <a href="{{ route($panel . '.org.edit', $org->id) }}" class="text-success"><i class="fas fa-pen"></i></a>
+                                        <td data-search="{{ $org->is_published ? 'Опубликован' : 'Не опубликован' }}">
+                                            <div class="d-flex align-items-center">
+                                                <div class="custom-control custom-switch mb-0 mr-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="custom-control-input org-publish-switch"
+                                                        id="org-publish-{{ $org->id }}"
+                                                        data-url="{{ route($panel . '.org.publish', $org->id) }}"
+                                                        {{ $org->is_published ? 'checked' : '' }}
+                                                    >
+                                                    <label class="custom-control-label font-weight-normal" for="org-publish-{{ $org->id }}">Опубликовать</label>
+                                                </div>
+                                                <a href="{{ route($panel . '.org.show', $org->id) }}" title="Просмотр"><i class="far fa-eye"></i></a>
+                                                &nbsp;&nbsp;
+                                                <a href="{{ route($panel . '.org.edit', $org->id) }}" class="text-success" title="Редактировать"><i class="fas fa-pen"></i></a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -270,6 +282,31 @@
 
             $('.custom-filters').not('#course').val('');
             $('#course').val(null).trigger('change');
+        });
+
+        $(document).on('change', '.org-publish-switch', function () {
+            var input = $(this);
+            var cell = input.closest('td');
+            input.prop('disabled', true);
+
+            $.ajax({
+                url: input.data('url'),
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                data: {
+                    is_published: input.is(':checked') ? 1 : 0
+                }
+            }).done(function () {
+                cell.attr('data-search', input.is(':checked') ? 'Опубликован' : 'Не опубликован');
+                table.cell(cell).invalidate().draw(false);
+            }).fail(function () {
+                input.prop('checked', !input.is(':checked'));
+            }).always(function () {
+                input.prop('disabled', false);
+            });
         });
     </script>
 @endsection

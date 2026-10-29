@@ -89,6 +89,8 @@ Route::get('/lid/getLidsExcel', [LidController::class, 'getLidsExcel'])->name('l
 Route::resource('lid', LidController::class)->whereNumber('lid');
 
 Route::get('biolid', [BioLidController::class, 'index'])->name('biolid.index');
+Route::get('biolid/create', [BioLidController::class, 'create'])->name('biolid.create');
+Route::post('biolid', [BioLidController::class, 'store'])->name('biolid.store');
 Route::get('biolid/questionnaire', [BioLidController::class, 'questionnaire'])
     ->name('biolid.questionnaire');
 Route::post('biolid/send-credentials-bulk', [BioLidController::class, 'sendCredentialsBulk'])
@@ -126,6 +128,9 @@ Route::get('/commerciallid/getLids', [CommercialLidController::class, 'getLids']
 Route::resource('commerciallid', CommercialLidController::class)->whereNumber('commerciallid');
 
 Route::resource('order', OrderController::class)->whereNumber('order');
+Route::patch('org/{org}/publish', [OrgController::class, 'publish'])
+    ->whereNumber('org')
+    ->name('org.publish');
 Route::resource('org', OrgController::class)
     ->except(['create', 'store'])
     ->whereNumber('org');
