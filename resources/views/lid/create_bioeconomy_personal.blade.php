@@ -310,14 +310,25 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <label class="form-label"><span class="text-danger">* </span>Адрес электронной почты</label>
-                    <input name="email" type="email" class="form-control mb-3" value="{{ old('email') }}" required>
+                    <label class="form-label org-name-label" for="email">
+                        <span><span class="text-danger">* </span>Адрес электронной почты</span>
+                        <button
+                            type="button"
+                            class="org-name-help"
+                            data-toggle="modal"
+                            data-target="#emailCabinetModal"
+                            aria-label="Информация об отправке пароля на электронную почту"
+                        >
+                            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                        </button>
+                    </label>
+                    <input name="email" id="email" type="email" class="form-control mb-3" value="{{ old('email') }}" required>
                     @error('email')
                     <div class="text-danger mb-2">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label"><span class="text-danger">* </span>Номер телефона</label>
+                    <label class="form-label"><span class="text-danger">* </span>Номер мобильного телефона</label>
                     <div class="mb-3">
                         <input name="phone" id="phone" type="tel" class="form-control" value="{{ old('phone') }}" required>
                         <input type="hidden" name="phone_prefix" id="phone_prefix" value="{{ old('phone_prefix', '7') }}">
@@ -366,6 +377,27 @@
                 </a>
                 <p>
                     Обращаем внимание, что необходимо назначить ответственное лицо, написать письмо по образцу, подписать и прикрепить скан-копию.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="emailCabinetModal" tabindex="-1" role="dialog" aria-labelledby="emailCabinetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailCabinetModalLabel">Электронная почта</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">
+                    Обращаем Ваше внимание, что после завершения подачи заявки на указанный Вами адрес электронной почты будет направлено автоматическое уведомление, содержащее пароль для доступа в личный кабинет. Если письмо не поступит в течение нескольких минут, пожалуйста, проверьте папку «Спам».
                 </p>
             </div>
             <div class="modal-footer">

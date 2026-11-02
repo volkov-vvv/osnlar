@@ -40,7 +40,16 @@
                                         <option value="Пользователь">Пользователь</option>
                                     </select>
                                 </div>
-                                <div class="col col-md-10 d-flex justify-content-end align-items-end">
+                                <div class="col col-md-3">
+                                    Учебная группа:
+                                    <select id="studygroup" name="studygroup" class="form-control form-control-sm custom-filters">
+                                        <option></option>
+                                        @foreach($studyGroups as $studyGroup)
+                                            <option value="{{ $studyGroup->short_title ?: $studyGroup->title }}">{{ $studyGroup->short_title ?: $studyGroup->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col col-md-7 d-flex justify-content-end align-items-end">
                                     <button id="resetTable" class="btn btn-secondary"><i class="fas fa-eraser mr-1"></i>Очистить фильтры</button>
                                 </div>
                             </div>
@@ -163,6 +172,7 @@
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
                     role: $('#role').val(),
+                    studygroup: $('#studygroup').val(),
                 };
             },
 
@@ -172,9 +182,13 @@
                 }
 
                 $('#role').val(data.custom_filters.role);
+                $('#studygroup').val(data.custom_filters.studygroup);
 
                 if (data.columns && data.columns[6] && data.columns[6].search) {
                     data.columns[6].search.search = data.custom_filters.role || '';
+                }
+                if (data.columns && data.columns[7] && data.columns[7].search) {
+                    data.columns[7].search.search = data.custom_filters.studygroup || '';
                 }
             },
 
@@ -255,6 +269,12 @@
                 .draw();
         });
 
+        $('#studygroup').on('change', function () {
+            table
+                .column(7)
+                .search(this.value)
+                .draw();
+        });
 
         $('#resetTable').on('click', function() {
             // Очищаем сохраненное состояние в localStorage
@@ -274,7 +294,7 @@
 
 
             $('#role').val(null).trigger('change');
-
+            $('#studygroup').val(null).trigger('change');
         });
 
         function showUserActionAlert(message, type) {

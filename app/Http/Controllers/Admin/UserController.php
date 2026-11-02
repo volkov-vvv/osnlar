@@ -21,7 +21,9 @@ class UserController extends Controller
         $user = new User();
         $roles = $user->getRoles();
         $users = User::with('studyGroups')->get();
-        return view('admin.user.index', compact('users','roles'));
+        $studyGroups = StudyGroup::orderBy('title')->get();
+
+        return view('admin.user.index', compact('users', 'roles', 'studyGroups'));
     }
 
     public function create()

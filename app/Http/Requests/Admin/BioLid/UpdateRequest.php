@@ -20,12 +20,21 @@ class UpdateRequest extends FormRequest
             'citizenship',
             'residence_address',
             'education',
+            'education_organization',
+            'education_qualification',
+            'diploma_series_number',
+            'diploma_issued_at',
             'organization_title',
             'organization_inn',
             'position',
             'snils',
             'gender',
             'birth_date',
+            'passport_series',
+            'passport_number',
+            'passport_issued_by',
+            'passport_issued_at',
+            'passport_department_code',
         ];
 
         $merged = [];
@@ -48,6 +57,27 @@ class UpdateRequest extends FormRequest
 
         $innDigits = preg_replace('/\D+/', '', (string) ($merged['organization_inn'] ?? ''));
         $merged['organization_inn'] = $innDigits === '' ? null : $innDigits;
+
+        $seriesDigits = preg_replace('/\D+/', '', (string) ($merged['passport_series'] ?? ''));
+        if ($seriesDigits === '') {
+            $merged['passport_series'] = null;
+        } elseif (strlen($seriesDigits) === 4) {
+            $merged['passport_series'] = substr($seriesDigits, 0, 2).' '.substr($seriesDigits, 2, 2);
+        } else {
+            $merged['passport_series'] = $seriesDigits;
+        }
+
+        $numberDigits = preg_replace('/\D+/', '', (string) ($merged['passport_number'] ?? ''));
+        $merged['passport_number'] = $numberDigits === '' ? null : $numberDigits;
+
+        $departmentDigits = preg_replace('/\D+/', '', (string) ($merged['passport_department_code'] ?? ''));
+        if ($departmentDigits === '') {
+            $merged['passport_department_code'] = null;
+        } elseif (strlen($departmentDigits) === 6) {
+            $merged['passport_department_code'] = substr($departmentDigits, 0, 3).'–'.substr($departmentDigits, 3, 3);
+        } else {
+            $merged['passport_department_code'] = $departmentDigits;
+        }
 
         $phone = preg_replace('/\D+/', '', (string) $this->input('phone')) ?? '';
         if (
@@ -84,7 +114,16 @@ class UpdateRequest extends FormRequest
             'snils' => ['required', 'regex:/^\d{3}-\d{3}-\d{3} \d{2}$/'],
             'citizenship' => 'required|string|max:255',
             'residence_address' => 'required|string|max:2000',
+            'passport_series' => ['nullable', 'regex:/^\d{2} \d{2}$/'],
+            'passport_number' => ['nullable', 'regex:/^\d{6}$/'],
+            'passport_issued_by' => 'nullable|string|max:255',
+            'passport_issued_at' => 'nullable|date|before_or_equal:today',
+            'passport_department_code' => ['nullable', 'regex:/^\d{3}–\d{3}$/u'],
             'education' => 'required|string|max:5000',
+            'education_organization' => 'nullable|string|max:255',
+            'education_qualification' => 'nullable|string|max:255',
+            'diploma_series_number' => 'nullable|string|max:100',
+            'diploma_issued_at' => 'nullable|date|before_or_equal:today',
             'organization_title' => 'required|string|max:255',
             'organization_inn' => ['nullable', 'regex:/^\d{10}$|^\d{12}$/'],
             'position' => 'required|string|max:255',
@@ -110,7 +149,12 @@ class UpdateRequest extends FormRequest
             'snils.regex' => 'СНИЛС должен быть в формате 111-222-333 00',
             'citizenship.required' => 'Укажите гражданство',
             'residence_address.required' => 'Укажите адрес места жительства',
+            'passport_series.regex' => 'Серия паспорта должна быть в формате 00 00',
+            'passport_number.regex' => 'Номер паспорта должен содержать 6 цифр',
+            'passport_issued_at.before_or_equal' => 'Дата выдачи паспорта не может быть в будущем',
+            'passport_department_code.regex' => 'Код подразделения должен быть в формате 000–000',
             'education.required' => 'Укажите сведения об образовании',
+            'diploma_issued_at.before_or_equal' => 'Дата выдачи диплома не может быть в будущем',
             'organization_title.required' => 'Укажите организацию',
             'organization_inn.regex' => 'ИНН организации должен содержать 10 или 12 цифр',
             'position.required' => 'Укажите должность',

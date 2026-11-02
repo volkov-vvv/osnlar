@@ -15,6 +15,8 @@ use App\Models\StudyGroup;
 use App\Models\User;
 use App\Models\UserDocument;
 use App\Service\BioLidAutomationService;
+use App\Service\BioLidDocumentsArchiveService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -34,7 +36,7 @@ class BioLidController extends Controller
     public function index()
     {
         $bioLids = BioLid::query()
-            ->with(['course', 'status', 'responsible', 'user.studyGroups'])
+            ->with(['course', 'status', 'responsible', 'user.studyGroups', 'documents'])
             ->latest()
             ->get();
 
@@ -76,7 +78,7 @@ class BioLidController extends Controller
         $docsCollection = UserDocument::query()
             ->with('reviewer')
             ->where('bio_lid_id', $biolid->id)
-            ->whereIn('type', array_keys(UserDocument::BIO_DOCS))
+            ->whereIn('type', array_keys(UserDocument::allBioDocs()))
             ->latest('id')
             ->get();
 
@@ -93,13 +95,15 @@ class BioLidController extends Controller
             'statuses' => $statuses,
             'activites' => $activites,
             'needDocs' => UserDocument::BIO_DOCS,
+            'applicationDocs' => UserDocument::BIO_APPLICATION_DOCS,
+            'consentDocs' => UserDocument::BIO_CONSENT_DOCS,
             'documents' => $documents,
             'reviewStatuses' => UserDocument::REVIEW_STATUSES,
             'panel' => $this->panel(),
         ]);
     }
 
-    public function reviewData(Request $request, BioLid $biolid): RedirectResponse
+    public function reviewData(Request $request, BioLid $biolid): JsonResponse|RedirectResponse
     {
         $data = $request->validate([
             'review_status' => ['required', Rule::in(array_keys(UserDocument::REVIEW_STATUSES))],
@@ -114,8 +118,12 @@ class BioLidController extends Controller
         ]);
 
         if (! $biolid->data_submitted_at && $biolid->data_review_status === null) {
-            return $this->panelRedirect('biolid.show', $biolid)
-                ->with('error', 'Пользователь ещё не отправил данные на проверку');
+            return $this->reviewResponse(
+                $request,
+                $biolid,
+                'Пользователь ещё не отправил данные на проверку',
+                error: true
+            );
         }
 
         $oldStatus = $biolid->data_review_status;
@@ -128,34 +136,61 @@ class BioLidController extends Controller
             'data_reviewed_by' => auth()->id(),
         ])->save();
 
+        $activityComment = sprintf(
+            'Проверка данных: %s → %s%s',
+            UserDocument::REVIEW_STATUSES[$oldStatus] ?? 'Не отправлено',
+            UserDocument::REVIEW_STATUSES[$data['review_status']],
+            ! empty($data['review_comment']) ? '. Комментарий: '.$data['review_comment'] : ''
+        );
+
         activity()
             ->causedBy(auth()->user())
             ->performedOn($biolid)
             ->withProperties([
                 'status_id_old' => $biolid->status_id,
                 'status_id' => $biolid->status_id,
-                'comment' => sprintf(
-                    'Проверка данных: %s → %s%s',
-                    UserDocument::REVIEW_STATUSES[$oldStatus] ?? 'Не отправлено',
-                    UserDocument::REVIEW_STATUSES[$data['review_status']],
-                    ! empty($data['review_comment']) ? '. Комментарий: '.$data['review_comment'] : ''
-                ),
+                'comment' => $activityComment,
             ])
             ->log('Проверка данных заявки');
 
-        return $this->panelRedirect('biolid.show', $biolid)
-            ->with('success', 'Статус проверки данных обновлён');
+        $biolid->loadMissing(['dataReviewer', 'status']);
+
+        return $this->reviewResponse(
+            $request,
+            $biolid,
+            'Статус проверки данных обновлён',
+            [
+                'status' => $biolid->data_review_status,
+                'label' => $biolid->dataReviewStatusLabel(),
+                'badge' => $biolid->dataReviewStatusBadgeClass(),
+                'comment' => $biolid->data_review_comment,
+                'reviewed_at' => $biolid->data_reviewed_at?->format('d.m.Y H:i'),
+                'reviewer_name' => $biolid->dataReviewer?->name,
+            ],
+            [
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+                'user' => auth()->user()?->name ?? '—',
+                'description' => 'Проверка данных заявки',
+                'status_old' => $biolid->status->title ?? '—',
+                'status_new' => $biolid->status->title ?? '—',
+                'comment' => $activityComment,
+            ]
+        );
     }
 
-    public function reviewDocument(Request $request, BioLid $biolid, UserDocument $document): RedirectResponse
+    public function reviewDocument(Request $request, BioLid $biolid, UserDocument $document): JsonResponse|RedirectResponse
     {
         if ((int) $document->bio_lid_id !== (int) $biolid->id) {
             abort(404);
         }
 
-        if (! isset(UserDocument::BIO_DOCS[$document->type])) {
-            return $this->panelRedirect('biolid.show', $biolid)
-                ->with('error', 'Неизвестный тип документа');
+        if (! isset(UserDocument::allBioDocs()[$document->type])) {
+            return $this->reviewResponse(
+                $request,
+                $biolid,
+                'Неизвестный тип документа',
+                error: true
+            );
         }
 
         $data = $request->validate([
@@ -180,7 +215,14 @@ class BioLidController extends Controller
             'reviewed_by' => auth()->id(),
         ]);
 
-        $docTitle = UserDocument::BIO_DOCS[$document->type]['title'];
+        $docTitle = UserDocument::allBioDocs()[$document->type]['title'];
+        $activityComment = sprintf(
+            'Проверка «%s»: %s → %s%s',
+            $docTitle,
+            UserDocument::REVIEW_STATUSES[$oldStatus] ?? 'Не отправлено',
+            UserDocument::REVIEW_STATUSES[$data['review_status']],
+            ! empty($data['review_comment']) ? '. Комментарий: '.$data['review_comment'] : ''
+        );
 
         activity()
             ->causedBy(auth()->user())
@@ -188,20 +230,63 @@ class BioLidController extends Controller
             ->withProperties([
                 'status_id_old' => $biolid->status_id,
                 'status_id' => $biolid->status_id,
-                'comment' => sprintf(
-                    'Проверка «%s»: %s → %s%s',
-                    $docTitle,
-                    UserDocument::REVIEW_STATUSES[$oldStatus] ?? 'Не отправлено',
-                    UserDocument::REVIEW_STATUSES[$data['review_status']],
-                    ! empty($data['review_comment']) ? '. Комментарий: '.$data['review_comment'] : ''
-                ),
+                'comment' => $activityComment,
                 'document_id' => $document->id,
                 'document_type' => $document->type,
             ])
             ->log('Проверка документа');
 
-        return $this->panelRedirect('biolid.show', $biolid)
-            ->with('success', 'Статус проверки документа обновлён');
+        $document->loadMissing('reviewer');
+        $biolid->loadMissing('status');
+
+        return $this->reviewResponse(
+            $request,
+            $biolid,
+            'Статус проверки документа обновлён',
+            [
+                'status' => $document->review_status,
+                'label' => $document->reviewStatusLabel(),
+                'badge' => $document->reviewStatusBadgeClass(),
+                'comment' => $document->review_comment,
+                'reviewed_at' => $document->reviewed_at?->format('d.m.Y H:i'),
+                'reviewer_name' => $document->reviewer?->name,
+            ],
+            [
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+                'user' => auth()->user()?->name ?? '—',
+                'description' => 'Проверка документа',
+                'status_old' => $biolid->status->title ?? '—',
+                'status_new' => $biolid->status->title ?? '—',
+                'comment' => $activityComment,
+            ]
+        );
+    }
+
+    /**
+     * @param  array{status?: string, label?: string, badge?: string, comment?: ?string, reviewed_at?: ?string, reviewer_name?: ?string}|null  $review
+     * @param  array{updated_at?: string, user?: string, description?: string, status_old?: string, status_new?: string, comment?: string}|null  $activity
+     */
+    protected function reviewResponse(
+        Request $request,
+        BioLid $biolid,
+        string $message,
+        ?array $review = null,
+        ?array $activity = null,
+        bool $error = false
+    ): JsonResponse|RedirectResponse {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $message,
+                'review' => $review,
+                'activity' => $activity,
+            ], $error ? 422 : 200);
+        }
+
+        $redirect = $this->panelRedirect('biolid.show', $biolid);
+
+        return $error
+            ? $redirect->with('error', $message)
+            : $redirect->with('success', $message);
     }
 
     public function create()
@@ -326,6 +411,31 @@ class BioLidController extends Controller
         $filename = 'anketa-gruppy-bio-'.now()->format('Y-m-d_H-i-s').'.xlsx';
 
         return Excel::download(new BioLidsQuestionnaireExport($ids), $filename);
+    }
+
+    public function documentsArchive(Request $request, BioLidDocumentsArchiveService $archiveService): BinaryFileResponse|RedirectResponse
+    {
+        $ids = $request->input('ids');
+        if (! is_array($ids)) {
+            $ids = [];
+        }
+
+        try {
+            $zipPath = $archiveService->create($ids);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return $this->panelRedirect('biolid.index')
+                ->with('error', $e->getMessage() ?: 'Не удалось сформировать архив документов');
+        }
+
+        $filename = 'dokumenty-bio-'.now()->format('Y-m-d_H-i-s').'.zip';
+
+        return response()
+            ->download($zipPath, $filename, [
+                'Content-Type' => 'application/zip',
+            ])
+            ->deleteFileAfterSend(true);
     }
 
     public function createUser(BioLid $biolid): RedirectResponse

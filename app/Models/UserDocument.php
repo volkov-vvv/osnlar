@@ -59,6 +59,56 @@ class UserDocument extends Model
         ],
     ];
 
+    public const BIO_APPLICATION_DOCS = [
+        'application' => [
+            'title' => 'Заявление',
+            'mimes' => 'pdf,jpg,jpeg,png',
+            'optional' => false,
+        ],
+        'name_change_doc' => [
+            'title' => 'Документ о смене фамилии',
+            'mimes' => 'pdf,jpg,jpeg,png',
+            'optional' => true,
+            'hint' => 'Если диплом выдан на другую фамилию — загрузите копию документа о смене фамилии.',
+        ],
+    ];
+
+    public const BIO_CONSENT_DOCS = [
+        'consent_arpm' => [
+            'title' => 'Согласие АРПМ',
+            'mimes' => 'pdf,jpg,jpeg,png',
+            'kind' => 'arpm',
+        ],
+        'consent_osnovanie' => [
+            'title' => 'Согласие «Основание»',
+            'mimes' => 'pdf,jpg,jpeg,png',
+            'kind' => 'osnovanie',
+        ],
+    ];
+
+    public static function allBioDocs(): array
+    {
+        return self::BIO_DOCS + self::BIO_APPLICATION_DOCS + self::BIO_CONSENT_DOCS;
+    }
+
+    /**
+     * Обязательные типы файлов для проверки по БИО (без опциональной смены фамилии).
+     *
+     * @return list<string>
+     */
+    public static function requiredBioDocTypes(): array
+    {
+        $types = array_keys(self::BIO_DOCS);
+
+        foreach (self::BIO_APPLICATION_DOCS as $type => $meta) {
+            if (empty($meta['optional'])) {
+                $types[] = $type;
+            }
+        }
+
+        return array_merge($types, array_keys(self::BIO_CONSENT_DOCS));
+    }
+
     public const REVIEW_PENDING = 'pending';
     public const REVIEW_APPROVED = 'approved';
     public const REVIEW_REJECTED = 'rejected';

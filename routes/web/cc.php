@@ -32,6 +32,8 @@ Route::get('biolid/create', [BioLidController::class, 'create'])->name('biolid.c
 Route::post('biolid', [BioLidController::class, 'store'])->name('biolid.store');
 Route::get('biolid/questionnaire', [BioLidController::class, 'questionnaire'])
     ->name('biolid.questionnaire');
+Route::get('biolid/documents-archive', [BioLidController::class, 'documentsArchive'])
+    ->name('biolid.documents-archive');
 Route::post('biolid/send-credentials-bulk', [BioLidController::class, 'sendCredentialsBulk'])
     ->name('biolid.send-credentials-bulk');
 Route::post('biolid/create-users-bulk', [BioLidController::class, 'createUsersBulk'])

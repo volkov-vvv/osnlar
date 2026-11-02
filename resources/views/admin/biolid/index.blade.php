@@ -150,6 +150,16 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="col col-md-2">
+                                    Статус документы:
+                                    <select id="docs_status" name="docs_status" class="form-control form-control-sm custom-filters">
+                                        <option></option>
+                                        <option value="Не отправлено">Не отправлено</option>
+                                        <option value="На проверке">На проверке</option>
+                                        <option value="Отклонено">Отклонено</option>
+                                        <option value="Проверено">Проверено</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <table id="biolids_table" class="table table-hover text-nowrap">
@@ -166,6 +176,7 @@
                                     <th>Курс</th>
                                     <th>Учебные группы</th>
                                     <th>Статус</th>
+                                    <th>Статус документы</th>
                                     <th>Дата создания</th>
                                     <th>Дата обновления</th>
                                     <th>Действия</th>
@@ -175,6 +186,7 @@
                                 @foreach($bioLids as $bioLid)
                                     @php
                                         $statusTitle = $bioLid->status->title ?? '';
+                                        $docsReview = $bioLid->documentsReviewSummary();
                                     @endphp
                                     <tr data-id="{{ $bioLid->id }}">
                                         <td>{{ $bioLid->id }}</td>
@@ -241,6 +253,9 @@
                                                 @endswitch">
                                                 {{ $statusTitle }}
                                             </span>
+                                        </td>
+                                        <td>
+                                            <span class="{{ $docsReview['badge'] }}">{{ $docsReview['label'] }}</span>
                                         </td>
                                         <td>{{ $bioLid->created_at }}</td>
                                         <td>{{ $bioLid->updated_at }}</td>
@@ -322,6 +337,7 @@
                     studygroup: $('#studygroup').val(),
                     responsible: $('#responsible').val(),
                     status: $('#status').val(),
+                    docs_status: $('#docs_status').val(),
                 };
             },
 
@@ -337,13 +353,15 @@
                 $('#studygroup').val(filters.studygroup || '');
                 $('#responsible').val(filters.responsible || '');
                 $('#status').val(filters.status || '');
+                $('#docs_status').val(filters.docs_status || '');
 
                 var columnFilters = {
                     1: filters.responsible,
                     2: filters.organization,
                     8: filters.course,
                     9: filters.studygroup,
-                    10: filters.status
+                    10: filters.status,
+                    11: filters.docs_status
                 };
 
                 if (!data.columns) {
@@ -369,7 +387,7 @@
 
             order: [[0, 'desc']],
             columnDefs: [
-                { orderable: false, searchable: false, targets: 13 }
+                { orderable: false, searchable: false, targets: 14 }
             ],
             responsive: true,
             lengthChange: false,
@@ -401,6 +419,30 @@
                         }).join('&');
 
                         window.location.href = @json(route($panel . '.biolid.questionnaire')) + '?' + params;
+                    }
+                },
+                {
+                    text: '<i class="fas fa-file-archive mr-1"></i>Сформировать архив',
+                    className: 'btn-secondary',
+                    action: function (e, dt) {
+                        var ids = [];
+                        dt.rows({ search: 'applied' }).every(function () {
+                            var id = $(this.node()).data('id');
+                            if (id) {
+                                ids.push(id);
+                            }
+                        });
+
+                        if (!ids.length) {
+                            alert('Нет заявок для архива по текущим фильтрам');
+                            return;
+                        }
+
+                        var params = ids.map(function (id) {
+                            return 'ids[]=' + encodeURIComponent(id);
+                        }).join('&');
+
+                        window.location.href = @json(route($panel . '.biolid.documents-archive')) + '?' + params;
                     }
                 },
                 {
@@ -546,6 +588,10 @@
             table.column(10).search(this.value, {exact: true}).draw();
         });
 
+        $('#docs_status').on('change', function () {
+            table.column(11).search(this.value, {exact: true}).draw();
+        });
+
         $('#studygroup').on('change', function () {
             table.column(9).search(this.value).draw();
         });
@@ -558,6 +604,7 @@
             $('#organization').val(null).trigger('change');
             $('#responsible').val(null).trigger('change');
             $('#status').val(null).trigger('change');
+            $('#docs_status').val(null).trigger('change');
             $('#studygroup').val(null).trigger('change');
         });
 

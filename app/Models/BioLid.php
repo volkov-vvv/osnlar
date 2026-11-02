@@ -23,10 +23,21 @@ class BioLid extends Model
 
     protected $casts = [
         'birth_date' => 'date',
+        'passport_issued_at' => 'date',
+        'diploma_issued_at' => 'date',
         'politic' => 'boolean',
         'data_submitted_at' => 'datetime',
         'data_reviewed_at' => 'datetime',
     ];
+
+    public function hasPassportData(): bool
+    {
+        return trim((string) $this->passport_series) !== ''
+            && trim((string) $this->passport_number) !== ''
+            && trim((string) $this->passport_issued_by) !== ''
+            && $this->passport_issued_at !== null
+            && trim((string) $this->passport_department_code) !== '';
+    }
 
     public function course(): BelongsTo
     {
@@ -75,6 +86,94 @@ class BioLid extends Model
     public function isDataRejected(): bool
     {
         return $this->data_review_status === UserDocument::REVIEW_REJECTED;
+    }
+
+    /**
+     * Шаги 1–5 (личные данные + обязательные сканы) проверены — можно открывать заявление и согласия.
+     */
+    public function areInitialDocumentStepsApproved(): bool
+    {
+        if (! $this->isDataApproved()) {
+            return false;
+        }
+
+        $this->loadMissing('documents');
+
+        $docsByType = $this->documents
+            ->sortByDesc('id')
+            ->unique('type')
+            ->keyBy('type');
+
+        foreach (array_keys(UserDocument::BIO_DOCS) as $type) {
+            $document = $docsByType->get($type);
+            if (! $document || ! $document->isApproved()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Агрегированный статус проверки данных и документов ЛК.
+     *
+     * @return array{status: string, label: string, badge: string}
+     */
+    public function documentsReviewSummary(): array
+    {
+        $this->loadMissing('documents');
+
+        $statuses = [$this->data_review_status];
+
+        $docsByType = $this->documents
+            ->sortByDesc('id')
+            ->unique('type')
+            ->keyBy('type');
+
+        foreach (UserDocument::requiredBioDocTypes() as $type) {
+            $document = $docsByType->get($type);
+            $statuses[] = $document?->review_status;
+        }
+
+        $nameChange = $docsByType->get('name_change_doc');
+        if ($nameChange) {
+            $statuses[] = $nameChange->review_status;
+        }
+
+        if (in_array(UserDocument::REVIEW_PENDING, $statuses, true)) {
+            return [
+                'status' => UserDocument::REVIEW_PENDING,
+                'label' => 'На проверке',
+                'badge' => 'badge badge-warning',
+            ];
+        }
+
+        if (in_array(UserDocument::REVIEW_REJECTED, $statuses, true)) {
+            return [
+                'status' => UserDocument::REVIEW_REJECTED,
+                'label' => 'Отклонено',
+                'badge' => 'badge badge-danger',
+            ];
+        }
+
+        $allApproved = $statuses !== []
+            && collect($statuses)->every(
+                static fn ($status) => $status === UserDocument::REVIEW_APPROVED
+            );
+
+        if ($allApproved) {
+            return [
+                'status' => UserDocument::REVIEW_APPROVED,
+                'label' => 'Проверено',
+                'badge' => 'badge badge-success',
+            ];
+        }
+
+        return [
+            'status' => 'empty',
+            'label' => 'Не отправлено',
+            'badge' => 'badge badge-secondary',
+        ];
     }
 
     public function status(): BelongsTo

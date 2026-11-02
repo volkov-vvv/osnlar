@@ -57,6 +57,34 @@
                 'class' => $document ? $document->reviewStatusBadgeClass() : 'badge badge-secondary',
             ];
         }
+        foreach ($applicationDocs as $type => $needDoc) {
+            $document = $documents[$type] ?? null;
+            $docSummary[] = [
+                'title' => match ($type) {
+                    'application' => 'Заявление',
+                    'name_change_doc' => 'Смена фамилии',
+                    default => $needDoc['title'],
+                },
+                'label' => $document
+                    ? $document->reviewStatusLabel()
+                    : (! empty($needDoc['optional']) ? 'Необязательно' : 'Не отправлено'),
+                'class' => $document
+                    ? $document->reviewStatusBadgeClass()
+                    : 'badge badge-secondary',
+            ];
+        }
+        foreach ($consentDocs as $type => $needDoc) {
+            $document = $documents[$type] ?? null;
+            $docSummary[] = [
+                'title' => match ($type) {
+                    'consent_arpm' => 'Согл. АРПМ',
+                    'consent_osnovanie' => 'Согл. Основание',
+                    default => $needDoc['title'],
+                },
+                'label' => $document ? $document->reviewStatusLabel() : 'Не отправлено',
+                'class' => $document ? $document->reviewStatusBadgeClass() : 'badge badge-secondary',
+            ];
+        }
 
         $historyCount = $activites->count();
     @endphp
@@ -100,12 +128,14 @@
 
     <section class="content biolid-show">
         <div class="container-fluid">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+            <div id="biolid-review-alerts">
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
+            </div>
 
             {{-- 1. Действия --}}
             <div class="mb-3">
@@ -226,6 +256,28 @@
                                         <td>{{ $bioLid->residence_address ?: '—' }}</td>
                                     </tr>
                                     <tr>
+                                        <td>Серия / номер паспорта</td>
+                                        <td>
+                                            @if($bioLid->passport_series || $bioLid->passport_number)
+                                                {{ trim(($bioLid->passport_series ?: '').' '.$bioLid->passport_number) }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Кем выдан</td>
+                                        <td>{{ $bioLid->passport_issued_by ?: '—' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Дата выдачи</td>
+                                        <td>{{ $bioLid->passport_issued_at ? $bioLid->passport_issued_at->format('d.m.Y') : '—' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Код подразделения</td>
+                                        <td>{{ $bioLid->passport_department_code ?: '—' }}</td>
+                                    </tr>
+                                    <tr>
                                         <td>Организация</td>
                                         <td>{{ $bioLid->organization_title ?: '—' }}</td>
                                     </tr>
@@ -240,6 +292,22 @@
                                     <tr>
                                         <td>Образование</td>
                                         <td>{{ $bioLid->education ?: '—' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Образовательная организация</td>
+                                        <td>{{ $bioLid->education_organization ?: '—' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Полученная квалификация</td>
+                                        <td>{{ $bioLid->education_qualification ?: '—' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Серия и номер диплома</td>
+                                        <td>{{ $bioLid->diploma_series_number ?: '—' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Дата выдачи диплома</td>
+                                        <td>{{ $bioLid->diploma_issued_at ? $bioLid->diploma_issued_at->format('d.m.Y') : '—' }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -259,10 +327,10 @@
                         </button>
                     </div>
                     <div class="w-100 pt-3 mt-2 d-flex flex-wrap" style="flex-basis: 100%;">
-                        @foreach($docSummary as $item)
-                            <span class="mr-3 mb-1">
+                        @foreach($docSummary as $index => $item)
+                            <span class="mr-3 mb-1" data-summary-index="{{ $index }}">
                                 <span class="text-muted">{{ $item['title'] }}:</span>
-                                <span class="{{ $item['class'] }}">{{ $item['label'] }}</span>
+                                <span class="doc-summary-badge {{ $item['class'] }}">{{ $item['label'] }}</span>
                             </span>
                         @endforeach
                     </div>
@@ -280,28 +348,30 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr data-summary-index="0">
                             <td>1. Данные заявки по БИО</td>
-                            <td>
+                            <td class="review-file-cell">
                                 @if($bioLid->data_submitted_at || $bioLid->data_review_status)
                                     Данные из заявки
-                                    @if($bioLid->isDataRejected())
-                                        @if($bioLid->data_reviewed_at)
-                                            <div class="small text-danger mt-1">Дата отклонения: {{ $bioLid->data_reviewed_at->format('d.m.Y H:i') }}</div>
+                                    <div class="review-rejection-info">
+                                        @if($bioLid->isDataRejected())
+                                            @if($bioLid->data_reviewed_at)
+                                                <div class="small text-danger mt-1">Дата отклонения: {{ $bioLid->data_reviewed_at->format('d.m.Y H:i') }}</div>
+                                            @endif
+                                            @if($bioLid->data_review_comment)
+                                                <div class="small text-danger mt-1">Причина: {{ $bioLid->data_review_comment }}</div>
+                                            @endif
                                         @endif
-                                        @if($bioLid->data_review_comment)
-                                            <div class="small text-danger mt-1">Причина: {{ $bioLid->data_review_comment }}</div>
-                                        @endif
-                                    @endif
+                                    </div>
                                 @else
                                     <span class="text-muted">Ещё не отправлено</span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="review-status-cell">
                                 <span class="{{ $bioLid->dataReviewStatusBadgeClass() }}">{{ $bioLid->dataReviewStatusLabel() }}</span>
                             </td>
                             <td>{{ $bioLid->data_submitted_at?->format('d.m.Y H:i') ?: '—' }}</td>
-                            <td>
+                            <td class="review-checked-cell">
                                 @if($bioLid->data_reviewed_at)
                                     {{ $bioLid->data_reviewed_at->format('d.m.Y H:i') }}
                                     @if($bioLid->dataReviewer)
@@ -337,32 +407,50 @@
                             </td>
                         </tr>
 
-                        @php $step = 1; @endphp
-                        @foreach($needDocs as $type => $needDoc)
-                            @php
+                        @php
+                            $step = 1;
+                            $reviewDocRows = [];
+                            foreach ($needDocs as $type => $needDoc) {
                                 $step++;
-                                $document = $documents[$type] ?? null;
-                            @endphp
-                            <tr>
-                                <td>{{ $step }}. {{ $needDoc['title'] }}</td>
-                                <td>
+                                $reviewDocRows[] = ['step' => $step, 'type' => $type, 'title' => $needDoc['title']];
+                            }
+                            $applicationStep = $step + 1;
+                            foreach ($applicationDocs as $type => $needDoc) {
+                                $title = $needDoc['title'];
+                                if (! empty($needDoc['optional'])) {
+                                    $title .= ' (при необходимости)';
+                                }
+                                $reviewDocRows[] = ['step' => $applicationStep, 'type' => $type, 'title' => $title];
+                            }
+                            $consentStep = $applicationStep + 1;
+                            foreach ($consentDocs as $type => $needDoc) {
+                                $reviewDocRows[] = ['step' => $consentStep, 'type' => $type, 'title' => $needDoc['title']];
+                            }
+                        @endphp
+                        @foreach($reviewDocRows as $index => $row)
+                            @php $document = $documents[$row['type']] ?? null; @endphp
+                            <tr data-summary-index="{{ $index + 1 }}">
+                                <td>{{ $row['step'] }}. {{ $row['title'] }}</td>
+                                <td class="review-file-cell">
                                     @if($document && $document->file)
                                         <a href="{{ url('storage/'.$document->file) }}" target="_blank" rel="noopener">
                                             {{ $document->title }}
                                         </a>
-                                        @if($document->isRejected())
-                                            @if($document->reviewed_at)
-                                                <div class="small text-danger mt-1">Дата отклонения: {{ $document->reviewed_at->format('d.m.Y H:i') }}</div>
+                                        <div class="review-rejection-info">
+                                            @if($document->isRejected())
+                                                @if($document->reviewed_at)
+                                                    <div class="small text-danger mt-1">Дата отклонения: {{ $document->reviewed_at->format('d.m.Y H:i') }}</div>
+                                                @endif
+                                                @if($document->review_comment)
+                                                    <div class="small text-danger mt-1">Причина: {{ $document->review_comment }}</div>
+                                                @endif
                                             @endif
-                                            @if($document->review_comment)
-                                                <div class="small text-danger mt-1">Причина: {{ $document->review_comment }}</div>
-                                            @endif
-                                        @endif
+                                        </div>
                                     @else
                                         <span class="text-muted">Файл не загружен</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="review-status-cell">
                                     @if($document)
                                         <span class="{{ $document->reviewStatusBadgeClass() }}">{{ $document->reviewStatusLabel() }}</span>
                                     @else
@@ -370,7 +458,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $document?->submitted_at?->format('d.m.Y H:i') ?: '—' }}</td>
-                                <td>
+                                <td class="review-checked-cell">
                                     @if($document?->reviewed_at)
                                         {{ $document->reviewed_at->format('d.m.Y H:i') }}
                                         @if($document->reviewer)
@@ -414,7 +502,7 @@
             {{-- 5. История — развёрнута --}}
             <div class="card card-outline card-secondary mb-4">
                 <div class="card-header p-3">
-                    <h3 class="card-title mb-0">История изменений ({{ $historyCount }})</h3>
+                    <h3 class="card-title mb-0">История изменений (<span id="biolid-history-count">{{ $historyCount }}</span>)</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -432,7 +520,7 @@
                             <th>Комментарий</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="biolid-history-body">
                         @forelse ($activites as $activity)
                             <tr>
                                 <td>{{ $activity->updated_at }}</td>
@@ -442,7 +530,7 @@
                                 <td class="text-wrap">{{ $activity->comment ?: '—' }}</td>
                             </tr>
                         @empty
-                            <tr>
+                            <tr class="biolid-history-empty">
                                 <td colspan="5">Нет изменений</td>
                             </tr>
                         @endforelse
@@ -456,19 +544,188 @@
 
 @section('javascript')
     <script>
-        document.querySelectorAll('.biolid-review-form').forEach(function (form) {
-            var select = form.querySelector('.review-status-select');
-            var commentWrap = form.querySelector('.review-comment-wrap');
-            if (!select || !commentWrap) {
-                return;
+        (function () {
+            function escapeHtml(value) {
+                return String(value == null ? '' : value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
             }
 
-            function syncComment() {
+            function showReviewAlert(message, type) {
+                type = type || 'success';
+                var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                var container = document.getElementById('biolid-review-alerts');
+                if (!container) {
+                    return;
+                }
+
+                container.innerHTML =
+                    '<div class="alert ' + alertClass + ' alert-dismissible fade show" role="alert">' +
+                        escapeHtml(message) +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                        '</button>' +
+                    '</div>';
+            }
+
+            function syncCommentVisibility(form) {
+                var select = form.querySelector('.review-status-select');
+                var commentWrap = form.querySelector('.review-comment-wrap');
+                if (!select || !commentWrap) {
+                    return;
+                }
                 commentWrap.style.display = select.value === 'rejected' ? '' : 'none';
             }
 
-            select.addEventListener('change', syncComment);
-            syncComment();
-        });
+            function updateRejectionInfo(row, review) {
+                var info = row.querySelector('.review-rejection-info');
+                if (!info) {
+                    return;
+                }
+
+                if (review.status !== 'rejected') {
+                    info.innerHTML = '';
+                    return;
+                }
+
+                var html = '';
+                if (review.reviewed_at) {
+                    html += '<div class="small text-danger mt-1">Дата отклонения: ' + escapeHtml(review.reviewed_at) + '</div>';
+                }
+                if (review.comment) {
+                    html += '<div class="small text-danger mt-1">Причина: ' + escapeHtml(review.comment) + '</div>';
+                }
+                info.innerHTML = html;
+            }
+
+            function updateRow(form, review) {
+                var row = form.closest('tr');
+                if (!row || !review) {
+                    return;
+                }
+
+                var statusCell = row.querySelector('.review-status-cell');
+                if (statusCell) {
+                    statusCell.innerHTML = '<span class="' + escapeHtml(review.badge) + '">' + escapeHtml(review.label) + '</span>';
+                }
+
+                var checkedCell = row.querySelector('.review-checked-cell');
+                if (checkedCell) {
+                    if (review.reviewed_at) {
+                        checkedCell.innerHTML = escapeHtml(review.reviewed_at) +
+                            (review.reviewer_name
+                                ? '<div class="small text-muted">' + escapeHtml(review.reviewer_name) + '</div>'
+                                : '');
+                    } else {
+                        checkedCell.textContent = '—';
+                    }
+                }
+
+                updateRejectionInfo(row, review);
+
+                var commentInput = form.querySelector('input[name="review_comment"]');
+                if (commentInput) {
+                    commentInput.value = review.status === 'rejected' ? (review.comment || '') : '';
+                }
+                syncCommentVisibility(form);
+
+                var summaryIndex = row.getAttribute('data-summary-index');
+                if (summaryIndex !== null) {
+                    var summaryBadge = document.querySelector(
+                        '[data-summary-index="' + summaryIndex + '"] .doc-summary-badge'
+                    );
+                    if (summaryBadge) {
+                        summaryBadge.className = 'doc-summary-badge ' + (review.badge || '');
+                        summaryBadge.textContent = review.label || '';
+                    }
+                }
+            }
+
+            function prependHistory(activity) {
+                if (!activity) {
+                    return;
+                }
+
+                var body = document.getElementById('biolid-history-body');
+                var countEl = document.getElementById('biolid-history-count');
+                if (!body) {
+                    return;
+                }
+
+                var emptyRow = body.querySelector('.biolid-history-empty');
+                if (emptyRow) {
+                    emptyRow.remove();
+                }
+
+                var tr = document.createElement('tr');
+                tr.innerHTML =
+                    '<td>' + escapeHtml(activity.updated_at) + '</td>' +
+                    '<td>' + escapeHtml(activity.user) + '</td>' +
+                    '<td>' + escapeHtml(activity.description) + '</td>' +
+                    '<td>' + escapeHtml(activity.status_old) + ' <i class="fas fa-arrow-right"></i> ' + escapeHtml(activity.status_new) + '</td>' +
+                    '<td class="text-wrap">' + escapeHtml(activity.comment || '—') + '</td>';
+                body.appendChild(tr);
+
+                if (countEl) {
+                    countEl.textContent = String((parseInt(countEl.textContent, 10) || 0) + 1);
+                }
+            }
+
+            document.querySelectorAll('.biolid-review-form').forEach(function (form) {
+                var select = form.querySelector('.review-status-select');
+                if (select) {
+                    select.addEventListener('change', function () {
+                        syncCommentVisibility(form);
+                    });
+                    syncCommentVisibility(form);
+                }
+
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                    }
+
+                    fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: new FormData(form),
+                        credentials: 'same-origin'
+                    }).then(function (response) {
+                        return response.json().then(function (data) {
+                            return { ok: response.ok, status: response.status, data: data };
+                        }).catch(function () {
+                            return { ok: response.ok, status: response.status, data: null };
+                        });
+                    }).then(function (result) {
+                        if (!result.ok) {
+                            var message = (result.data && result.data.message)
+                                || (result.data && result.data.errors && Object.values(result.data.errors)[0] && Object.values(result.data.errors)[0][0])
+                                || 'Не удалось сохранить статус';
+                            showReviewAlert(message, 'error');
+                            return;
+                        }
+
+                        updateRow(form, result.data.review);
+                        prependHistory(result.data.activity);
+                        showReviewAlert(result.data.message || 'Статус обновлён', 'success');
+                    }).catch(function () {
+                        showReviewAlert('Не удалось сохранить статус', 'error');
+                    }).finally(function () {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                        }
+                    });
+                });
+            });
+        })();
     </script>
 @endsection

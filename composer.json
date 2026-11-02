@@ -21,6 +21,7 @@
         "spatie/data-transfer-object": "^3.9",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-cookie-consent": "^3.2",
+        "wapmorgan/morphos": "^3.2",
         "yoomoney/yookassa-sdk-php": "^3.0"
     },
     "require-dev": {

@@ -34,10 +34,11 @@ class IndexController extends Controller
                 ]);
             }
 
+            $allBioDocs = UserDocument::allBioDocs();
             $docs = UserDocument::query()
                 ->where('user_id', $user->id)
                 ->where('bio_lid_id', $bioLid->id)
-                ->whereIn('type', array_keys(UserDocument::BIO_DOCS))
+                ->whereIn('type', array_keys($allBioDocs))
                 ->where('review_status', UserDocument::REVIEW_REJECTED)
                 ->latest('id')
                 ->get()
@@ -45,10 +46,14 @@ class IndexController extends Controller
 
             foreach ($docs as $doc) {
                 $rejectedDocuments->push([
-                    'title' => UserDocument::BIO_DOCS[$doc->type]['title'] ?? $doc->title,
+                    'title' => $allBioDocs[$doc->type]['title'] ?? $doc->title,
                     'comment' => $doc->review_comment,
                     'rejected_at' => $doc->reviewed_at,
-                    'anchor' => 'doc-'.$doc->type,
+                    'anchor' => match (true) {
+                        isset(UserDocument::BIO_CONSENT_DOCS[$doc->type]) => 'doc-consents',
+                        isset(UserDocument::BIO_APPLICATION_DOCS[$doc->type]) => 'doc-application',
+                        default => 'doc-'.$doc->type,
+                    },
                 ]);
             }
         }

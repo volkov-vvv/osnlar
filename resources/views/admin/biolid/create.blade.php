@@ -110,6 +110,9 @@
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    @include('admin.biolid._passport_fields')
+
                     <div class="mb-3">
                         <label>Образование</label>
                         <textarea name="education" class="form-control" rows="3">{{ old('education') }}</textarea>
@@ -117,6 +120,8 @@
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    @include('admin.biolid._education_fields')
 
                     <div class="mb-3">
                         <label>Полное наименование организации</label>
