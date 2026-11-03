@@ -6,15 +6,29 @@
             padding: 2.5rem 1rem 3rem;
             text-align: center;
         }
-        .bioeconomy-logo {
-            display: block;
-            width: min(280px, 78%);
-            height: auto;
-            margin: 0 auto 1.5rem;
-        }
         .bioeconomy-lead {
             color: grey;
             font-size: 20px;
+        }
+        .bioeconomy-partners {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem 2.5rem;
+            margin: 0 auto 1.75rem;
+            max-width: 960px;
+        }
+        .bioeconomy-partners img {
+            display: block;
+            height: 64px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            flex: 0 1 auto;
+        }
+        .bioeconomy-partners .bioeconomy-logo {
+            height: 200px;
         }
         .featured-posts-section .course-study-meta {
             display: flex;
@@ -57,7 +71,7 @@
             opacity: 0.9;
         }
         .bioeconomy-apply {
-            padding: 0.5rem 0 11rem;
+            padding: 0.5rem 0 4rem;
         }
         .bioeconomy-apply-card {
             padding: 2.25rem 1.5rem;
@@ -107,6 +121,16 @@
             }
             .bioeconomy-lead {
                 font-size: 16px;
+            }
+            .bioeconomy-partners {
+                gap: 0.75rem 1rem;
+                margin-bottom: 1.25rem;
+            }
+            .bioeconomy-partners img {
+                height: 36px;
+            }
+            .bioeconomy-partners .bioeconomy-logo {
+                height: 120px;
             }
             .bioeconomy-apply-title {
                 font-size: 1.4rem;
@@ -183,15 +207,18 @@
         <div class="container">
             <div class="row" data-aos="fade-up">
                 <div class="col bioeconomy-hero">
-                    <img class="bioeconomy-logo" src="{{ asset('assets/images/биоэкономика-thumb.jpg') }}" alt="Национальный проект «Биоэкономика»">
+                    <div class="bioeconomy-partners" aria-label="Партнёры проекта">
+                        <img class="bioeconomy-logo" src="{{ asset('assets/images/биоэкономика-thumb.jpg') }}" alt="Национальный проект «Биоэкономика»" data-aos="fade-up">
+                        <img src="{{ asset('assets/images/arpm-logo.svg') }}" alt="Агентство развития профессионального мастерства" data-aos="fade-up" data-aos-delay="100">
+                    </div>
                     <h1>Национальный проект </br>«Технологическое обеспечение биоэкономики»</h1>
-                    <p class="bioeconomy-lead">Совместно с «Агентством развития профессионального мастерства» проводим бесплатное обучение по программам дополнительного профессионального образования для сотрудников передовых организаций в области биоэкономики</p>
+                    <p class="bioeconomy-lead">Совместно с <a href="https://arpm.pro/" target="_blank" rel="noopener">«Агентством развития профессионального мастерства»</a> проводим бесплатное обучение по программам дополнительного профессионального образования для сотрудников передовых организаций в области биоэкономики</p>
                 </div>
             </div>
             @if($documents->isNotEmpty())
                 <div class="bioeconomy-docs">
                     @foreach($documents as $document)
-                        <a class="bioeconomy-doc" href="{{ url('storage/' . $document['path']) }}" target="_blank" rel="noopener" data-aos="fade-up">
+                        <a class="bioeconomy-doc" href="{{ url('storage/' . $document['path']) }}" target="_blank" rel="noopener">
                             <div class="bioeconomy-doc-icon" aria-hidden="true"><i class="{{ $document['icon'] }}"></i></div>
                             <div class="bioeconomy-doc-title">{{ $document['title'] }}</div>
                         </a>
@@ -203,7 +230,7 @@
                     <h4 class="edica-landing-section-subtitle-alt">Доступные курсы в рамках проекта</h4>
                     <div class="row">
                         @foreach($courses as $course)
-                            <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
+                            <div class="col-md-4 fetured-post blog-post">
                                 <div class="blog-post-thumbnail-wrapper">
                                     <a href="{{route('course.show', $course->id)}}">
                                         <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
@@ -238,7 +265,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9 mx-auto">
-                        <div class="bioeconomy-apply-card" data-aos="fade-up">
+                        <div class="bioeconomy-apply-card">
                             <h2 class="bioeconomy-apply-title">Подать заявку!</h2>
                             <a href="{{ route('org.bioeconomy.create') }}" class="bioeconomy-apply-btn"><i class="fas fa-pencil-alt" aria-hidden="true"></i>Оставить заявку от организации</a>
                         </div>

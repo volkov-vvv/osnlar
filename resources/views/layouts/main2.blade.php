@@ -20,13 +20,302 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{asset('assets/images/fav.ico')}}">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v49">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v107">
     <style>
+        header.edica-header.sticky-top {
+            top: 0;
+            z-index: 1030;
+        }
+
+        @media (min-width: 992px) {
+            header.edica-header.sticky-top {
+                padding: 0.85rem 0 0;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            header.edica-header .header-glass {
+                position: relative;
+                width: 100%;
+                max-width: 1140px;
+                margin: 0 auto;
+                padding: 0 15px;
+                isolation: isolate;
+                border-radius: 1.25rem;
+                border: 1px solid rgba(255, 255, 255, 0.72);
+                background:
+                    linear-gradient(
+                        145deg,
+                        rgba(255, 255, 255, 0.82) 0%,
+                        rgba(255, 255, 255, 0.55) 42%,
+                        rgba(232, 240, 250, 0.72) 100%
+                    );
+                background-clip: padding-box;
+                backdrop-filter: blur(18px) saturate(160%);
+                -webkit-backdrop-filter: blur(18px) saturate(160%);
+                box-shadow:
+                    0 14px 36px rgba(15, 23, 42, 0.1),
+                    0 4px 14px rgba(9, 76, 161, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+                    inset 0 -1px 0 rgba(9, 76, 161, 0.06);
+            }
+
+            header.edica-header .header-glass::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                padding: 1px;
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(147, 197, 253, 0.28) 48%, rgba(255, 255, 255, 0.35));
+                -webkit-mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                mask-composite: exclude;
+                pointer-events: none;
+                z-index: 0;
+            }
+
+            header.edica-header .header-glass > * {
+                position: relative;
+                z-index: 1;
+            }
+
+            header.edica-header .header-glass .navbar {
+                flex-wrap: nowrap;
+                width: 100%;
+                min-width: 0;
+                padding-top: 1.75rem;
+                padding-bottom: 1.75rem;
+            }
+
+            header.edica-header .header-glass .navbar-collapse {
+                min-width: 0;
+            }
+
+            header.edica-header .header-glass .nav-item-login {
+                margin-left: 1.25rem;
+            }
+
+            header.edica-header .header-glass .button-login {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.45rem;
+                min-height: 2.35rem;
+                padding: 0.45rem 1.15rem;
+                border: 1px solid rgba(9, 76, 161, 0.22);
+                border-radius: 999px;
+                color: #094ca1;
+                font-size: 0.95rem;
+                font-weight: 700;
+                line-height: 1.2;
+                white-space: nowrap;
+                text-decoration: none;
+                background:
+                    linear-gradient(
+                        145deg,
+                        rgba(255, 255, 255, 0.95) 0%,
+                        rgba(236, 244, 255, 0.88) 48%,
+                        rgba(210, 228, 252, 0.92) 100%
+                    );
+                box-shadow:
+                    0 8px 18px rgba(9, 76, 161, 0.12),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+                transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+            }
+
+            header.edica-header .header-glass .button-login i {
+                font-size: 0.85em;
+                opacity: 0.9;
+            }
+
+            header.edica-header .header-glass .button-login:hover,
+            header.edica-header .header-glass .button-login:focus {
+                color: #083d82;
+                border-color: rgba(9, 76, 161, 0.38);
+                background:
+                    linear-gradient(
+                        145deg,
+                        rgba(255, 255, 255, 1) 0%,
+                        rgba(220, 234, 252, 0.96) 50%,
+                        rgba(186, 214, 246, 0.98) 100%
+                    );
+                box-shadow:
+                    0 12px 24px rgba(9, 76, 161, 0.18),
+                    inset 0 1px 0 rgba(255, 255, 255, 1);
+                text-decoration: none;
+                transform: translateY(-1px);
+            }
+
+            header.edica-header .header-glass .button-lid-create {
+                padding: 5px 12px;
+                box-shadow: 0 6px 14px rgba(220, 53, 69, 0.18);
+            }
+
+            header.edica-header .header-glass .nav-item-lid-create {
+                margin-right: 0.75rem !important;
+                margin-left: 0.75rem !important;
+            }
+
+            header.edica-header .header-glass .navbar-nav > .nav-item:last-child {
+                margin-right: 0;
+                padding-right: 0;
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            header.edica-header .header-glass {
+                max-width: 960px;
+            }
+        }
+
+        header.edica-header .navbar-nav .nav-item-user .header-user-toggle {
+            gap: 0.55rem;
+            padding: 0.35rem 0.65rem;
+            min-height: 0;
+            border: 1px solid rgba(9, 76, 161, 0.12);
+            border-radius: 999px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.9) 0%,
+                    rgba(236, 244, 255, 0.75) 100%
+                );
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+        }
+
+        header.edica-header .navbar-nav .nav-item-user .header-user-toggle:hover,
+        header.edica-header .navbar-nav .nav-item-user.show > .header-user-toggle {
+            border-color: rgba(9, 76, 161, 0.28);
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.98) 0%,
+                    rgba(220, 234, 252, 0.92) 100%
+                );
+            box-shadow:
+                0 8px 18px rgba(9, 76, 161, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        header.edica-header .header-user-avatar {
+            width: 28px;
+            height: 28px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        header.edica-header .header-user-avatar--placeholder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(9, 76, 161, 0.12);
+            color: #094ca1;
+            font-size: 0.75rem;
+        }
+
+        header.edica-header .header-user-name {
+            max-width: 10rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        header.edica-header .header-user-menu {
+            min-width: 15.5rem;
+            margin-top: 0.55rem;
+            padding: 0.45rem;
+            border: 1px solid rgba(9, 76, 161, 0.12);
+            border-radius: 1rem;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.98) 0%,
+                    rgba(248, 251, 255, 0.97) 45%,
+                    rgba(240, 246, 252, 0.98) 100%
+                );
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            box-shadow:
+                0 18px 40px rgba(15, 23, 42, 0.14),
+                0 4px 14px rgba(9, 76, 161, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+
+        header.edica-header .header-user-menu .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.7rem 0.85rem;
+            border-radius: 0.7rem;
+            color: #334155;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.25;
+            background: transparent;
+            border: 0;
+            width: 100%;
+            text-align: left;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        header.edica-header .header-user-menu .dropdown-item i {
+            width: 1rem;
+            color: #094ca1;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        header.edica-header .header-user-menu .dropdown-item:hover,
+        header.edica-header .header-user-menu .dropdown-item:focus {
+            color: #094ca1;
+            background: rgba(9, 76, 161, 0.08);
+            text-decoration: none;
+        }
+
+        header.edica-header .header-user-menu .dropdown-divider {
+            margin: 0.35rem 0.4rem;
+            border-top-color: rgba(9, 76, 161, 0.12);
+        }
+
+        header.edica-header .header-user-menu .header-user-menu__logout {
+            color: #b42318;
+        }
+
+        header.edica-header .header-user-menu .header-user-menu__logout i {
+            color: #b42318;
+        }
+
+        header.edica-header .header-user-menu .header-user-menu__logout:hover,
+        header.edica-header .header-user-menu .header-user-menu__logout:focus {
+            color: #912018;
+            background: rgba(180, 35, 24, 0.08);
+        }
+
+        @media (min-width: 992px) {
+            header.edica-header .nav-item-user:hover > .header-user-menu,
+            header.edica-header .nav-item-user.show > .header-user-menu {
+                display: block;
+            }
+        }
+
         header.edica-header .navbar-light .navbar-nav .active > .nav-link,
         header.edica-header .navbar-light .navbar-nav .nav-link.active {
             color: #094ca1;
@@ -37,10 +326,52 @@
             font-size: 0.85em;
         }
         @media (max-width: 991.98px) {
+            header.edica-header.sticky-top {
+                padding: 0;
+                background-color: rgba(255, 255, 255, 0.7);
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            header.edica-header .header-glass {
+                max-width: none;
+                margin: 0;
+                padding: 0 15px;
+                border: 0;
+                border-radius: 0;
+                background: transparent;
+                box-shadow: none;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+
+            header.edica-header .header-glass::before {
+                content: none;
+            }
+
             header.edica-header .navbar-nav .nav-item.active .nav-link,
             header.edica-header .navbar-nav .nav-link.active {
                 color: #094ca1;
                 border-color: #d0d5db;
+            }
+
+            header.edica-header .navbar-nav .nav-item-user {
+                width: 100%;
+            }
+
+            header.edica-header .navbar-nav .nav-item-user .header-user-toggle {
+                width: 100%;
+                justify-content: center;
+                border-radius: 0.8rem;
+            }
+
+            header.edica-header .navbar-nav .nav-item-user .header-user-menu {
+                width: 100%;
+                margin-top: 0.45rem;
+                position: static !important;
+                float: none;
+                transform: none !important;
             }
         }
     </style>
@@ -97,8 +428,8 @@
 {{--box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 sticky-top  bg-white bg-opacity-75
 --}}
-<header class="edica-header sticky-top bg-opacity-75" style="background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(5px);  box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-    <div class="container">
+<header class="edica-header sticky-top">
+    <div class="header-glass">
         <nav class="navbar navbar-expand-lg navbar-light">
 
             <div class="d-none d-lg-block"> <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-clear.png')}}" width="220"  alt="Основание"></a></div>
@@ -120,7 +451,7 @@ sticky-top  bg-white bg-opacity-75
                         'class' => 'mobile-header-cta--enroll',
                         'icon' => false,
                     ];
-                } elseif (request()->routeIs('main.index', 'course.index')) {
+                } elseif (request()->routeIs('course.index')) {
                     $mobileHeaderCta = [
                         'label' => 'Оставить заявку',
                         'url' => route('lid.create'),
@@ -184,63 +515,82 @@ sticky-top  bg-white bg-opacity-75
 
                     @guest
                     <li class="nav-item nav-item-social nav-item-social-first">
-                        <a class="nav-link" href="{{url('https://max.ru/id7751117260_biz')}}" target="_blank" rel="noopener noreferrer">
-                            <img class="social-icon-max" src="{{asset('assets/images/Max_logo_2025.png')}}" width="25" height="25" alt="Макс">
+                        <a class="nav-link header-social-btn header-social-btn--max" href="{{url('https://max.ru/id7751117260_biz')}}" target="_blank" rel="noopener noreferrer" aria-label="Макс">
+                            <svg class="header-social-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" fill-rule="evenodd" d="M12 2.2C6.7 2.2 2.4 6.3 2.4 11.35c0 2.9 1.35 5.5 3.5 7.25L4.1 21.8l3.6-1.4c1.3.5 2.75.8 4.3.8 5.3 0 9.6-4.1 9.6-9.15S17.3 2.2 12 2.2Zm0 3.35c3.55 0 6.4 2.7 6.4 6.05S15.55 17.65 12 17.65c-1.1 0-2.15-.25-3.05-.7l-2.45.95.9-2.2c-1.15-1.15-1.85-2.7-1.85-4.4 0-3.35 2.85-6.05 6.45-6.05Z"/>
+                            </svg>
                             <span class="d-lg-none">Макс</span>
                         </a>
                     </li>
                     <li class="nav-item nav-item-social">
-                        <a class="nav-link" href="{{url('https://t.me/osnovanie_study')}}" target="_blank" rel="noopener noreferrer">
-                            <img src="{{asset('assets/images/Telegram_Messenger.png')}}" width="28" height="28" alt="Телеграмм">
-                            <span class="d-lg-none">Телеграмм</span>
+                        <a class="nav-link header-social-btn header-social-btn--telegram" href="{{url('https://t.me/osnovanie_study')}}" target="_blank" rel="noopener noreferrer" aria-label="Телеграм">
+                            <i class="fab fa-telegram-plane header-social-icon" aria-hidden="true"></i>
+                            <span class="d-lg-none">Телеграм</span>
                         </a>
                     </li>
                     @endguest
 
                     @if( isset(auth()->user()->id) )
+                        @php
+                            $userCabinetUrl = match ((int) auth()->user()->role) {
+                                1 => route('admin.main.index'),
+                                3 => route('cc.main.index'),
+                                default => route('user.index'),
+                            };
+                            $userCabinetLabel = in_array((int) auth()->user()->role, [1, 3], true)
+                                ? 'Административная панель'
+                                : 'Личный кабинет';
+                        @endphp
 
-                        <li class="nav-item dropdown ml-lg-auto">
-                            <a class="nav-link dropdown-toggle d-inline-flex align-items-center" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item dropdown nav-item-user ml-lg-auto">
+                            <a class="nav-link dropdown-toggle header-user-toggle d-inline-flex align-items-center" href="#" id="userMenuDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if(auth()->user()->avatar)
-                                    <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="rounded-circle mr-2" width="28" height="28" style="object-fit: cover;">
+                                    <img src="{{ url('storage/' . auth()->user()->avatar) }}" alt="" class="header-user-avatar rounded-circle" width="28" height="28">
+                                @else
+                                    <span class="header-user-avatar header-user-avatar--placeholder" aria-hidden="true">
+                                        <i class="fas fa-user"></i>
+                                    </span>
                                 @endif
-                                {{auth()->user()->name}}
+                                <span class="header-user-name">{{ auth()->user()->name }}</span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-lg-right" aria-labelledby="blogDropdown">
-                                <a class="dropdown-item btn btn-link" href="
-                            @switch(auth()->user()->role)
-                                @case(1) {{route('admin.main.index')}}">Административная панель
-                                    @break
-                                    @case(3) {{route('cc.main.index')}}">Административная панель
-                                    @break
-                                    @default
-                                    {{route('user.index')}}">Личный кабинет
-                                    @endswitch
+                            <div class="dropdown-menu dropdown-menu-lg-right header-user-menu" aria-labelledby="userMenuDropdown">
+                                <a class="dropdown-item" href="{{ $userCabinetUrl }}">
+                                    <i class="fas fa-th-large" aria-hidden="true"></i>{{ $userCabinetLabel }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">Профиль</a>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                    <i class="fas fa-user-edit" aria-hidden="true"></i>Профиль
+                                </a>
                                 @if((int) auth()->user()->role === 10)
-                                    <a class="dropdown-item" href="{{ route('user.documents') }}">Документы</a>
+                                    <a class="dropdown-item" href="{{ route('user.documents') }}">
+                                        <i class="fas fa-folder-open" aria-hidden="true"></i>Документы
+                                    </a>
                                 @endif
-                                <a class="dropdown-item" href="{{ route('help.index') }}">Справка</a>
-                                <form action="{{route('logout')}}" method="post">
+                                <a class="dropdown-item" href="{{ route('help.index') }}">
+                                    <i class="fas fa-question-circle" aria-hidden="true"></i>Справка
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <form action="{{ route('logout') }}" method="post">
                                     @csrf
-                                    <button type="submit" class="dropdown-item">
-                                        <i class="fas fa-sign-out-alt mr-2" aria-hidden="true"></i>Выйти
+                                    <button type="submit" class="dropdown-item header-user-menu__logout">
+                                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>Выйти
                                     </button>
                                 </form>
                             </div>
                         </li>
 
                     @else
-
+                        @unless(request()->routeIs('main.index', 'about.index', 'login', 'author.*'))
                         <li class="nav-item nav-item-lid-create mr-lg-3 ml-lg-3">
                             <a class="button-lid-create{{ request()->routeIs('bioeconomy.index') ? ' button-lid-create--bio' : '' }}" role="button" href="{{ request()->routeIs('bioeconomy.index') ? route('org.bioeconomy.create') : route('lid.create') }}">Оставить заявку</a>
                         </li>
+                        @endunless
 
-                        <li class="nav-item">
+                        @unless(request()->routeIs('login'))
+                        <li class="nav-item nav-item-login">
                             <a class="nav-link d-lg-none" href="{{route('login')}}">Войти</a>
-                            <a class="button-login d-none d-lg-inline-flex" href="{{route('login')}}">Войти</a>
+                            <a class="button-login d-none d-lg-inline-flex" href="{{route('login')}}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i>Войти</a>
                         </li>
+                        @endunless
                     @endif
 
                 </ul>
@@ -255,94 +605,17 @@ sticky-top  bg-white bg-opacity-75
 @yield('content')
 </div>
 
-{{--<section class="edica-footer-banner-section">--}}
-{{--    <div class="container">--}}
-{{--        <div class="footer-banner" data-aos="fade-up">--}}
-{{--            <h1 class="banner-title">Подать заявку!</h1>--}}
-{{--            <div class="banner-btns-wrapper">--}}
-{{--                <div class="carousel-content-btns">--}}
-{{--                    <a href="{{route('lid.create')}}" class="btn btn-primary"><i class="fas fa-arrow-right mr-2"></i> Записаться</a>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</section>--}}
-<footer class="edica-footer mt-auto" data-aos="fade-up">
-    <div class="container">
-        <div class="row footer-widget-area">
-            <div class="col-md-3">
-                <nav class="footer-nav">
-                    <p class="">ООО «Центр повышения квалификации и профессиональной подготовки «Основание»</p>
-                    <p class="">Адрес: 129110, г. Москва, ул. Гиляровского д. 57, стр. 1.</p>
-                    <p class="">+7 (499) 609-60-20</p>
-                    <p class="">edu@partnerdpo.ru</p>
-
-
-                    <nav class="footer-social-links">
-                        <a href="{{url('https://vk.com/osnovanie_study')}}" target="_blank"><i class="fab fa-vk"></i></a>
-                        <a href="{{url('https://ok.ru/group/70000005562055')}}" target="_blank"><i class="fab fa-odnoklassniki"></i></a>
-                        <a href="{{url('https://t.me/osnovanie_study')}}" target="_blank"><i class="fab fa-telegram"></i></a>
-                        {{--                        <a href="#!"><i class="fab fa-yandex" target="_blank"></i></a>--}}
-                    </nav>
-                </nav>
-            </div>
-            <div class="col-md-3">
-                <nav class="footer-nav">
-                    <p>Реквизиты</p>
-                    <p>ИНН/КПП: 7751117260/770201001</p>
-                    <p>ОГРН: 5177746204763</p>
-                    <p>Режим работы</p>
-                    <p>Пн-Пт, 9:00 – 18:00</p>
-                </nav>
-            </div>
-            <div class="col-md-3">
-                <nav class="footer-nav">
-                    <a href="{{asset('files/reg_org.pdf')}}" class="nav-link" target="_blank">Карточка организации</a>
-                    <a href="#!" class="nav-link">Блог</a>
-                    <a href="#!" class="nav-link">FAQ</a>
-                    {{--                    <a href="#!" class="nav-link">Цены и услуги</a>--}}
-                    <a href="#!" class="nav-link">Условия сотрудничества</a>
-                    <a href="#!" class="nav-link">Партнеры</a>
-                    <a href="{{ route('author.index') }}" class="nav-link">Авторы / Эксперты</a>
-                </nav>
-            </div>
-            <div class="col-md-3">
-                <div class="dropdown footer-country-dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="footerCountryDropdown"
-                            data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                        <span class="flag-icon flag-icon-ru flag-icon-squared"></span> Русский <i
-                            class="fas fa-chevron-down ml-2"></i>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="footerCountryDropdown">
-                        <button class="dropdown-item" href="#">
-                            <span class="flag-icon flag-icon-gb flag-icon-squared"></span> Английский
-                        </button>
-                        <button class="dropdown-item" href="#">
-                            <span class="flag-icon flag-icon-сhn flag-icon-squared"></span> Китайский
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom-content">
-            <nav class="nav footer-bottom-nav">
-                <a href="{{asset('files/lic.pdf')}}" target="_blank">Образовательная лицензия №Л035-01298-77/00180209 от 29.12.2021</a>
-                <a href="#!">Карта сайта</a>
-            </nav>
-            <p class="mb-0">© Все права защищены</p>
-        </div>
-    </div>
-
-</footer>
+@include('includes.footer')
 
 <script src="{{asset('assets/vendors/popper.js/popper.min.js')}}"></script>
 <script src="{{asset('assets/vendors/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('assets/vendors/aos/aos.js')}}"></script>
-<script src="{{asset('assets/js/main.js')}}"></script>
+<script src="{{asset('assets/js/main.js')}}?v3"></script>
 <script>
     AOS.init({
-        duration: 2000
+        duration: 1600,
+        once: true,
+        offset: 80
     });
 </script>
 

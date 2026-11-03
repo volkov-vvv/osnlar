@@ -1,4 +1,53 @@
 @extends('layouts.main2')
+
+@push('styles')
+    <style>
+        .featured-posts-section .course-study-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 10px;
+        }
+        .featured-posts-section .course-study-form {
+            margin: 0;
+            color: #094ca1;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .featured-posts-section .course-study-form i {
+            margin-right: 0.4rem;
+            color: #094ca1;
+        }
+        .featured-posts-section .course-study-hours {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0 0 0 auto;
+            padding: 0.28rem 0.7rem;
+            border: 1px solid rgba(9, 76, 161, 0.18);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #eaf2fb 0%, #f7fbff 100%);
+            color: #094ca1;
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(9, 76, 161, 0.08);
+        }
+        .featured-posts-section .course-study-hours i {
+            font-size: 0.8em;
+            color: #094ca1;
+            opacity: 0.9;
+        }
+        .edica-landing-blog .blog .blog-post {
+            margin-bottom: 2rem;
+        }
+    </style>
+@endpush
+
 @section('content')
 
 <main>
@@ -20,7 +69,7 @@
                                     </ul>
 
                                     <div class="carousel-content-btns">
-                                        <a href="{{route('course.index')}}" class="button-main">Выберите курс</a>
+                                        <a href="{{route('course.index')}}" class="button-main button-main--glass button-main--shift-right">Выберите курс</a>
                                     </div>
                                     <div class="achievement">
                                         <div><span class="achievement-bold" data-count="{{ $listenersCount }}">{{ number_format($listenersCount, 0, '', ' ') }}</span><br>слушателей</div>
@@ -52,36 +101,34 @@
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item active">
                         <div class="row">
-                            <div class="col-md-6 img-wrapper align-self-start">
-                                <img src="{{asset('assets/images/Slider_1.png')}}" alt="carousel-img" class="img-fluid"
-                                     width="350px">
+                            <div class="col-md-6 img-wrapper align-self-center">
+                                <img class="projects-slide-bioeconomy-ai" src="{{ asset('assets/images/bioeconomy-ai.jpg') }}" alt="Биоэкономика и искусственный интеллект">
                             </div>
                             <div class="col-md-6">
-                                <h2>Федеральный проект «Активные меры содействия занятости»</h2>
-                                <p>Учебный центр «Основание» открывает предварительную запись на <em>бесплатное</em> обучение по программам
-                                    дополнительного профессионального образования отдельных категорий граждан в рамках
-                                    реализации Федерального проекта «Активные меры содействия занятости» <a href="https://xn--80aapampemcchfmo7a3c9ehj.xn--p1ai/new-projects/kadry/" target="_blank">Национального проекта «Кадры»</a>.</p>
+                                <h2>Национальный проект «Технологическое обеспечение биоэкономики» </h2>
+                                <p>Совместно с <a href="https://arpm.pro/" target="_blank" rel="noopener">«Агентством развития профессионального мастерства»</a> проводим <em>бесплатное</em> обучение по программам
+                                    дополнительного профессионального образования для сотрудников передовых органиция в области биоэкономики. Наши программы (BioTech & IT): управление цифровыми решениями, биоинформатика, использование ИИ для анализа данных в биологических исследованиях</p>
 
                                 <div class="carousel-content-btns">
-                                    <a href="{{route('course.index')}}" class="button-main">Оставить заявку</a>
+                                    <a href="{{route('bioeconomy.index')}}" class="button-main button-main--glass">Оставить заявку</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="row">
+                            <div class="col-md-6 img-wrapper align-self-center">
+                                <img class="projects-slide-bioeconomy-ai" src="{{ asset('assets/images/employment-amsz.jpg') }}?v4" alt="Активные меры содействия занятости">
+                            </div>
                             <div class="col-md-6">
-                                <h2>Национальный проект «Технологическое обеспечение биоэкономики» </h2>
-                                <p>Совместно с «Агентством развития профессионального мастерства» проводим <em>бесплатное</em> обучение по программам
-                                    дополнительного профессионального образования для сотрудников передовых органиция в области биоэкономики. Наши программы (BioTech & IT): управление цифровыми решениями, биоинформатика, использование ИИ для анализа данных в биологических исследованиях</p>
+                                <h2>Федеральный проект <br>«Активные меры содействия занятости»</h2>
+                                <p>Учебный центр «Основание» открывает предварительную запись на <em>бесплатное</em> обучение по программам
+                                    дополнительного профессионального образования отдельных категорий граждан в рамках
+                                    реализации Федерального проекта «Активные меры содействия занятости» <a href="https://xn--80aapampemcchfmo7a3c9ehj.xn--p1ai/new-projects/kadry/" target="_blank">Национального проекта «Кадры»</a>.</p>
 
                                 <div class="carousel-content-btns">
-                                    <a href="{{route('bioeconomy.index')}}" class="button-main">Оставить заявку</a>
+                                    <a href="{{route('course.index')}}" class="button-main button-main--glass">Оставить заявку</a>
                                 </div>
-                            </div>
-                            <div class="col-md-6 img-wrapper align-self-start">
-                                <img src="{{asset('assets/images/биоэкономика-thumb.jpg')}}" alt="carousel-img" class="img-fluid"
-                                     width="350px">
                             </div>
                         </div>
                     </div>
@@ -99,21 +146,39 @@
         <div class="container">
             <h4 class="edica-landing-section-subtitle-alt">Наши курсы</h4>
             <h2 class="edica-landing-section-title" data-aos="fade-up">Бесплатные курсы, в рамках Федерального проекта</h2>
-            <div class="row">
-                @foreach($randomCourses as $course)
-                    <div class="col-md-4 pt-0 pb-5 landing-blog-post" data-aos="fade-right">
-                        <a href="{{route('course.show', $course->id)}}"><img src="{{url('storage/' . $course->prev_img) }}" alt="blog post" class="blog-post-thumbnail"></a>
-                        <p class="blog-post-category"></p>
-                        <h4 class="blog-post-title">{{$course->title}}</h4>
-                        <a href="{{route('course.show', $course->id)}}" class="blog-post-link">Перейти</a>
+            <div class="blog">
+                <section class="featured-posts-section">
+                    <div class="row">
+                        @foreach($randomCourses as $course)
+                            <div class="col-md-4 fetured-post blog-post" data-aos="fade-right">
+                                <div class="blog-post-thumbnail-wrapper">
+                                    <a href="{{route('course.show', $course->id)}}">
+                                        <img src="{{ url('storage/' . $course->prev_img) }}" alt="{{ $course->title }}">
+                                    </a>
+                                </div>
+                                @if($course->studyFormLabel() || $course->studyHoursLabel())
+                                    <div class="course-study-meta">
+                                        @if($course->studyFormLabel())
+                                            <p class="course-study-form"><i class="fas fa-graduation-cap" aria-hidden="true"></i>{{ $course->studyFormLabel() }}</p>
+                                        @endif
+                                        @if($course->studyHoursLabel())
+                                            <p class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</p>
+                                        @endif
+                                    </div>
+                                @endif
+                                <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
+                                    <h6 class="blog-post-title">{{$course->title}}</h6>
+                                </a>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                </section>
             </div>
 
             <div class="row mt-5">
 
                 <div class="carousel-content-btns mx-auto text-center">
-                    <a href="{{route('course.index')}}" class="button-main">Все курсы</a>
+                    <a href="{{route('course.index')}}" class="button-main button-main--glass">Все курсы</a>
                 </div>
             </div>
         </div>
@@ -121,7 +186,7 @@
 
     <section class="edica-landing-section edica-landing-about">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-md-6" data-aos="fade-up-right">
                     <h4 class="edica-landing-section-subtitle-alt">О нас</h4>
                     <h2 class="edica-landing-section-title">Успешно обучили более 20 000 слушателей</h2>
@@ -133,7 +198,7 @@
                     </ul>
                 </div>
                 <div class="col-md-6" data-aos="fade-up-left">
-                    <img src="{{asset('assets/images/bilding.png')}}" alt="about" class="img-fluid">
+                    <img src="{{asset('assets/images/bilding.png')}}" alt="about" class="img-fluid" width="930" height="590">
                 </div>
             </div>
         </div>
@@ -168,7 +233,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 carousel-img-wrapper">
-                                            <img src="{{asset('assets/images/Veber.Y.png')}}" alt="carousel-img" class="img-fluid" width="350px">
+                                            <img src="{{asset('assets/images/Veber.Y.png')}}" alt="carousel-img" class="img-fluid" width="350" height="400">
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +250,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 carousel-img-wrapper">
-                                            <img src="{{asset('assets/images/Mirzoyan.E.png')}}" alt="carousel-img" class="img-fluid" width="350px">
+                                            <img src="{{asset('assets/images/Mirzoyan.E.png')}}" alt="carousel-img" class="img-fluid" width="350" height="400">
                                         </div>
                                     </div>
                                 </div>
@@ -201,7 +266,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 carousel-img-wrapper">
-                                            <img src="{{asset('assets/images/Ageev.a.png')}}" alt="carousel-img" class="img-fluid" width="350px">
+                                            <img src="{{asset('assets/images/Ageev.a.png')}}" alt="carousel-img" class="img-fluid" width="350" height="400">
                                         </div>
                                     </div>
                                 </div>
@@ -213,73 +278,6 @@
 
         </div>
     </section>
-
-    <script>
-        (function () {
-            var carouselIds = ['edicaProjectsCarousel', 'edicaReviewsCarousel'];
-
-            function equalizeCarousel(carouselId) {
-                var carousel = document.getElementById(carouselId);
-                if (!carousel) return;
-
-                var items = carousel.querySelectorAll('.carousel-item');
-                var maxHeight = 0;
-
-                items.forEach(function (item) {
-                    item.style.minHeight = '';
-                });
-
-                items.forEach(function (item) {
-                    var previousDisplay = item.style.display;
-                    var previousPosition = item.style.position;
-                    var previousVisibility = item.style.visibility;
-                    var previousWidth = item.style.width;
-
-                    item.style.display = 'block';
-                    item.style.position = 'absolute';
-                    item.style.visibility = 'hidden';
-                    item.style.width = carousel.offsetWidth + 'px';
-
-                    maxHeight = Math.max(maxHeight, item.offsetHeight);
-
-                    item.style.display = previousDisplay;
-                    item.style.position = previousPosition;
-                    item.style.visibility = previousVisibility;
-                    item.style.width = previousWidth;
-                });
-
-                items.forEach(function (item) {
-                    item.style.minHeight = maxHeight + 'px';
-                });
-            }
-
-            function equalizeAllCarousels() {
-                carouselIds.forEach(equalizeCarousel);
-            }
-
-            function runEqualize() {
-                equalizeAllCarousels();
-                carouselIds.forEach(function (carouselId) {
-                    var images = document.querySelectorAll('#' + carouselId + ' img');
-                    images.forEach(function (img) {
-                        if (!img.complete) {
-                            img.addEventListener('load', function () {
-                                equalizeCarousel(carouselId);
-                            });
-                        }
-                    });
-                });
-            }
-
-            if (document.readyState === 'complete') {
-                runEqualize();
-            } else {
-                window.addEventListener('load', runEqualize);
-            }
-
-            window.addEventListener('resize', equalizeAllCarousels);
-        })();
-    </script>
 
     <section class="edica-landing-section edica-landing-clients">
         <div class="container">
@@ -298,7 +296,7 @@
         <div class="container">
             <div id="edicaLandingTestimonialCarousel" class="carousel slide landing-testimonial-carousel" data-ride="carousel">
                 <div class="text-center py-4">
-                    <img src="{{asset('assets/images/quote.svg')}}" alt="quote">
+                    <img src="{{asset('assets/images/quote.svg')}}" alt="quote" width="48" height="43">
                 </div>
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item">
@@ -377,23 +375,23 @@
             <h2 class="edica-landing-section-title">Почему выбирают нас:</h2>
             <div class="row">
                 <div class="col-md-6 landing-service-card" data-aos="fade-left">
-                    <img src="{{asset('assets/images/internet2.png')}}" alt="card img" class="img-fluid service-card-img">
+                    <img src="{{asset('assets/images/internet2.png')}}" alt="card img" class="img-fluid service-card-img" width="140" height="140">
                     <h4 class="service-card-title">Очное и дистанционное обучение</h4>
                     <p class="service-card-description">Наше обучение проходит и в очном и дистанционном формате на платформе LMS, что позволяет нашим слушателям обучаться эффективно с учетом их персонального графика и личного куратора</p>
                 </div>
                 <div class="col-md-6 landing-service-card" data-aos="fade-right">
-                    <img src="{{asset('assets/images/picture.svg')}}" alt="card img" class="img-fluid service-card-img">
+                    <img src="{{asset('assets/images/picture.svg')}}" alt="card img" class="img-fluid service-card-img" width="140" height="140">
                     <h4 class="service-card-title">Видеоуроки в режиме реального времени</h4>
                     <p class="service-card-description">Вы можете активно участвовать в обсуждениях, задавать вопросы и обмениваться мнениями с преподавателем и другими слушателями. Это позволяет не только получить дополнительные объяснения, но и расширить свои знания, услышав разные точки зрения</p>
                 </div>
 
                 <div class="col-md-6 landing-service-card" data-aos="fade-right">
-                    <img src="{{asset('assets/images/goal.svg')}}" alt="card img" class="img-fluid service-card-img">
+                    <img src="{{asset('assets/images/goal.svg')}}" alt="card img" class="img-fluid service-card-img" width="140" height="140">
                     <h4 class="service-card-title">Максимальная персонализация обучения</h4>
                     <p class="service-card-description">Для каждого слушателя наших курсов мы строим индивидуальную образовательную траекторию на основе "умных" алгоритмов</p>
                 </div>
                 <div class="col-md-6 landing-service-card" data-aos="fade-left">
-                    <img src="{{asset('assets/images/chat-bubble.svg')}}" alt="card img" class="img-fluid service-card-img">
+                    <img src="{{asset('assets/images/chat-bubble.svg')}}" alt="card img" class="img-fluid service-card-img" width="140" height="140">
                     <h4 class="service-card-title">Поддержка в удобном формате</h4>
                     <p class="service-card-description">Поддержка кураторов 24/7: адаптация слушателей во время обучения, своевременное оповещение о важных моментах на курсе, сбор обратной связи для улучшения качества курса</p>
                 </div>
@@ -450,8 +448,10 @@
                 var suffix = node.getAttribute('data-suffix') || '';
                 var duration = 1600;
                 var start = null;
-
-                node.textContent = '0' + suffix;
+                // Keep final text width reserved so counting does not reflow the hero.
+                node.style.display = 'inline-block';
+                node.style.minWidth = node.offsetWidth + 'px';
+                node.style.fontVariantNumeric = 'tabular-nums';
 
                 function frame(timestamp) {
                     if (!start) {
