@@ -28,15 +28,52 @@
         }
         .lid-create-form .bs-stepper .line {
             align-self: center;
+            background-color: #dee2e6;
+        }
+        .lid-create-form .bs-stepper .step.crossed + .line,
+        .lid-create-form .bs-stepper .step.active + .line {
+            background-color: #094ca1;
         }
         .lid-create-form .bs-stepper .step-trigger {
             display: inline-flex;
             align-items: center;
             padding: 10px 0;
+            color: #6c757d;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+        }
+        .lid-create-form .bs-stepper .step-trigger:hover,
+        .lid-create-form .bs-stepper .step-trigger:focus {
+            color: #495057;
+            text-decoration: none;
+            outline: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        .lid-create-form .bs-stepper-circle {
+            background-color: #adb5bd;
+            color: #fff;
+        }
+        .lid-create-form .bs-stepper .step.active .bs-stepper-circle,
+        .lid-create-form .bs-stepper .step.crossed .bs-stepper-circle {
+            background-color: #094ca1;
+            color: #fff;
         }
         .lid-create-form .bs-stepper-label {
             margin-top: 0;
             margin-bottom: 0;
+            color: #6c757d;
+            font-weight: 600;
+        }
+        .lid-create-form .bs-stepper .step.active .bs-stepper-label,
+        .lid-create-form .bs-stepper .step.crossed .bs-stepper-label {
+            color: #094ca1;
+            font-weight: 700;
+        }
+        .lid-create-form .bs-stepper .step.active .step-trigger,
+        .lid-create-form .bs-stepper .step.crossed .step-trigger {
+            color: #094ca1;
         }
         .lid-create-form .bs-stepper-content {
             padding-top: 0.5rem;
@@ -52,6 +89,17 @@
             flex-wrap: wrap;
             gap: 0.75rem;
             text-align: center;
+        }
+        .lid-create-form .btn-primary {
+            border-color: #094ca1;
+            background-color: #094ca1;
+            color: #fff;
+        }
+        .lid-create-form .btn-primary:hover,
+        .lid-create-form .btn-primary:focus {
+            border-color: #063a7a;
+            background-color: #063a7a;
+            color: #fff;
         }
 
         .lid-create-form,

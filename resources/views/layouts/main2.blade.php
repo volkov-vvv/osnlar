@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{{asset('assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendors/aos/aos.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v107">
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}?v108">
     <style>
         header.edica-header.sticky-top {
             top: 0;
@@ -236,6 +236,59 @@
             white-space: nowrap;
             font-weight: 700;
             color: #0f172a;
+        }
+
+        header.edica-header .header-courses-menu {
+            min-width: 22rem;
+            max-width: min(28rem, calc(100vw - 2rem));
+            margin-top: 0.55rem;
+            padding: 0.45rem;
+            border: 1px solid rgba(9, 76, 161, 0.12);
+            border-radius: 1rem;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255, 255, 255, 0.98) 0%,
+                    rgba(248, 251, 255, 0.97) 45%,
+                    rgba(240, 246, 252, 0.98) 100%
+                );
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            box-shadow:
+                0 18px 40px rgba(15, 23, 42, 0.14),
+                0 4px 14px rgba(9, 76, 161, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+
+        header.edica-header .header-courses-menu .dropdown-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0.9rem;
+            border-radius: 0.75rem;
+            color: #334155;
+            font-weight: 600;
+            font-size: 0.92rem;
+            line-height: 1.35;
+            white-space: normal;
+            background: transparent;
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+
+        header.edica-header .header-courses-menu .dropdown-item i {
+            width: 1rem;
+            margin-top: 0.15rem;
+            color: #094ca1;
+            text-align: center;
+            flex-shrink: 0;
+            opacity: 0.9;
+        }
+
+        header.edica-header .header-courses-menu .dropdown-item:hover,
+        header.edica-header .header-courses-menu .dropdown-item:focus {
+            color: #094ca1;
+            background: rgba(9, 76, 161, 0.08);
+            text-decoration: none;
         }
 
         header.edica-header .header-user-menu {
@@ -446,14 +499,14 @@ sticky-top  bg-white bg-opacity-75
                     ];
                 } elseif (request()->routeIs('bioeconomy.index')) {
                     $mobileHeaderCta = [
-                        'label' => 'Оставить заявку',
+                        'label' => 'Заявка',
                         'url' => route('org.bioeconomy.create'),
                         'class' => 'mobile-header-cta--enroll',
                         'icon' => false,
                     ];
                 } elseif (request()->routeIs('course.index')) {
                     $mobileHeaderCta = [
-                        'label' => 'Оставить заявку',
+                        'label' => 'Заявка',
                         'url' => route('lid.create'),
                         'class' => 'btn btn-danger',
                         'icon' => false,
@@ -492,11 +545,20 @@ sticky-top  bg-white bg-opacity-75
                     @endif
                         ">
                         <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Курсы</a>
-                        <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                        <div class="dropdown-menu header-courses-menu" aria-labelledby="blogDropdown">
 {{--                            <a class="dropdown-item" href="{{route('future.index')}}">Код будущего</a>--}}
-                            <a class="dropdown-item" href="{{route('course.index')}}">- Бесплатные курсы «Активные меры содействия занятости»</a>
-                            <a class="dropdown-item" href="{{route('commerce.index')}}">- Софинансирование обучения «Профессии будущего»</a>
-                            <a class="dropdown-item" href="{{route('archive.index')}}">- Архив</a>
+                            <a class="dropdown-item" href="{{route('course.index')}}">
+                                <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                                <span>Бесплатные курсы «Активные меры содействия занятости»</span>
+                            </a>
+                            <a class="dropdown-item" href="{{route('commerce.index')}}">
+                                <i class="fas fa-briefcase" aria-hidden="true"></i>
+                                <span>Софинансирование обучения «Профессии будущего»</span>
+                            </a>
+                            <a class="dropdown-item" href="{{route('archive.index')}}">
+                                <i class="fas fa-archive" aria-hidden="true"></i>
+                                <span>Архив</span>
+                            </a>
                         </div>
                     </li>
                     {{-- Mobile: flat list --}}
@@ -579,9 +641,20 @@ sticky-top  bg-white bg-opacity-75
                         </li>
 
                     @else
-                        @unless(request()->routeIs('main.index', 'about.index', 'login', 'author.*'))
+                        @php
+                            $hideHeaderLidCreate = request()->routeIs(
+                                'main.index',
+                                'about.index',
+                                'login',
+                                'author.*',
+                                'org.bioeconomy.create',
+                                'lid.bioeconomy.personal.create',
+                                'lid.create'
+                            ) || (request()->routeIs('course.show') && isset($course) && !empty($course->bioeconomy));
+                        @endphp
+                        @unless($hideHeaderLidCreate)
                         <li class="nav-item nav-item-lid-create mr-lg-3 ml-lg-3">
-                            <a class="button-lid-create{{ request()->routeIs('bioeconomy.index') ? ' button-lid-create--bio' : '' }}" role="button" href="{{ request()->routeIs('bioeconomy.index') ? route('org.bioeconomy.create') : route('lid.create') }}">Оставить заявку</a>
+                            <a class="button-lid-create{{ request()->routeIs('bioeconomy.index') ? ' button-lid-create--bio' : '' }}" role="button" href="{{ request()->routeIs('bioeconomy.index') ? route('org.bioeconomy.create') : route('lid.create') }}">Заявка</a>
                         </li>
                         @endunless
 

@@ -33,7 +33,8 @@ class CourseService
         } catch (Throwable $exception) {
             DB::rollBack();
             report($exception);
-            abort(500, 'Не удалось сохранить курс');
+
+            throw $exception;
         }
     }
 
@@ -64,7 +65,8 @@ class CourseService
         } catch (Throwable $exception) {
             DB::rollBack();
             report($exception);
-            abort(500, 'Не удалось обновить курс');
+
+            throw $exception;
         }
 
         return $course;

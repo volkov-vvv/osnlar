@@ -28,7 +28,7 @@
             flex: 0 1 auto;
         }
         .bioeconomy-partners .bioeconomy-logo {
-            height: 200px;
+            height: 130px;
         }
         .featured-posts-section .course-study-meta {
             display: flex;
@@ -81,11 +81,18 @@
             background: linear-gradient(135deg, #e5f6ea 0%, #f3fbf5 55%, #ffffff 100%);
         }
         .bioeconomy-apply-title {
-            margin: 0 0 1.25rem;
+            margin: 0 0 0.75rem;
             color: #1b7a3a;
             font-size: 1.75rem;
             font-weight: 700;
             line-height: 1.2;
+        }
+        .bioeconomy-apply-note {
+            margin: 0 0 1.25rem;
+            color: #3f6b4d;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.45;
         }
         .bioeconomy-apply-btn {
             display: inline-flex;
@@ -130,7 +137,7 @@
                 height: 36px;
             }
             .bioeconomy-partners .bioeconomy-logo {
-                height: 120px;
+                height: 85px;
             }
             .bioeconomy-apply-title {
                 font-size: 1.4rem;
@@ -267,6 +274,7 @@
                     <div class="col-lg-9 mx-auto">
                         <div class="bioeconomy-apply-card">
                             <h2 class="bioeconomy-apply-title">Подать заявку!</h2>
+                            <p class="bioeconomy-apply-note">Подать заявку на обучение сотрудников может только юридическое лицо</p>
                             <a href="{{ route('org.bioeconomy.create') }}" class="bioeconomy-apply-btn"><i class="fas fa-pencil-alt" aria-hidden="true"></i>Оставить заявку от организации</a>
                         </div>
                     </div>

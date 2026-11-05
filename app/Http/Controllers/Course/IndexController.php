@@ -23,39 +23,39 @@ class IndexController extends Controller
                 ->orWhereNull('bioeconomy');
         })->get()->sortBy('order');
 
-        $coursesS1 = Course::where('is_published', 1)->where('series', 1)->whereNull('price')->where(function ($query) {
-            $query->where('company_id', '=', 1)
-                ->orWhereNull('company_id');
-        })->where(function ($query) {
-            $query->where('code_future', '!=', 1)
-                ->orWhereNull('code_future');
-        })->where(function ($query) {
-            $query->where('bioeconomy', '!=', 1)
-                ->orWhereNull('bioeconomy');
-        })->get()->sortBy('order');
-        $coursesS2 = Course::where('is_published', 1)->where('series', 2)->whereNull('price')->where(function ($query) {
-            $query->where('company_id', '=', 1)
-                ->orWhereNull('company_id');
-        })->where(function ($query) {
-            $query->where('code_future', '!=', 1)
-                ->orWhereNull('code_future');
-        })->where(function ($query) {
-            $query->where('bioeconomy', '!=', 1)
-                ->orWhereNull('bioeconomy');
-        })->get()->sortBy('order');
-        $coursesS3 = Course::where('is_published', 1)->where('series', 3)->whereNull('price')->where(function ($query) {
-            $query->where('company_id', '=', 1)
-                ->orWhereNull('company_id');
-        })->where(function ($query) {
-            $query->where('code_future', '!=', 1)
-                ->orWhereNull('code_future');
-        })->where(function ($query) {
-            $query->where('bioeconomy', '!=', 1)
-                ->orWhereNull('bioeconomy');
-        })->get()->sortBy('order');
+        $filterHours = $courses
+            ->pluck('study_hours')
+            ->filter(fn ($hours) => $hours !== null && $hours !== '')
+            ->map(fn ($hours) => (int) $hours)
+            ->unique()
+            ->sort()
+            ->values();
+
+        $filterForms = $courses
+            ->pluck('study_form')
+            ->filter(fn ($form) => is_string($form) && $form !== '' && isset(Course::STUDY_FORMS[$form]))
+            ->unique()
+            ->values()
+            ->mapWithKeys(fn ($form) => [$form => Course::STUDY_FORMS[$form]]);
+
+        $filterTypes = $courses
+            ->pluck('type')
+            ->filter(fn ($type) => is_string($type) && $type !== '' && isset(Course::TYPES[$type]))
+            ->unique()
+            ->values()
+            ->mapWithKeys(fn ($type) => [$type => Course::TYPES[$type]]);
+
         $pageTitle = "Бесплатные курсы";
         $pageDescription = "Бесплатные курсы Учебного центра «Основание» по программам дополнительного профессионального образования в рамках реализации федерального проекта «Содействие занятости»";
-        return view('course.index',compact('courses', 'pageTitle', 'pageDescription','coursesS1','coursesS2','coursesS3'));
+
+        return view('course.index', compact(
+            'courses',
+            'pageTitle',
+            'pageDescription',
+            'filterHours',
+            'filterForms',
+            'filterTypes'
+        ));
     }
 
     //Платные курсы
