@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Models\Course;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class CourseService
 {
@@ -12,62 +13,60 @@ class CourseService
     {
         try {
             DB::beginTransaction();
-            if (isset($data['author_ids'])){
+            if (isset($data['author_ids'])) {
                 $authorIds = $data['author_ids'];
                 unset($data['author_ids']);
             }
 
             $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
             $data['image'] = Storage::disk('public')->put('/images', $data['image']);
-            if(isset($data['utp'])){
+            if (isset($data['utp'])) {
                 $data['utp'] = Storage::disk('public')->put('/utps', $data['utp']);
             }
 
-
             $course = Course::firstOrCreate($data);
-            if (isset($authorIds)){
-            $course->authors()->attach($authorIds);
+            if (isset($authorIds)) {
+                $course->authors()->attach($authorIds);
             }
 
             DB::commit();
-        }
-        catch (\Exception $exception){
+        } catch (Throwable $exception) {
             DB::rollBack();
-            abort(404);
-        };
-
+            report($exception);
+            abort(500, 'Не удалось сохранить курс');
+        }
     }
+
     public function update($data, $course)
     {
         try {
             DB::beginTransaction();
-            if (isset($data['author_ids'])){
+            if (isset($data['author_ids'])) {
                 $authorIds = $data['author_ids'];
                 unset($data['author_ids']);
             }
 
-            if (isset($data['prev_img'])){
+            if (isset($data['prev_img'])) {
                 $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
             }
-            if (isset($data['image'])){
+            if (isset($data['image'])) {
                 $data['image'] = Storage::disk('public')->put('/images', $data['image']);
             }
-            if (isset($data['utp'])){
+            if (isset($data['utp'])) {
                 $data['utp'] = Storage::disk('public')->put('/utps', $data['utp']);
             }
 
             $course->update($data);
-            if (isset($authorIds)){
-            $course->authors()->sync($authorIds);
+            if (isset($authorIds)) {
+                $course->authors()->sync($authorIds);
             }
             DB::commit();
-
-        }
-        catch (\Exception $exception){
+        } catch (Throwable $exception) {
             DB::rollBack();
-            abort(500);
-        };
-            return $course;
-    }
+            report($exception);
+            abort(500, 'Не удалось обновить курс');
+        }
 
+        return $course;
+    }
 }
