@@ -11,12 +11,19 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
-        $allCourses = Course::where('is_published', 1)->where('company_id', 1)->where('price', NULL)->get();
+        $allCourses = Course::where('is_published', 1)
+            ->where('company_id', 1)
+            ->where('price', NULL)
+            ->where(function ($query) {
+                $query->where('bioeconomy', '!=', 1)
+                    ->orWhereNull('bioeconomy');
+            })
+            ->get();
         $countCourses = $allCourses->count();
 
-        if($countCourses >= 3){
-            $randomCourses = Course::where('is_published', 1)->where('company_id', 1)->where('price', NULL)->get()->random(3);
-        }else{
+        if ($countCourses >= 3) {
+            $randomCourses = $allCourses->random(3);
+        } else {
             $randomCourses = $allCourses;
         }
 
