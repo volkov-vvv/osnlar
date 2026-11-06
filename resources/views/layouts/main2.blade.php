@@ -94,15 +94,107 @@
             }
 
             header.edica-header .header-glass .navbar {
+                display: flex;
                 flex-wrap: nowrap;
+                align-items: center;
                 width: 100%;
                 min-width: 0;
-                padding-top: 1.75rem;
-                padding-bottom: 1.75rem;
+                padding-top: 1.85rem;
+                padding-bottom: 1.85rem;
+            }
+
+            header.edica-header .header-brand-wrap {
+                display: none;
+                align-items: center;
+                flex: 0 0 auto;
+            }
+
+            header.edica-header .navbar-brand.header-brand {
+                display: inline-flex;
+                align-items: center;
+                gap: 0;
+                margin: 0 1.25rem 0 0.75rem;
+                padding: 0;
+                line-height: 1;
+                text-decoration: none;
+            }
+
+            header.edica-header .header-logo-mark {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex: 0 0 auto;
+                line-height: 0;
+            }
+
+            header.edica-header .header-logo-mark img {
+                display: block;
+                transform-origin: 50% 50%;
+                will-change: transform;
+            }
+
+            header.edica-header .header-logo-mark:hover img,
+            header.edica-header .header-logo-mark:focus img {
+                animation: header-logo-propeller 0.85s linear infinite;
+            }
+
+            header.edica-header .header-brand-text {
+                display: inline-flex;
+                align-items: center;
+                color: #111827;
+                font-size: 1.2rem;
+                font-weight: 800;
+                letter-spacing: 0.04em;
+                line-height: 1;
+                text-transform: uppercase;
+            }
+
+            @keyframes header-logo-propeller {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                header.edica-header .header-logo-mark:hover img,
+                header.edica-header .header-logo-mark:focus img {
+                    animation: none;
+                }
             }
 
             header.edica-header .header-glass .navbar-collapse {
                 min-width: 0;
+                align-items: center;
+            }
+
+            @media (min-width: 992px) {
+                header.edica-header .header-brand-wrap {
+                    display: inline-flex;
+                }
+
+                header.edica-header .header-glass .edica-main-nav {
+                    flex-direction: row;
+                    align-items: center;
+                    margin-top: 0 !important;
+                }
+
+                header.edica-header .header-glass .edica-main-nav > .nav-item {
+                    display: flex;
+                    align-items: center;
+                }
+
+                header.edica-header .header-glass .edica-main-nav > .nav-item > .nav-link {
+                    display: inline-flex;
+                    align-items: center;
+                    min-height: 2.35rem;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    line-height: 1.2;
+                }
+
+                header.edica-header .header-glass .button-login,
+                header.edica-header .header-glass .button-lid-create {
+                    align-self: center;
+                }
             }
 
             header.edica-header .header-glass .nav-item-login {
@@ -485,7 +577,14 @@ sticky-top  bg-white bg-opacity-75
     <div class="header-glass">
         <nav class="navbar navbar-expand-lg navbar-light">
 
-            <div class="d-none d-lg-block"> <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main-clear.png')}}" width="220"  alt="Основание"></a></div>
+            <div class="header-brand-wrap d-none d-lg-flex">
+                <a class="navbar-brand header-brand" href="{{ route('main.index') }}" aria-label="Основание">
+                    <span class="header-logo-mark">
+                        <img src="{{ asset('assets/images/logo-main-little.png') }}" width="40" height="40" alt="">
+                    </span>
+                    <span class="header-brand-text">Основание</span>
+                </a>
+            </div>
             @php
                 $mobileHeaderCta = null;
                 if (request()->routeIs('course.show') && isset($course) && empty($course->bioeconomy)) {
@@ -514,8 +613,8 @@ sticky-top  bg-white bg-opacity-75
                 }
             @endphp
             <div class="d-lg-none mobile-header-bar{{ $mobileHeaderCta ? ' mobile-header-bar--with-cta' : '' }}">
-                <a class="navbar-brand mobile-header-logo mb-0" href="{{route('main.index')}}">
-                    <img src="{{asset('assets/images/logo-main-little.png')}}" width="40" height="40" alt="Основание">
+                <a class="navbar-brand mobile-header-logo header-logo-mark mb-0" href="{{route('main.index')}}" aria-label="Основание">
+                    <img src="{{asset('assets/images/logo-main-little.png')}}" width="40" height="40" alt="">
                 </a>
                 @if($mobileHeaderCta)
                     <a class="{{ $mobileHeaderCta['class'] }} mobile-header-cta" role="button" href="{{ $mobileHeaderCta['url'] }}">

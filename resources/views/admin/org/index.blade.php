@@ -311,23 +311,29 @@
         $(document).on('change', '.org-publish-switch', function () {
             var input = $(this);
             var cell = input.closest('td');
+            var published = input.is(':checked');
             input.prop('disabled', true);
 
             $.ajax({
                 url: input.data('url'),
-                method: 'PATCH',
+                method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 data: {
-                    is_published: input.is(':checked') ? 1 : 0
+                    _token: '{{ csrf_token() }}',
+                    _method: 'PATCH',
+                    is_published: published ? 1 : 0
                 }
             }).done(function () {
-                cell.attr('data-search', input.is(':checked') ? 'Опубликован' : 'Не опубликован');
-                table.cell(cell).invalidate().draw(false);
-            }).fail(function () {
-                input.prop('checked', !input.is(':checked'));
+                cell.attr('data-search', published ? 'Опубликован' : 'Не опубликован');
+            }).fail(function (xhr) {
+                input.prop('checked', !published);
+                var message = (xhr.responseJSON && (xhr.responseJSON.message || xhr.responseJSON.error))
+                    || 'Не удалось сохранить статус публикации';
+                alert(message);
             }).always(function () {
                 input.prop('disabled', false);
             });

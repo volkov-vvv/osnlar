@@ -80,11 +80,24 @@ class OrgController extends Controller
 
     public function publish(Request $request, Org $org): JsonResponse|RedirectResponse
     {
-        $org->update([
-            'is_published' => $request->boolean('is_published'),
-        ]);
+        try {
+            $org->update([
+                'is_published' => $request->boolean('is_published'),
+            ]);
+        } catch (\Throwable $exception) {
+            report($exception);
 
-        if ($request->expectsJson()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'message' => 'Не удалось сохранить статус публикации. Проверьте, что миграции применены.',
+                ], 500);
+            }
+
+            return $this->panelRedirect('org.index')
+                ->with('error', 'Не удалось сохранить статус публикации');
+        }
+
+        if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'is_published' => (bool) $org->is_published,
             ]);

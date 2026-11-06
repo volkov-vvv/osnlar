@@ -205,7 +205,7 @@
         }
         .course-filters__empty {
             display: none;
-            margin: 1.5rem 0 0;
+            margin: 1.5rem 0 4rem;
             padding: 1.25rem 1rem;
             border: 1px dashed rgba(9, 76, 161, 0.25);
             border-radius: 0.85rem;

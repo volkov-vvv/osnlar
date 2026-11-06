@@ -9,14 +9,99 @@
         <script src="https://smartcaptcha.yandexcloud.net/captcha.js" defer></script>
     @endif
     <style>
+        .lid-create-form .lid-create-group {
+            margin-bottom: 0.5rem;
+            padding: 1.15rem 1.2rem 0.85rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+        }
+        .lid-create-form .form-label {
+            margin-bottom: 0.45rem;
+            color: #3d4a5c;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
         .lid-create-form .form-control,
         .lid-create-form .input-group-text,
         .lid-create-form .select2-container--bootstrap4 .select2-selection {
-            border-color: #dee2e6;
+            border: 1px solid #d5dde8;
+            background-color: #f8fafc;
+            color: #1f2937;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+        }
+        .lid-create-form .form-control {
+            min-height: calc(1.5em + 1rem + 2px);
+            padding: 0.55rem 0.95rem;
+            border-radius: 0.75rem;
+            font-size: 0.975rem;
+            line-height: 1.5;
+        }
+        .lid-create-form .form-control::placeholder {
+            color: #94a3b8;
+        }
+        .lid-create-form .form-control:hover,
+        .lid-create-form .select2-container--bootstrap4 .select2-selection:hover {
+            border-color: #b7c5d8;
+            background-color: #fff;
         }
         .lid-create-form .form-control:focus {
-            border-color: #ced4da;
-            box-shadow: 0 0 0 0.2rem rgba(206, 212, 218, 0.35);
+            border-color: #094ca1;
+            background-color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(9, 76, 161, 0.14);
+            outline: 0;
+        }
+        .lid-create-form .input-group-text {
+            border-radius: 0.75rem 0 0 0.75rem;
+            color: #64748b;
+        }
+        .lid-create-form .input-group > .form-control {
+            border-radius: 0 0.75rem 0.75rem 0;
+        }
+        .lid-create-form .input-group:focus-within .input-group-text,
+        .lid-create-form .input-group:focus-within .form-control {
+            border-color: #094ca1;
+        }
+        .lid-create-form .select2-container--bootstrap4 .select2-selection--single {
+            height: calc(1.5em + 1rem + 2px) !important;
+            padding: 0;
+            border-radius: 0.75rem;
+            font-size: 0.975rem;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6l4 4 4-4'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.85rem center;
+            background-size: 14px 14px;
+        }
+        .lid-create-form .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+            padding-left: 0.95rem;
+            padding-right: 2.4rem;
+            line-height: calc(1.5em + 1rem);
+            color: #1f2937;
+        }
+        .lid-create-form .select2-container--bootstrap4 .select2-selection--single .select2-selection__placeholder {
+            color: #94a3b8;
+            line-height: calc(1.5em + 1rem);
+        }
+        .lid-create-form .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+            display: none;
+        }
+        .lid-create-form .select2-container--bootstrap4.select2-container--focus .select2-selection,
+        .lid-create-form .select2-container--bootstrap4.select2-container--open .select2-selection {
+            border-color: #094ca1;
+            background-color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(9, 76, 161, 0.14);
+        }
+        .lid-create-form .select2-container--bootstrap4 .select2-dropdown {
+            border-color: #d5dde8;
+            border-radius: 0.75rem;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+            overflow: hidden;
+        }
+        .lid-create-form .select2-container--bootstrap4 .select2-results__option--highlighted,
+        .lid-create-form .select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
+            background-color: #094ca1;
         }
         .lid-create-form .bs-stepper-header {
             margin-bottom: 1.5rem;
@@ -91,15 +176,28 @@
             text-align: center;
         }
         .lid-create-form .btn-primary {
-            border-color: #094ca1;
-            background-color: #094ca1;
+            min-width: 8.5rem;
+            padding: 0.65rem 1.35rem;
+            border: 1px solid #063a7a;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #094ca1 0%, #0b5cc0 100%);
             color: #fff;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(9, 76, 161, 0.2);
+            transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
         }
         .lid-create-form .btn-primary:hover,
         .lid-create-form .btn-primary:focus {
             border-color: #063a7a;
-            background-color: #063a7a;
+            background: linear-gradient(135deg, #073a7a 0%, #094ca1 100%);
             color: #fff;
+            box-shadow: 0 10px 22px rgba(9, 76, 161, 0.26);
+            transform: translateY(-1px);
+        }
+        .lid-create-form .btn-outline-secondary {
+            border-radius: 0.75rem;
+            padding: 0.65rem 1.2rem;
+            font-weight: 600;
         }
 
         .lid-create-form,
@@ -117,8 +215,11 @@
             display: flex;
             align-items: center;
             gap: 0.55rem;
-            padding-left: 0;
+            padding: 0.7rem 0.9rem;
             min-height: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            background: #f8fafc;
         }
 
         .lid-create-form .form-check-input {
@@ -137,6 +238,11 @@
             white-space: normal;
             flex: 1 1 auto;
             min-width: 0;
+        }
+
+        .lid-create-form .form-check-label a {
+            color: #094ca1;
+            font-weight: 600;
         }
 
         .lid-create-form .course-option-label {
@@ -187,6 +293,10 @@
         .lid-create-form .iti .iti__tel-input,
         .lid-create-form .iti input[type="tel"] {
             width: 100%;
+        }
+
+        .lid-create-form .iti__selected-flag {
+            border-radius: 0.75rem 0 0 0.75rem;
         }
 
         .lid-create-form .smart-captcha,
@@ -316,15 +426,17 @@
 
                 <div class="bs-stepper-content">
                     <div id="courses-part" class="content" role="tabpanel" aria-labelledby="courses-part-trigger">
-                        <label class="form-label d-block mb-3"><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
-                        @foreach($courses as $course)
-                            @if($course->title != '---')
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input" name="course_id" type="radio" id="course_id_{{ $course->id }}" value="{{ $course->id }}" {{ $course->id == $selectedCourse ? 'checked' : '' }}>
-                                    <label class="form-check-label category-label course-option-label" for="course_id_{{ $course->id }}">{{ $course->title }}@if($course->studyHoursLabel()) <span class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</span>@endif</label>
-                                </div>
-                            @endif
-                        @endforeach
+                        <div class="lid-create-group">
+                            <label class="form-label d-block mb-3"><span class="text-danger">* </span>Выберите курс, на который хотите записаться</label>
+                            @foreach($courses as $course)
+                                @if($course->title != '---')
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" name="course_id" type="radio" id="course_id_{{ $course->id }}" value="{{ $course->id }}" {{ $course->id == $selectedCourse ? 'checked' : '' }}>
+                                        <label class="form-check-label category-label course-option-label" for="course_id_{{ $course->id }}">{{ $course->title }}@if($course->studyHoursLabel()) <span class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</span>@endif</label>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
 
                         <div class="mt-4 mb-4 step-actions">
                             <button type="button" class="btn btn-primary" onclick="stepper.next()">Дальше</button>
@@ -332,37 +444,39 @@
                     </div>
 
                     <div id="fio-part" class="content" role="tabpanel" aria-labelledby="fio-part-trigger">
-                        <div class="mb-3">
-                            <label class="form-label"><span class="text-danger">* </span>Фамилия</label>
-                            <input name="lastname" type="text" class="form-control" value="{{ old('lastname') }}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label"><span class="text-danger">* </span>Имя</label>
-                            <input name="firstname" type="text" class="form-control" value="{{ old('firstname') }}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Отчество</label>
-                            <input name="middlename" type="text" class="form-control" value="{{ old('middlename') }}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Дата рождения</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                <input name="data" type="text" class="form-control" data-inputmask-alias="datetime"
-                                       data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" value="{{ old('data') }}">
+                        <div class="lid-create-group">
+                            <div class="mb-3">
+                                <label class="form-label"><span class="text-danger">* </span>Фамилия</label>
+                                <input name="lastname" type="text" class="form-control" value="{{ old('lastname') }}">
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label"><span class="text-danger">* </span>Выберите Ваш регион</label>
-                            <select name="region_id" class="form-control select2">
-                                @foreach($regions as $region)
-                                    <option value="{{ $region->id }}" {{ $region->id == old('region_id') ? 'selected' : '' }}>{{ $region->title }}</option>
-                                @endforeach
-                            </select>
+                            <div class="mb-3">
+                                <label class="form-label"><span class="text-danger">* </span>Имя</label>
+                                <input name="firstname" type="text" class="form-control" value="{{ old('firstname') }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Отчество</label>
+                                <input name="middlename" type="text" class="form-control" value="{{ old('middlename') }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Дата рождения</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    <input name="data" type="text" class="form-control" data-inputmask-alias="datetime"
+                                           data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" value="{{ old('data') }}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><span class="text-danger">* </span>Выберите Ваш регион</label>
+                                <select name="region_id" class="form-control select2">
+                                    @foreach($regions as $region)
+                                        <option value="{{ $region->id }}" {{ $region->id == old('region_id') ? 'selected' : '' }}>{{ $region->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="mt-4 mb-4 step-actions">
@@ -372,34 +486,30 @@
                     </div>
 
                     <div id="contacts-part" class="content" role="tabpanel" aria-labelledby="contacts-part-trigger">
-                        <div class="mb-3">
-                            <label class="form-label"><span class="text-danger">* </span>Телефон</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <div class="lid-create-group">
+                            <div class="mb-3">
+                                <label class="form-label"><span class="text-danger">* </span>Телефон</label>
                                 <input name="phone" id="phone" type="tel" class="form-control" value="{{ old('phone') }}">
                                 <input type="hidden" name="phone_prefix" id="phone_prefix" value="{{ old('phone_prefix', '7') }}">
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label"><span class="text-danger">* </span>Email</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <div class="mb-3">
+                                <label class="form-label"><span class="text-danger">* </span>Email</label>
                                 <input name="email" type="email" class="form-control" value="{{ old('email') }}">
                             </div>
-                        </div>
 
-                        <div class="form-check mb-3 mt-4">
-                            <input name="politic" class="form-check-input" type="checkbox" id="politicCheckbox" value="1" {{ old('politic') ? 'checked' : '' }}>
-                            <label for="politicCheckbox" class="form-check-label">
-                                <span class="text-danger">* </span>Я соглашаюсь с
-                                <a href="{{ asset('files/politic.pdf') }}" target="_blank">политикой обработки персональных данных</a>
-                            </label>
-                        </div>
+                            <div class="form-check mb-2 mt-3">
+                                <input name="politic" class="form-check-input" type="checkbox" id="politicCheckbox" value="1" {{ old('politic') ? 'checked' : '' }}>
+                                <label for="politicCheckbox" class="form-check-label">
+                                    <span class="text-danger">* </span>Я соглашаюсь с
+                                    <a href="{{ asset('files/politic.pdf') }}" target="_blank">политикой обработки персональных данных</a>
+                                </label>
+                            </div>
 
-                        <div class="form-check mb-3">
-                            <input name="in_project" class="form-check-input" type="checkbox" id="inProjectCheckbox" value="1" {{ old('in_project') ? 'checked' : '' }}>
-                            <label for="inProjectCheckbox" class="form-check-label">Я никогда не обучался(-лась) в рамках проекта "Содействие занятости"</label>
+                            <div class="form-check mb-3">
+                                <input name="in_project" class="form-check-input" type="checkbox" id="inProjectCheckbox" value="1" {{ old('in_project') ? 'checked' : '' }}>
+                                <label for="inProjectCheckbox" class="form-check-label">Я никогда не обучался(-лась) в рамках проекта "Содействие занятости"</label>
+                            </div>
                         </div>
 
                         <div class="mt-4 mb-4 step-actions">
@@ -409,57 +519,59 @@
                     </div>
 
                     <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
-                        <div class="mb-3">
-                            <label class="form-label">Текущий уровень вашего образования</label>
-                            <select name="lid_level_edu_id" class="form-control select2">
-                                @foreach($levelsedu as $leveledu)
-                                    <option value="{{ $leveledu->id }}" {{ $leveledu->id == old('lid_level_edu_id') ? 'selected' : '' }}>{{ $leveledu->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Выберите подходящую для Вас категорию</label>
-                            @foreach($categoriesMain as $categoryMain)
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" name="category_main" type="radio" id="category_main_{{ $categoryMain->id }}" value="{{ $categoryMain->id }}">
-                                    <label class="form-check-label category-label" for="category_main_{{ $categoryMain->id }}">{{ $categoryMain->title }}</label>
-                                </div>
-                            @endforeach
-
-                            <div id="category_all" class="ml-3 mt-2">
-                                <p class="mb-2">Все категории:</p>
-                                <select name="category_all" class="form-control select2">
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ $category->id == old('category_id') ? 'selected' : '' }}>{{ $category->title }}</option>
+                        <div class="lid-create-group">
+                            <div class="mb-3">
+                                <label class="form-label">Текущий уровень вашего образования</label>
+                                <select name="lid_level_edu_id" class="form-control select2">
+                                    @foreach($levelsedu as $leveledu)
+                                        <option value="{{ $leveledu->id }}" {{ $leveledu->id == old('lid_level_edu_id') ? 'selected' : '' }}>{{ $leveledu->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <input type="hidden" name="category_id" value="{{ old('category_id') }}">
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Ваш персональный агент</label>
-                            <select name="agent_id" class="form-control select2">
-                                @foreach($agents as $agent)
-                                    <option value="{{ $agent->id }}" {{ $agent->id == old('agent_id') ? 'selected' : '' }}>{{ $agent->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        @if($lidCaptchaEnabled ?? true)
                             <div class="mb-3">
-                                <div
-                                    style="height: 100px"
-                                    id="captcha-container"
-                                    class="smart-captcha"
-                                    data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
-                                ></div>
-                                @error('smart-token')
-                                <div class="text-danger mt-2">{{ $message }}</div>
-                                @enderror
+                                <label class="form-label">Выберите подходящую для Вас категорию</label>
+                                @foreach($categoriesMain as $categoryMain)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" name="category_main" type="radio" id="category_main_{{ $categoryMain->id }}" value="{{ $categoryMain->id }}">
+                                        <label class="form-check-label category-label" for="category_main_{{ $categoryMain->id }}">{{ $categoryMain->title }}</label>
+                                    </div>
+                                @endforeach
+
+                                <div id="category_all" class="ml-3 mt-2">
+                                    <p class="mb-2">Все категории:</p>
+                                    <select name="category_all" class="form-control select2">
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}" {{ $category->id == old('category_id') ? 'selected' : '' }}>{{ $category->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <input type="hidden" name="category_id" value="{{ old('category_id') }}">
                             </div>
-                        @endif
+
+                            <div class="mb-3">
+                                <label class="form-label">Ваш персональный агент</label>
+                                <select name="agent_id" class="form-control select2">
+                                    @foreach($agents as $agent)
+                                        <option value="{{ $agent->id }}" {{ $agent->id == old('agent_id') ? 'selected' : '' }}>{{ $agent->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            @if($lidCaptchaEnabled ?? true)
+                                <div class="mb-3">
+                                    <div
+                                        style="height: 100px"
+                                        id="captcha-container"
+                                        class="smart-captcha"
+                                        data-sitekey="ysc1_HS8I72wAFfPh2X4mqPtIPHrpIaq8zkaDIX5PZNXtb0548045"
+                                    ></div>
+                                    @error('smart-token')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endif
+                        </div>
 
                         <div class="mt-4 mb-4 step-actions">
                             <button type="button" class="btn btn-outline-secondary" onclick="stepper.previous()">Назад</button>
