@@ -78,6 +78,11 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+        @hasSection('breadcrumbs')
+            @yield('breadcrumbs')
+        @else
+            @include('admin.includes.breadcrumbs')
+        @endif
         <!-- Content Header (Page header) -->
         @yield('content')
         <!-- /.content -->
@@ -247,6 +252,44 @@
 @yield('javascript')
 
 <style>
+    .content-wrapper {
+        position: relative;
+    }
+
+    .admin-breadcrumbs {
+        position: absolute;
+        top: 1.15rem;
+        right: 1.25rem;
+        z-index: 5;
+        max-width: min(65%, 34rem);
+    }
+
+    .admin-breadcrumbs .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        font-size: 0.9rem;
+    }
+
+    .content-wrapper > .content-header .row > [class*="col-"] {
+        padding-right: 1rem;
+    }
+
+    @media (max-width: 767.98px) {
+        .admin-breadcrumbs {
+            position: static;
+            max-width: none;
+            padding: 0.85rem 1rem 0;
+        }
+
+        .admin-breadcrumbs .breadcrumb {
+            justify-content: flex-start;
+        }
+    }
+
     .custom-file-input:lang(en) ~ .custom-file-label::after {
         content: "...";
     }

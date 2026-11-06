@@ -502,7 +502,7 @@
                                 <input name="politic" class="form-check-input" type="checkbox" id="politicCheckbox" value="1" {{ old('politic') ? 'checked' : '' }}>
                                 <label for="politicCheckbox" class="form-check-label">
                                     <span class="text-danger">* </span>Я соглашаюсь с
-                                    <a href="{{ asset('files/politic.pdf') }}" target="_blank">политикой обработки персональных данных</a>
+                                    <a href="{{ route('privacy') }}" target="_blank" rel="noopener">политикой обработки персональных данных</a>
                                 </label>
                             </div>
 

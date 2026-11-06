@@ -11,6 +11,10 @@
         <priority>0.9</priority>
     </url>
     <url>
+        <loc>https://osnovanie.info/privacy</loc>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>https://osnovanie.info/course</loc>
         <lastmod>2024-04-22T15:48:07+01:00</lastmod>
         <priority>0.9</priority>

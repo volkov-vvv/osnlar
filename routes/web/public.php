@@ -23,6 +23,7 @@ use App\Http\Controllers\Org\StoreBioeconomyController as OrgStoreBioeconomyCont
 use App\Http\Controllers\Org\StoreController as OrgStoreController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Page\GuideController;
+use App\Http\Controllers\Page\PrivacyPolicyController;
 use App\Http\Controllers\Page\VideoController;
 use App\Http\Controllers\Services\IndexController as ServicesIndexController;
 use App\Http\Controllers\SitemapController;
@@ -57,6 +58,7 @@ Route::get('/about', AboutIndexController::class)->name('about.index');
 Route::get('/services', ServicesIndexController::class)->name('services.index');
 Route::get('/video', VideoController::class)->name('video');
 Route::get('/guide', GuideController::class)->name('guide');
+Route::get('/privacy', PrivacyPolicyController::class)->name('privacy');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 

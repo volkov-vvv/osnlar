@@ -503,13 +503,18 @@
                 <div class="row">
                     <div class="col-lg-9 mx-auto">
                         <div class="course-apply-card" data-aos="fade-up">
-                            <h2 class="course-apply-title">Подать заявку!</h2>
                             @if(isset($course->price) && $course->price != 0)
+                                <h2 class="course-apply-title">Сформировать заказ!</h2>
                                 <p class="course-apply-price">Стоимость обучения {{ number_format($course->price, 0, ',', ' ') }} руб.</p>
+                                <a href="{{ route('order.create', $course->id) }}" class="course-apply-btn">
+                                    <i class="fas fa-arrow-right" aria-hidden="true"></i>Заказ
+                                </a>
+                            @else
+                                <h2 class="course-apply-title">Подать заявку!</h2>
+                                <a href="{{ route('lid.create', ['selectedCourse' => $course->id]) }}" class="course-apply-btn">
+                                    <i class="fas fa-arrow-right" aria-hidden="true"></i>Записаться
+                                </a>
                             @endif
-                            <a href="@if(isset($course->price) && $course->price != 0){{ route('order.create', $course->id) }}@else{{ route('lid.create', ['selectedCourse' => $course->id]) }}@endif" class="course-apply-btn">
-                                <i class="fas fa-arrow-right" aria-hidden="true"></i>Записаться
-                            </a>
                         </div>
                     </div>
                 </div>

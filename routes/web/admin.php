@@ -7,6 +7,7 @@ use App\Http\Controllers\Common\BioLidController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommercialLidController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\ContactCenterController;
 use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -29,6 +30,9 @@ use App\Http\Controllers\Admin\FormSettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', MainIndexController::class)->name('main.index');
+
+Route::get('/contactcenter', [ContactCenterController::class, 'index'])
+    ->name('contactcenter.index');
 
 Route::get('/getDashboard', [DashboardController::class, 'getDashboard'])
     ->name('dashboard.getDashboard');

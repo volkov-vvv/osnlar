@@ -70,6 +70,13 @@
             color: #094ca1;
             opacity: 0.9;
         }
+        .featured-posts-section .blog-post-title {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .bioeconomy-apply {
             padding: 0.5rem 0 4rem;
         }
@@ -152,6 +159,9 @@
             align-items: stretch;
             gap: 1rem;
             margin: 0 auto 2.5rem;
+        }
+        .blog > .container > .edica-landing-section.edica-landing-blog {
+            padding-top: 1.75rem;
         }
         .bioeconomy-doc {
             display: flex;
@@ -254,7 +264,7 @@
                                     </div>
                                 @endif
                                 <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
-                                    <h6 class="blog-post-title">{{$course->title}}</h6>
+                                    <h6 class="blog-post-title" title="{{ $course->title }}">{{ $course->title }}</h6>
                                 </a>
                             </div>
                         @endforeach

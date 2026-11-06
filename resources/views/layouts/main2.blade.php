@@ -588,9 +588,10 @@ sticky-top  bg-white bg-opacity-75
             @php
                 $mobileHeaderCta = null;
                 if (request()->routeIs('course.show') && isset($course) && empty($course->bioeconomy)) {
+                    $isPaidCourse = isset($course->price) && $course->price != 0;
                     $mobileHeaderCta = [
-                        'label' => 'Записаться',
-                        'url' => (isset($course->price) && $course->price != 0)
+                        'label' => $isPaidCourse ? 'Заказ' : 'Записаться',
+                        'url' => $isPaidCourse
                             ? route('order.create', $course->id)
                             : route('lid.create', ['selectedCourse' => $course->id]),
                         'class' => 'mobile-header-cta--enroll',
@@ -750,10 +751,27 @@ sticky-top  bg-white bg-opacity-75
                                 'lid.bioeconomy.personal.create',
                                 'lid.create'
                             ) || (request()->routeIs('course.show') && isset($course) && !empty($course->bioeconomy));
+
+                            $headerLidCreateLabel = 'Заявка';
+                            $headerLidCreateUrl = route('lid.create');
+                            $headerLidCreateClass = '';
+
+                            if (request()->routeIs('bioeconomy.index')) {
+                                $headerLidCreateUrl = route('org.bioeconomy.create');
+                                $headerLidCreateClass = ' button-lid-create--bio';
+                            } elseif (
+                                request()->routeIs('course.show')
+                                && isset($course)
+                                && isset($course->price)
+                                && $course->price != 0
+                            ) {
+                                $headerLidCreateLabel = 'Заказ';
+                                $headerLidCreateUrl = route('order.create', $course->id);
+                            }
                         @endphp
                         @unless($hideHeaderLidCreate)
                         <li class="nav-item nav-item-lid-create mr-lg-3 ml-lg-3">
-                            <a class="button-lid-create{{ request()->routeIs('bioeconomy.index') ? ' button-lid-create--bio' : '' }}" role="button" href="{{ request()->routeIs('bioeconomy.index') ? route('org.bioeconomy.create') : route('lid.create') }}">Заявка</a>
+                            <a class="button-lid-create{{ $headerLidCreateClass }}" role="button" href="{{ $headerLidCreateUrl }}">{{ $headerLidCreateLabel }}</a>
                         </li>
                         @endunless
 

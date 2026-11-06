@@ -48,6 +48,10 @@ class LoginController extends Controller
             ]);
         }
 
+        $user->forceFill([
+            'last_login_at' => now(),
+        ])->save();
+
         if ($user->role == 1) {
             return redirect('/admin');
         } elseif ($user->role == 2) {

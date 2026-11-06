@@ -66,6 +66,7 @@
                                     <th>Роль</th>
                                     <th>Учебные группы</th>
                                     <th>Дата создания</th>
+                                    <th>Последний сеанс</th>
                                     <th>Действия</th>
                                 </tr>
                                 </thead>
@@ -110,6 +111,9 @@
                                             @endforelse
                                         </td>
                                         <td>{{$user->created_at}}</td>
+                                        <td data-order="{{ $user->last_login_at ? $user->last_login_at->timestamp : 0 }}">
+                                            {{ $user->last_login_at ? $user->last_login_at->format('d.m.Y H:i') : '—' }}
+                                        </td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <a href="{{route('admin.user.show', $user->id)}}" title="Просмотр"><i class="far fa-eye"></i></a>&nbsp;&nbsp;

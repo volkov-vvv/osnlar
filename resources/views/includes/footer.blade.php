@@ -34,6 +34,7 @@
                 <nav class="footer-nav">
                     <a href="{{ asset('files/reg_org.pdf') }}" class="nav-link" target="_blank" rel="noopener">Карточка организации</a>
                     <a href="{{ asset('files/lic.pdf') }}" class="nav-link" target="_blank" rel="noopener">Образовательная лицензия</a>
+                    <a href="{{ route('privacy') }}" class="nav-link">Политика обработки персональных данных</a>
                     <a href="{{ route('author.index') }}" class="nav-link">Авторы / Эксперты</a>
                 </nav>
             </div>

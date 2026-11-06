@@ -73,6 +73,13 @@
             color: #094ca1;
             opacity: 0.9;
         }
+        .featured-posts-section .blog-post-title {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         .course-filters {
             margin: 0 0 2rem;
@@ -345,7 +352,7 @@
                                 </div>
                             @endif
                             <a href="{{ route('course.show', $course->id) }}" class="blog-post-permalink">
-                                <h6 class="blog-post-title">{{ $course->title }}</h6>
+                                <h6 class="blog-post-title" title="{{ $course->title }}">{{ $course->title }}</h6>
                             </a>
                         </div>
                     @endforeach
