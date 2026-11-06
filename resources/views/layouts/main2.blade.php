@@ -143,8 +143,8 @@
                 align-items: center;
                 color: #111827;
                 font-size: 1.2rem;
-                font-weight: 800;
-                letter-spacing: 0.04em;
+                font-weight: 700;
+                letter-spacing: 0.03em;
                 line-height: 1;
                 text-transform: uppercase;
             }
