@@ -52,17 +52,7 @@ class LoginController extends Controller
             'last_login_at' => now(),
         ])->save();
 
-        if ($user->role == 1) {
-            return redirect('/admin');
-        } elseif ($user->role == 2) {
-            return redirect('/agent');
-        } elseif ($user->role == 3) {
-            return redirect('/cc/lid');
-        } elseif ($user->role == 10) {
-            return redirect('/user');
-        }
-
-        return redirect('/');
+        return redirect($user->homePath());
     }
 
 }

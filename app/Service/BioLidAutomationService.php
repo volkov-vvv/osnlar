@@ -121,9 +121,24 @@ class BioLidAutomationService
         return $password;
     }
 
-    public function processAfterCreate(BioLid $biolid, Course $course): void
+    /**
+     * @param  array{
+     *     send_confirmation_email?: bool,
+     *     auto_create_user?: bool,
+     *     study_group_id?: int|null,
+     *     send_credentials_email?: bool
+     * }|null  $options  Переопределения настроек курса (например, при создании из админки).
+     */
+    public function processAfterCreate(BioLid $biolid, Course $course, ?array $options = null): void
     {
-        if ($course->biolid_send_confirmation_email) {
+        $settings = array_merge([
+            'send_confirmation_email' => (bool) $course->biolid_send_confirmation_email,
+            'auto_create_user' => (bool) $course->biolid_auto_create_user,
+            'study_group_id' => $course->biolid_study_group_id ? (int) $course->biolid_study_group_id : null,
+            'send_credentials_email' => (bool) $course->biolid_send_credentials_email,
+        ], $options ?? []);
+
+        if (! empty($settings['send_confirmation_email'])) {
             try {
                 $this->sendConfirmationEmail($biolid);
             } catch (\Throwable $e) {
@@ -131,7 +146,7 @@ class BioLidAutomationService
             }
         }
 
-        if (! $course->biolid_auto_create_user) {
+        if (empty($settings['auto_create_user'])) {
             return;
         }
 
@@ -148,15 +163,16 @@ class BioLidAutomationService
             return;
         }
 
-        if ($course->biolid_study_group_id) {
+        $studyGroupId = $settings['study_group_id'] ?? null;
+        if ($studyGroupId) {
             try {
-                $this->attachToStudyGroup($user, (int) $course->biolid_study_group_id);
+                $this->attachToStudyGroup($user, (int) $studyGroupId);
             } catch (\Throwable $e) {
                 report($e);
             }
         }
 
-        if ($course->biolid_send_credentials_email) {
+        if (! empty($settings['send_credentials_email'])) {
             try {
                 $password = $result['password'];
                 if ($password === null) {

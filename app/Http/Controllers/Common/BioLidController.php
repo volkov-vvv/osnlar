@@ -301,8 +301,31 @@ class BioLidController extends Controller
     {
         $courses = Course::query()
             ->where('bioeconomy', 1)
+            ->with(['studyGroups' => static fn ($query) => $query->orderBy('title')])
             ->orderBy('title')
             ->get();
+
+        $courseAutomation = $courses->mapWithKeys(static function (Course $course) {
+            return [
+                (string) $course->id => [
+                    'biolid_study_group_id' => $course->biolid_study_group_id,
+                    'biolid_auto_create_user' => (bool) $course->biolid_auto_create_user,
+                    'biolid_send_confirmation_email' => (bool) $course->biolid_send_confirmation_email,
+                    'biolid_send_credentials_email' => (bool) $course->biolid_send_credentials_email,
+                    'study_groups' => $course->studyGroups
+                        ->map(static function (StudyGroup $studyGroup) {
+                            return [
+                                'id' => $studyGroup->id,
+                                'title' => $studyGroup->short_title
+                                    ? $studyGroup->short_title.' — '.$studyGroup->title
+                                    : $studyGroup->title,
+                            ];
+                        })
+                        ->values()
+                        ->all(),
+                ],
+            ];
+        });
 
         $organizations = $this->organizationsForPanel();
 
@@ -311,6 +334,7 @@ class BioLidController extends Controller
 
         return view('admin.biolid.create', [
             'courses' => $courses,
+            'courseAutomation' => $courseAutomation,
             'organizations' => $organizations,
             'genders' => BioLid::GENDERS,
             'statuses' => $statuses,
@@ -321,7 +345,13 @@ class BioLidController extends Controller
 
     public function store(StoreRequest $request): RedirectResponse
     {
-        $data = $request->safe()->except(['org_id']);
+        $data = $request->safe()->except([
+            'org_id',
+            'biolid_study_group_id',
+            'biolid_auto_create_user',
+            'biolid_send_confirmation_email',
+            'biolid_send_credentials_email',
+        ]);
         $data['politic'] = true;
 
         $this->assertAgentMayUseOrganizationTitle($data['organization_title'] ?? null);
@@ -330,7 +360,13 @@ class BioLidController extends Controller
         $course = Course::query()->find($bioLid->course_id);
 
         if ($course) {
-            $this->automation->processAfterCreate($bioLid, $course);
+            $studyGroupId = $request->input('biolid_study_group_id');
+            $this->automation->processAfterCreate($bioLid, $course, [
+                'send_confirmation_email' => (int) $request->input('biolid_send_confirmation_email') === 1,
+                'auto_create_user' => (int) $request->input('biolid_auto_create_user') === 1,
+                'study_group_id' => ($studyGroupId === '' || $studyGroupId === null) ? null : (int) $studyGroupId,
+                'send_credentials_email' => (int) $request->input('biolid_send_credentials_email') === 1,
+            ]);
         }
 
         activity()

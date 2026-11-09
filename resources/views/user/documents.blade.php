@@ -621,6 +621,9 @@
                                 </button>
                                 <div id="{{ $collapseId }}" class="collapse">
                                     <div class="card-body border-top">
+                                        @if(!empty($needDoc['hint']))
+                                            <div class="docs-hint mb-3">{!! nl2br(e($needDoc['hint'])) !!}</div>
+                                        @endif
                                         <p class="docs-hint mb-3">Допустимые форматы: PDF, JPG, PNG. Размер файла — до 5 МБ.</p>
 
                                         @if(!empty($doc['file']))
@@ -796,7 +799,7 @@
                                                 @endif
                                             </h5>
                                             @if(!empty($needDoc['hint']))
-                                                <p class="docs-hint mb-2">{{ $needDoc['hint'] }}</p>
+                                                <div class="docs-hint mb-2">{!! nl2br(e($needDoc['hint'])) !!}</div>
                                             @endif
                                             <p class="docs-hint mb-3">Допустимые форматы: PDF, JPG, PNG. Размер файла — до 5 МБ.</p>
 

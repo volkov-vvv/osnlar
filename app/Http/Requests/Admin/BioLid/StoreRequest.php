@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin\BioLid;
 use App\Models\BioLid;
 use App\Models\Org;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class StoreRequest extends UpdateRequest
 {
@@ -26,6 +27,15 @@ class StoreRequest extends UpdateRequest
                 'organization_inn' => $innDigits === '' ? null : $innDigits,
             ]);
         }
+
+        $studyGroupId = $this->input('biolid_study_group_id');
+
+        $this->merge([
+            'biolid_study_group_id' => ($studyGroupId === '' || $studyGroupId === null) ? null : $studyGroupId,
+            'biolid_auto_create_user' => (int) $this->input('biolid_auto_create_user') === 1 ? 1 : 0,
+            'biolid_send_confirmation_email' => (int) $this->input('biolid_send_confirmation_email') === 1 ? 1 : 0,
+            'biolid_send_credentials_email' => (int) $this->input('biolid_send_credentials_email') === 1 ? 1 : 0,
+        ]);
     }
 
     public function rules()
@@ -72,7 +82,36 @@ class StoreRequest extends UpdateRequest
             'phone' => 'required|string|max:32',
             'status_id' => 'required|integer|exists:statuses,id',
             'responsible_id' => 'nullable|integer|exists:users,id',
+            'biolid_study_group_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('study_groups', 'id')->where(function ($query) {
+                    $courseId = $this->input('course_id');
+                    if ($courseId) {
+                        $query->where('course_id', $courseId);
+                    }
+                    $query->whereNull('deleted_at');
+                }),
+            ],
+            'biolid_auto_create_user' => 'nullable|boolean',
+            'biolid_send_confirmation_email' => 'nullable|boolean',
+            'biolid_send_credentials_email' => 'nullable|boolean',
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $needsUser = $this->filled('biolid_study_group_id')
+                || (int) $this->input('biolid_send_credentials_email') === 1;
+
+            if ($needsUser && (int) $this->input('biolid_auto_create_user') !== 1) {
+                $validator->errors()->add(
+                    'biolid_auto_create_user',
+                    'Для учебной группы или письма с доступом нужно включить создание пользователя'
+                );
+            }
+        });
     }
 
     public function messages()
@@ -93,6 +132,7 @@ class StoreRequest extends UpdateRequest
             'status_id.required' => 'Укажите статус',
             'status_id.exists' => 'Выбранный статус недоступен',
             'responsible_id.exists' => 'Выбранный сотрудник недоступен',
+            'biolid_study_group_id.exists' => 'Выберите учебную группу выбранного курса',
         ];
     }
 }

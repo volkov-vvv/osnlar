@@ -213,6 +213,63 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3 form-group alert alert-secondary" id="biolidAutomationSettings">
+                        <h6 class="mb-3">Автоматизация при создании</h6>
+                        <p class="small text-muted mb-3">
+                            Значения подставляются из настроек выбранного курса — их можно изменить только для этой заявки.
+                        </p>
+
+                        <div class="mb-3">
+                            <label for="biolid_study_group_id">Учебная группа</label>
+                            <select name="biolid_study_group_id" id="biolid_study_group_id" class="form-control">
+                                <option value="">Не назначать</option>
+                            </select>
+                            <small class="form-text text-muted">Слушатель будет добавлен в выбранную группу.</small>
+                            @error('biolid_study_group_id')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" name="biolid_auto_create_user" value="0">
+                                <input name="biolid_auto_create_user" type="checkbox" class="custom-control-input" id="biolidAutoCreateUser" value="1"
+                                    {{ (string) old('biolid_auto_create_user', 0) === '1' ? ' checked' : '' }}
+                                >
+                                <label class="custom-control-label" for="biolidAutoCreateUser">Создавать пользователя</label>
+                            </div>
+                            @error('biolid_auto_create_user')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" name="biolid_send_confirmation_email" value="0">
+                                <input name="biolid_send_confirmation_email" type="checkbox" class="custom-control-input" id="biolidSendConfirmationEmail" value="1"
+                                    {{ (string) old('biolid_send_confirmation_email', 0) === '1' ? ' checked' : '' }}
+                                >
+                                <label class="custom-control-label" for="biolidSendConfirmationEmail">Письмо «заявка принята»</label>
+                            </div>
+                            @error('biolid_send_confirmation_email')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-0">
+                            <div class="custom-control custom-switch">
+                                <input type="hidden" name="biolid_send_credentials_email" value="0">
+                                <input name="biolid_send_credentials_email" type="checkbox" class="custom-control-input" id="biolidSendCredentialsEmail" value="1"
+                                    {{ (string) old('biolid_send_credentials_email', 0) === '1' ? ' checked' : '' }}
+                                >
+                                <label class="custom-control-label" for="biolidSendCredentialsEmail">Письмо с логином и паролем</label>
+                            </div>
+                            @error('biolid_send_credentials_email')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="mb-4">
                         <button type="submit" class="btn btn-primary">Создать</button>
                         <a class="btn btn-outline-secondary" href="{{ route($panel . '.biolid.index') }}">Назад</a>
@@ -229,6 +286,20 @@
             var orgSelect = document.getElementById('org_id');
             var innDisplay = document.getElementById('organization_inn_display');
             var innHidden = document.getElementById('organization_inn');
+            var courseSelect = document.querySelector('select[name="course_id"]');
+            var groupSelect = document.getElementById('biolid_study_group_id');
+            var autoCreateUser = document.getElementById('biolidAutoCreateUser');
+            var sendConfirmation = document.getElementById('biolidSendConfirmationEmail');
+            var sendCredentials = document.getElementById('biolidSendCredentialsEmail');
+            var courseAutomation = @json($courseAutomation);
+            var oldStudyGroupId = @json(old('biolid_study_group_id'));
+            @php
+                $hasOldAutomation = old('biolid_auto_create_user') !== null
+                    || old('biolid_send_confirmation_email') !== null
+                    || old('biolid_send_credentials_email') !== null
+                    || old('biolid_study_group_id') !== null;
+            @endphp
+            var skipCourseDefaultsOnce = @json($hasOldAutomation);
 
             function syncOrganizationInn() {
                 if (!orgSelect || !innDisplay || !innHidden) {
@@ -241,6 +312,57 @@
                 innHidden.value = inn;
             }
 
+            function fillStudyGroups(groups, selectedId) {
+                if (!groupSelect) {
+                    return;
+                }
+
+                groupSelect.innerHTML = '';
+                var emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = 'Не назначать';
+                groupSelect.appendChild(emptyOption);
+
+                (groups || []).forEach(function (group) {
+                    var option = document.createElement('option');
+                    option.value = String(group.id);
+                    option.textContent = group.title;
+                    if (selectedId !== null && selectedId !== undefined && String(selectedId) === String(group.id)) {
+                        option.selected = true;
+                    }
+                    groupSelect.appendChild(option);
+                });
+            }
+
+            function applyCourseAutomation(useDefaults) {
+                if (!courseSelect) {
+                    return;
+                }
+
+                var courseId = courseSelect.value;
+                var settings = courseId && courseAutomation[courseId] ? courseAutomation[courseId] : null;
+                var groups = settings ? settings.study_groups : [];
+                var selectedGroupId = useDefaults
+                    ? (settings ? settings.biolid_study_group_id : '')
+                    : (oldStudyGroupId || (groupSelect ? groupSelect.value : ''));
+
+                fillStudyGroups(groups, selectedGroupId);
+
+                if (!useDefaults || !settings) {
+                    return;
+                }
+
+                if (autoCreateUser) {
+                    autoCreateUser.checked = !!settings.biolid_auto_create_user;
+                }
+                if (sendConfirmation) {
+                    sendConfirmation.checked = !!settings.biolid_send_confirmation_email;
+                }
+                if (sendCredentials) {
+                    sendCredentials.checked = !!settings.biolid_send_credentials_email;
+                }
+            }
+
             if (orgSelect) {
                 if (window.jQuery) {
                     jQuery(orgSelect).on('change', syncOrganizationInn);
@@ -248,6 +370,20 @@
                     orgSelect.addEventListener('change', syncOrganizationInn);
                 }
                 syncOrganizationInn();
+            }
+
+            if (courseSelect) {
+                var onCourseChange = function () {
+                    applyCourseAutomation(true);
+                };
+
+                if (window.jQuery) {
+                    jQuery(courseSelect).on('change', onCourseChange);
+                } else {
+                    courseSelect.addEventListener('change', onCourseChange);
+                }
+
+                applyCourseAutomation(!skipCourseDefaultsOnce);
             }
         })();
     </script>

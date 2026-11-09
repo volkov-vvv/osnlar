@@ -228,6 +228,20 @@ class User extends Authenticatable
     }
 
     /**
+     * URL кабинета после входа / при редиректе с /home.
+     */
+    public function homePath(): string
+    {
+        return match ((int) $this->role) {
+            self::ROLE_ADMIN => '/admin',
+            self::ROLE_AGENT => '/agent',
+            self::ROLE_CONTACT => '/cc/lid',
+            self::ROLE_USER => '/user',
+            default => '/',
+        };
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
