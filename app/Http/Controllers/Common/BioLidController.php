@@ -35,19 +35,22 @@ class BioLidController extends Controller
 
     public function index()
     {
-        $bioLids = BioLid::query()
+        $bioLidsQuery = BioLid::query()
             ->with(['course', 'status', 'responsible', 'user.studyGroups', 'documents'])
-            ->latest()
-            ->get();
+            ->latest();
+        $this->applyAgentOrganizationScope($bioLidsQuery);
+        $bioLids = $bioLidsQuery->get();
 
         $courses = Course::query()
             ->where('bioeconomy', 1)
             ->orderBy('title')
             ->get();
 
-        $organizations = BioLid::query()
+        $organizationsQuery = BioLid::query()
             ->whereNotNull('organization_title')
-            ->where('organization_title', '!=', '')
+            ->where('organization_title', '!=', '');
+        $this->applyAgentOrganizationScope($organizationsQuery);
+        $organizations = $organizationsQuery
             ->distinct()
             ->orderBy('organization_title')
             ->pluck('organization_title');
@@ -71,6 +74,7 @@ class BioLidController extends Controller
 
     public function show(BioLid $biolid)
     {
+        $this->authorizeAgentBioLid($biolid);
         $biolid->load(['course', 'status', 'responsible', 'user', 'dataReviewer']);
         $statuses = Status::all();
         $activites = $this->bioLidActivities($biolid, $statuses);
@@ -105,6 +109,8 @@ class BioLidController extends Controller
 
     public function reviewData(Request $request, BioLid $biolid): JsonResponse|RedirectResponse
     {
+        $this->authorizeAgentBioLid($biolid);
+
         $data = $request->validate([
             'review_status' => ['required', Rule::in(array_keys(UserDocument::REVIEW_STATUSES))],
             'review_comment' => [
@@ -180,6 +186,8 @@ class BioLidController extends Controller
 
     public function reviewDocument(Request $request, BioLid $biolid, UserDocument $document): JsonResponse|RedirectResponse
     {
+        $this->authorizeAgentBioLid($biolid);
+
         if ((int) $document->bio_lid_id !== (int) $biolid->id) {
             abort(404);
         }
@@ -296,20 +304,7 @@ class BioLidController extends Controller
             ->orderBy('title')
             ->get();
 
-        $organizations = Org::query()
-            ->where('source', 'bioeconomy')
-            ->where('is_published', true)
-            ->whereNotNull('organization_title')
-            ->where('organization_title', '!=', '')
-            ->orderByDesc('id')
-            ->get(['id', 'organization_title', 'inn'])
-            ->unique(function (Org $org) {
-                return mb_strtolower(trim($org->organization_title));
-            })
-            ->sortBy(function (Org $org) {
-                return mb_strtolower($org->organization_title);
-            }, SORT_NATURAL)
-            ->values();
+        $organizations = $this->organizationsForPanel();
 
         $statuses = Status::all();
         $users = User::where('role', User::ROLE_CONTACT)->get();
@@ -328,6 +323,8 @@ class BioLidController extends Controller
     {
         $data = $request->safe()->except(['org_id']);
         $data['politic'] = true;
+
+        $this->assertAgentMayUseOrganizationTitle($data['organization_title'] ?? null);
 
         $bioLid = BioLid::create($data);
         $course = Course::query()->find($bioLid->course_id);
@@ -352,6 +349,8 @@ class BioLidController extends Controller
 
     public function edit(BioLid $biolid)
     {
+        $this->authorizeAgentBioLid($biolid);
+
         $courses = Course::query()
             ->where('bioeconomy', 1)
             ->orderBy('title')
@@ -372,7 +371,10 @@ class BioLidController extends Controller
 
     public function update(UpdateRequest $request, BioLid $biolid)
     {
+        $this->authorizeAgentBioLid($biolid);
+
         $data = $request->validated();
+        $this->assertAgentMayUseOrganizationTitle($data['organization_title'] ?? null);
         $oldStatus = $biolid->status_id;
         $biolid->update($data);
 
@@ -395,6 +397,7 @@ class BioLidController extends Controller
 
     public function destroy(BioLid $biolid)
     {
+        $this->authorizeAgentBioLid($biolid);
         $biolid->delete();
 
         return $this->panelRedirect('biolid.index')
@@ -403,10 +406,7 @@ class BioLidController extends Controller
 
     public function questionnaire(Request $request): BinaryFileResponse
     {
-        $ids = $request->input('ids');
-        if (! is_array($ids)) {
-            $ids = [];
-        }
+        $ids = $this->filterAgentAccessibleIds($request->input('ids'));
 
         $filename = 'anketa-gruppy-bio-'.now()->format('Y-m-d_H-i-s').'.xlsx';
 
@@ -415,10 +415,7 @@ class BioLidController extends Controller
 
     public function documentsArchive(Request $request, BioLidDocumentsArchiveService $archiveService): BinaryFileResponse|RedirectResponse
     {
-        $ids = $request->input('ids');
-        if (! is_array($ids)) {
-            $ids = [];
-        }
+        $ids = $this->filterAgentAccessibleIds($request->input('ids'));
 
         try {
             $zipPath = $archiveService->create($ids);
@@ -440,6 +437,8 @@ class BioLidController extends Controller
 
     public function createUser(BioLid $biolid): RedirectResponse
     {
+        $this->authorizeAgentBioLid($biolid);
+
         if ($biolid->user) {
             return $this->panelRedirect('biolid.show', $biolid)
                 ->with('error', 'Учётка уже привязана');
@@ -477,6 +476,7 @@ class BioLidController extends Controller
 
     public function sendCredentials(BioLid $biolid): RedirectResponse
     {
+        $this->authorizeAgentBioLid($biolid);
         $biolid->loadMissing('user');
 
         if (! $biolid->user) {
@@ -510,11 +510,7 @@ class BioLidController extends Controller
 
     public function sendCredentialsBulk(Request $request): RedirectResponse
     {
-        $ids = $request->input('ids');
-        if (! is_array($ids)) {
-            $ids = [];
-        }
-        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        $ids = $this->filterAgentAccessibleIds($request->input('ids'));
 
         if ($ids === []) {
             return $this->panelRedirect('biolid.index')
@@ -574,11 +570,7 @@ class BioLidController extends Controller
 
     public function createUsersBulk(Request $request): RedirectResponse
     {
-        $ids = $request->input('ids');
-        if (! is_array($ids)) {
-            $ids = [];
-        }
-        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        $ids = $this->filterAgentAccessibleIds($request->input('ids'));
 
         if ($ids === []) {
             return $this->panelRedirect('biolid.index')
@@ -683,6 +675,110 @@ class BioLidController extends Controller
         }
 
         return $redirect->with('success', $summary);
+    }
+
+    protected function authorizeAgentBioLid(BioLid $biolid): void
+    {
+        if ($this->panel() !== 'agent') {
+            return;
+        }
+
+        $user = auth()->user();
+        if (! $user instanceof User || ! $user->canAccessBioLid($biolid)) {
+            abort(404);
+        }
+    }
+
+    protected function applyAgentOrganizationScope($query): void
+    {
+        if ($this->panel() !== 'agent') {
+            return;
+        }
+
+        $user = auth()->user();
+        if (! $user instanceof User) {
+            $query->whereRaw('1 = 0');
+
+            return;
+        }
+
+        $titles = $user->bioOrganizationTitles();
+        if ($titles === []) {
+            $query->whereRaw('1 = 0');
+
+            return;
+        }
+
+        $query->whereIn('organization_title', $titles);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, Org>
+     */
+    protected function organizationsForPanel()
+    {
+        $organizations = Org::publishedBioeconomyOptions();
+
+        if ($this->panel() !== 'agent') {
+            return $organizations;
+        }
+
+        $user = auth()->user();
+        if (! $user instanceof User) {
+            return collect();
+        }
+
+        $allowedTitles = collect($user->bioOrganizationTitles())
+            ->map(static fn (string $title) => mb_strtolower($title))
+            ->all();
+
+        if ($allowedTitles === []) {
+            return collect();
+        }
+
+        return $organizations
+            ->filter(static function (Org $org) use ($allowedTitles) {
+                return in_array(mb_strtolower(trim($org->organization_title)), $allowedTitles, true);
+            })
+            ->values();
+    }
+
+    protected function assertAgentMayUseOrganizationTitle(?string $organizationTitle): void
+    {
+        if ($this->panel() !== 'agent') {
+            return;
+        }
+
+        $user = auth()->user();
+        if (! $user instanceof User) {
+            abort(403);
+        }
+
+        $title = trim((string) $organizationTitle);
+        if ($title === '' || ! in_array($title, $user->bioOrganizationTitles(), true)) {
+            abort(403, 'Организация недоступна для агента');
+        }
+    }
+
+    /**
+     * @param  mixed  $ids
+     * @return list<int>
+     */
+    protected function filterAgentAccessibleIds($ids): array
+    {
+        if (! is_array($ids)) {
+            $ids = [];
+        }
+
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+        if ($ids === [] || $this->panel() !== 'agent') {
+            return $ids;
+        }
+
+        $query = BioLid::query()->whereIn('id', $ids);
+        $this->applyAgentOrganizationScope($query);
+
+        return $query->pluck('id')->map(static fn ($id) => (int) $id)->all();
     }
 
     protected function formatBioLidBulkError(BioLid $biolid, \Throwable $e): string

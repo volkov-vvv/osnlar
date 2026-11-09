@@ -30,10 +30,18 @@
                         <p>Дашборд</p>
                     </a>
                 </li>
+                @if(auth()->user()->hasAgentReportAccess())
                 <li class="nav-item">
                     <a href="{{route('agent.report.index')}}" class="nav-link" >
                         <i class="nav-icon fas fa-link"></i>
                         <p>Отчеты</p>
+                    </a>
+                </li>
+                @endif
+                <li class="nav-item">
+                    <a href="{{route('agent.biolid.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-leaf"></i>
+                        <p>Заявки по БИО</p>
                     </a>
                 </li>
             </ul>

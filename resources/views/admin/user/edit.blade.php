@@ -113,6 +113,31 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="mb-3 form-group">
+                            <label>Организации (Заявки по БИО)</label>
+                            @php
+                                $selectedOrgTitles = $user->orgs
+                                    ->map(fn ($org) => mb_strtolower(trim((string) $org->organization_title)))
+                                    ->filter()
+                                    ->all();
+                            @endphp
+                            <select name="org_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите организации" style="width: 100%;">
+                                @foreach($organizations as $organization)
+                                    @php
+                                        $orgTitleKey = mb_strtolower(trim((string) $organization->organization_title));
+                                    @endphp
+                                    <option value="{{ $organization->id }}"
+                                        {{ in_array($orgTitleKey, $selectedOrgTitles, true) ? 'selected' : '' }}
+                                    >{{ $organization->organization_title }}</option>
+                                @endforeach
+                            </select>
+                            @error('org_ids')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            @error('org_ids.*')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <div id="company-form"

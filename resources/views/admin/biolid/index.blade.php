@@ -387,7 +387,10 @@
 
             order: [[0, 'desc']],
             columnDefs: [
-                { orderable: false, searchable: false, targets: 14 }
+                { orderable: false, searchable: false, targets: 14 },
+                @if($panel === 'agent')
+                { targets: [1, 10, 13], visible: false }
+                @endif
             ],
             responsive: true,
             lengthChange: false,
@@ -599,6 +602,9 @@
         $('#resetTable').on('click', function () {
             table.state.clear();
             table.columns().visible(true);
+            @if($panel === 'agent')
+            table.columns([1, 10, 13]).visible(false);
+            @endif
             table.search('').columns().search('').order([[0, 'desc']]).draw();
             $('#course').val(null).trigger('change');
             $('#organization').val(null).trigger('change');

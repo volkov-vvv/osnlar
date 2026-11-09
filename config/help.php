@@ -34,7 +34,7 @@ return [
             'title' => 'Заявки по БИО',
             'group' => 'Модули',
             'file' => 'modules/biolids.md',
-            'roles' => [User::ROLE_ADMIN, User::ROLE_CONTACT],
+            'roles' => [User::ROLE_ADMIN, User::ROLE_CONTACT, User::ROLE_AGENT],
         ],
         [
             'slug' => 'lids',
@@ -112,6 +112,13 @@ return [
             'group' => 'Модули',
             'file' => 'modules/agent.md',
             'roles' => [User::ROLE_ADMIN, User::ROLE_AGENT],
+        ],
+        [
+            'slug' => 'bio-application-and-documents',
+            'title' => 'Сценарий: заявка на БИО и документы',
+            'group' => 'Сценарии',
+            'file' => 'flows/bio-application-and-documents.md',
+            'roles' => [User::ROLE_ADMIN, User::ROLE_CONTACT, User::ROLE_AGENT, User::ROLE_USER],
         ],
         [
             'slug' => 'bioeconomy-onboarding',

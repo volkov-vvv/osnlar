@@ -21,7 +21,7 @@
 | Гость | Сайт `/` | Смотрите курсы, оставляете заявку / заказ |
 | Администратор | `/admin` | Полная CRM: справочники, курсы, группы, заявки, настройки |
 | Специалист КЦ | `/cc/lid` | Заявки слушателей, заказы, заявки организаций, статусы, ссылки |
-| Агент | `/agent/report` | Дашборд и свой отчёт |
+| Агент | `/agent` | Дашборд, свой отчёт, заявки по БИО |
 | Пользователь (слушатель) | `/user` | Личный кабинет: профиль и документы по заказу |
 
 Подробнее: [Роли и вход](00-roles-and-login.md).
@@ -41,7 +41,7 @@
 | --- | --- | --- | --- |
 | [Курсы](modules/courses.md) | `modules/courses.md` | Админ | Готово |
 | [Учебные группы](modules/study-groups.md) | `modules/study-groups.md` | Админ | Готово |
-| [Заявки по БИО](modules/biolids.md) | `modules/biolids.md` | Админ, КЦ | Готово |
+| [Заявки по БИО](modules/biolids.md) | `modules/biolids.md` | Админ, КЦ, агент | Готово |
 | [Заявки (слушатели)](modules/lids.md) | `modules/lids.md` | Админ, КЦ | Готово |
 | [Заявки организаций](modules/orgs.md) | `modules/orgs.md` | Админ, КЦ | Готово |
 | [Заказы](modules/orders.md) | `modules/orders.md` | Админ, КЦ | Готово |
@@ -58,6 +58,7 @@
 
 | Сценарий | Файл | Статус |
 | --- | --- | --- |
+| [Заявка на БИО и документы по шагам](flows/bio-application-and-documents.md) | `flows/bio-application-and-documents.md` | Готово |
 | [Запуск курса по биоэкономике](flows/bioeconomy-onboarding.md) | `flows/bioeconomy-onboarding.md` | Готово |
 | [Обычная заявка с сайта до КЦ](flows/lid-to-cc.md) | `flows/lid-to-cc.md` | Готово |
 | [Платный заказ и документы](flows/order-and-documents.md) | `flows/order-and-documents.md` | Готово |

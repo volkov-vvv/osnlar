@@ -74,6 +74,18 @@
                                         @endforelse
                                     </td>
                                 </tr>
+                                @if((int) $user->role === \App\Models\User::ROLE_AGENT)
+                                <tr>
+                                    <td>Организации (БИО)</td>
+                                    <td>
+                                        @forelse($user->orgs as $organization)
+                                            {{ $organization->organization_title }}@if(!$loop->last), @endif
+                                        @empty
+                                            —
+                                        @endforelse
+                                    </td>
+                                </tr>
+                                @endif
                                 <tr>
                                     <td>Дата создания</td>
                                     <td>{{$user->created_at}}</td>

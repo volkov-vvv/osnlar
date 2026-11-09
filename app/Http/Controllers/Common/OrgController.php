@@ -115,34 +115,39 @@ class OrgController extends Controller
 
     protected function orgActivities(Org $org, Collection $statuses): Collection
     {
-        $activites = Activity::all()->where('subject_id', '=', $org['id']);
+        $activites = Activity::query()
+            ->where('subject_type', Org::class)
+            ->where('subject_id', $org->id)
+            ->orderBy('created_at')
+            ->get();
 
-        $activites->each(function ($item) use ($statuses) {
+        $userNames = User::query()
+            ->whereIn('id', $activites->pluck('causer_id')->filter()->unique())
+            ->pluck('name', 'id');
+
+        $activites->each(function ($item) use ($statuses, $userNames) {
             $properties = $item->properties;
             $oldStatus = $statuses->where('id', $properties['status_id_old'] ?? null)->first();
             $newStatus = $statuses->where('id', $properties['status_id'] ?? null)->first();
             $item->status_old = $oldStatus->title ?? '—';
             $item->status_new = $newStatus->title ?? '—';
             $item->comment = $properties['comment'] ?? '';
-            $item->user = User::find($item->causer_id)?->name ?? '—';
+            $item->user = $userNames[$item->causer_id] ?? '—';
         });
 
-        $firstActivity = Activity::all()
-            ->where('subject_id', '=', $org['id'])
-            ->where('description', '=', 'Изменение статуса')
-            ->first();
+        $firstActivity = $activites->firstWhere('description', 'Изменение статуса');
 
         if ($firstActivity) {
             $interval = date_diff($firstActivity->created_at, $org->created_at);
             $formatStr = '%hч %iмин';
             if ($interval->d > 0) {
-                $formatStr = '%dд ' . $formatStr;
+                $formatStr = '%dд '.$formatStr;
             }
             if ($interval->m > 0) {
-                $formatStr = '%mм ' . $formatStr;
+                $formatStr = '%mм '.$formatStr;
             }
             if ($interval->y > 0) {
-                $formatStr = '%yг ' . $formatStr;
+                $formatStr = '%yг '.$formatStr;
             }
             $activites->interval = $interval->format($formatStr);
         } else {

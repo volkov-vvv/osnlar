@@ -111,4 +111,4 @@ Email и телефон на форме как правило **только д�
 
 - [Публичный сайт и формы](public-site.md)  
 - [Заявки по БИО](biolids.md) · [Заказы](orders.md)  
-- Сценарии: [биоэкономика](../flows/bioeconomy-onboarding.md), [заказ](../flows/order-and-documents.md)  
+- Сценарии: [заявка на БИО и документы по шагам](../flows/bio-application-and-documents.md), [биоэкономика (админ)](../flows/bioeconomy-onboarding.md), [заказ](../flows/order-and-documents.md)  

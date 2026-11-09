@@ -84,6 +84,24 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div id="agent-form" style="display: none">
+                        <div class="mb-3 form-group">
+                            <label>Организации (Заявки по БИО)</label>
+                            <select name="org_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите организации" style="width: 100%;">
+                                @foreach($organizations as $organization)
+                                    <option value="{{ $organization->id }}"
+                                        {{ collect(old('org_ids', []))->contains($organization->id) ? 'selected' : '' }}
+                                    >{{ $organization->organization_title }}</option>
+                                @endforeach
+                            </select>
+                            @error('org_ids')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            @error('org_ids.*')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
                     <div id="company-form" style="display: none">
                         <div class="mb-3 form-group">
                             <label>Компания</label>
@@ -133,18 +151,25 @@
 
 @section('javascript')
     <script>
-        $('#role').on('change', function (e){
+        function toggleRoleForms() {
+            if($('#role option:selected').val() == 2){
+                $('#agent-form').show();
+            }else{
+                $('#agent-form').hide();
+            }
+
             if($('#role option:selected').val() == 3){
                 $('#company-form').show();
             }else{
                 $('#company-form').hide();
             }
-        })
+        }
+
+        $('#role').on('change', toggleRoleForms);
 
 
         $(document).ready(function() {
-
-
+            toggleRoleForms();
 
             $('[data-mask]').inputmask();
 

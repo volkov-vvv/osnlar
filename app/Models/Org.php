@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 class Org extends Model
 {
@@ -24,6 +25,34 @@ class Org extends Model
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'course_org');
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    /**
+     * Опубликованные организации биоэкономики для выбора (уникальные по названию).
+     *
+     * @return Collection<int, self>
+     */
+    public static function publishedBioeconomyOptions(): Collection
+    {
+        return self::query()
+            ->where('source', 'bioeconomy')
+            ->where('is_published', true)
+            ->whereNotNull('organization_title')
+            ->where('organization_title', '!=', '')
+            ->orderByDesc('id')
+            ->get(['id', 'organization_title', 'inn'])
+            ->unique(static function (self $org) {
+                return mb_strtolower(trim($org->organization_title));
+            })
+            ->sortBy(static function (self $org) {
+                return mb_strtolower($org->organization_title);
+            }, SORT_NATURAL)
+            ->values();
     }
 
     public function course(): BelongsTo

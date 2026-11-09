@@ -36,6 +36,8 @@ class UpdateRequest extends FormRequest
             'agent_ids' => 'array',
             'study_group_ids' => 'nullable|array',
             'study_group_ids.*' => 'integer|exists:study_groups,id',
+            'org_ids' => 'nullable|array',
+            'org_ids.*' => 'integer|exists:orgs,id',
             'utm' => 'array',
             'password' => '',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',

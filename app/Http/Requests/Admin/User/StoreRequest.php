@@ -35,6 +35,8 @@ class StoreRequest extends FormRequest
             'company_id' => '',
             'study_group_ids' => 'nullable|array',
             'study_group_ids.*' => 'integer|exists:study_groups,id',
+            'org_ids' => 'nullable|array',
+            'org_ids.*' => 'integer|exists:orgs,id',
         ];
     }
 

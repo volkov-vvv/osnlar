@@ -696,6 +696,7 @@ sticky-top  bg-white bg-opacity-75
                         @php
                             $userCabinetUrl = match ((int) auth()->user()->role) {
                                 1 => route('admin.main.index'),
+                                2 => route('agent.main.index'),
                                 3 => route('cc.main.index'),
                                 default => route('user.index'),
                             };

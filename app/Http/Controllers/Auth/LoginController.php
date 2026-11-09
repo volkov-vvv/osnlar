@@ -55,7 +55,7 @@ class LoginController extends Controller
         if ($user->role == 1) {
             return redirect('/admin');
         } elseif ($user->role == 2) {
-            return redirect('/agent/report');
+            return redirect('/agent');
         } elseif ($user->role == 3) {
             return redirect('/cc/lid');
         } elseif ($user->role == 10) {

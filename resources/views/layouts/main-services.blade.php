@@ -125,15 +125,21 @@
                                 -->
                                 <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
-                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') : ''}}
+                            @case(1) {{route('admin.main.index')}}
                             @break
-                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') : ''}}
+                            @case(2) {{route('agent.main.index')}}
+                            @break
+                            @case(3) {{route('cc.main.index')}}
                             @break
                             @default
-                                    {{route('cc.main.index')}}
+                                    {{route('user.index')}}
                             @endswitch
                             ">
-                                    Административная панель
+                                    @if(in_array((int) auth()->user()->role, [1, 3], true))
+                                        Административная панель
+                                    @else
+                                        Личный кабинет
+                                    @endif
                                 </a>
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">Профиль</a>
                                 <a class="dropdown-item" href="#">

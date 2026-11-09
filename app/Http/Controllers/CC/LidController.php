@@ -110,27 +110,42 @@ class LidController extends Controller
         $levels_edu = Leveledu::all();
 
         // Формирование коллекции активности
-        $activites = Activity::all()->where('subject_id', '=', $lid['id']);
-        $activites->each(function ($item, $key)  use ($statuses){
+        $activites = Activity::query()
+            ->where('subject_type', Lid::class)
+            ->where('subject_id', $lid->id)
+            ->orderBy('created_at')
+            ->get();
+
+        $userNames = User::query()
+            ->whereIn('id', $activites->pluck('causer_id')->filter()->unique())
+            ->pluck('name', 'id');
+
+        $activites->each(function ($item) use ($statuses, $userNames) {
             $activitiesStatuses = $item->properties;
-            $activitesStatusOld = $statuses->where('id',  $activitiesStatuses['status_id_old'])->first();
-            $activitesStatusNew = $statuses->where('id',  $activitiesStatuses['status_id'])->first();
-            $item->status_old = $activitesStatusOld->title;
-            $item->status_new = $activitesStatusNew->title;
-            if(isset($activitiesStatuses['comment']))  $item->comment = $activitiesStatuses['comment']; else $item->comment = '';
-            $item->user = User::findOrFail($item->causer_id)->name;
+            $activitesStatusOld = $statuses->where('id', $activitiesStatuses['status_id_old'] ?? null)->first();
+            $activitesStatusNew = $statuses->where('id', $activitiesStatuses['status_id'] ?? null)->first();
+            $item->status_old = $activitesStatusOld->title ?? '—';
+            $item->status_new = $activitesStatusNew->title ?? '—';
+            $item->comment = $activitiesStatuses['comment'] ?? '';
+            $item->user = $userNames[$item->causer_id] ?? '—';
         });
 
         // Определение времени первой реакции
-        $firstActivity = Activity::all()->where('subject_id', '=', $lid['id'])->where('description', '=', 'Изменение статуса')->first();
-        if($firstActivity){
+        $firstActivity = $activites->firstWhere('description', 'Изменение статуса');
+        if ($firstActivity) {
             $interval = date_diff($firstActivity->created_at, $lid->created_at);
             $formatStr = '%hч %iмин';
-            if ($interval->d > 0) $formatStr = '%dд ' . $formatStr;
-            if ($interval->m > 0) $formatStr = '%mм ' . $formatStr;
-            if ($interval->y > 0) $formatStr = '%yг ' . $formatStr;
+            if ($interval->d > 0) {
+                $formatStr = '%dд '.$formatStr;
+            }
+            if ($interval->m > 0) {
+                $formatStr = '%mм '.$formatStr;
+            }
+            if ($interval->y > 0) {
+                $formatStr = '%yг '.$formatStr;
+            }
             $activites->interval = $interval->format($formatStr);
-        }else{
+        } else {
             $activites->interval = '---';
         }
 

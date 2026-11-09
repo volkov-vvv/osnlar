@@ -22,14 +22,23 @@ class ShowController extends Controller
         $categories = Category::all();
 
         // Формирование коллекции активности
-        $activites = Activity::all()->where('subject_id', '=', $lid['id']);
-        $activites->each(function ($item, $key)  use ($statuses){
+        $activites = Activity::query()
+            ->where('subject_type', Lid::class)
+            ->where('subject_id', $lid->id)
+            ->orderBy('created_at')
+            ->get();
+
+        $userNames = User::query()
+            ->whereIn('id', $activites->pluck('causer_id')->filter()->unique())
+            ->pluck('name', 'id');
+
+        $activites->each(function ($item) use ($statuses, $userNames) {
             $activitiesStatuses = $item->properties;
-            $activitesStatusOld = $statuses->where('id',  $activitiesStatuses['status_id_old'])->first();
-            $activitesStatusNew = $statuses->where('id',  $activitiesStatuses['status_id'])->first();
-            $item->status_old = $activitesStatusOld->title;
-            $item->status_new = $activitesStatusNew->title;
-            $item->user = User::findOrFail($item->causer_id)->name;
+            $activitesStatusOld = $statuses->where('id', $activitiesStatuses['status_id_old'] ?? null)->first();
+            $activitesStatusNew = $statuses->where('id', $activitiesStatuses['status_id'] ?? null)->first();
+            $item->status_old = $activitesStatusOld->title ?? '—';
+            $item->status_new = $activitesStatusNew->title ?? '—';
+            $item->user = $userNames[$item->causer_id] ?? '—';
         });
 
         return view('cc.lid.show', compact('lid','courses','statuses','activites','regions','categories'));

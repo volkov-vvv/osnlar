@@ -73,7 +73,8 @@
 Подробные сценарии:
 
 - [Обычная заявка → КЦ](../flows/lid-to-cc.md)  
-- [Биоэкономика](../flows/bioeconomy-onboarding.md)  
+- [Заявка на БИО и документы по шагам](../flows/bio-application-and-documents.md)  
+- [Биоэкономика (настройка курса)](../flows/bioeconomy-onboarding.md)  
 - [Платный заказ](../flows/order-and-documents.md)  
 
 ## Карточка курса: кнопка «Записаться»

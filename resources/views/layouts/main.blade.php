@@ -115,6 +115,8 @@
                                 @switch(auth()->user()->role)
                                     @case(1) {{route('admin.main.index')}}">Административная панель
                                     @break
+                                    @case(2) {{route('agent.main.index')}}">Личный кабинет
+                                    @break
                                     @case(3) {{route('cc.main.index')}}">Административная панель
                                     @break
                                     @default
