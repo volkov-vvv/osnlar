@@ -17,9 +17,35 @@ class BioLid extends Model
         'female' => 'Женский',
     ];
 
+    public const ARPM_NOT_SENT = 'not_sent';
+
+    public const ARPM_UNDER_REVIEW = 'under_review';
+
+    public const ARPM_APPROVED = 'approved';
+
+    public const ARPM_REMARKS = 'remarks';
+
+    public const ARPM_STATUSES = [
+        self::ARPM_NOT_SENT => 'Не отправлено',
+        self::ARPM_UNDER_REVIEW => 'На рассмотрении',
+        self::ARPM_APPROVED => 'Утверждено',
+        self::ARPM_REMARKS => 'Замечания',
+    ];
+
+    public const ARPM_STATUS_ICONS = [
+        self::ARPM_NOT_SENT => 'fas fa-minus-circle',
+        self::ARPM_UNDER_REVIEW => 'fas fa-hourglass-half',
+        self::ARPM_APPROVED => 'fas fa-check-circle',
+        self::ARPM_REMARKS => 'fas fa-exclamation-triangle',
+    ];
+
     protected $table = 'bio_lids';
 
     protected $guarded = false;
+
+    protected $attributes = [
+        'arpm_status' => self::ARPM_NOT_SENT,
+    ];
 
     protected $casts = [
         'birth_date' => 'date',
@@ -174,6 +200,58 @@ class BioLid extends Model
             'label' => 'Не отправлено',
             'badge' => 'badge badge-secondary',
         ];
+    }
+
+    public function arpmStatusValue(): string
+    {
+        $status = (string) ($this->arpm_status ?: self::ARPM_NOT_SENT);
+
+        return array_key_exists($status, self::ARPM_STATUSES) ? $status : self::ARPM_NOT_SENT;
+    }
+
+    public function arpmStatusLabel(): string
+    {
+        return self::ARPM_STATUSES[$this->arpmStatusValue()];
+    }
+
+    public function arpmStatusIconClass(): string
+    {
+        return self::arpmStatusIconClassFor($this->arpmStatusValue());
+    }
+
+    public static function arpmStatusIconClassFor(string $status): string
+    {
+        return self::ARPM_STATUS_ICONS[$status] ?? self::ARPM_STATUS_ICONS[self::ARPM_NOT_SENT];
+    }
+
+    public function arpmStatusBadgeClass(): string
+    {
+        return match ($this->arpmStatusValue()) {
+            self::ARPM_UNDER_REVIEW => 'badge badge-warning',
+            self::ARPM_APPROVED => 'badge badge-success',
+            self::ARPM_REMARKS => 'badge badge-danger',
+            default => 'badge badge-secondary',
+        };
+    }
+
+    /**
+     * Если все документы проверены, а статус АРПМ ещё «Не отправлено» — ставим «На рассмотрении».
+     */
+    public function syncArpmStatusWhenDocumentsApproved(): bool
+    {
+        if ($this->documentsReviewSummary()['status'] !== UserDocument::REVIEW_APPROVED) {
+            return false;
+        }
+
+        if ($this->arpmStatusValue() !== self::ARPM_NOT_SENT) {
+            return false;
+        }
+
+        $this->forceFill([
+            'arpm_status' => self::ARPM_UNDER_REVIEW,
+        ])->save();
+
+        return true;
     }
 
     public function status(): BelongsTo

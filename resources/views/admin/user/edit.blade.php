@@ -113,31 +113,29 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3 form-group">
-                            <label>Организации (Заявки по БИО)</label>
-                            @php
+                        @php
+                            if (old('org_ids') !== null) {
+                                $selectedOrgIds = collect(old('org_ids'))->map(fn ($id) => (int) $id)->all();
+                            } else {
                                 $selectedOrgTitles = $user->orgs
                                     ->map(fn ($org) => mb_strtolower(trim((string) $org->organization_title)))
                                     ->filter()
                                     ->all();
-                            @endphp
-                            <select name="org_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите организации" style="width: 100%;">
-                                @foreach($organizations as $organization)
-                                    @php
+                                $selectedOrgIds = $organizations
+                                    ->filter(function ($organization) use ($selectedOrgTitles) {
                                         $orgTitleKey = mb_strtolower(trim((string) $organization->organization_title));
-                                    @endphp
-                                    <option value="{{ $organization->id }}"
-                                        {{ in_array($orgTitleKey, $selectedOrgTitles, true) ? 'selected' : '' }}
-                                    >{{ $organization->organization_title }}</option>
-                                @endforeach
-                            </select>
-                            @error('org_ids')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                            @error('org_ids.*')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
+
+                                        return $orgTitleKey !== '' && in_array($orgTitleKey, $selectedOrgTitles, true);
+                                    })
+                                    ->pluck('id')
+                                    ->map(fn ($id) => (int) $id)
+                                    ->all();
+                            }
+                        @endphp
+                        @include('admin.user._agent_orgs_picker', [
+                            'organizations' => $organizations,
+                            'selectedOrgIds' => $selectedOrgIds,
+                        ])
                     </div>
 
                     <div id="company-form"
@@ -186,10 +184,15 @@
         </div><!-- /.container-fluid -->
     </section>
 
+    @include('admin.user._agent_orgs_modal', [
+        'organizations' => $organizations,
+        'selectedOrgIds' => $selectedOrgIds ?? [],
+    ])
 @endsection
 
 @section('javascript')
     @include('admin.user._avatar_script')
+    @include('admin.user._agent_orgs_picker_script')
     <script>
         $('#role').on('change', function (e){
             if($('#role option:selected').val() == 2){

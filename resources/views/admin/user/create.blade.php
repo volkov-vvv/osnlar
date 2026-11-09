@@ -84,23 +84,14 @@
                         <div class="text-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    @php
+                        $selectedOrgIds = collect(old('org_ids', []))->map(fn ($id) => (int) $id)->all();
+                    @endphp
                     <div id="agent-form" style="display: none">
-                        <div class="mb-3 form-group">
-                            <label>Организации (Заявки по БИО)</label>
-                            <select name="org_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите организации" style="width: 100%;">
-                                @foreach($organizations as $organization)
-                                    <option value="{{ $organization->id }}"
-                                        {{ collect(old('org_ids', []))->contains($organization->id) ? 'selected' : '' }}
-                                    >{{ $organization->organization_title }}</option>
-                                @endforeach
-                            </select>
-                            @error('org_ids')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                            @error('org_ids.*')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @include('admin.user._agent_orgs_picker', [
+                            'organizations' => $organizations,
+                            'selectedOrgIds' => $selectedOrgIds,
+                        ])
                     </div>
                     <div id="company-form" style="display: none">
                         <div class="mb-3 form-group">
@@ -139,17 +130,14 @@
         </div><!-- /.container-fluid -->
     </section>
 
-
-
-
-
-
-
-
-
+    @include('admin.user._agent_orgs_modal', [
+        'organizations' => $organizations,
+        'selectedOrgIds' => $selectedOrgIds,
+    ])
 @endsection
 
 @section('javascript')
+    @include('admin.user._agent_orgs_picker_script')
     <script>
         function toggleRoleForms() {
             if($('#role option:selected').val() == 2){

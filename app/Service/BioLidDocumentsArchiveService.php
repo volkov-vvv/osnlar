@@ -4,12 +4,25 @@ namespace App\Service;
 
 use App\Models\BioLid;
 use App\Models\UserDocument;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 use ZipArchive;
 
 class BioLidDocumentsArchiveService
 {
+    /**
+     * Типы и суффиксы имён файлов для выгрузки агента.
+     *
+     * @var array<string, string>
+     */
+    private const AGENT_DOC_SUFFIXES = [
+        'education_doc' => 'диплом',
+        'consent_arpm' => 'СОПД',
+        'application' => 'Заявление',
+        'name_change_doc' => 'смена фамилии',
+    ];
+
     /**
      * Собирает zip с папками по заявкам и загруженными BIO-документами.
      *
@@ -18,44 +31,12 @@ class BioLidDocumentsArchiveService
      */
     public function create(array $bioLidIds): string
     {
-        $ids = array_values(array_unique(array_filter(array_map('intval', $bioLidIds))));
-        if ($ids === []) {
-            throw new RuntimeException('Не выбраны заявки для архива');
-        }
-
+        $ids = $this->normalizeIds($bioLidIds);
         $bioTypes = array_keys(UserDocument::allBioDocs());
+        $bioLids = $this->loadBioLids($ids, $bioTypes);
 
-        $bioLids = BioLid::query()
-            ->with(['documents' => function ($query) use ($bioTypes) {
-                $query->whereNotNull('file')
-                    ->where('file', '!=', '')
-                    ->whereIn('type', $bioTypes)
-                    ->orderBy('id');
-            }])
-            ->whereIn('id', $ids)
-            ->orderBy('lastname')
-            ->orderBy('firstname')
-            ->orderBy('middlename')
-            ->orderBy('id')
-            ->get();
-
-        if ($bioLids->isEmpty()) {
-            throw new RuntimeException('Заявки не найдены');
-        }
-
-        $tmpBase = tempnam(sys_get_temp_dir(), 'biolid_docs_');
-        if ($tmpBase === false) {
-            throw new RuntimeException('Не удалось создать временный файл');
-        }
-
-        $zipPath = $tmpBase.'.zip';
-        @unlink($tmpBase);
-
-        $zip = new ZipArchive();
-        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            throw new RuntimeException('Не удалось создать архив');
-        }
-
+        $zipPath = $this->makeTempZipPath();
+        $zip = $this->openZip($zipPath);
         $disk = Storage::disk('public');
         $usedFolders = [];
 
@@ -69,13 +50,8 @@ class BioLidDocumentsArchiveService
             $added = 0;
 
             foreach ($bioLid->documents as $document) {
-                $relative = (string) $document->file;
-                if ($relative === '' || ! $disk->exists($relative)) {
-                    continue;
-                }
-
-                $absolute = $disk->path($relative);
-                if (! is_file($absolute)) {
+                $absolute = $this->absoluteDocumentPath($disk, $document);
+                if ($absolute === null) {
                     continue;
                 }
 
@@ -94,6 +70,157 @@ class BioLidDocumentsArchiveService
         $zip->close();
 
         return $zipPath;
+    }
+
+    /**
+     * Архив для агента: плоский список файлов (диплом, СОПД АРПМ, заявление, смена фамилии).
+     *
+     * @param  list<int|string>  $bioLidIds
+     * @return array{path: string, filename: string}
+     */
+    public function createForAgent(array $bioLidIds, ?string $studyGroupTitle = null): array
+    {
+        $ids = $this->normalizeIds($bioLidIds);
+        $types = array_keys(self::AGENT_DOC_SUFFIXES);
+        $bioLids = $this->loadBioLids($ids, $types, withStudyGroups: true);
+
+        $zipPath = $this->makeTempZipPath();
+        $zip = $this->openZip($zipPath);
+        $disk = Storage::disk('public');
+        $usedFiles = [];
+        $added = 0;
+
+        foreach ($bioLids as $bioLid) {
+            $docsByType = $bioLid->documents
+                ->sortByDesc('id')
+                ->unique('type')
+                ->keyBy('type');
+
+            foreach (self::AGENT_DOC_SUFFIXES as $type => $suffix) {
+                $document = $docsByType->get($type);
+                if (! $document) {
+                    continue;
+                }
+
+                $absolute = $this->absoluteDocumentPath($disk, $document);
+                if ($absolute === null) {
+                    continue;
+                }
+
+                $entryName = $this->agentDocumentFileName($bioLid, $document, $suffix, $usedFiles);
+                if (! $zip->addFile($absolute, $entryName)) {
+                    continue;
+                }
+                $added++;
+            }
+        }
+
+        if ($added === 0) {
+            $zip->close();
+            @unlink($zipPath);
+
+            throw new RuntimeException(
+                'Нет файлов для архива: нужны диплом, СОПД АРПМ, заявление (и смена фамилии при наличии)'
+            );
+        }
+
+        if ($zip->close() !== true || ! is_file($zipPath)) {
+            @unlink($zipPath);
+            throw new RuntimeException('Не удалось сохранить архив документов');
+        }
+
+        $groupTitle = trim((string) $studyGroupTitle);
+        if ($groupTitle === '') {
+            $groupTitle = $this->resolveStudyGroupTitle($bioLids);
+        }
+
+        $filename = 'dokumenty-bio-'.$this->sanitizeZipName($groupTitle !== '' ? $groupTitle : 'gruppa').'.zip';
+
+        return [
+            'path' => $zipPath,
+            'filename' => $filename,
+        ];
+    }
+
+    /**
+     * @param  list<int|string>  $bioLidIds
+     * @return list<int>
+     */
+    private function normalizeIds(array $bioLidIds): array
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $bioLidIds))));
+        if ($ids === []) {
+            throw new RuntimeException('Не выбраны заявки для архива');
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @param  list<int>  $ids
+     * @param  list<string>  $types
+     * @return Collection<int, BioLid>
+     */
+    private function loadBioLids(array $ids, array $types, bool $withStudyGroups = false): Collection
+    {
+        $query = BioLid::query()
+            ->with(['documents' => function ($query) use ($types) {
+                $query->whereNotNull('file')
+                    ->where('file', '!=', '')
+                    ->whereIn('type', $types)
+                    ->orderByDesc('id');
+            }])
+            ->whereIn('id', $ids)
+            ->orderBy('lastname')
+            ->orderBy('firstname')
+            ->orderBy('middlename')
+            ->orderBy('id');
+
+        if ($withStudyGroups) {
+            $query->with(['user.studyGroups']);
+        }
+
+        $bioLids = $query->get();
+        if ($bioLids->isEmpty()) {
+            throw new RuntimeException('Заявки не найдены');
+        }
+
+        return $bioLids;
+    }
+
+    private function makeTempZipPath(): string
+    {
+        $tmpBase = tempnam(sys_get_temp_dir(), 'biolid_docs_');
+        if ($tmpBase === false) {
+            throw new RuntimeException('Не удалось создать временный файл');
+        }
+
+        $zipPath = $tmpBase.'.zip';
+        @unlink($tmpBase);
+
+        return $zipPath;
+    }
+
+    private function openZip(string $zipPath): ZipArchive
+    {
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            throw new RuntimeException('Не удалось создать архив');
+        }
+
+        return $zip;
+    }
+
+    private function absoluteDocumentPath($disk, UserDocument $document): ?string
+    {
+        $relative = (string) $document->file;
+        if ($relative === '' || ! $disk->exists($relative)) {
+            return null;
+        }
+
+        $absolute = $disk->path($relative);
+
+        return is_file($absolute) ? $absolute : null;
     }
 
     private function personFolderName(BioLid $bioLid): string
@@ -122,6 +249,63 @@ class BioLidDocumentsArchiveService
         $fileName = $ext !== '' ? $base.'.'.$ext : $base;
 
         return $this->uniqueName($fileName, $usedFiles, $ext);
+    }
+
+    private function agentDocumentFileName(
+        BioLid $bioLid,
+        UserDocument $document,
+        string $suffix,
+        array &$usedFiles
+    ): string {
+        $ext = strtolower((string) pathinfo((string) $document->file, PATHINFO_EXTENSION));
+        $base = $this->sanitizeZipName($this->personIoPrefix($bioLid).'_'.$suffix);
+        $fileName = $ext !== '' ? $base.'.'.$ext : $base;
+
+        return $this->uniqueName($fileName, $usedFiles, $ext);
+    }
+
+    private function personIoPrefix(BioLid $bioLid): string
+    {
+        $lastname = $this->sanitizeZipName((string) $bioLid->lastname);
+        if ($lastname === '' || $lastname === 'bez-imeni') {
+            $lastname = 'bez-familii';
+        }
+
+        $initials = '';
+        $firstname = trim((string) $bioLid->firstname);
+        $middlename = trim((string) $bioLid->middlename);
+
+        if ($firstname !== '') {
+            $initials .= mb_strtoupper(mb_substr($firstname, 0, 1));
+        }
+        if ($middlename !== '') {
+            $initials .= mb_strtoupper(mb_substr($middlename, 0, 1));
+        }
+
+        return $initials !== '' ? $lastname.'_'.$initials : $lastname;
+    }
+
+    /**
+     * @param  Collection<int, BioLid>  $bioLids
+     */
+    private function resolveStudyGroupTitle(Collection $bioLids): string
+    {
+        $titles = $bioLids
+            ->flatMap(static function (BioLid $bioLid) {
+                return $bioLid->user?->studyGroups ?? [];
+            })
+            ->map(static function ($studyGroup) {
+                return trim((string) ($studyGroup->short_title ?: $studyGroup->title));
+            })
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($titles->count() === 1) {
+            return (string) $titles->first();
+        }
+
+        return '';
     }
 
     /**

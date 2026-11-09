@@ -28,6 +28,10 @@
         .biolid-show .badge:not(.biolid-status-badge) {
             border-radius: 0.5rem;
         }
+
+        .biolid-arpm-comment-box {
+            max-width: 720px;
+        }
     </style>
     @php
         $fio = trim(implode(' ', array_filter([
@@ -93,16 +97,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-12">
-                    <h1 class="m-0 d-inline-flex flex-wrap align-items-center">
-                        <span class="mr-2">Заявка №{{ $bioLid->id }} — {{ $fio }}</span>
-                        @if($bioLid->status)
-                            <span class="badge badge-lg biolid-status-badge align-middle" style="background-color: {{ $bioLid->status->color }} !important; color: {{ contrast_color($bioLid->status->color) }}; font-size: 0.95rem; font-weight: 500;">
-                                {{ $bioLid->status->title }}
-                            </span>
-                        @else
-                            <span class="badge badge-secondary biolid-status-badge align-middle">Без статуса</span>
-                        @endif
-                    </h1>
+                    <h1 class="m-0">Заявка №{{ $bioLid->id }} — {{ $fio }}</h1>
                 </div>
             </div>
             <div class="text-muted mb-2">
@@ -140,56 +135,60 @@
             {{-- 1. Действия --}}
             <div class="mb-3">
                 <a class="btn btn-outline-secondary" href="{{ route($panel . '.biolid.index') }}">Назад</a>
-                <a class="btn btn-primary" href="{{ route($panel . '.biolid.edit', $bioLid->id) }}">Редактировать</a>
-                <form method="post" action="{{ route($panel . '.biolid.destroy', $bioLid->id) }}" class="d-inline" onsubmit="return confirm('Удалить заявку?');">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger" type="submit">Удалить</button>
-                </form>
+                @if($panel !== 'agent')
+                    <a class="btn btn-primary" href="{{ route($panel . '.biolid.edit', $bioLid->id) }}">Редактировать</a>
+                    <form method="post" action="{{ route($panel . '.biolid.destroy', $bioLid->id) }}" class="d-inline" onsubmit="return confirm('Удалить заявку?');">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Удалить</button>
+                    </form>
+                @endif
             </div>
 
-            {{-- 2. Учётная запись --}}
-            <div class="card card-outline card-info mb-3">
-                <div class="card-header p-3">
-                    <h3 class="card-title mb-0">Учётная запись</h3>
-                </div>
-                <div class="card-body p-3">
-                    <div class="d-flex flex-wrap align-items-center justify-content-between">
-                        <div class="mb-2 mb-md-0">
-                            @if($bioLid->user)
-                                <span class="badge badge-success mr-2">Привязана</span>
-                                @if($panel === 'admin')
-                                    <a href="{{ route('admin.user.show', $bioLid->user->id) }}">
-                                        {{ trim($bioLid->user->lastname.' '.$bioLid->user->name.' '.$bioLid->user->middlename) ?: $bioLid->user->email }}
-                                    </a>
+            @if($panel !== 'agent')
+                {{-- 2. Учётная запись --}}
+                <div class="card card-outline card-info mb-3">
+                    <div class="card-header p-3">
+                        <h3 class="card-title mb-0">Учётная запись</h3>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                            <div class="mb-2 mb-md-0">
+                                @if($bioLid->user)
+                                    <span class="badge badge-success mr-2">Привязана</span>
+                                    @if($panel === 'admin')
+                                        <a href="{{ route('admin.user.show', $bioLid->user->id) }}">
+                                            {{ trim($bioLid->user->lastname.' '.$bioLid->user->name.' '.$bioLid->user->middlename) ?: $bioLid->user->email }}
+                                        </a>
+                                    @else
+                                        <strong>{{ trim($bioLid->user->lastname.' '.$bioLid->user->name.' '.$bioLid->user->middlename) ?: $bioLid->user->email }}</strong>
+                                    @endif
+                                    <span class="text-muted ml-1">({{ $bioLid->user->email }})</span>
                                 @else
-                                    <strong>{{ trim($bioLid->user->lastname.' '.$bioLid->user->name.' '.$bioLid->user->middlename) ?: $bioLid->user->email }}</strong>
+                                    <span class="badge badge-secondary mr-2">Нет учётки</span>
+                                    <span class="text-muted">Email заявки: {{ $bioLid->email }}</span>
                                 @endif
-                                <span class="text-muted ml-1">({{ $bioLid->user->email }})</span>
-                            @else
-                                <span class="badge badge-secondary mr-2">Нет учётки</span>
-                                <span class="text-muted">Email заявки: {{ $bioLid->email }}</span>
-                            @endif
-                        </div>
-                        <div>
-                            @if(!$bioLid->user)
-                                <form method="post" action="{{ route($panel . '.biolid.create-user', $bioLid->id) }}" class="d-inline" onsubmit="return confirm('Создать или привязать учётную запись пользователя?');">
-                                    @csrf
-                                    <button class="btn btn-success btn-sm" type="submit">Создать учётную запись</button>
-                                </form>
-                            @else
-                                @if($panel === 'admin')
-                                    <a class="btn btn-outline-info btn-sm" href="{{ route('admin.user.show', $bioLid->user->id) }}">Открыть пользователя</a>
+                            </div>
+                            <div>
+                                @if(!$bioLid->user)
+                                    <form method="post" action="{{ route($panel . '.biolid.create-user', $bioLid->id) }}" class="d-inline" onsubmit="return confirm('Создать или привязать учётную запись пользователя?');">
+                                        @csrf
+                                        <button class="btn btn-success btn-sm" type="submit">Создать учётную запись</button>
+                                    </form>
+                                @else
+                                    @if($panel === 'admin')
+                                        <a class="btn btn-outline-info btn-sm" href="{{ route('admin.user.show', $bioLid->user->id) }}">Открыть пользователя</a>
+                                    @endif
+                                    <form method="post" action="{{ route($panel . '.biolid.send-credentials', $bioLid->id) }}" class="d-inline" onsubmit="return confirm('Будет сгенерирован новый пароль и отправлен на email пользователя. Продолжить?');">
+                                        @csrf
+                                        <button class="btn btn-warning btn-sm" type="submit">Отправить письмо</button>
+                                    </form>
                                 @endif
-                                <form method="post" action="{{ route($panel . '.biolid.send-credentials', $bioLid->id) }}" class="d-inline" onsubmit="return confirm('Будет сгенерирован новый пароль и отправлен на email пользователя. Продолжить?');">
-                                    @csrf
-                                    <button class="btn btn-warning btn-sm" type="submit">Отправить письмо</button>
-                                </form>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             {{-- 3. Данные заявки — две колонки, свёрнуто по умолчанию --}}
             <div class="card card-outline card-primary biolid-data-card collapsed-card mb-3">
@@ -344,7 +343,9 @@
                             <th>Статус</th>
                             <th>Отправлено</th>
                             <th>Проверено</th>
-                            <th style="min-width: 280px;">Действия</th>
+                            @if($panel !== 'agent')
+                                <th style="min-width: 280px;">Действия</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
@@ -381,30 +382,32 @@
                                     —
                                 @endif
                             </td>
-                            <td>
-                                @if($bioLid->data_submitted_at || $bioLid->data_review_status)
-                                    <form method="post" action="{{ route($panel . '.biolid.review-data', $bioLid) }}" class="biolid-review-form">
-                                        @csrf
-                                        <div class="form-row align-items-start">
-                                            <div class="col-auto mb-1">
-                                                <select name="review_status" class="form-control form-control-sm review-status-select" required>
-                                                    @foreach($reviewStatuses as $value => $label)
-                                                        <option value="{{ $value }}" {{ $bioLid->data_review_status === $value ? 'selected' : '' }}>{{ $label }}</option>
-                                                    @endforeach
-                                                </select>
+                            @if($panel !== 'agent')
+                                <td>
+                                    @if($bioLid->data_submitted_at || $bioLid->data_review_status)
+                                        <form method="post" action="{{ route($panel . '.biolid.review-data', $bioLid) }}" class="biolid-review-form">
+                                            @csrf
+                                            <div class="form-row align-items-start">
+                                                <div class="col-auto mb-1">
+                                                    <select name="review_status" class="form-control form-control-sm review-status-select" required>
+                                                        @foreach($reviewStatuses as $value => $label)
+                                                            <option value="{{ $value }}" {{ $bioLid->data_review_status === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col mb-1 review-comment-wrap" style="{{ $bioLid->isDataRejected() ? '' : 'display:none;' }}">
+                                                    <input type="text" name="review_comment" class="form-control form-control-sm" placeholder="Причина отклонения" value="{{ old('review_comment', $bioLid->data_review_comment) }}">
+                                                </div>
+                                                <div class="col-auto mb-1">
+                                                    <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                                                </div>
                                             </div>
-                                            <div class="col mb-1 review-comment-wrap" style="{{ $bioLid->isDataRejected() ? '' : 'display:none;' }}">
-                                                <input type="text" name="review_comment" class="form-control form-control-sm" placeholder="Причина отклонения" value="{{ old('review_comment', $bioLid->data_review_comment) }}">
-                                            </div>
-                                            <div class="col-auto mb-1">
-                                                <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                @else
-                                    <span class="text-muted">—</span>
-                                @endif
-                            </td>
+                                        </form>
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
+                            @endif
                         </tr>
 
                         @php
@@ -468,30 +471,32 @@
                                         —
                                     @endif
                                 </td>
-                                <td>
-                                    @if($document)
-                                        <form method="post" action="{{ route($panel . '.biolid.review-document', [$bioLid, $document]) }}" class="biolid-review-form">
-                                            @csrf
-                                            <div class="form-row align-items-start">
-                                                <div class="col-auto mb-1">
-                                                    <select name="review_status" class="form-control form-control-sm review-status-select" required>
-                                                        @foreach($reviewStatuses as $value => $label)
-                                                            <option value="{{ $value }}" {{ $document->review_status === $value ? 'selected' : '' }}>{{ $label }}</option>
-                                                        @endforeach
-                                                    </select>
+                                @if($panel !== 'agent')
+                                    <td>
+                                        @if($document)
+                                            <form method="post" action="{{ route($panel . '.biolid.review-document', [$bioLid, $document]) }}" class="biolid-review-form">
+                                                @csrf
+                                                <div class="form-row align-items-start">
+                                                    <div class="col-auto mb-1">
+                                                        <select name="review_status" class="form-control form-control-sm review-status-select" required>
+                                                            @foreach($reviewStatuses as $value => $label)
+                                                                <option value="{{ $value }}" {{ $document->review_status === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col mb-1 review-comment-wrap" style="{{ $document->isRejected() ? '' : 'display:none;' }}">
+                                                        <input type="text" name="review_comment" class="form-control form-control-sm" placeholder="Причина отклонения" value="{{ old('review_comment', $document->review_comment) }}">
+                                                    </div>
+                                                    <div class="col-auto mb-1">
+                                                        <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                                                    </div>
                                                 </div>
-                                                <div class="col mb-1 review-comment-wrap" style="{{ $document->isRejected() ? '' : 'display:none;' }}">
-                                                    <input type="text" name="review_comment" class="form-control form-control-sm" placeholder="Причина отклонения" value="{{ old('review_comment', $document->review_comment) }}">
-                                                </div>
-                                                <div class="col-auto mb-1">
-                                                    <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    @else
-                                        <span class="text-muted">—</span>
-                                    @endif
-                                </td>
+                                            </form>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>
@@ -499,7 +504,80 @@
                 </div>
             </div>
 
-            {{-- 5. История — развёрнута --}}
+            {{-- 5. Статус АРПМ --}}
+            <div class="card card-outline card-warning mb-3" id="biolid-arpm-status-wrap">
+                <div class="card-header p-3">
+                    <h3 class="card-title mb-0">
+                        Статус АРПМ
+                        <span
+                            id="biolid-arpm-status-badge"
+                            class="{{ $bioLid->arpmStatusBadgeClass() }} ml-2"
+                        ><i class="{{ $bioLid->arpmStatusIconClass() }} mr-1" aria-hidden="true"></i>{{ $bioLid->arpmStatusLabel() }}</span>
+                    </h3>
+                </div>
+                <div class="card-body p-3">
+                    @if($canManageArpmStatus)
+                        <form
+                            method="post"
+                            action="{{ route($panel . '.biolid.arpm-status', $bioLid) }}"
+                            id="biolid-arpm-status-form"
+                        >
+                            @csrf
+                            <div class="form-row align-items-end">
+                                <div class="form-group col-md-4 mb-2 mb-md-0">
+                                    <label for="biolid-arpm-status-select">Статус</label>
+                                    <select
+                                        name="arpm_status"
+                                        id="biolid-arpm-status-select"
+                                        class="form-control select2-arpm-status"
+                                        required
+                                    >
+                                        @foreach($arpmStatuses as $value => $label)
+                                            <option
+                                                value="{{ $value }}"
+                                                data-icon="{{ \App\Models\BioLid::arpmStatusIconClassFor($value) }}"
+                                                {{ $bioLid->arpmStatusValue() === $value ? 'selected' : '' }}
+                                            >
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-auto mb-2 mb-md-0">
+                                    <button type="submit" class="btn btn-primary" id="biolid-arpm-save">
+                                        Сохранить
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div
+                                id="biolid-arpm-comment-wrap"
+                                class="biolid-arpm-comment-box mt-3"
+                                style="{{ $bioLid->arpmStatusValue() === \App\Models\BioLid::ARPM_REMARKS ? '' : 'display:none;' }}"
+                            >
+                                <label for="biolid-arpm-comment">Текст замечаний</label>
+                                <textarea
+                                    name="arpm_comment"
+                                    id="biolid-arpm-comment"
+                                    class="form-control"
+                                    rows="3"
+                                    placeholder="Опишите замечание"
+                                >{{ old('arpm_comment', $bioLid->arpm_comment) }}</textarea>
+                            </div>
+                        </form>
+                    @else
+                        @if($bioLid->arpmStatusValue() === \App\Models\BioLid::ARPM_REMARKS && $bioLid->arpm_comment)
+                            <div class="text-muted" id="biolid-arpm-comment-readonly">
+                                {{ $bioLid->arpm_comment }}
+                            </div>
+                        @else
+                            <div class="text-muted">Изменение статуса доступно администраторам и агентам.</div>
+                        @endif
+                    @endif
+                </div>
+            </div>
+
+            {{-- 6. История — развёрнута --}}
             <div class="card card-outline card-secondary mb-4">
                 <div class="card-header p-3">
                     <h3 class="card-title mb-0">История изменений (<span id="biolid-history-count">{{ $historyCount }}</span>)</h3>
@@ -516,7 +594,6 @@
                             <th>Дата</th>
                             <th>Автор</th>
                             <th>Что изменилось</th>
-                            <th>Изменение</th>
                             <th>Комментарий</th>
                         </tr>
                         </thead>
@@ -526,12 +603,11 @@
                                 <td>{{ $activity->updated_at }}</td>
                                 <td>{{ $activity->user }}</td>
                                 <td>{{ $activity->description }}</td>
-                                <td>{{ $activity->status_old }} <i class="fas fa-arrow-right"></i> {{ $activity->status_new }}</td>
                                 <td class="text-wrap">{{ $activity->comment ?: '—' }}</td>
                             </tr>
                         @empty
                             <tr class="biolid-history-empty">
-                                <td colspan="5">Нет изменений</td>
+                                <td colspan="4">Нет изменений</td>
                             </tr>
                         @endforelse
                         </tbody>
@@ -665,9 +741,8 @@
                     '<td>' + escapeHtml(activity.updated_at) + '</td>' +
                     '<td>' + escapeHtml(activity.user) + '</td>' +
                     '<td>' + escapeHtml(activity.description) + '</td>' +
-                    '<td>' + escapeHtml(activity.status_old) + ' <i class="fas fa-arrow-right"></i> ' + escapeHtml(activity.status_new) + '</td>' +
                     '<td class="text-wrap">' + escapeHtml(activity.comment || '—') + '</td>';
-                body.appendChild(tr);
+                body.insertBefore(tr, body.firstChild);
 
                 if (countEl) {
                     countEl.textContent = String((parseInt(countEl.textContent, 10) || 0) + 1);
@@ -716,6 +791,7 @@
 
                         updateRow(form, result.data.review);
                         prependHistory(result.data.activity);
+                        updateArpmStatus(result.data.arpm);
                         showReviewAlert(result.data.message || 'Статус обновлён', 'success');
                     }).catch(function () {
                         showReviewAlert('Не удалось сохранить статус', 'error');
@@ -726,6 +802,146 @@
                     });
                 });
             });
+
+            var ARPM_REMARKS = @json(\App\Models\BioLid::ARPM_REMARKS);
+
+            function syncArpmCommentVisibility(status) {
+                var wrap = document.getElementById('biolid-arpm-comment-wrap');
+                if (!wrap) {
+                    return;
+                }
+                wrap.style.display = status === ARPM_REMARKS ? '' : 'none';
+            }
+
+            function updateArpmStatus(arpm) {
+                if (!arpm) {
+                    return;
+                }
+
+                var badge = document.getElementById('biolid-arpm-status-badge');
+                if (badge) {
+                    badge.className = (arpm.badge || 'badge badge-secondary') + ' ml-2';
+                    badge.innerHTML = arpm.icon
+                        ? '<i class="' + escapeHtml(arpm.icon) + ' mr-1" aria-hidden="true"></i>' + escapeHtml(arpm.label || '')
+                        : escapeHtml(arpm.label || '');
+                }
+
+                var select = document.getElementById('biolid-arpm-status-select');
+                if (select && arpm.status) {
+                    select.value = arpm.status;
+                    if (window.jQuery && jQuery(select).hasClass('select2-hidden-accessible')) {
+                        jQuery(select).trigger('change.select2');
+                    }
+                    syncArpmCommentVisibility(arpm.status);
+                }
+
+                var comment = document.getElementById('biolid-arpm-comment');
+                if (comment) {
+                    comment.value = arpm.comment || '';
+                }
+
+                var readonly = document.getElementById('biolid-arpm-comment-readonly');
+                if (readonly) {
+                    if (arpm.status === ARPM_REMARKS && arpm.comment) {
+                        readonly.style.display = '';
+                        readonly.textContent = arpm.comment;
+                    } else {
+                        readonly.style.display = 'none';
+                        readonly.textContent = '';
+                    }
+                }
+            }
+
+            var arpmForm = document.getElementById('biolid-arpm-status-form');
+            var arpmSelect = document.getElementById('biolid-arpm-status-select');
+            if (arpmSelect) {
+                function formatArpmOption(state) {
+                    if (!state.id) {
+                        return state.text;
+                    }
+                    var icon = state.element ? state.element.getAttribute('data-icon') : '';
+                    if (!icon) {
+                        return state.text;
+                    }
+                    return $('<span><i class="' + icon + ' mr-1" aria-hidden="true"></i>' + state.text + '</span>');
+                }
+
+                if (window.jQuery) {
+                    jQuery(arpmSelect).select2({
+                        width: '100%',
+                        minimumResultsForSearch: Infinity,
+                        templateResult: formatArpmOption,
+                        templateSelection: formatArpmOption,
+                        escapeMarkup: function (markup) { return markup; }
+                    });
+
+                    jQuery(arpmSelect).on('change', function () {
+                        syncArpmCommentVisibility(arpmSelect.value);
+                        if (arpmSelect.value === ARPM_REMARKS) {
+                            var comment = document.getElementById('biolid-arpm-comment');
+                            if (comment) {
+                                comment.focus();
+                            }
+                        }
+                    });
+                } else {
+                    arpmSelect.addEventListener('change', function () {
+                        syncArpmCommentVisibility(arpmSelect.value);
+                        if (arpmSelect.value === ARPM_REMARKS) {
+                            var comment = document.getElementById('biolid-arpm-comment');
+                            if (comment) {
+                                comment.focus();
+                            }
+                        }
+                    });
+                }
+            }
+
+            if (arpmForm) {
+                arpmForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var submitBtn = document.getElementById('biolid-arpm-save');
+                    var payload = new FormData(arpmForm);
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                    }
+
+                    fetch(arpmForm.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: payload,
+                        credentials: 'same-origin'
+                    }).then(function (response) {
+                        return response.json().then(function (data) {
+                            return { ok: response.ok, data: data };
+                        }).catch(function () {
+                            return { ok: response.ok, data: null };
+                        });
+                    }).then(function (result) {
+                        if (!result.ok) {
+                            var message = (result.data && result.data.message)
+                                || (result.data && result.data.errors && Object.values(result.data.errors)[0] && Object.values(result.data.errors)[0][0])
+                                || 'Не удалось сохранить статус АРПМ';
+                            showReviewAlert(message, 'error');
+                            return;
+                        }
+
+                        updateArpmStatus(result.data.arpm);
+                        prependHistory(result.data.activity);
+                        showReviewAlert(result.data.message || 'Статус АРПМ обновлён', 'success');
+                    }).catch(function () {
+                        showReviewAlert('Не удалось сохранить статус АРПМ', 'error');
+                    }).finally(function () {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                        }
+                    });
+                });
+            }
         })();
     </script>
 @endsection

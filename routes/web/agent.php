@@ -37,6 +37,9 @@ Route::post('biolid/{biolid}/send-credentials', [BioLidController::class, 'sendC
 Route::post('biolid/{biolid}/review-data', [BioLidController::class, 'reviewData'])
     ->whereNumber('biolid')
     ->name('biolid.review-data');
+Route::post('biolid/{biolid}/arpm-status', [BioLidController::class, 'updateArpmStatus'])
+    ->whereNumber('biolid')
+    ->name('biolid.arpm-status');
 Route::post('biolid/{biolid}/documents/{document}/review', [BioLidController::class, 'reviewDocument'])
     ->whereNumber('biolid')
     ->whereNumber('document')

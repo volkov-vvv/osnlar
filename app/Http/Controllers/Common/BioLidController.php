@@ -103,8 +103,94 @@ class BioLidController extends Controller
             'consentDocs' => UserDocument::BIO_CONSENT_DOCS,
             'documents' => $documents,
             'reviewStatuses' => UserDocument::REVIEW_STATUSES,
+            'arpmStatuses' => BioLid::ARPM_STATUSES,
+            'canManageArpmStatus' => $this->canManageArpmStatus(),
             'panel' => $this->panel(),
         ]);
+    }
+
+    public function updateArpmStatus(Request $request, BioLid $biolid): JsonResponse|RedirectResponse
+    {
+        $this->authorizeAgentBioLid($biolid);
+        $this->authorizeArpmStatusChange();
+
+        $data = $request->validate([
+            'arpm_status' => ['required', Rule::in(array_keys(BioLid::ARPM_STATUSES))],
+            'arpm_comment' => [
+                Rule::requiredIf(fn () => $request->input('arpm_status') === BioLid::ARPM_REMARKS),
+                'nullable',
+                'string',
+                'max:5000',
+            ],
+        ], [
+            'arpm_status.required' => 'Выберите статус АРПМ',
+            'arpm_status.in' => 'Некорректный статус АРПМ',
+            'arpm_comment.required' => 'Укажите текст замечаний',
+        ]);
+
+        $oldStatus = $biolid->arpmStatusValue();
+        $oldComment = trim((string) $biolid->arpm_comment);
+        $newStatus = $data['arpm_status'];
+        $newComment = $newStatus === BioLid::ARPM_REMARKS
+            ? trim((string) ($data['arpm_comment'] ?? ''))
+            : null;
+
+        $changed = $oldStatus !== $newStatus || $oldComment !== (string) $newComment;
+
+        if ($changed) {
+            $biolid->forceFill([
+                'arpm_status' => $newStatus,
+                'arpm_comment' => $newComment === '' ? null : $newComment,
+            ])->save();
+
+            $activityComment = sprintf(
+                'Статус АРПМ: %s → %s%s',
+                BioLid::ARPM_STATUSES[$oldStatus],
+                BioLid::ARPM_STATUSES[$newStatus],
+                $newComment ? '. Замечания: '.$newComment : ''
+            );
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($biolid)
+                ->withProperties([
+                    'status_id_old' => $biolid->status_id,
+                    'status_id' => $biolid->status_id,
+                    'comment' => $activityComment,
+                    'arpm_status_old' => $oldStatus,
+                    'arpm_status' => $newStatus,
+                    'arpm_comment' => $newComment,
+                ])
+                ->log('Статус АРПМ');
+        }
+
+        $biolid->loadMissing('status');
+
+        return $this->reviewResponse(
+            $request,
+            $biolid,
+            'Статус АРПМ обновлён',
+            activity: $changed ? [
+                'updated_at' => now()->format('Y-m-d H:i:s'),
+                'user' => auth()->user()?->name ?? '—',
+                'description' => 'Статус АРПМ',
+                'status_old' => $biolid->status->title ?? '—',
+                'status_new' => $biolid->status->title ?? '—',
+                'comment' => sprintf(
+                    'Статус АРПМ: %s → %s%s',
+                    BioLid::ARPM_STATUSES[$oldStatus],
+                    BioLid::ARPM_STATUSES[$newStatus],
+                    $newComment ? '. Замечания: '.$newComment : ''
+                ),
+            ] : null,
+            arpm: [
+                'status' => $biolid->arpmStatusValue(),
+                'label' => $biolid->arpmStatusLabel(),
+                'badge' => $biolid->arpmStatusBadgeClass(),
+                'icon' => $biolid->arpmStatusIconClass(),
+                'comment' => $biolid->arpm_comment,
+            ]
+        );
     }
 
     public function reviewData(Request $request, BioLid $biolid): JsonResponse|RedirectResponse
@@ -160,6 +246,7 @@ class BioLidController extends Controller
             ->log('Проверка данных заявки');
 
         $biolid->loadMissing(['dataReviewer', 'status']);
+        $arpm = $this->applyArpmAutoStatus($biolid);
 
         return $this->reviewResponse(
             $request,
@@ -180,7 +267,8 @@ class BioLidController extends Controller
                 'status_old' => $biolid->status->title ?? '—',
                 'status_new' => $biolid->status->title ?? '—',
                 'comment' => $activityComment,
-            ]
+            ],
+            arpm: $arpm
         );
     }
 
@@ -246,6 +334,7 @@ class BioLidController extends Controller
 
         $document->loadMissing('reviewer');
         $biolid->loadMissing('status');
+        $arpm = $this->applyArpmAutoStatus($biolid);
 
         return $this->reviewResponse(
             $request,
@@ -266,13 +355,15 @@ class BioLidController extends Controller
                 'status_old' => $biolid->status->title ?? '—',
                 'status_new' => $biolid->status->title ?? '—',
                 'comment' => $activityComment,
-            ]
+            ],
+            arpm: $arpm
         );
     }
 
     /**
      * @param  array{status?: string, label?: string, badge?: string, comment?: ?string, reviewed_at?: ?string, reviewer_name?: ?string}|null  $review
      * @param  array{updated_at?: string, user?: string, description?: string, status_old?: string, status_new?: string, comment?: string}|null  $activity
+     * @param  array{status?: string, label?: string, badge?: string}|null  $arpm
      */
     protected function reviewResponse(
         Request $request,
@@ -280,13 +371,25 @@ class BioLidController extends Controller
         string $message,
         ?array $review = null,
         ?array $activity = null,
-        bool $error = false
+        bool $error = false,
+        ?array $arpm = null
     ): JsonResponse|RedirectResponse {
+        if ($arpm === null && ! $error) {
+            $arpm = [
+                'status' => $biolid->arpmStatusValue(),
+                'label' => $biolid->arpmStatusLabel(),
+                'badge' => $biolid->arpmStatusBadgeClass(),
+                'icon' => $biolid->arpmStatusIconClass(),
+                'comment' => $biolid->arpm_comment,
+            ];
+        }
+
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => $message,
                 'review' => $review,
                 'activity' => $activity,
+                'arpm' => $arpm,
             ], $error ? 422 : 200);
         }
 
@@ -295,6 +398,54 @@ class BioLidController extends Controller
         return $error
             ? $redirect->with('error', $message)
             : $redirect->with('success', $message);
+    }
+
+    /**
+     * @return array{status: string, label: string, badge: string}
+     */
+    protected function applyArpmAutoStatus(BioLid $biolid): array
+    {
+        $oldStatus = $biolid->arpmStatusValue();
+
+        if ($biolid->syncArpmStatusWhenDocumentsApproved()) {
+            $activityComment = sprintf(
+                'Статус АРПМ: %s → %s (документы проверены)',
+                BioLid::ARPM_STATUSES[$oldStatus],
+                $biolid->arpmStatusLabel()
+            );
+
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($biolid)
+                ->withProperties([
+                    'status_id_old' => $biolid->status_id,
+                    'status_id' => $biolid->status_id,
+                    'comment' => $activityComment,
+                    'arpm_status_old' => $oldStatus,
+                    'arpm_status' => $biolid->arpmStatusValue(),
+                ])
+                ->log('Статус АРПМ');
+        }
+
+        return [
+            'status' => $biolid->arpmStatusValue(),
+            'label' => $biolid->arpmStatusLabel(),
+            'badge' => $biolid->arpmStatusBadgeClass(),
+            'icon' => $biolid->arpmStatusIconClass(),
+            'comment' => $biolid->arpm_comment,
+        ];
+    }
+
+    protected function canManageArpmStatus(): bool
+    {
+        return in_array($this->panel(), ['admin', 'agent'], true);
+    }
+
+    protected function authorizeArpmStatusChange(): void
+    {
+        if (! $this->canManageArpmStatus()) {
+            abort(403, 'Статус АРПМ могут менять только администраторы и агенты');
+        }
     }
 
     public function create()
@@ -454,7 +605,17 @@ class BioLidController extends Controller
         $ids = $this->filterAgentAccessibleIds($request->input('ids'));
 
         try {
-            $zipPath = $archiveService->create($ids);
+            if ($this->panel() === 'agent') {
+                $archive = $archiveService->createForAgent(
+                    $ids,
+                    $request->input('studygroup')
+                );
+                $zipPath = $archive['path'];
+                $filename = $archive['filename'];
+            } else {
+                $zipPath = $archiveService->create($ids);
+                $filename = 'dokumenty-bio-'.now()->format('Y-m-d_H-i-s').'.zip';
+            }
         } catch (\Throwable $e) {
             report($e);
 
@@ -462,7 +623,10 @@ class BioLidController extends Controller
                 ->with('error', $e->getMessage() ?: 'Не удалось сформировать архив документов');
         }
 
-        $filename = 'dokumenty-bio-'.now()->format('Y-m-d_H-i-s').'.zip';
+        if (! is_file($zipPath)) {
+            return $this->panelRedirect('biolid.index')
+                ->with('error', 'Не удалось сформировать архив документов');
+        }
 
         return response()
             ->download($zipPath, $filename, [
@@ -860,7 +1024,8 @@ class BioLidController extends Controller
         $activites = Activity::query()
             ->where('subject_type', BioLid::class)
             ->where('subject_id', $bioLid->id)
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->get();
 
         $activites->each(function ($item) use ($statuses) {
@@ -873,7 +1038,9 @@ class BioLidController extends Controller
             $item->user = User::find($item->causer_id)?->name ?? '—';
         });
 
-        $firstActivity = $activites->firstWhere('description', 'Изменение статуса');
+        $firstActivity = $activites
+            ->sortBy('created_at')
+            ->firstWhere('description', 'Изменение статуса');
         if ($firstActivity) {
             $interval = date_diff($firstActivity->created_at, $bioLid->created_at);
             $formatStr = '%hч %iмин';

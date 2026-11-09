@@ -61,8 +61,18 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row mb-3">
-                <div class="col">
-                    <a href="{{ route($panel . '.biolid.create') }}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
+                <div class="col d-flex flex-wrap align-items-center" style="gap: 0.5rem;">
+                    @if($panel !== 'agent')
+                        <a href="{{ route($panel . '.biolid.create') }}" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Создать</a>
+                    @endif
+                    @if(in_array($panel, ['admin', 'agent'], true))
+                        <button type="button" class="btn btn-primary" id="biolidQuestionnaireBtn">
+                            <i class="fas fa-file-excel mr-1"></i>Сформировать анкету для группы
+                        </button>
+                        <button type="button" class="btn btn-primary" id="biolidArchiveBtn">
+                            <i class="fas fa-file-archive mr-1"></i>Сформировать архив
+                        </button>
+                    @endif
                 </div>
             </div>
             @if(session('success'))
@@ -132,24 +142,26 @@
                                 </div>
                             </div>
                             <div class="row pb-3">
-                                <div class="col col-md-2">
-                                    Ответственный:
-                                    <select id="responsible" name="responsible" class="form-control form-control-sm custom-filters">
-                                        <option></option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->name }}">{{ $user->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col col-md-2">
-                                    Статус:
-                                    <select id="status" name="status" class="form-control form-control-sm custom-filters">
-                                        <option></option>
-                                        @foreach($statuses as $status)
-                                            <option value="{{ $status->title }}">{{ $status->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                @if($panel !== 'agent')
+                                    <div class="col col-md-2">
+                                        Ответственный:
+                                        <select id="responsible" name="responsible" class="form-control form-control-sm custom-filters">
+                                            <option></option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->name }}">{{ $user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col col-md-2">
+                                        Статус:
+                                        <select id="status" name="status" class="form-control form-control-sm custom-filters">
+                                            <option></option>
+                                            @foreach($statuses as $status)
+                                                <option value="{{ $status->title }}">{{ $status->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                                 <div class="col col-md-2">
                                     Статус документы:
                                     <select id="docs_status" name="docs_status" class="form-control form-control-sm custom-filters">
@@ -158,6 +170,15 @@
                                         <option value="На проверке">На проверке</option>
                                         <option value="Отклонено">Отклонено</option>
                                         <option value="Проверено">Проверено</option>
+                                    </select>
+                                </div>
+                                <div class="col col-md-2">
+                                    Статус АРПМ:
+                                    <select id="arpm_status" name="arpm_status" class="form-control form-control-sm custom-filters">
+                                        <option></option>
+                                        @foreach(\App\Models\BioLid::ARPM_STATUSES as $arpmLabel)
+                                            <option value="{{ $arpmLabel }}">{{ $arpmLabel }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -177,6 +198,7 @@
                                     <th>Учебные группы</th>
                                     <th>Статус</th>
                                     <th>Статус документы</th>
+                                    <th>Статус АРПМ</th>
                                     <th>Дата создания</th>
                                     <th>Дата обновления</th>
                                     <th>Действия</th>
@@ -257,17 +279,23 @@
                                         <td>
                                             <span class="{{ $docsReview['badge'] }}">{{ $docsReview['label'] }}</span>
                                         </td>
+                                        <td>
+                                            <span class="{{ $bioLid->arpmStatusBadgeClass() }}"><i class="{{ $bioLid->arpmStatusIconClass() }} mr-1" aria-hidden="true"></i>{{ $bioLid->arpmStatusLabel() }}</span>
+                                        </td>
                                         <td>{{ $bioLid->created_at }}</td>
                                         <td>{{ $bioLid->updated_at }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="{{ route($panel . '.biolid.show', $bioLid->id) }}" title="Просмотр"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
-                                                <a href="{{ route($panel . '.biolid.edit', $bioLid->id) }}" title="Редактировать"><i class="fas fa-pencil-alt text-success"></i></a>&nbsp;&nbsp;
-                                                <form method="post" action="{{ route($panel . '.biolid.destroy', $bioLid->id) }}" class="mb-0" onsubmit="return confirm('Удалить заявку?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="bg-transparent border-0" type="submit" title="Удалить"><i class="fas fa-trash text-danger" role="button"></i></button>
-                                                </form>
+                                                <a href="{{ route($panel . '.biolid.show', $bioLid->id) }}" title="Просмотр"><i class="far fa-eye"></i></a>
+                                                @if($panel !== 'agent')
+                                                    &nbsp;&nbsp;
+                                                    <a href="{{ route($panel . '.biolid.edit', $bioLid->id) }}" title="Редактировать"><i class="fas fa-pencil-alt text-success"></i></a>&nbsp;&nbsp;
+                                                    <form method="post" action="{{ route($panel . '.biolid.destroy', $bioLid->id) }}" class="mb-0" onsubmit="return confirm('Удалить заявку?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="bg-transparent border-0" type="submit" title="Удалить"><i class="fas fa-trash text-danger" role="button"></i></button>
+                                                    </form>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -326,6 +354,17 @@
     <script>
         var createUsersBulkIds = [];
 
+        function biolidFilteredIds() {
+            var ids = [];
+            table.rows({ search: 'applied' }).every(function () {
+                var id = $(this.node()).data('id');
+                if (id) {
+                    ids.push(id);
+                }
+            });
+            return ids;
+        }
+
         var table = new DataTable('#biolids_table', {
             stateSave: true,
             stateDuration: 0,
@@ -338,6 +377,7 @@
                     responsible: $('#responsible').val(),
                     status: $('#status').val(),
                     docs_status: $('#docs_status').val(),
+                    arpm_status: $('#arpm_status').val(),
                 };
             },
 
@@ -354,6 +394,7 @@
                 $('#responsible').val(filters.responsible || '');
                 $('#status').val(filters.status || '');
                 $('#docs_status').val(filters.docs_status || '');
+                $('#arpm_status').val(filters.arpm_status || '');
 
                 var columnFilters = {
                     1: filters.responsible,
@@ -361,7 +402,8 @@
                     8: filters.course,
                     9: filters.studygroup,
                     10: filters.status,
-                    11: filters.docs_status
+                    11: filters.docs_status,
+                    12: filters.arpm_status
                 };
 
                 if (!data.columns) {
@@ -387,9 +429,9 @@
 
             order: [[0, 'desc']],
             columnDefs: [
-                { orderable: false, searchable: false, targets: 14 },
+                { orderable: false, searchable: false, targets: 15 },
                 @if($panel === 'agent')
-                { targets: [1, 10, 13], visible: false }
+                { targets: [1, 6, 7, 10, 13], visible: false }
                 @endif
             ],
             responsive: true,
@@ -400,54 +442,6 @@
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             buttons: [
                 @if($panel === 'admin')
-                {
-                    text: '<i class="fas fa-file-excel mr-1"></i>Сформировать анкету для группы',
-                    className: 'btn-secondary',
-                    action: function (e, dt) {
-                        var ids = [];
-                        dt.rows({ search: 'applied' }).every(function () {
-                            var id = $(this.node()).data('id');
-                            if (id) {
-                                ids.push(id);
-                            }
-                        });
-
-                        if (!ids.length) {
-                            alert('Нет заявок для выгрузки по текущим фильтрам');
-                            return;
-                        }
-
-                        var params = ids.map(function (id) {
-                            return 'ids[]=' + encodeURIComponent(id);
-                        }).join('&');
-
-                        window.location.href = @json(route($panel . '.biolid.questionnaire')) + '?' + params;
-                    }
-                },
-                {
-                    text: '<i class="fas fa-file-archive mr-1"></i>Сформировать архив',
-                    className: 'btn-secondary',
-                    action: function (e, dt) {
-                        var ids = [];
-                        dt.rows({ search: 'applied' }).every(function () {
-                            var id = $(this.node()).data('id');
-                            if (id) {
-                                ids.push(id);
-                            }
-                        });
-
-                        if (!ids.length) {
-                            alert('Нет заявок для архива по текущим фильтрам');
-                            return;
-                        }
-
-                        var params = ids.map(function (id) {
-                            return 'ids[]=' + encodeURIComponent(id);
-                        }).join('&');
-
-                        window.location.href = @json(route($panel . '.biolid.documents-archive')) + '?' + params;
-                    }
-                },
                 {
                     text: '<i class="fas fa-user-plus mr-1"></i>Создать пользователей',
                     className: 'btn-secondary',
@@ -575,6 +569,41 @@
             form.submit();
         });
 
+        $('#biolidQuestionnaireBtn').on('click', function () {
+            var ids = biolidFilteredIds();
+            if (!ids.length) {
+                alert('Нет заявок для выгрузки по текущим фильтрам');
+                return;
+            }
+
+            var params = ids.map(function (id) {
+                return 'ids[]=' + encodeURIComponent(id);
+            }).join('&');
+
+            window.location.href = @json(route($panel . '.biolid.questionnaire')) + '?' + params;
+        });
+
+        $('#biolidArchiveBtn').on('click', function () {
+            var ids = biolidFilteredIds();
+            if (!ids.length) {
+                alert('Нет заявок для архива по текущим фильтрам');
+                return;
+            }
+
+            var params = ids.map(function (id) {
+                return 'ids[]=' + encodeURIComponent(id);
+            }).join('&');
+
+            @if($panel === 'agent')
+            var studygroup = $('#studygroup').val();
+            if (studygroup) {
+                params += '&studygroup=' + encodeURIComponent(studygroup);
+            }
+            @endif
+
+            window.location.href = @json(route($panel . '.biolid.documents-archive')) + '?' + params;
+        });
+
         $('#organization').on('change', function () {
             table.column(2).search(this.value, {exact: true}).draw();
         });
@@ -595,6 +624,10 @@
             table.column(11).search(this.value, {exact: true}).draw();
         });
 
+        $('#arpm_status').on('change', function () {
+            table.column(12).search(this.value, {exact: true}).draw();
+        });
+
         $('#studygroup').on('change', function () {
             table.column(9).search(this.value).draw();
         });
@@ -603,7 +636,7 @@
             table.state.clear();
             table.columns().visible(true);
             @if($panel === 'agent')
-            table.columns([1, 10, 13]).visible(false);
+            table.columns([1, 6, 7, 10, 13]).visible(false);
             @endif
             table.search('').columns().search('').order([[0, 'desc']]).draw();
             $('#course').val(null).trigger('change');
@@ -611,6 +644,7 @@
             $('#responsible').val(null).trigger('change');
             $('#status').val(null).trigger('change');
             $('#docs_status').val(null).trigger('change');
+            $('#arpm_status').val(null).trigger('change');
             $('#studygroup').val(null).trigger('change');
         });
 
