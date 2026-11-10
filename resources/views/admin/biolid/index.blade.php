@@ -168,6 +168,7 @@
                                         <option></option>
                                         <option value="Не отправлено">Не отправлено</option>
                                         <option value="На проверке">На проверке</option>
+                                        <option value="Ожидает этап 2">Ожидает этап 2</option>
                                         <option value="Отклонено">Отклонено</option>
                                         <option value="Проверено">Проверено</option>
                                     </select>
