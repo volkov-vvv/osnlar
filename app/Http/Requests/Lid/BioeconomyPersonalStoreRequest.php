@@ -105,7 +105,15 @@ class BioeconomyPersonalStoreRequest extends FormRequest
             'organization_title' => 'required|string|max:255',
             'organization_inn' => ['nullable', 'regex:/^\d{10}$|^\d{12}$/'],
             'position' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('bio_lids', 'email')
+                    ->where(fn ($query) => $query
+                        ->where('course_id', $this->input('course_id'))
+                        ->whereNull('deleted_at')),
+            ],
             'phone_prefix' => 'required|string|max:8',
             'phone' => 'required|string|max:32',
             'politic' => 'accepted',
@@ -135,6 +143,7 @@ class BioeconomyPersonalStoreRequest extends FormRequest
             'position.required' => 'Укажите должность',
             'email.required' => 'Укажите email',
             'email.email' => 'Укажите корректный email',
+            'email.unique' => 'Заявка с этой почтой на выбранный курс уже подана',
             'phone.required' => 'Укажите номер телефона',
             'phone_prefix.required' => 'Укажите код страны телефона',
             'politic.accepted' => 'Необходимо согласие с политикой обработки персональных данных',

@@ -127,7 +127,16 @@ class UpdateRequest extends FormRequest
             'organization_title' => 'required|string|max:255',
             'organization_inn' => ['nullable', 'regex:/^\d{10}$|^\d{12}$/'],
             'position' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('bio_lids', 'email')
+                    ->where(fn ($query) => $query
+                        ->where('course_id', $this->input('course_id'))
+                        ->whereNull('deleted_at'))
+                    ->ignore($this->route('biolid')),
+            ],
             'phone' => 'required|string|max:32',
             'status_id' => 'required|integer|exists:statuses,id',
             'responsible_id' => 'nullable|integer|exists:users,id',
@@ -160,6 +169,7 @@ class UpdateRequest extends FormRequest
             'position.required' => 'Укажите должность',
             'email.required' => 'Укажите email',
             'email.email' => 'Укажите корректный email',
+            'email.unique' => 'Заявка с этой почтой на выбранный курс уже есть',
             'phone.required' => 'Укажите номер телефона',
             'status_id.required' => 'Укажите статус',
             'status_id.exists' => 'Выбранный статус недоступен',

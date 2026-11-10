@@ -208,6 +208,7 @@
                                 @foreach($bioLids as $bioLid)
                                     @php
                                         $statusTitle = $bioLid->status->title ?? '';
+                                        $statusColor = $bioLid->status->color ?? null;
                                         $docsReview = $bioLid->documentsReviewSummary();
                                     @endphp
                                     <tr data-id="{{ $bioLid->id }}">
@@ -266,15 +267,14 @@
                                             @endforelse
                                         </td>
                                         <td>
-                                            <span class="badge rounded-pill
-                                                @switch($bioLid->status_id)
-                                                    @case(1) bg-danger @break
-                                                    @case(2) bg-warning text-dark @break
-                                                    @case(3) bg-info @break
-                                                    @case(4) bg-success @break
-                                                @endswitch">
-                                                {{ $statusTitle }}
-                                            </span>
+                                            @if($statusColor)
+                                                <span
+                                                    class="badge rounded-pill"
+                                                    style="background-color: {{ $statusColor }} !important; color: {{ contrast_color($statusColor) }}"
+                                                >{{ $statusTitle }}</span>
+                                            @else
+                                                <span class="badge rounded-pill badge-secondary">{{ $statusTitle ?: '—' }}</span>
+                                            @endif
                                         </td>
                                         <td>
                                             <span class="{{ $docsReview['badge'] }}">{{ $docsReview['label'] }}</span>

@@ -78,7 +78,15 @@ class StoreRequest extends UpdateRequest
             'organization_title' => 'nullable|string|max:255',
             'organization_inn' => ['nullable', 'regex:/^\d{10}$|^\d{12}$/'],
             'position' => 'nullable|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('bio_lids', 'email')
+                    ->where(fn ($query) => $query
+                        ->where('course_id', $this->input('course_id'))
+                        ->whereNull('deleted_at')),
+            ],
             'phone' => 'required|string|max:32',
             'status_id' => 'required|integer|exists:statuses,id',
             'responsible_id' => 'nullable|integer|exists:users,id',
@@ -128,6 +136,7 @@ class StoreRequest extends UpdateRequest
             'organization_inn.regex' => 'ИНН организации должен содержать 10 или 12 цифр',
             'email.required' => 'Укажите email',
             'email.email' => 'Укажите корректный email',
+            'email.unique' => 'Заявка с этой почтой на выбранный курс уже есть',
             'phone.required' => 'Укажите номер телефона',
             'status_id.required' => 'Укажите статус',
             'status_id.exists' => 'Выбранный статус недоступен',
