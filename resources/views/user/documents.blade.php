@@ -724,7 +724,7 @@
                         $applicationStatusLabel = 'На проверке';
                     } else {
                         $applicationStatusClass = 'docs-status-empty';
-                        $applicationStatusLabel = 'Не отправлено';
+                        $applicationStatusLabel = $initialStepsApproved ? 'Ожидает отправки' : 'Не отправлено';
                     }
                 @endphp
                 <div class="row justify-content-center mb-3" id="doc-application">
@@ -902,7 +902,7 @@
                         $consentStatusClass = 'docs-status-pending';
                     } else {
                         $consentStatus = null;
-                        $consentStatusLabel = 'Не отправлено';
+                        $consentStatusLabel = $initialStepsApproved ? 'Ожидает отправки' : 'Не отправлено';
                         $consentStatusClass = 'docs-status-empty';
                     }
                 @endphp

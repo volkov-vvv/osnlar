@@ -68,6 +68,33 @@
             padding: 0.55rem 0.95rem;
             font-size: 0.975rem;
             line-height: 1.5;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        /* type=date на мобильных имеет большую intrinsic width и вылезает из колонки */
+        .bio-personal-form .row > [class*="col-"] {
+            min-width: 0;
+        }
+        .bio-personal-form input[type="date"] {
+            width: 100%;
+            min-width: 0;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .bio-personal-form input[type="date"]::-webkit-date-and-time-value {
+            text-align: left;
+            min-height: 1.5em;
+        }
+        @media (max-width: 575.98px) {
+            .bio-personal-form .bio-personal-group {
+                padding-left: 0.85rem;
+                padding-right: 0.85rem;
+            }
+            .bio-personal-form input[type="date"] {
+                padding-left: 0.7rem;
+                padding-right: 0.7rem;
+                font-size: 1rem; /* iOS не зумит поле при фокусе */
+            }
         }
         .bio-personal-form textarea.form-control {
             min-height: auto;

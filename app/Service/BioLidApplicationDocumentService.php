@@ -25,16 +25,18 @@ class BioLidApplicationDocumentService
      */
     public function generate(BioLid $bioLid): array
     {
-        $bioLid->loadMissing(['course.biolidStudyGroup']);
+        $bioLid->loadMissing(['course.biolidStudyGroup', 'user.studyGroups']);
 
         $course = $bioLid->course;
         if (! $course instanceof Course) {
             throw new RuntimeException('У заявки не указан курс');
         }
 
-        $studyGroup = $course->biolidStudyGroup;
+        $studyGroup = $this->resolveStudyGroup($bioLid, $course);
         if (! $studyGroup instanceof StudyGroup) {
-            throw new RuntimeException('У курса не выбрана учебная группа для заявок');
+            throw new RuntimeException(
+                'Не найдена учебная группа для сроков обучения: привяжите пользователя к группе курса или укажите группу для заявок в настройках курса'
+            );
         }
 
         if (! $studyGroup->starts_at || ! $studyGroup->ends_at) {
@@ -171,6 +173,32 @@ class BioLidApplicationDocumentService
         }
 
         return $binary;
+    }
+
+    /**
+     * Сроки в заявление: группа пользователя по курсу заявки, иначе группа курса для заявок.
+     */
+    protected function resolveStudyGroup(BioLid $bioLid, Course $course): ?StudyGroup
+    {
+        $userGroups = $bioLid->user?->studyGroups;
+        if ($userGroups) {
+            $fromUser = $userGroups
+                ->filter(static fn (StudyGroup $group) => (int) $group->course_id === (int) $course->id)
+                ->sortByDesc('id')
+                ->first(static fn (StudyGroup $group) => $group->starts_at && $group->ends_at)
+                ?? $userGroups
+                    ->filter(static fn (StudyGroup $group) => (int) $group->course_id === (int) $course->id)
+                    ->sortByDesc('id')
+                    ->first();
+
+            if ($fromUser instanceof StudyGroup) {
+                return $fromUser;
+            }
+        }
+
+        $fromCourse = $course->biolidStudyGroup;
+
+        return $fromCourse instanceof StudyGroup ? $fromCourse : null;
     }
 
     protected function studyHoursPhrase(int $hours): string

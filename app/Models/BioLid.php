@@ -141,7 +141,7 @@ class BioLid extends Model
     }
 
     /**
-     * Агрегированный статус проверки данных и документов ЛК.
+     * Агрегированный статус проверки данных и документов ЛК (с учётом этапов 1 и 2).
      *
      * @return array{status: string, label: string, badge: string}
      */
@@ -149,32 +149,35 @@ class BioLid extends Model
     {
         $this->loadMissing('documents');
 
-        $statuses = [$this->data_review_status];
-
         $docsByType = $this->documents
             ->sortByDesc('id')
             ->unique('type')
             ->keyBy('type');
 
-        foreach (UserDocument::requiredBioDocTypes() as $type) {
-            $document = $docsByType->get($type);
-            $statuses[] = $document?->review_status;
+        $stage1 = [$this->data_review_status];
+        foreach (array_keys(UserDocument::BIO_DOCS) as $type) {
+            $stage1[] = $docsByType->get($type)?->review_status;
+        }
+
+        $stage2 = [];
+        foreach (UserDocument::BIO_APPLICATION_DOCS as $type => $meta) {
+            if (! empty($meta['optional'])) {
+                continue;
+            }
+            $stage2[] = $docsByType->get($type)?->review_status;
+        }
+        foreach (array_keys(UserDocument::BIO_CONSENT_DOCS) as $type) {
+            $stage2[] = $docsByType->get($type)?->review_status;
         }
 
         $nameChange = $docsByType->get('name_change_doc');
         if ($nameChange) {
-            $statuses[] = $nameChange->review_status;
+            $stage2[] = $nameChange->review_status;
         }
 
-        if (in_array(UserDocument::REVIEW_PENDING, $statuses, true)) {
-            return [
-                'status' => UserDocument::REVIEW_PENDING,
-                'label' => 'На проверке',
-                'badge' => 'badge badge-warning',
-            ];
-        }
+        $all = array_merge($stage1, $stage2);
 
-        if (in_array(UserDocument::REVIEW_REJECTED, $statuses, true)) {
+        if (in_array(UserDocument::REVIEW_REJECTED, $all, true)) {
             return [
                 'status' => UserDocument::REVIEW_REJECTED,
                 'label' => 'Отклонено',
@@ -182,12 +185,33 @@ class BioLid extends Model
             ];
         }
 
-        $allApproved = $statuses !== []
-            && collect($statuses)->every(
+        if (in_array(UserDocument::REVIEW_PENDING, $all, true)) {
+            return [
+                'status' => UserDocument::REVIEW_PENDING,
+                'label' => 'На проверке',
+                'badge' => 'badge badge-warning',
+            ];
+        }
+
+        $stage1Done = $stage1 !== []
+            && collect($stage1)->every(
                 static fn ($status) => $status === UserDocument::REVIEW_APPROVED
             );
 
-        if ($allApproved) {
+        if (! $stage1Done) {
+            return [
+                'status' => 'empty',
+                'label' => 'Не отправлено',
+                'badge' => 'badge badge-secondary',
+            ];
+        }
+
+        $stage2Done = $stage2 !== []
+            && collect($stage2)->every(
+                static fn ($status) => $status === UserDocument::REVIEW_APPROVED
+            );
+
+        if ($stage2Done) {
             return [
                 'status' => UserDocument::REVIEW_APPROVED,
                 'label' => 'Проверено',
@@ -196,9 +220,9 @@ class BioLid extends Model
         }
 
         return [
-            'status' => 'empty',
-            'label' => 'Не отправлено',
-            'badge' => 'badge badge-secondary',
+            'status' => 'awaiting_stage2',
+            'label' => 'Ожидает этап 2',
+            'badge' => 'badge badge-info',
         ];
     }
 
