@@ -20,6 +20,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Activitylog\Models\Activity;
@@ -358,6 +359,93 @@ class BioLidController extends Controller
             ],
             arpm: $arpm
         );
+    }
+
+    public function uploadDocument(Request $request, BioLid $biolid, string $type): RedirectResponse
+    {
+        if ($this->panel() !== 'admin') {
+            abort(403);
+        }
+
+        $this->authorizeAgentBioLid($biolid);
+
+        $allDocs = UserDocument::allBioDocs();
+        if (! isset($allDocs[$type])) {
+            return $this->panelRedirect('biolid.show', $biolid)
+                ->with('error', 'Неизвестный тип документа');
+        }
+
+        if (! $biolid->user_id) {
+            return $this->panelRedirect('biolid.show', $biolid)
+                ->with('error', 'Сначала создайте учётную запись пользователя для заявки');
+        }
+
+        $mimes = $allDocs[$type]['mimes'] ?? 'pdf,jpg,jpeg,png';
+        $request->validate([
+            'doc' => ['required', 'file', 'mimes:'.$mimes, 'max:5120'],
+        ], [
+            'doc.required' => 'Выберите файл документа',
+            'doc.mimes' => 'Недопустимый формат файла',
+            'doc.max' => 'Размер файла не должен превышать 5 МБ',
+        ]);
+
+        $file = $request->file('doc');
+        $path = $file->store('user_docs', 'public');
+        $docTitle = $allDocs[$type]['title'];
+        $originalName = $file->getClientOriginalName();
+
+        $document = UserDocument::query()
+            ->where('bio_lid_id', $biolid->id)
+            ->where('type', $type)
+            ->latest('id')
+            ->first();
+
+        $replaced = false;
+        if ($document) {
+            $replaced = (bool) $document->file;
+            if ($document->file && Storage::disk('public')->exists($document->file)) {
+                Storage::disk('public')->delete($document->file);
+            }
+
+            $document->update([
+                'title' => $originalName,
+                'file' => $path,
+                'submitted_at' => now(),
+                'user_id' => $biolid->user_id,
+            ]);
+        } else {
+            $document = UserDocument::create([
+                'user_id' => $biolid->user_id,
+                'order_id' => null,
+                'bio_lid_id' => $biolid->id,
+                'title' => $originalName,
+                'file' => $path,
+                'type' => $type,
+                'submitted_at' => now(),
+            ]);
+        }
+
+        $activityComment = sprintf(
+            '%s документ «%s»: %s',
+            $replaced ? 'Заменён' : 'Загружен',
+            $docTitle,
+            $originalName
+        );
+
+        activity()
+            ->causedBy(auth()->user())
+            ->performedOn($biolid)
+            ->withProperties([
+                'status_id_old' => $biolid->status_id,
+                'status_id' => $biolid->status_id,
+                'comment' => $activityComment,
+                'document_id' => $document->id,
+                'document_type' => $document->type,
+            ])
+            ->log($replaced ? 'Замена документа' : 'Загрузка документа');
+
+        return $this->panelRedirect('biolid.show', $biolid)
+            ->with('success', $activityComment);
     }
 
     /**

@@ -48,10 +48,16 @@
             renderSummary(ids);
         }
 
+        function syncCheckedState($checkbox) {
+            $checkbox.closest('.agent-org-item').toggleClass('is-checked', $checkbox.prop('checked'));
+        }
+
         function syncModalFromInputs() {
             var selected = selectedIdsFromInputs();
             $('.agent-org-checkbox').each(function () {
-                $(this).prop('checked', selected.indexOf(String($(this).val())) !== -1);
+                var $checkbox = $(this);
+                $checkbox.prop('checked', selected.indexOf(String($checkbox.val())) !== -1);
+                syncCheckedState($checkbox);
             });
             $('#agentOrgsSearch').val('');
             filterList('');
@@ -75,12 +81,20 @@
             filterList($(this).val());
         });
 
+        $(document).on('change', '.agent-org-checkbox', function () {
+            syncCheckedState($(this));
+        });
+
         $('#agentOrgsSelectAll').on('click', function () {
-            visibleCheckboxes().prop('checked', true);
+            visibleCheckboxes().prop('checked', true).each(function () {
+                syncCheckedState($(this));
+            });
         });
 
         $('#agentOrgsClearAll').on('click', function () {
-            visibleCheckboxes().prop('checked', false);
+            visibleCheckboxes().prop('checked', false).each(function () {
+                syncCheckedState($(this));
+            });
         });
 
         $('#agentOrgsApply').on('click', function () {

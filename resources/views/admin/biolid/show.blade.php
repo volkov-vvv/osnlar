@@ -431,14 +431,41 @@
                             }
                         @endphp
                         @foreach($reviewDocRows as $index => $row)
-                            @php $document = $documents[$row['type']] ?? null; @endphp
+                            @php
+                                $document = $documents[$row['type']] ?? null;
+                                $docMeta = \App\Models\UserDocument::allBioDocs()[$row['type']] ?? [];
+                                $docMimes = $docMeta['mimes'] ?? 'pdf,jpg,jpeg,png';
+                            @endphp
                             <tr data-summary-index="{{ $index + 1 }}">
                                 <td>{{ $row['step'] }}. {{ $row['title'] }}</td>
                                 <td class="review-file-cell">
+                                    <div class="d-inline-flex align-items-center flex-wrap">
+                                        @if($document && $document->file)
+                                            <a href="{{ url('storage/'.$document->file) }}" target="_blank" rel="noopener">
+                                                {{ $document->title }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">Файл не загружен</span>
+                                        @endif
+                                        @if($panel === 'admin')
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-outline-secondary rounded-circle ml-2 biolid-doc-upload-btn"
+                                                title="Загрузить / заменить"
+                                                style="width: 2rem; height: 2rem; padding: 0; line-height: 2rem;"
+                                                data-type="{{ $row['type'] }}"
+                                                data-title="{{ $row['title'] }}"
+                                                data-has-file="{{ $document && $document->file ? 1 : 0 }}"
+                                                data-file-url="{{ $document && $document->file ? url('storage/'.$document->file) : '' }}"
+                                                data-file-name="{{ $document && $document->file ? $document->title : '' }}"
+                                                data-upload-url="{{ route('admin.biolid.upload-document', [$bioLid, $row['type']]) }}"
+                                                data-mimes="{{ $docMimes }}"
+                                            >
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        @endif
+                                    </div>
                                     @if($document && $document->file)
-                                        <a href="{{ url('storage/'.$document->file) }}" target="_blank" rel="noopener">
-                                            {{ $document->title }}
-                                        </a>
                                         <div class="review-rejection-info">
                                             @if($document->isRejected())
                                                 @if($document->reviewed_at)
@@ -449,8 +476,6 @@
                                                 @endif
                                             @endif
                                         </div>
-                                    @else
-                                        <span class="text-muted">Файл не загружен</span>
                                     @endif
                                 </td>
                                 <td class="review-status-cell">
@@ -616,6 +641,90 @@
             </div>
         </div>
     </section>
+
+    @if($panel === 'admin')
+        <style>
+            #biolidDocUploadModal .modal-content {
+                border: 0;
+                border-radius: .4rem;
+                box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, .18);
+                overflow: hidden;
+            }
+            #biolidDocUploadModal .modal-header {
+                align-items: center;
+                background: #094ca1;
+                border-bottom: 0;
+                color: #fff;
+                padding: .9rem 1.15rem;
+            }
+            #biolidDocUploadModal .modal-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin: 0;
+            }
+            #biolidDocUploadModal .modal-header .close {
+                color: #fff;
+                opacity: .85;
+                text-shadow: none;
+            }
+            #biolidDocUploadModal .modal-header .close:hover {
+                opacity: 1;
+            }
+            #biolidDocUploadModal .modal-body {
+                background: #f4f6f9;
+                padding: 1rem 1.15rem;
+            }
+            #biolidDocUploadModal .modal-footer {
+                background: #fff;
+                border-top: 1px solid #e3e6ea;
+                padding: .85rem 1.15rem;
+            }
+        </style>
+
+        <div class="modal fade" id="biolidDocUploadModal" tabindex="-1" role="dialog" aria-labelledby="biolidDocUploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form id="biolidDocUploadForm" method="post" enctype="multipart/form-data" action="#">
+                        @csrf
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="biolidDocUploadModalLabel">
+                                <i class="fas fa-file-upload mr-2"></i><span id="biolidDocUploadModalTitleText">Загрузить документ</span>
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-2">
+                                <strong id="biolidDocUploadDocName"></strong>
+                            </p>
+                            <div id="biolidDocUploadCurrentWrap" class="mb-3" style="display: none;">
+                                <div class="text-muted small mb-1">Текущий файл</div>
+                                <a id="biolidDocUploadCurrentLink" href="#" target="_blank" rel="noopener"></a>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="biolidDocUploadInput">Файл</label>
+                                <input
+                                    type="file"
+                                    name="doc"
+                                    id="biolidDocUploadInput"
+                                    class="form-control-file"
+                                    required
+                                >
+                                <div class="form-text text-muted" id="biolidDocUploadHint">PDF, JPG, PNG. До 5 МБ.</div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary" id="biolidDocUploadSubmit">
+                                <i class="fas fa-check mr-1"></i>Сохранить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @section('javascript')
@@ -940,6 +1049,57 @@
                             submitBtn.disabled = false;
                         }
                     });
+                });
+            }
+
+            var uploadModal = document.getElementById('biolidDocUploadModal');
+            var uploadForm = document.getElementById('biolidDocUploadForm');
+            var uploadInput = document.getElementById('biolidDocUploadInput');
+            var uploadTitleText = document.getElementById('biolidDocUploadModalTitleText');
+            var uploadDocName = document.getElementById('biolidDocUploadDocName');
+            var uploadCurrentWrap = document.getElementById('biolidDocUploadCurrentWrap');
+            var uploadCurrentLink = document.getElementById('biolidDocUploadCurrentLink');
+            var uploadHint = document.getElementById('biolidDocUploadHint');
+
+            if (uploadModal && uploadForm && typeof $ !== 'undefined') {
+                document.querySelectorAll('.biolid-doc-upload-btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        var hasFile = btn.getAttribute('data-has-file') === '1';
+                        var title = btn.getAttribute('data-title') || '';
+                        var fileUrl = btn.getAttribute('data-file-url') || '';
+                        var fileName = btn.getAttribute('data-file-name') || '';
+                        var uploadUrl = btn.getAttribute('data-upload-url') || '#';
+                        var mimes = (btn.getAttribute('data-mimes') || 'pdf,jpg,jpeg,png')
+                            .split(',')
+                            .map(function (item) { return item.trim().toUpperCase(); })
+                            .filter(Boolean);
+
+                        uploadForm.action = uploadUrl;
+                        uploadTitleText.textContent = hasFile ? 'Заменить документ' : 'Загрузить документ';
+                        uploadDocName.textContent = title;
+                        uploadHint.textContent = mimes.join(', ') + '. До 5 МБ.';
+                        uploadInput.value = '';
+                        uploadInput.accept = mimes.map(function (ext) { return '.' + ext.toLowerCase(); }).join(',');
+
+                        if (hasFile && fileUrl) {
+                            uploadCurrentWrap.style.display = '';
+                            uploadCurrentLink.href = fileUrl;
+                            uploadCurrentLink.textContent = fileName || 'Открыть файл';
+                        } else {
+                            uploadCurrentWrap.style.display = 'none';
+                            uploadCurrentLink.href = '#';
+                            uploadCurrentLink.textContent = '';
+                        }
+
+                        $('#biolidDocUploadModal').modal('show');
+                    });
+                });
+
+                uploadForm.addEventListener('submit', function () {
+                    var submitBtn = document.getElementById('biolidDocUploadSubmit');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                    }
                 });
             }
         })();

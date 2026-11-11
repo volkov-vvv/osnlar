@@ -128,6 +128,10 @@ Route::post('biolid/{biolid}/documents/{document}/review', [BioLidController::cl
     ->whereNumber('biolid')
     ->whereNumber('document')
     ->name('biolid.review-document');
+Route::post('biolid/{biolid}/documents/{type}/upload', [BioLidController::class, 'uploadDocument'])
+    ->whereNumber('biolid')
+    ->where('type', '[A-Za-z0-9_]+')
+    ->name('biolid.upload-document');
 Route::delete('biolid/{biolid}', [BioLidController::class, 'destroy'])
     ->whereNumber('biolid')
     ->name('biolid.destroy');

@@ -1,6 +1,5 @@
 <div class="mb-3 form-group">
-    <label for="avatar-source">Фото</label>
-    <div class="mb-2">
+    <div class="mb-3 text-center">
         <img
             id="avatar-current-image"
             alt="Фото"
