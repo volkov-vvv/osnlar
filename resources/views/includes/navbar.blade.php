@@ -47,9 +47,11 @@
                             </a>
                             <a class="dropdown-item btn btn-link" href="
                             @switch(auth()->user()->role)
-                            @case(1) {{auth()->user()->role == 1 ? route('admin.main.index') . ' ">Административная панель' : ''}}
+                            @case(1) {{route('admin.main.index')}}">Административная панель
                             @break
-                            @case(2) {{auth()->user()->role == 3 ? route('cc.main.index') . ' ">Административная панель' : ''}}
+                            @case(2) {{route('agent.main.index')}}">Личный кабинет
+                            @break
+                            @case(3) {{route('cc.main.index')}}">Административная панель
                             @break
                             @default
                                     {{route('user.index')}}">Личный кабинет

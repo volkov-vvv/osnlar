@@ -42,6 +42,30 @@ class Setting extends Model
         return self::getBool('lid_captcha_enabled', true);
     }
 
+    public static function bioeconomyDocuments(): array
+    {
+        return [
+            [
+                'key' => 'bioeconomy_presentation',
+                'input' => 'presentation',
+                'title' => 'Презентация проекта',
+                'icon' => 'fas fa-file-powerpoint',
+            ],
+            [
+                'key' => 'bioeconomy_order',
+                'input' => 'order',
+                'title' => 'Приказ Минпромторга от 30.12.2025 №6807',
+                'icon' => 'fas fa-scroll',
+            ],
+            [
+                'key' => 'bioeconomy_organizations',
+                'input' => 'organizations',
+                'title' => 'Список программ',
+                'icon' => 'fas fa-clipboard-list',
+            ],
+        ];
+    }
+
     protected static function cacheKey(string $key): string
     {
         return 'setting.' . $key;

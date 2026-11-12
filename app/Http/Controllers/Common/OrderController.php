@@ -79,22 +79,25 @@ class OrderController extends Controller
 
     protected function orderActivities(Order $order, Collection $statuses): Collection
     {
-        $activites = Activity::all()
-            ->where('log_name', '=', 'order')
-            ->where('subject_id', '=', $order['id']);
+        $activites = Activity::query()
+            ->where('subject_type', Order::class)
+            ->where('subject_id', $order->id)
+            ->orderBy('created_at')
+            ->get();
 
-        $activites->each(function ($item) use ($statuses) {
+        $userNames = User::query()
+            ->whereIn('id', $activites->pluck('causer_id')->filter()->unique())
+            ->pluck('name', 'id');
+
+        $activites->each(function ($item) use ($statuses, $userNames) {
             $properties = $item->properties;
-            $item->status_old = $statuses->where('id', $properties['status_id_old'])->first()->title;
-            $item->status_new = $statuses->where('id', $properties['status_id'])->first()->title;
+            $item->status_old = $statuses->where('id', $properties['status_id_old'] ?? null)->first()->title ?? '—';
+            $item->status_new = $statuses->where('id', $properties['status_id'] ?? null)->first()->title ?? '—';
             $item->comment = $properties['comment'] ?? '';
-            $item->user = User::findOrFail($item->causer_id)->name;
+            $item->user = $userNames[$item->causer_id] ?? '—';
         });
 
-        $firstActivity = Activity::all()
-            ->where('subject_id', '=', $order['id'])
-            ->where('description', '=', 'Изменение статуса')
-            ->first();
+        $firstActivity = $activites->firstWhere('description', 'Изменение статуса');
 
         $activites->interval = $firstActivity
             ? dateDiff($firstActivity->created_at, $order->created_at)

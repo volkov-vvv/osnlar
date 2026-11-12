@@ -20,7 +20,8 @@ class ProfileController extends Controller
     public function update(UpdateRequest $request)
     {
         $user = auth()->user();
-        $data = $request->safe()->only(['lastname', 'name']);
+        $data = $request->safe()->only(['lastname', 'name', 'middlename']);
+        $data['middlename'] = ($data['middlename'] ?? '') !== '' ? $data['middlename'] : null;
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar) {

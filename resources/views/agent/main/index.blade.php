@@ -6,76 +6,106 @@
                 <div class="col-sm-6">
                     <h1>Главная</h1>
                 </div>
-
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
             <div class="row">
                 <div class="col-lg-3 col-6">
-                    <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>{{$data['lidsCount']}}</h3>
-
-                            <p>Заявок</p>
+                            <h3>{{ $data['bioLidsCount'] }}</h3>
+                            <p>Заявки</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('agent.biolid.index') }}" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+            </div>
 
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>93<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Процент трудоустроенных</p>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card card-outline card-secondary mb-4">
+                        <div class="card-header px-4 py-3">
+                            <h3 class="card-title">Документы</h3>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-column flex-md-row align-items-center px-2 py-3">
+                                <div class="position-relative" style="width: 260px; height: 260px;">
+                                    <canvas id="docsStatusChart"></canvas>
+                                </div>
+                                <ul class="list-unstyled mb-0 ml-md-5 mt-4 mt-md-0">
+                                    @foreach($data['docsStats'] as $docsStat)
+                                        <li class="mb-3 d-flex align-items-center">
+                                            <span
+                                                class="d-inline-block mr-2 rounded-circle"
+                                                style="width: 12px; height: 12px; background-color: {{ $docsStat['color'] }};"
+                                            ></span>
+                                            <span>{{ $docsStat['label'] }}: <strong>{{ $docsStat['count'] }}</strong></span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div class="mt-4 pt-2">
+                                <a href="{{ route('agent.biolid.index') }}">Перейти к заявкам <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
                         </div>
-                        <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
             </div>
-
-
-            <!-- /.row -->
-
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-
-            <div class="row mb-3">
-                <div class="col">
-
-
-
-
-                </div>
-            </div>
-                <!-- /.row -->
-
-
-            </div><!-- /.container-fluid -->
-    </section>
-
-
 @endsection
 
+@section('javascript')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        (function () {
+            var labels = @json(collect($data['docsStats'])->pluck('label')->values());
+            var values = @json(collect($data['docsStats'])->pluck('count')->values());
+            var colors = @json(collect($data['docsStats'])->pluck('color')->values());
+            var total = values.reduce(function (sum, value) { return sum + Number(value); }, 0);
+
+            var canvas = document.getElementById('docsStatusChart');
+            if (!canvas) {
+                return;
+            }
+
+            new Chart(canvas.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: total > 0 ? values : [1],
+                        backgroundColor: total > 0 ? colors : ['#dee2e6'],
+                        borderWidth: 1,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: total > 0,
+                            callbacks: {
+                                label: function (context) {
+                                    var label = context.label || '';
+                                    var value = context.raw || 0;
+                                    return label + ': ' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+@endsection

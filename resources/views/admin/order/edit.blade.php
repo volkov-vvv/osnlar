@@ -26,15 +26,15 @@
                     </div>
                     <div class="mb-3">
                         <label>ФИО</label>
-                        <input type="text" class="form-control" value="{{$order->user->firstname}} {{$order->user->name}} {{$order->user->middlename}}" disabled>
+                        <input type="text" class="form-control" value="{{ $order->user ? trim($order->user->lastname . ' ' . $order->user->name . ' ' . $order->user->middlename) : '—' }}" disabled>
                     </div>
                     <div class="mb-3">
                         <label>Телефон</label>
-                        <input type="text" class="form-control" value="{{$order->user->phone_prefix}}{{$order->user->phone}}" disabled>
+                        <input type="text" class="form-control" value="{{ $order->user ? ($order->user->phone_prefix . $order->user->phone) : '—' }}" disabled>
                     </div>
                     <div class="mb-3">
                         <label>Email</label>
-                        <input type="text" class="form-control" value="{{$order->user->email}}" disabled>
+                        <input type="text" class="form-control" value="{{ $order->user->email ?? '—' }}" disabled>
                     </div>
                     <div class="mb-3">
                         <label>Регион</label>

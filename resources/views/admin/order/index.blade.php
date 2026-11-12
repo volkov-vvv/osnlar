@@ -77,15 +77,21 @@
                                     <tr>
                                         <td>{{$order->id}}</td>
                                         <td>{{$order->course->title}}</td>
-                                        <td>{{$order->user->lastname}} {{$order->user->name}} {{$order->user->middlename}}</td>
+                                        <td>
+                                            @if($order->user)
+                                                {{ trim($order->user->lastname . ' ' . $order->user->name . ' ' . $order->user->middlename) }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
                                         <td>
                                             @if(isset($order->region))
                                                 {{$order->region->title}}
                                             @endif
                                         </td>
-                                        <td>{{$order->user->email}}</td>
+                                        <td>{{ $order->user->email ?? '—' }}</td>
                                         <td>
-                                            @if(isset($order->user->phone))
+                                            @if($order->user?->phone)
                                                 8{{$order->user->phone}}
                                             @endif
                                         </td>
@@ -139,6 +145,7 @@
         var table = new DataTable('#order_table', {
 
             stateSave: true,
+            stateDuration: 0,
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {

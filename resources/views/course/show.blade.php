@@ -2,6 +2,35 @@
 
 @push('styles')
     <style>
+        .course-page-title {
+            color: #094ca1;
+            text-align: center;
+        }
+        .course-page-title .course-study-hours {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin: 0 0 0 0.55rem;
+            padding: 0.28rem 0.75rem;
+            border: 1px solid #063a7a;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #094ca1 0%, #0b5cc0 55%, #0a4fa8 100%);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            vertical-align: middle;
+            position: relative;
+            top: -0.12em;
+            box-shadow: 0 4px 12px rgba(9, 76, 161, 0.28);
+        }
+        .course-page-title .course-study-hours i {
+            font-size: 0.85em;
+            color: #fff;
+            opacity: 0.95;
+        }
         .course-facts {
             margin: 1.75rem 0;
         }
@@ -259,8 +288,12 @@
 
     <main class="blog-post">
         <div class="container">
-            <div class="d-none d-lg-block"><h2 class="text-center pt-5 pb-2 " data-aos="fade-up" style="color: #094ca1">{{$course->title}}</h2></div>
-            <div class="d-lg-none pb-2"><h3 class="text-center pt-4" data-aos="fade-up" style="color: #094ca1">{{$course->title}}</h3></div>
+            <div class="d-none d-lg-block">
+                <h2 class="course-page-title text-center pt-5 pb-2" data-aos="fade-up">{{$course->title}}@if($course->studyHoursLabel()) <span class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</span>@endif</h2>
+            </div>
+            <div class="d-lg-none pb-2">
+                <h3 class="course-page-title text-center pt-4" data-aos="fade-up">{{$course->title}}@if($course->studyHoursLabel()) <span class="course-study-hours"><i class="fas fa-clock" aria-hidden="true"></i>{{ $course->studyHoursLabel() }}</span>@endif</h3>
+            </div>
 
             <p class="course-experts pb-lg-3 text-center" data-aos="fade-up" data-aos-delay="200">
                 <span class="course-experts-label">Эксперты курса:</span>
@@ -448,19 +481,40 @@
 
 
         </div>
-        @if(!$course->bioeconomy)
+        @if($course->bioeconomy)
         <section class="course-apply">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9 mx-auto">
                         <div class="course-apply-card" data-aos="fade-up">
-                            <h2 class="course-apply-title">Подать заявку!</h2>
-                            @if(isset($course->price) && $course->price != 0)
-                                <p class="course-apply-price">Стоимость обучения {{ number_format($course->price, 0, ',', ' ') }} руб.</p>
-                            @endif
-                            <a href="@if(isset($course->price) && $course->price != 0){{ route('order.create', $course->id) }}@else{{ route('lid.create', ['selectedCourse' => $course->id]) }}@endif" class="course-apply-btn">
-                                <i class="fas fa-arrow-right" aria-hidden="true"></i>Записаться
+                            <h2 class="course-apply-title">Персональная запись на курс</h2>
+                            <p class="course-apply-price">Национальный проект «Технологическое обеспечение биоэкономики»</p>
+                            <a href="{{ route('lid.bioeconomy.personal.create', $course->id) }}" class="course-apply-btn">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>Персональная запись на курс
                             </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @else
+        <section class="course-apply">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 mx-auto">
+                        <div class="course-apply-card" data-aos="fade-up">
+                            @if(isset($course->price) && $course->price != 0)
+                                <h2 class="course-apply-title">Сформировать заказ!</h2>
+                                <p class="course-apply-price">Стоимость обучения {{ number_format($course->price, 0, ',', ' ') }} руб.</p>
+                                <a href="{{ route('order.create', $course->id) }}" class="course-apply-btn">
+                                    <i class="fas fa-arrow-right" aria-hidden="true"></i>Заказ
+                                </a>
+                            @else
+                                <h2 class="course-apply-title">Подать заявку!</h2>
+                                <a href="{{ route('lid.create', ['selectedCourse' => $course->id]) }}" class="course-apply-btn">
+                                    <i class="fas fa-arrow-right" aria-hidden="true"></i>Записаться
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

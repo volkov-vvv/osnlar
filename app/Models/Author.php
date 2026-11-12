@@ -14,6 +14,7 @@ class Author extends Model
     protected $guarded = false;
     protected $casts = [
         'is_published' => 'boolean',
+        'passport_issued_at' => 'date',
     ];
 
     public function scopePublished($query)

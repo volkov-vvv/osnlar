@@ -22,6 +22,12 @@ class User extends Authenticatable
     const ROLE_CONTACT = 3;
     const ROLE_USER = 10;
 
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            $user->bioLids()->update(['user_id' => null]);
+        });
+    }
 
     public function getRoles()
     {
@@ -38,11 +44,77 @@ class User extends Authenticatable
         return $this->belongsToMany(Agent::class)->withPivot('user_id','agent_id');
     }
 
+    public function orgs()
+    {
+        return $this->belongsToMany(Org::class)->withTimestamps();
+    }
+
+    public function studyGroups()
+    {
+        return $this->belongsToMany(StudyGroup::class)->withTimestamps();
+    }
+
+    /**
+     * Названия организаций, доступных агенту в заявках по БИО.
+     *
+     * @return list<string>
+     */
+    public function bioOrganizationTitles(): array
+    {
+        $this->loadMissing('orgs');
+
+        return $this->orgs
+            ->pluck('organization_title')
+            ->map(static fn ($title) => trim((string) $title))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    public function canAccessBioLid(BioLid $bioLid): bool
+    {
+        if ((int) $this->role !== self::ROLE_AGENT) {
+            return true;
+        }
+
+        $title = trim((string) $bioLid->organization_title);
+        if ($title === '') {
+            return false;
+        }
+
+        return in_array($title, $this->bioOrganizationTitles(), true);
+    }
+
+    /**
+     * Есть привязки для раздела «Отчеты» агента: справочные агенты и/или utm_source.
+     */
+    public function hasAgentReportAccess(): bool
+    {
+        $this->loadMissing('agents');
+
+        if ($this->agents->isNotEmpty()) {
+            return true;
+        }
+
+        $utm = is_array($this->utm) ? $this->utm : [];
+
+        return collect($utm)
+            ->map(static fn ($value) => trim((string) $value))
+            ->filter()
+            ->isNotEmpty();
+    }
+
+
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
+    public function bioLids()
+    {
+        return $this->hasMany(BioLid::class);
+    }
 
     public function getLids()
     {
@@ -151,9 +223,29 @@ class User extends Authenticatable
         'phone',
         'password',
         'role',
+        'is_blocked',
         'utm',
         'company_id'
     ];
+
+    public function isBlocked(): bool
+    {
+        return (bool) $this->is_blocked;
+    }
+
+    /**
+     * URL кабинета после входа / при редиректе с /home.
+     */
+    public function homePath(): string
+    {
+        return match ((int) $this->role) {
+            self::ROLE_ADMIN => '/admin',
+            self::ROLE_AGENT => '/agent',
+            self::ROLE_CONTACT => '/cc/lid',
+            self::ROLE_USER => '/user',
+            default => '/',
+        };
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -172,6 +264,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
         'utm' => 'array',
+        'is_blocked' => 'boolean',
     ];
 }

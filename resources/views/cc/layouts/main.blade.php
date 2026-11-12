@@ -54,12 +54,8 @@
             </li>
         </ul>
         <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto">
-            <form action="{{route('logout')}}" method="post">
-                @csrf
-{{--                <label><i class="fa-solid fa-right-from-bracket"></i></label>--}}
-                <input class="btn btn-outline-primary" type="submit" value="Выйти">
-            </form>
+        <ul class="navbar-nav ml-auto align-items-center">
+            @include('includes.navbar-user')
         </ul>
 
 

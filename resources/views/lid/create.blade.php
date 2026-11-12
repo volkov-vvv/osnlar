@@ -197,7 +197,7 @@
                 <div class="col">
                     <div class="custom-control custom-checkbox">
                         <input name="politic" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1">
-                        <label for="customCheckbox1" class="custom-control-label"><span class="text-danger">* </span>Я соглашаюсь с <a href="{{asset('files/politic.pdf')}}" target="_blank">политикой обработки персональных данных</a> </label>
+                        <label for="customCheckbox1" class="custom-control-label"><span class="text-danger">* </span>Я соглашаюсь с <a href="{{ route('privacy') }}" target="_blank" rel="noopener">политикой обработки персональных данных</a> </label>
                     </div>
                     @error('politic')
                     <div class="text-danger">{{$message}}</div>

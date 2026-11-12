@@ -166,6 +166,7 @@
         var table = new DataTable('#example2', {
 
             stateSave: true,
+            stateDuration: 0,
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {

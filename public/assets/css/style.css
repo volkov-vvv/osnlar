@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
+/* DM Sans is loaded from layouts via <link> to avoid late @import font swap near page bottom. */
 
 @font-face {
     font-family: "Soyuz Grotesk Bold";
@@ -7388,83 +7388,211 @@ a.text-dark:hover, a.text-dark:focus {
           display: none; } }
 
 .edica-footer {
-  background-color: #191919;
-  padding-top: 200px;
-  margin-top: -93px;
-  padding-bottom: 56px;
-  color: #ffffff; }
-  .edica-footer .footer-brand-wrapper {
-    display: block;
-    margin-bottom: 20px; }
-    .edica-footer .footer-brand-wrapper img {
-      width: 88px; }
-  .edica-footer .contact-details {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: #ffffff; }
-  .edica-footer .footer-social-links {
-    padding-top: 31px;
-    padding-bottom: 31px; }
-  .edica-footer .footer-country-dropdown .dropdown-toggle {
-    border: 1px solid #282727;
-    background-color: transparent;
-    padding: 13px 15px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.14;
-    color: inherit; }
-  .edica-footer .footer-country-dropdown .flag-icon {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    margin-right: 12px; }
+  margin-top: 2rem;
+  padding: 0 1.25rem 1.5rem;
+  background: transparent;
+  color: #ffffff;
+  font-family: "Manrope", "DM Sans", sans-serif; }
 
-.footer-social-links a {
+.edica-footer .footer-col-title,
+.edica-footer .footer-org-name,
+.edica-footer .footer-copy {
+  font-family: "Manrope", "DM Sans", sans-serif;
+  letter-spacing: 0.01em; }
+
+.edica-footer .footer-glass {
+  position: relative;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 2.75rem 2rem 1.5rem;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 38%, rgba(9, 76, 161, 0.22) 100%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.62) 100%);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-radius: 28px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow:
+    0 18px 48px rgba(15, 23, 42, 0.28),
+    0 -8px 28px rgba(9, 76, 161, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04); }
+
+.edica-footer .footer-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(147, 197, 253, 0.18) 45%, rgba(255, 255, 255, 0.08));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0; }
+
+.edica-footer .footer-glass::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -10%;
+  width: 55%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.22) 0%, rgba(147, 197, 253, 0) 70%);
+  pointer-events: none;
+  z-index: 0; }
+
+.edica-footer .footer-glass > * {
+  position: relative;
+  z-index: 1; }
+
+.edica-footer .footer-widget-area {
+  padding-bottom: 1.75rem;
+  margin: 0; }
+
+.edica-footer .footer-col {
+  margin-bottom: 1.75rem; }
+
+.edica-footer .footer-col-title {
+  margin: 0 0 1rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase; }
+
+.edica-footer .footer-col-title--spaced {
+  margin-top: 1.5rem; }
+
+.edica-footer .footer-org-name {
+  margin-bottom: 0.85rem;
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.45; }
+
+.edica-footer .footer-text {
+  margin-bottom: 0.45rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95rem;
+  line-height: 1.5; }
+
+.edica-footer .footer-link {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color 0.15s ease; }
+
+.edica-footer .footer-link:hover,
+.edica-footer .footer-link:focus {
+  color: #93c5fd;
+  text-decoration: none; }
+
+.edica-footer .footer-social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding-top: 1.25rem; }
+
+.edica-footer .footer-social-links a {
   display: inline-flex;
-  font-size: 12px;
-  color: #121973;
-  width: 35px;
-  height: 35px;
   align-items: center;
   justify-content: center;
-  background-color: #f9f9f9;
+  width: 2.35rem;
+  height: 2.35rem;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 50%;
-  margin-right: 10px; }
-  .footer-social-links a:hover {
-    text-decoration: none; }
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
 
-.footer-widget-area {
-  padding-bottom: 80px; }
+.edica-footer .footer-social-links a:hover,
+.edica-footer .footer-social-links a:focus {
+  background-color: #094ca1;
+  border-color: #094ca1;
+  color: #ffffff;
+  text-decoration: none; }
 
-.footer-nav .nav-link {
-  color: inherit; }
+.edica-footer .footer-social-links .footer-social-max {
+  display: block;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0; }
 
-.footer-bottom-content {
-  padding-top: 31px;
-  padding-bottom: 31px;
-  border-top: 1px solid rgba(240, 240, 240, 0.07);
+.edica-footer .footer-nav {
   display: flex;
-  justify-content: space-between; }
-  @media (max-width: 767px) {
-    .footer-bottom-content {
-      display: block; } }
-  @media (max-width: 767px) {
-    .footer-bottom-content .footer-bottom-nav {
-      margin-bottom: 20px; } }
-  .footer-bottom-content .footer-bottom-nav a {
-    color: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.14;
-    display: inline-block; }
-    .footer-bottom-content .footer-bottom-nav a::after {
-      content: "-";
-      display: inline-block;
-      margin-left: 14px;
-      margin-right: 14px; }
-    .footer-bottom-content .footer-bottom-nav a:last-child::after {
-      content: none; }
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem; }
+
+.edica-footer .footer-nav .nav-link {
+  padding: 0.2rem 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  transition: color 0.15s ease; }
+
+.edica-footer .footer-nav .nav-link:hover,
+.edica-footer .footer-nav .nav-link:focus {
+  color: #93c5fd;
+  text-decoration: none; }
+
+.edica-footer .footer-bottom-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.35rem;
+  padding-bottom: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1); }
+
+.edica-footer .footer-bottom-nav a {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.4;
+  display: inline-block;
+  transition: color 0.15s ease; }
+
+.edica-footer .footer-bottom-nav a:hover,
+.edica-footer .footer-bottom-nav a:focus {
+  color: #ffffff;
+  text-decoration: none; }
+
+.edica-footer .footer-copy {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: nowrap; }
+
+@media (max-width: 767.98px) {
+  .edica-footer {
+    padding: 0 0.85rem 1.1rem; }
+
+  .edica-footer .footer-glass {
+    padding: 2rem 1.15rem 1.25rem;
+    border-radius: 22px; }
+
+  .edica-footer .footer-widget-area {
+    padding-bottom: 1rem; }
+
+  .edica-footer .footer-bottom-content {
+    flex-direction: column;
+    align-items: flex-start; }
+
+  .edica-footer .footer-copy {
+    white-space: normal; }
+}
 
 .edica-landing-section {
   padding-top: 75px;
@@ -7518,7 +7646,7 @@ a.text-dark:hover, a.text-dark:focus {
           position: absolute;
           border-width: 6px;
           border-style: solid;
-          border-color: transparent #f29431 #f29431 transparent;
+          border-color: transparent #1f8a42 #1f8a42 transparent;
           left: -40px;
           top: 6px; }
 
@@ -7527,6 +7655,34 @@ a.text-dark:hover, a.text-dark:focus {
 
 .edica-landing-section.about-osnovanie .img-wrapper{
     text-align: center; }
+
+.edica-landing-section.about-osnovanie .projects-carousel .img-wrapper img {
+    margin-left: auto;
+    margin-right: auto; }
+
+.edica-landing-section.about-osnovanie .projects-carousel .img-wrapper img.projects-slide-bioeconomy-ai {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    min-height: 420px;
+    margin: 0;
+    border-radius: 1rem;
+    aspect-ratio: auto;
+    object-fit: cover;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+}
+
+.edica-landing-section.about-osnovanie .projects-carousel .img-wrapper:has(.projects-slide-bioeconomy-ai) {
+    display: flex;
+    align-items: stretch;
+}
+
+@media (max-width: 767.98px) {
+    .edica-landing-section.about-osnovanie .projects-carousel .img-wrapper img.projects-slide-bioeconomy-ai {
+        min-height: 220px;
+    }
+}
 
 @media (max-width: 767.98px) {
     .edica-landing-section.about-osnovanie .projects-carousel .img-wrapper {
@@ -7546,14 +7702,53 @@ a.text-dark:hover, a.text-dark:focus {
     margin-right: 24px;
     margin-bottom: 24px; }
 
+.edica-landing-section.about-osnovanie .projects-carousel .carousel-content-btns {
+    margin-top: 2rem;
+}
+
 .edica-landing-section.about-osnovanie .projects-carousel {
     padding-bottom: 48px; }
+
+.edica-landing-section.about-osnovanie .projects-carousel .carousel-item {
+    min-height: 480px; }
 
 .edica-landing-section.about-osnovanie .projects-carousel .carousel-item > .row {
     height: 100%; }
 
+.edica-landing-section.about-osnovanie .projects-carousel .img-wrapper img,
+.edica-landing-section.edica-landing-clients .reviews-carousel .carousel-img-wrapper img {
+    display: block;
+    width: 350px;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 350 / 400;
+    object-fit: contain; }
+
+.edica-landing-section.edica-landing-clients .reviews-carousel .carousel-item {
+    min-height: 480px; }
+
 .edica-landing-section.edica-landing-clients .reviews-carousel .carousel-item > .row {
     height: 100%; }
+
+.edica-landing-section.edica-landing-about img.img-fluid {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 930 / 590;
+    object-fit: cover;
+    border-radius: 1rem;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12); }
+
+.edica-header.edica-landing-header.main-page .carousel-img-wrapper img {
+    display: block;
+    width: 650px;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 650 / 750;
+    object-fit: contain;
+    filter:
+        drop-shadow(-14px 16px 20px rgba(15, 23, 42, 0.26))
+        drop-shadow(-6px 6px 8px rgba(15, 23, 42, 0.14)); }
 
 .edica-landing-section.about-osnovanie .projects-carousel .carousel-indicators {
     position: absolute;
@@ -7572,15 +7767,21 @@ a.text-dark:hover, a.text-dark:focus {
     border: 0;
     border-radius: 50%;
     text-indent: -999px;
-    background-color: #bbc5d2;
+    background-color: #a8d5b5;
     opacity: 1;
     transition: background-color 0.3s ease; }
 
 .edica-landing-section.about-osnovanie .projects-carousel .carousel-indicators li.active {
-    background-color: #f29431; }
+    background-color: #1f8a42; }
 
+  .edica-landing-section.edica-landing-clients .partners-wrapper {
+    min-height: 215px; }
   .edica-landing-section.edica-landing-clients .partners-wrapper img {
-    margin: 20px; }
+    margin: 20px;
+    height: 175px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain; }
     .edica-landing-section.edica-landing-clients .partners-wrapper img:first-child {
       margin-left: 0; }
     .edica-landing-section.edica-landing-clients .partners-wrapper img:last-child {
@@ -7604,6 +7805,11 @@ a.text-dark:hover, a.text-dark:focus {
   .edica-landing-section.edica-landing-services .landing-service-card {
     margin-bottom: 85px; }
     .edica-landing-section.edica-landing-services .landing-service-card .service-card-img {
+      display: block;
+      height: 140px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
       margin-bottom: 36px; }
     .edica-landing-section.edica-landing-services .landing-service-card .service-card-title {
       font-size: 25px;
@@ -7613,10 +7819,18 @@ a.text-dark:hover, a.text-dark:focus {
       font-size: 18px;
       line-height: 1.56; }
   .edica-landing-section.edica-landing-testimonials {
-    background-color: #fff3ee; }
+    background-color: #fff3ee;
+    /* Reserve full block height so autoplay/font load cannot reflow the page bottom. */
+    min-height: 820px; }
+    .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-item {
+      min-height: 400px; }
+    .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators {
+      min-height: 190px;
+      align-items: flex-start; }
     .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel blockquote {
       padding-top: 40px;
-      padding-bottom: 40px; }
+      padding-bottom: 40px;
+      min-height: 380px; }
       .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel blockquote p {
         font-size: 35px;
         font-weight: 700;
@@ -7648,20 +7862,26 @@ a.text-dark:hover, a.text-dark:focus {
             padding-top: 0; } }
         .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li img {
           border-radius: 50%;
-          width: 65px;
-          height: 65px;
-          transition: all 0.5s ease;
+          /* Reserve active size in layout so scale never overlaps the caption. */
+          width: 82px;
+          height: 82px;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+          transform: scale(0.79);
+          transform-origin: center center;
           margin-top: 8px;
           margin-bottom: 9px; }
           @media (max-width: 575px) {
             .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li img {
-              width: 35px;
-              height: 35px;
+              width: 40px;
+              height: 40px;
+              transform: scale(0.875);
               margin-top: 0;
               margin-bottom: 0; } }
         .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li .user-details {
           visibility: hidden;
-          text-align: center; }
+          text-align: center;
+          min-height: 2.75rem; }
           .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li .user-details h6 {
             margin-bottom: 0; }
             @media (max-width: 575px) {
@@ -7677,12 +7897,14 @@ a.text-dark:hover, a.text-dark:focus {
         .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li.active {
           padding-top: 0; }
           .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li.active img {
+            width: 82px;
             height: 82px;
-            width: 82px; }
+            transform: scale(1); }
             @media (max-width: 575px) {
               .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li.active img {
                 width: 40px;
-                height: 40px; } }
+                height: 40px;
+                transform: scale(1); } }
           .edica-landing-section.edica-landing-testimonials .landing-testimonial-carousel .carousel-indicators li.active .user-details {
             visibility: visible; }
   .edica-landing-section.edica-landing-blog .edica-landing-section-title {
@@ -7690,7 +7912,11 @@ a.text-dark:hover, a.text-dark:focus {
     line-height: 1.29;
     margin-bottom: 66px; }
   .edica-landing-section.edica-landing-blog .landing-blog-post .blog-post-thumbnail {
+    display: block;
     width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     margin-bottom: 37px; }
   .edica-landing-section.edica-landing-blog .landing-blog-post .blog-post-category {
     font-size: 16px;
@@ -7847,7 +8073,26 @@ a.text-dark:hover, a.text-dark:focus {
     height: 265px;
     position: relative;
     overflow: hidden;
-    margin-bottom: 26px; }
+    margin-bottom: 26px;
+    border-radius: 1.05rem;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(236, 244, 252, 0.92) 100%);
+    box-shadow:
+      0 0 0 1px rgba(9, 76, 161, 0.12),
+      0 0 0 5px rgba(255, 255, 255, 0.96),
+      0 0 0 6px rgba(9, 76, 161, 0.2),
+      0 14px 30px rgba(9, 76, 161, 0.12);
+    transition: box-shadow 0.25s ease, transform 0.25s ease; }
+    .blog .blog-post .blog-post-thumbnail-wrapper::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        inset 0 -1px 0 rgba(9, 76, 161, 0.08);
+      z-index: 1; }
     .blog .blog-post .blog-post-thumbnail-wrapper img {
       max-width: 100%;
       position: absolute;
@@ -7871,6 +8116,13 @@ a.text-dark:hover, a.text-dark:focus {
     line-height: 1.5;
     color: #020202;
     margin-bottom: 0; }
+  .blog .blog-post:hover .blog-post-thumbnail-wrapper {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgba(9, 76, 161, 0.16),
+      0 0 0 5px rgba(255, 255, 255, 0.98),
+      0 0 0 6px rgba(9, 76, 161, 0.3),
+      0 18px 36px rgba(9, 76, 161, 0.16); }
   .blog .blog-post:hover .blog-post-thumbnail-wrapper img {
     transform: scale(1.075); }
   .blog .blog-post.fetured-post .blog-post-thumbnail-wrapper {
@@ -8193,6 +8445,49 @@ label {
     text-decoration: none;
 }
 
+.button-main--glass {
+    color: #094ca1;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.72) 0%,
+            rgba(255, 255, 255, 0.22) 38%,
+            rgba(147, 197, 253, 0.28) 72%,
+            rgba(9, 76, 161, 0.14) 100%
+        );
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    background-clip: padding-box;
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow:
+        0 14px 32px rgba(9, 76, 161, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -1px 0 rgba(9, 76, 161, 0.1),
+        inset 1px 0 0 rgba(255, 255, 255, 0.35);
+}
+
+.button-main--glass:hover {
+    color: #083d82;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.85) 0%,
+            rgba(255, 255, 255, 0.32) 38%,
+            rgba(147, 197, 253, 0.38) 72%,
+            rgba(9, 76, 161, 0.2) 100%
+        );
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow:
+        0 18px 36px rgba(9, 76, 161, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 0 rgba(9, 76, 161, 0.12),
+        inset 1px 0 0 rgba(255, 255, 255, 0.45);
+}
+
+.button-main--shift-right {
+    margin-left: 1.5rem;
+}
+
 .button-main:before {
     content: " ";
     position: absolute;
@@ -8207,10 +8502,6 @@ label {
 .edica-landing-section.edica-landing-blog .carousel-content-btns .button-main {
     margin-left: auto;
     margin-right: auto;
-}
-
-.edica-landing-section.edica-landing-blog .carousel-content-btns .button-main:before {
-    display: none;
 }
 
 @media (max-width: 992px) {
@@ -8310,6 +8601,19 @@ label {
         color: #fff;
         background-color: #c82333;
         border-color: #bd2130;
+        text-decoration: none;
+    }
+
+    .edica-header .navbar-nav .button-lid-create.button-lid-create--bio {
+        background-color: #1f8a42;
+        border-color: #1f8a42;
+    }
+
+    .edica-header .navbar-nav .button-lid-create.button-lid-create--bio:hover,
+    .edica-header .navbar-nav .button-lid-create.button-lid-create--bio:focus {
+        color: #fff;
+        background-color: #176b33;
+        border-color: #176b33;
         text-decoration: none;
     }
 }
@@ -8497,35 +8801,100 @@ background-color: #4CAF50; /* Ваш цвет кнопки */
     .edica-header .navbar-nav .nav-link {
         display: flex;
         align-items: center;
+        white-space: nowrap;
     }
 
     .edica-header .navbar-nav .nav-item-social-first {
         margin-left: auto;
     }
 
+    @media (max-width: 1199.98px) {
+        .edica-header .navbar-expand-lg .navbar-nav .nav-link {
+            padding-right: 0.4rem;
+            padding-left: 0.4rem;
+        }
+
+        .edica-header .navbar-brand img {
+            width: 160px;
+        }
+
+        .edica-header .header-glass .button-login {
+            padding: 5px 12px;
+            font-size: 15px;
+        }
+
+        .edica-header .header-glass .button-lid-create {
+            padding: 5px 8px;
+            font-size: 14px;
+        }
+
+        .edica-header .navbar-nav .nav-item-lid-create {
+            margin-left: 0.5rem !important;
+            margin-right: 0.5rem !important;
+        }
+    }
+
     .edica-header .navbar-nav .nav-item-social .nav-link {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
+        padding: 0;
     }
 }
 
-.edica-header .navbar-nav .nav-item-social .nav-link {
+.edica-header .navbar-nav .nav-item-social {
+    display: flex;
+    align-items: center;
+}
+
+.edica-header .navbar-nav .nav-item-social .nav-link.header-social-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
+    width: 2.35rem;
+    height: 2.35rem;
+    padding: 0;
+    margin: 0 0.15rem;
+    border: 1px solid rgba(9, 76, 161, 0.14);
+    border-radius: 50%;
+    color: #094ca1;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.92) 0%,
+            rgba(255, 255, 255, 0.55) 45%,
+            rgba(232, 240, 250, 0.85) 100%
+        );
+    box-shadow:
+        0 6px 14px rgba(15, 23, 42, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
 
-.edica-header .navbar-nav .nav-item-social .nav-link img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
+.edica-header .navbar-nav .nav-item-social .nav-link.header-social-btn:hover,
+.edica-header .navbar-nav .nav-item-social .nav-link.header-social-btn:focus {
+    transform: translateY(-1px);
+    color: #083d82;
+    border-color: rgba(9, 76, 161, 0.32);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.98) 0%,
+            rgba(236, 244, 255, 0.9) 50%,
+            rgba(210, 228, 252, 0.95) 100%
+        );
+    box-shadow:
+        0 10px 20px rgba(9, 76, 161, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    text-decoration: none;
+}
+
+.edica-header .navbar-nav .nav-item-social .nav-link .header-social-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    font-size: 1.1rem;
+    line-height: 1;
     display: block;
     flex-shrink: 0;
-}
-
-.edica-header .navbar-nav .nav-item-social .nav-link img.social-icon-max {
-    width: 25px;
-    height: 25px;
+    color: inherit;
 }
 
 @media (max-width: 991.98px) {
@@ -8566,9 +8935,19 @@ background-color: #4CAF50; /* Ваш цвет кнопки */
         font-size: 18px;
     }
 
-    .edica-header .navbar-nav .nav-item-social .nav-link {
-        justify-content: center;
+    .edica-header .navbar-nav .nav-item-social .nav-link.header-social-btn {
         width: 100%;
+        height: auto;
+        min-height: 44px;
+        padding: 0.75rem 1rem;
+        border-radius: 0.8rem;
+        justify-content: center;
+    }
+
+    .edica-header .navbar-nav .nav-item-social .nav-link.header-social-btn .header-social-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        font-size: 1.25rem;
     }
 
     .edica-header .navbar-nav .dropdown-menu {

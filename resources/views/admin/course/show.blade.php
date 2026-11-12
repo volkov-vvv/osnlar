@@ -32,12 +32,8 @@
                                     <td>{{$course->title}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Описание</td>
-                                    <td style="white-space: normal; word-break: break-word; max-width: 0;">
-                                        <div class="course-description">
-                                            {!! $course->description !!}
-                                        </div>
-                                    </td>
+                                    <td>Краткое название</td>
+                                    <td>{{ $course->short_title ?: '—' }}</td>
                                 </tr>
 {{--                                <tr>--}}
 {{--                                    <td>Категория</td>--}}
@@ -56,6 +52,10 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>Тип</td>
+                                    <td>{{ $course->typeLabel() ?? '—' }}</td>
+                                </tr>
+                                <tr>
                                     <td>Статус по умолчанию</td>
                                     <td>{{ $course->defaultStatus->title ?? '—' }}</td>
                                 </tr>
@@ -70,6 +70,10 @@
                                 <tr>
                                     <td>Сроки обучения</td>
                                     <td>{{ $course->studyWeeksLabel() ?? '—' }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Учебные часы</td>
+                                    <td>{{ $course->studyHoursLabel() ?? '—' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Дата создания</td>
@@ -90,7 +94,7 @@
             </div>
 
             <!-- /.row -->
-            <div class="row pb-4">
+            <div class="row mb-4">
                 <div class="col-3">
                     <a class="btn btn-outline-primary mr-2" href="{{route('admin.course.edit', $course->id)}}">Редактировать</a>
                     <a class="btn btn-outline-secondary" href="{{route('admin.course.index')}}">Назад</a>

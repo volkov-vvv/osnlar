@@ -122,10 +122,22 @@
                                         </td>
                                         <td>{{ optional($org->created_at)->format('Y-m-d H:i:s') }}</td>
                                         <td>{{ optional($org->updated_at)->format('Y-m-d H:i:s') }}</td>
-                                        <td>
-                                            <a href="{{ route($panel . '.org.show', $org->id) }}"><i class="far fa-eye"></i></a>
-                                            &nbsp;&nbsp;
-                                            <a href="{{ route($panel . '.org.edit', $org->id) }}" class="text-success"><i class="fas fa-pen"></i></a>
+                                        <td data-search="{{ $org->is_published ? 'Опубликован' : 'Не опубликован' }}">
+                                            <div class="d-flex align-items-center">
+                                                <div class="custom-control custom-switch mb-0 mr-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        class="custom-control-input org-publish-switch"
+                                                        id="org-publish-{{ $org->id }}"
+                                                        data-url="{{ route($panel . '.org.publish', $org->id) }}"
+                                                        {{ $org->is_published ? 'checked' : '' }}
+                                                    >
+                                                    <label class="custom-control-label font-weight-normal" for="org-publish-{{ $org->id }}">Опубликовать</label>
+                                                </div>
+                                                <a href="{{ route($panel . '.org.show', $org->id) }}" title="Просмотр"><i class="far fa-eye"></i></a>
+                                                &nbsp;&nbsp;
+                                                <a href="{{ route($panel . '.org.edit', $org->id) }}" class="text-success" title="Редактировать"><i class="fas fa-pen"></i></a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -140,10 +152,11 @@
 @endsection
 
 @section('javascript')
+    @include('partials.datatable-filter-persist', ['pageUrl' => $panel . '.org.index'])
     <script>
-        let stateSaveTimer;
         var table = new DataTable('#org_table', {
             stateSave: true,
+            stateDuration: 0,
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
@@ -190,29 +203,11 @@
             },
 
             stateSaveCallback: function (settings, data) {
-                clearTimeout(stateSaveTimer);
-                stateSaveTimer = setTimeout(function () {
-                    $.ajax({
-                        url: "{{ route('filters.save') }}",
-                        method: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            page_url: "{{ $panel }}.org.index",
-                            state: JSON.stringify(data)
-                        }
-                    });
-                }, 2000);
+                window.OsnlarFilterPersist.scheduleSave(data);
             },
 
             stateLoadCallback: function (settings, callback) {
-                $.ajax({
-                    url: "{{ route('filters.get') }}",
-                    data: { page_url: "{{ $panel }}.org.index" },
-                    dataType: "json",
-                    success: function (json) {
-                        callback(json);
-                    }
-                });
+                window.OsnlarFilterPersist.load(callback);
             },
 
             order: [[0, 'desc']],
@@ -234,7 +229,9 @@
                 }
             ],
             language: {
+                emptyTable: "В таблице нет данных",
                 info: "Записи с _START_ до _END_ из _TOTAL_ записей",
+                infoEmpty: "Записи с 0 до 0 из 0 записей",
                 infoFiltered: "(отфильтровано из _MAX_ записей)",
                 paginate: {
                     first: "Первая",
@@ -285,6 +282,37 @@
 
             $('.custom-filters').not('#course').val('');
             $('#course').val(null).trigger('change');
+        });
+
+        $(document).on('change', '.org-publish-switch', function () {
+            var input = $(this);
+            var cell = input.closest('td');
+            var published = input.is(':checked');
+            input.prop('disabled', true);
+
+            $.ajax({
+                url: input.data('url'),
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    _method: 'PATCH',
+                    is_published: published ? 1 : 0
+                }
+            }).done(function () {
+                cell.attr('data-search', published ? 'Опубликован' : 'Не опубликован');
+            }).fail(function (xhr) {
+                input.prop('checked', !published);
+                var message = (xhr.responseJSON && (xhr.responseJSON.message || xhr.responseJSON.error))
+                    || 'Не удалось сохранить статус публикации';
+                alert(message);
+            }).always(function () {
+                input.prop('disabled', false);
+            });
         });
     </script>
 @endsection

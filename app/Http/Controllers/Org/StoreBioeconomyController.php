@@ -14,7 +14,11 @@ class StoreBioeconomyController extends Controller
     {
         $data = $request->validated();
         $courseIds = $data['course_ids'];
-        unset($data['course_ids']);
+        unset($data['course_ids'], $data['appointment_letter'], $data['politic']);
+
+        if ($request->hasFile('appointment_letter')) {
+            $data['appointment_letter'] = $request->file('appointment_letter')->store('org_docs', 'public');
+        }
 
         $data['source'] = 'bioeconomy';
         $data['politic'] = 1;
@@ -27,7 +31,7 @@ class StoreBioeconomyController extends Controller
         try {
             $mailData = collect($data);
             $mailData->subject = 'Ваша заявка на обучение принята';
-            $mailData->template = 'mails.template';
+            $mailData->template = 'mails.bioeconomy';
             Mail::to($data['email'])->send(new SendEmail($mailData));
         } catch (\Throwable $e) {
             report($e);

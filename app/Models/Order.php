@@ -31,7 +31,7 @@ class Order extends Model
 
     public function user()
     {
-        return$this->belongsTo(User::class, 'customer_id', 'id' );
+        return $this->belongsTo(User::class, 'customer_id', 'id')->withTrashed();
     }
 
     public function agent()

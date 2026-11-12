@@ -4,185 +4,101 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Редактирование пользователя: "{{$user->name}}"</h1>
+                    <h1>Редактирование пользователя: "{{ $user->name }}"</h1>
                 </div>
-
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
+    @php
+        if (old('org_ids') !== null) {
+            $selectedOrgIds = collect(old('org_ids'))->map(fn ($id) => (int) $id)->all();
+        } else {
+            $selectedOrgTitles = $user->orgs
+                ->map(fn ($org) => mb_strtolower(trim((string) $org->organization_title)))
+                ->filter()
+                ->all();
+            $selectedOrgIds = $organizations
+                ->filter(function ($organization) use ($selectedOrgTitles) {
+                    $orgTitleKey = mb_strtolower(trim((string) $organization->organization_title));
+
+                    return $orgTitleKey !== '' && in_array($orgTitleKey, $selectedOrgTitles, true);
+                })
+                ->pluck('id')
+                ->map(fn ($id) => (int) $id)
+                ->all();
+        }
+
+        $selectedStudyGroupIds = collect(
+            old('study_group_ids', $user->studyGroups->pluck('id')->all())
+        )->map(fn ($id) => (int) $id)->all();
+    @endphp
+
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-            <div  class="col-4">
-                <form action="{{route('admin.user.update', $user->id)}}" method="post">
-                    @csrf
-                    @method('PATCH')
-                    <div class="mb-3">
-                        <input type="hidden" name="user_id" value="{{$user->id}}">
-                    </div>
-                    <div class="mb-3">
-                        <label>Фамилия</label>
-                        <input name="lastname" type="text" class="form-control" aria-describedby="Фамилия" value="{{$user->lastname}}">
-                        @error('lastname')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Имя</label>
-                        <input name="name" type="text" class="form-control" aria-describedby="Имя" value="{{$user->name}}">
-                        @error('name')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Отчество</label>
-                        <input name="middlename" type="text" class="form-control" aria-describedby="Отчество" value="{{$user->middlename}}">
-                        @error('middlename')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Email</label>
-                        <input name="email" type="email" class="form-control" value="{{$user->email}}">
-                        @error('email')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Телефон</label>
-                        <div>
-                            <input name="phone" id="phone" type="tel" class="form-control"
-                                   value="{{$user->phone}}"
-                            >
-                            <input type="hidden" name="phone_prefix" id="phone_prefix" value="{{ $user->phone_prefix ? $user->phone_prefix : '7' }}">
-                        </div>
-
-                        @error('phone')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label>Пароль</label>
-                        <input name="password" type="password" class="form-control">
-                        @error('password')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3 form-group">
-                        <label>Роль пользователя</label>
-                        <select name="role" id="role" class="form-control">
-                            @foreach($roles as $id => $role)
-                                <option value="{{$id}}"
-                                    {{ $id == $user->role ? ' selected' : '' }}
-                                >{{$role}}</option>
-                            @endforeach
-                        </select>
-                        @error('role')
-                        <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-
-                    <div id="agent-form"
-                        @if($user->role != 2)
-                            style="display: none"
-                        @endif
-                    >
-                        <div class="mb-3 form-group">
-                            <label>Привязка к агенту</label>
-                            <select name="agent_ids[]" class="select2" multiple="multiple" data-placeholder="Выберите" style="width: 100%;">
-                                @foreach($agents as $agent)
-                                    <option value="{{$agent->id}}"
-                                        {{ is_array($user->agents->pluck('id')->toArray()) && in_array($agent->id, $user->agents->pluck('id')->toArray()) ? ' selected' : ''  }}
-                                    >{{$agent->title}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3 form-group">
-                            <label>utm_source</label>
-                            <select name="utm[]" class="select2" multiple="multiple" data-allow-clear="true" data-placeholder="Выберите" style="width: 100%;">
-                                @foreach($utm_sources as $utm_source)
-                                    @if(!empty($utm_source))
-                                    <option value="{{$utm_source}}"
-                                        {{ is_array($user->utm) && in_array($utm_source, $user->utm) ? ' selected' : ''  }}
-                                    >{{$utm_source}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="company-form"
-                         @if($user->role != 3)
-                         style="display: none"
-                        @endif
-                    >
-                        <div class="mb-3 form-group">
-                            <label>Компания</label>
-                            <select name="company_id" class="select2" data-placeholder="Выберите" style="width: 100%;">
-                                <option value="">---</option>
-                                @foreach($companies as $company)
-                                    <option value="{{$company->id}}"
-                                        {{ !empty($user->company->id) && $user->company->id == $company->id ? ' selected' : ''  }}
-                                    >{{$company->title}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <button type="submit" class="btn btn-primary">Обновить</button>
-                    <a class="btn btn-outline-secondary" href="{{route('admin.user.index')}}">Назад</a>
-                </form>
-            </div>
-
-
-            <!-- /.row -->
-
-        </div><!-- /.container-fluid -->
+            <form
+                action="{{ route('admin.user.update', $user->id) }}"
+                method="post"
+                enctype="multipart/form-data"
+            >
+                @csrf
+                @method('PATCH')
+                @include('admin.user._form', [
+                    'isEdit' => true,
+                    'user' => $user,
+                    'selectedOrgIds' => $selectedOrgIds,
+                    'selectedStudyGroupIds' => $selectedStudyGroupIds,
+                ])
+            </form>
+        </div>
     </section>
 
+    @include('admin.user._agent_orgs_modal', [
+        'organizations' => $organizations,
+        'selectedOrgIds' => $selectedOrgIds,
+    ])
+    @include('admin.user._study_groups_modal', [
+        'studyGroups' => $studyGroups,
+        'selectedStudyGroupIds' => $selectedStudyGroupIds,
+    ])
 @endsection
 
 @section('javascript')
+    @include('admin.user._avatar_script')
+    @include('admin.user._agent_orgs_picker_script')
+    @include('admin.user._study_groups_picker_script')
+    @include('admin.user._password_script')
     <script>
-        $('#role').on('change', function (e){
-            if($('#role option:selected').val() == 2){
-                $('#agent-form').show();
-            }else{
-                $('#agent-form').hide();
-            }
+        function toggleRoleForms() {
+            var role = $('#role option:selected').val();
+            var isAgent = role == 2;
+            var isCompany = role == 3;
 
-            if($('#role option:selected').val() == 3){
-                $('#company-form').show();
-            }else{
-                $('#company-form').hide();
-            }
-        })
+            $('#agent-form').toggle(isAgent);
+            $('#company-form').toggle(isCompany);
+            $('#role-data-empty').toggle(!isAgent && !isCompany);
+        }
 
+        $('#role').on('change', toggleRoleForms);
 
-        $(document).ready(function() {
-
-
+        $(document).ready(function () {
+            toggleRoleForms();
 
             $('[data-mask]').inputmask();
 
-            var input = document.querySelector("#phone");
+            var input = document.querySelector('#phone');
             const iti = window.intlTelInput(input, {
                 strictMode: true,
                 showSelectedDialCode: true,
                 nationalMode: false,
-                initialCountry:"ru",
-                onlyCountries: ["ru", "by"],
+                initialCountry: 'ru',
+                onlyCountries: ['ru', 'by'],
                 i18n: {
-                    // Country names
-                    ru: "Россия",
-                    by: "Беларусь",
+                    ru: 'Россия',
+                    by: 'Беларусь',
                 },
-                hiddenInput: () => ({ phone: "phone"}),
-                utilsScript: "{{ asset('js/intlTelInput/utils.js')}}?1712939239769"
+                hiddenInput: () => ({ phone: 'phone' }),
+                utilsScript: "{{ asset('js/intlTelInput/utils.js') }}?1712939239769"
             });
 
             input.addEventListener('countrychange', () => {

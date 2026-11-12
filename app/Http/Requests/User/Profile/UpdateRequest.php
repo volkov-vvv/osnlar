@@ -16,6 +16,7 @@ class UpdateRequest extends FormRequest
         return [
             'lastname' => 'required|string|max:255',
             'name' => 'required|string|max:255',
+            'middlename' => 'nullable|string|max:255',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
     }
@@ -29,6 +30,8 @@ class UpdateRequest extends FormRequest
             'name.required' => 'Укажите имя',
             'name.string' => 'Имя должно быть строкой',
             'name.max' => 'Имя не должно быть длиннее 255 символов',
+            'middlename.string' => 'Отчество должно быть строкой',
+            'middlename.max' => 'Отчество не должно быть длиннее 255 символов',
             'avatar.image' => 'Аватар должен быть изображением',
             'avatar.mimes' => 'Допустимые форматы: jpg, jpeg, png, webp',
             'avatar.max' => 'Размер аватарки не должен превышать 2 МБ',

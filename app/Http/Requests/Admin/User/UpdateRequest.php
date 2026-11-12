@@ -34,8 +34,13 @@ class UpdateRequest extends FormRequest
             'role' => 'required|string',
             'company_id' => '',
             'agent_ids' => 'array',
+            'study_group_ids' => 'nullable|array',
+            'study_group_ids.*' => 'integer|exists:study_groups,id',
+            'org_ids' => 'nullable|array',
+            'org_ids.*' => 'integer|exists:orgs,id',
             'utm' => 'array',
             'password' => '',
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
     }
 
@@ -72,6 +77,9 @@ class UpdateRequest extends FormRequest
             'email.unique' => 'Почта с таким email уже существует',
             'role.required' => 'Это поле необходимо для заполнения',
             'role.string' => 'Роль должно быть строкой',
+            'avatar.image' => 'Аватар должен быть изображением',
+            'avatar.mimes' => 'Допустимые форматы: jpg, jpeg, png, webp',
+            'avatar.max' => 'Размер аватарки не должен превышать 2 МБ',
         ];
     }
 }

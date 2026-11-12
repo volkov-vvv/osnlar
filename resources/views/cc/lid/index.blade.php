@@ -136,12 +136,13 @@
 
 
 @section('javascript')
+    @include('partials.datatable-filter-persist', ['pageUrl' => 'cc.lid.index'])
     <script>
-        let stateSaveTimer; // Переменная для хранения таймера
         var table = new DataTable('#example2', {
 
 
             stateSave: true,
+            stateDuration: 0,
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
@@ -194,36 +195,11 @@
             },
 
             stateSaveCallback: function(settings, data) {
-                // Очищаем предыдущий таймер, если пользователь нажал что-то еще
-                clearTimeout(stateSaveTimer);
-
-                // Устанавливаем задержку 2 секунды (2000 мс)
-                stateSaveTimer = setTimeout(function() {
-                    $.ajax({
-                        url: "{{ route('filters.save') }}",
-                        method: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            page_url: "cc.lid.index",
-                            state: JSON.stringify(data)
-                        },
-                        success: function() {
-                            console.log("Состояние сохранено в БД");
-                        }
-                    });
-                }, 2000);
+                window.OsnlarFilterPersist.scheduleSave(data);
             },
 
             stateLoadCallback: function(settings, callback) {
-                $.ajax({
-                    url: "{{ route('filters.get') }}",
-                    data: { page_url: "cc.lid.index" },
-                    dataType: "json",
-                    success: function(json) {
-                        // Передаем данные обратно в DataTables
-                        callback(json);
-                    }
-                });
+                window.OsnlarFilterPersist.load(callback);
             },
 
             "responsive": true,

@@ -1,4 +1,17 @@
 @extends('layouts.main2')
+
+@push('styles')
+    <style>
+        .featured-posts-section .blog-post-title {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+@endpush
+
 @section('content')
 
     <main class="blog">
@@ -23,7 +36,7 @@
                                 </div>
                                 <p class="blog-post-category"></p>
                                 <a href="{{route('course.show', $course->id)}}" class="blog-post-permalink">
-                                    <h6 class="blog-post-title">{{$course->title}}</h6>
+                                    <h6 class="blog-post-title" title="{{ $course->title }}">{{ $course->title }}</h6>
                                 </a>
                             </div>
                         @endforeach

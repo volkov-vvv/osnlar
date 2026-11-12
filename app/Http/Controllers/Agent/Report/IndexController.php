@@ -18,9 +18,14 @@ class IndexController extends Controller
 {
     public function __invoke()
     {
+        $user = auth()->user();
+        if (! $user->hasAgentReportAccess()) {
+            abort(404);
+        }
+
         $categories = Category::all();
-        $agents = auth()->user()->agents;
-        $sources = auth()->user()->utm;
+        $agents = $user->agents;
+        $sources = $user->utm;
         $regions = Region::all();
         $statuses = Status::all();
         $courses = Course::all();
