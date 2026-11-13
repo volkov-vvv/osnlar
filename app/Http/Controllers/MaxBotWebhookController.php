@@ -294,4 +294,23 @@ class MaxBotWebhookController extends Controller
             ]);
         }
     }
+
+    private function requestPhoneIfNeeded(
+        int|string $maxUserId,
+        MaxBotService $maxBot
+    ): void {
+        $active = MaxSubscription::query()
+            ->where('max_user_id', $maxUserId)
+            ->active()
+            ->exists();
+
+        if ($active) {
+            $maxBot->sendToUser(
+                $maxUserId,
+                'Уведомления уже подключены.'
+            );
+        } else {
+            $maxBot->requestPhone($maxUserId);
+        }
+    }
 }

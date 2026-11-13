@@ -25,6 +25,10 @@ class LogRequests
     {
         $request->end = microtime(true);
 
+        if ($request->is('api/max/webhook')) {
+            return;
+        }
+
         $this->log($request,$response);
     }
 
