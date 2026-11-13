@@ -313,4 +313,135 @@ class MaxBotWebhookController extends Controller
             $maxBot->requestPhone($maxUserId);
         }
     }
+
+    private function subscribe(
+        int|string $maxUserId,
+        int|string|null $chatId,
+        string $phone,
+        MaxBotService $maxBot
+    ): void {
+
+        $result = DB::transaction(function () use (
+            $maxUserId,
+            $chatId,
+            $phone
+        ): string {
+
+            // Нормализуем телефон, полученный из MAX
+            $normalizedPhone = preg_replace('/\D+/', '', $phone);
+
+            if ($normalizedPhone === '') {
+                return 'invalid_phone';
+            }
+
+            // В базе код страны и номер хранятся отдельно
+            $users = User::query()
+                ->whereRaw(
+                    'CONCAT(phone_prefix, phone) = ?',
+                    [$normalizedPhone]
+                )
+                ->whereIn('role', [1, 3])
+                ->limit(2)
+                ->lockForUpdate()
+                ->get();
+
+            if ($users->isEmpty()) {
+                Log::warning('MAX: пользователь не найден', [
+                    'max_user_id' => $maxUserId,
+                    'phone_last4' => substr($normalizedPhone, -4),
+                ]);
+
+                return 'not_found';
+            }
+
+            if ($users->count() > 1) {
+                return 'ambiguous';
+            }
+
+            $user = $users->first();
+
+            // Проверяем существующую привязку MAX ID
+            $subscriptionByMaxId = MaxSubscription::query()
+                ->where('max_user_id', $maxUserId)
+                ->lockForUpdate()
+                ->first();
+
+            if (
+                $subscriptionByMaxId !== null &&
+                (string) $subscriptionByMaxId->user_id !==
+                (string) $user->getKey()
+            ) {
+                return 'conflict';
+            }
+
+            // Проверяем привязку пользователя сайта
+            $subscription = MaxSubscription::query()
+                ->where('user_id', $user->getKey())
+                ->lockForUpdate()
+                ->first();
+
+            if (
+                $subscription !== null &&
+                (string) $subscription->max_user_id !==
+                (string) $maxUserId
+            ) {
+                return 'conflict';
+            }
+
+            // Создаём новую подписку
+            if ($subscription === null) {
+                MaxSubscription::query()->create([
+                    'user_id' => $user->getKey(),
+                    'max_user_id' => $maxUserId,
+                    'chat_id' => $chatId,
+                    'subscribed_at' => now(),
+                ]);
+
+                return 'subscribed';
+            }
+
+            // Восстанавливаем существующую подписку
+            $alreadyActive = $subscription->subscribed_at !== null;
+
+            if ($chatId !== null) {
+                $subscription->chat_id = $chatId;
+            }
+
+            $subscription->subscribed_at =
+                $subscription->subscribed_at ?? now();
+
+            $subscription->save();
+
+            return $alreadyActive
+                ? 'already_subscribed'
+                : 'subscribed';
+        });
+
+        Log::info('MAX: результат регистрации', [
+            'max_user_id' => $maxUserId,
+            'result' => $result,
+        ]);
+
+        $message = match ($result) {
+            'subscribed' =>
+            'Телефон подтверждён. Подписка на уведомления активирована.',
+
+            'already_subscribed' =>
+            'Вы уже подписаны на уведомления.',
+
+            'not_found' =>
+            'Пользователь с таким номером не найден в базе данных.',
+
+            'ambiguous' =>
+            'Найдено несколько пользователей с таким номером. Обратитесь в поддержку.',
+
+            'invalid_phone' =>
+            'Не удалось распознать номер телефона.',
+
+            default =>
+            'Этот аккаунт уже привязан к другому пользователю. Обратитесь в поддержку.',
+        };
+
+        $maxBot->sendToUser($maxUserId, $message);
+    }
 }
