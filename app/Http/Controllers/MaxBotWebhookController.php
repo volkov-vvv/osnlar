@@ -276,39 +276,88 @@ class MaxBotWebhookController extends Controller
             default => 'Заявка не найдена.',
         };
 
-// Сначала ставим в очередь обновление сообщений.
-// Ошибка callback не должна препятствовать этому.
-        if ($result === 'accepted') {
-            SyncMaxLidMessages::dispatch(
-                $lidId,
-                (int) $user->id
-            );
 
-            Log::info('MAX: обновление сообщений поставлено в очередь', [
+        if ($result === 'not_found') {
+            $maxBot->sendToUser($maxUserId, 'Заявка не найдена.');
+            return;
+        }
+
+// Получаем заявку и фактически назначенного ответственного.
+        $lid = Lid::find($lidId);
+
+        $responsible = $lid?->responsible_id
+            ? User::find($lid->responsible_id)
+            : null;
+
+        if (!$responsible) {
+            Log::error('MAX: ответственный не найден', [
                 'lid_id' => $lidId,
-                'responsible_id' => $user->id,
             ]);
+            return;
+        }
+
+// Находим исходное сообщение пользователя,
+// который нажал кнопку.
+        $sentMessage = MaxSentMessage::query()
+            ->where('message_id', $messageId)
+            ->where('lid_id', $lidId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$sentMessage) {
+            Log::warning('MAX: исходное сообщение не найдено', [
+                'lid_id' => $lidId,
+                'message_id' => $messageId,
+            ]);
+            return;
+        }
+
+// Проверяем, является ли нажавший ответственным.
+        $isResponsible =
+            (string) $user->id === (string) $responsible->id;
+
+// Формируем полный текст заявки с персональным статусом.
+        $newText = SyncMaxLidMessages::formatMessage(
+            (string) $sentMessage->text,
+            $isResponsible,
+            (string) $responsible->name
+        );
+
+        if (mb_strlen($newText) > 4000) {
+            Log::error('MAX: сообщение слишком длинное', [
+                'lid_id' => $lidId,
+                'message_id' => $messageId,
+            ]);
+            return;
         }
 
         try {
-            // Подтверждаем нажатие кнопки
-            $maxBot->answerCallback(
-                $callbackId,
-                e($notification)
-            );
+            // Сохраняем первоначальный текст и удаляем кнопку
+            // в сообщении нажавшего пользователя.
+            $maxBot->answerCallback($callbackId, $newText);
 
-            // Отдельное сообщение пользователю в чат MAX
-            $maxBot->sendToUser(
-                $maxUserId,
-                $notification
-            );
-
+            $sentMessage->update([
+                'text' => $newText,
+            ]);
         } catch (\Throwable $e) {
-            Log::error('MAX: ошибка ответа на принятие заявки', [
+            Log::error('MAX: ошибка ответа на callback', [
                 'lid_id' => $lidId,
                 'error' => $e->getMessage(),
             ]);
         }
+
+// Обновляем сообщения у всех получателей.
+        SyncMaxLidMessages::dispatch(
+            $lidId,
+            (int) $responsible->id
+        );
+
+        Log::info('MAX: запущено обновление уведомлений', [
+            'lid_id' => $lidId,
+            'responsible_id' => $responsible->id,
+            'result' => $result,
+        ]);
+
     }
 
     private function requestPhoneIfNeeded(

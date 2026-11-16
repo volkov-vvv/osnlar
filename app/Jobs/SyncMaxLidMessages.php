@@ -13,15 +13,11 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
-/**
- * Обновляет сообщения о заявке у всех получателей MAX.
- */
 class SyncMaxLidMessages implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 5;
-
     public array $backoff = [15, 60, 180, 300];
 
     public function __construct(
@@ -29,40 +25,67 @@ class SyncMaxLidMessages implements ShouldQueue
         public int $responsibleId
     ) {}
 
+    public static function formatMessage(
+        string $originalText,
+        bool $forResponsible,
+        string $responsibleName
+    ): string {
+        $text = rtrim($originalText);
+
+        // Удаляем ранее добавленный служебный статус,
+        // чтобы он не дублировался при повторной обработке.
+        $patterns = [
+            '/(?:\r?\n){1,2}Вы назначены ответственным\.?\z/u',
+            '/(?:\r?\n){1,2}<b>Вы назначены ответственным<\/b>\.?\z/u',
+            '/(?:\r?\n){1,2}(?:<b>)?Ответственный:(?:<\/b>)?[ \t]*[^\r\n]*\z/u',
+        ];
+
+        foreach ($patterns as $pattern) {
+            $cleaned = preg_replace($pattern, '', $text);
+
+            if ($cleaned !== null && $cleaned !== $text) {
+                $text = rtrim($cleaned);
+                break;
+            }
+        }
+
+        $status = $forResponsible
+            ? 'Вы назначены ответственным'
+            : 'Ответственный: ' . e($responsibleName);
+
+        return $text . "\n\n" . $status;
+    }
+
     public function handle(MaxBotService $maxBot): void
     {
-        $responsible = User::query()
-            ->find($this->responsibleId);
+        $responsible = User::find($this->responsibleId);
 
         if (!$responsible) {
             throw new RuntimeException(
-                'MAX: не найден назначенный ответственный.'
+                'MAX: ответственный не найден.'
             );
         }
-
-        $marker = "\n<b>Ответственный:</b> ";
-
-        $suffix = $marker . e(
-                (string) $responsible->name
-            );
 
         MaxSentMessage::query()
             ->where('lid_id', $this->lidId)
             ->whereNotNull('message_id')
-            ->orderBy('id')
             ->chunkById(50, function ($messages) use (
                 $maxBot,
-                $marker,
-                $suffix
+                $responsible
             ) {
                 foreach ($messages as $message) {
 
-                    $newText = str_contains((string) $message->text, $marker)
-                        ? (string) $message->text
-                        : rtrim((string) $message->text) . $suffix;
+                    $forResponsible =
+                        (string) $message->user_id ===
+                        (string) $this->responsibleId;
 
-                    // Проверяем длину сообщения
-                    if (mb_strlen(strip_tags($newText)) > 4000) {
+                    $newText = self::formatMessage(
+                        (string) $message->text,
+                        $forResponsible,
+                        (string) $responsible->name
+                    );
+
+                    if (mb_strlen($newText) > 4000) {
                         Log::error(
                             'MAX: сообщение слишком длинное',
                             [
@@ -70,26 +93,25 @@ class SyncMaxLidMessages implements ShouldQueue
                                 'lid_id' => $this->lidId,
                             ]
                         );
-
                         continue;
                     }
 
-                    // Редактируем сообщение в MAX
-                    // и удаляем кнопку принятия заявки
+                    // Редактируем существующее сообщение
+                    // и удаляем клавиатуру.
                     $maxBot->editMessage(
                         (string) $message->message_id,
                         $newText
                     );
 
-                    // Сохраняем изменённый текст в БД
+                    // Сохраняем актуальный текст в журнале.
                     $message->update([
                         'text' => $newText,
                     ]);
 
-                    Log::info('MAX: сообщение обновлено', [
-                        'message_id' => $message->message_id,
+                    Log::info('MAX: уведомление обновлено', [
                         'lid_id' => $this->lidId,
-                        'responsible_id' => $this->responsibleId,
+                        'message_id' => $message->message_id,
+                        'user_id' => $message->user_id,
                     ]);
                 }
             });
