@@ -111,9 +111,21 @@ class MaxBotWebhookController extends Controller
         }
 
         $maxUserId = data_get($message, 'sender.user_id');
+
         if ($maxUserId === null) {
             return;
         }
+
+// Игнорируем сообщения, отправленные ботами
+        if (data_get($message, 'sender.is_bot') === true) {
+            return;
+        }
+
+        Log::info('MAX: входящее сообщение', [
+            'max_user_id' => $maxUserId,
+            'chat_id' => data_get($message, 'recipient.chat_id'),
+            'message_id' => data_get($message, 'body.mid'),
+        ]);
 
         $chatType = data_get($message, 'recipient.chat_type');
         // Не обрабатываем контакты, присланные в групповой чат или канал.
@@ -156,8 +168,12 @@ class MaxBotWebhookController extends Controller
             }
         }
 
-        $text = trim((string) data_get($message, 'body.text', ''));
-        if ($text !== '') {
+        $text = mb_strtolower(
+            trim((string) data_get($message, 'body.text', ''))
+        );
+
+// Отвечаем только на команду запуска
+        if (in_array($text, ['/start', 'старт'], true)) {
             $this->requestPhoneIfNeeded($maxUserId, $maxBot);
         }
     }

@@ -78,6 +78,19 @@ class MaxBotService
             ]];
         }
 
+// Диагностика получателя служебных сообщений
+        if (in_array($text, [
+            'Уведомления уже подключены.',
+            'Вы уже подписаны на уведомления.',
+        ], true)) {
+            Log::info('MAX: персональный ответ', [
+                'target_type' => $targetType,
+                'target_id' => (string) $targetId,
+                'text' => $text,
+            ]);
+        }
+
+// Отправка сообщения в MAX
         $response = Http::withHeaders(['Authorization' => $this->token])
             ->asJson()
             ->timeout(10)
