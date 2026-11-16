@@ -18,8 +18,13 @@ class UpdateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $responsibleId = $this->input('responsible_id');
+
         $this->merge([
             'type' => $this->has('type') ? $this->type : '',
+            'responsible_id' => ($responsibleId === '' || $responsibleId === null)
+                ? null
+                : $responsibleId,
         ]);
     }
 
@@ -39,7 +44,7 @@ class UpdateRequest extends FormRequest
             'course_id' => '',
             'lid_level_edu_id' => '',
             'status_id' => 'required|string',
-            'responsible_id' => '',
+            'responsible_id' => 'nullable|integer|exists:users,id',
             'type' => 'nullable|string',
         ];
     }
