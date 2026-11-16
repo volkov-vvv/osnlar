@@ -240,6 +240,17 @@ class MaxBotWebhookController extends Controller
 // Получаем пользователя сайта
         $user = User::find($subscription->user_id);
 
+        Log::warning('MAX: определение пользователя при принятии заявки', [
+            'lid_id' => $lidId,
+            'callback_max_user_id' => (string) $maxUserId,
+            'subscription_user_id' => $subscription->user_id,
+            'user_id' => $user?->id,
+            'user_name' => $user?->name,
+            'responsible_id_before' => Lid::query()
+                ->whereKey($lidId)
+                ->value('responsible_id'),
+        ]);
+
 // Проверяем роль пользователя
 
         Log::warning('MAX: проверка доступа к заявке', [
@@ -271,11 +282,25 @@ class MaxBotWebhookController extends Controller
             }
 
             if ($lid->responsible_id !== null) {
+                Log::info('MAX: заявка уже принята', [
+                    'lid_id' => $lidId,
+                    'clicked_user_id' => $user->id,
+                    'existing_responsible_id' => $lid->responsible_id,
+                ]);
+
                 return 'already_assigned';
             }
 
-            $lid->responsible_id = $user->id;
+            // Ответственным становится именно пользователь,
+            // чей MAX ID получен из callback и проверен по подписке.
+            $lid->responsible_id = $user->getKey();
             $lid->save();
+
+            Log::info('MAX: назначен новый ответственный', [
+                'lid_id' => $lid->getKey(),
+                'responsible_id' => $lid->responsible_id,
+                'clicked_user_id' => $user->getKey(),
+            ]);
 
             return 'accepted';
         });
