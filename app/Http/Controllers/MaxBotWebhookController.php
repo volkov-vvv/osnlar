@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\MaxSubscription;
+use App\Models\MaxSentMessage;
 use App\Models\User;
 use App\Service\MaxBotService;
 use Illuminate\Http\JsonResponse;
@@ -183,8 +184,9 @@ class MaxBotWebhookController extends Controller
         MaxBotService $maxBot
     ): void {
 
-        Log::info('MAX: нажата кнопка', [
+        Log::warning('MAX: callback получен', [
             'payload' => data_get($update, 'callback.payload'),
+            'callback_id_exists' => !empty(data_get($update, 'callback.callback_id')),
             'max_user_id' => data_get($update, 'callback.user.user_id'),
             'message_id' => data_get($update, 'message.body.mid'),
         ]);
@@ -239,6 +241,15 @@ class MaxBotWebhookController extends Controller
         $user = User::find($subscription->user_id);
 
 // Проверяем роль пользователя
+
+        Log::warning('MAX: проверка доступа к заявке', [
+            'lid_id' => $lidId,
+            'user_id' => $user?->id,
+            'role' => $user?->role,
+            'subscription_active' => $subscription !== null,
+            'received_this_message' => $allowed,
+        ]);
+
         if (!$user || !in_array((int) $user->role, [1, 3], true)) {
             $maxBot->answerCallback(
                 $callbackId,
@@ -331,20 +342,58 @@ class MaxBotWebhookController extends Controller
             return;
         }
 
-        try {
-            // Сохраняем первоначальный текст и удаляем кнопку
-            // в сообщении нажавшего пользователя.
-            $maxBot->answerCallback($callbackId, $newText);
 
-            $sentMessage->update([
-                'text' => $newText,
-            ]);
-        } catch (\Throwable $e) {
-            Log::error('MAX: ошибка ответа на callback', [
+        Log::warning('MAX: начинаем обновление уведомления', [
+            'lid_id' => $lidId,
+            'message_id' => $messageId,
+            'result' => $result,
+            'text_length' => mb_strlen($newText),
+        ]);
+
+        try {
+            // Основной способ: ответ на callback с редактированием
+            $response = $maxBot->answerCallback($callbackId, $newText);
+
+            Log::info('MAX: callback успешно обработан', [
                 'lid_id' => $lidId,
+                'message_id' => $messageId,
+                'response' => $response,
+            ]);
+
+            $sentMessage->update(['text' => $newText]);
+
+        } catch (Throwable $e) {
+
+            Log::error('MAX: ошибка answerCallback', [
+                'lid_id' => $lidId,
+                'message_id' => $messageId,
                 'error' => $e->getMessage(),
             ]);
+
+            // Резервный способ: редактируем сообщение по message_id
+            try {
+                $response = $maxBot->editMessage(
+                    (string) $messageId,
+                    $newText
+                );
+
+                $sentMessage->update(['text' => $newText]);
+
+                Log::info('MAX: сообщение обновлено резервным способом', [
+                    'lid_id' => $lidId,
+                    'message_id' => $messageId,
+                    'response' => $response,
+                ]);
+
+            } catch (Throwable $editException) {
+                Log::error('MAX: оба способа редактирования завершились ошибкой', [
+                    'lid_id' => $lidId,
+                    'message_id' => $messageId,
+                    'error' => $editException->getMessage(),
+                ]);
+            }
         }
+
 
 // Обновляем сообщения у всех получателей.
         SyncMaxLidMessages::dispatch(
