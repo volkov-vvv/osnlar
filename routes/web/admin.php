@@ -132,6 +132,10 @@ Route::post('biolid/{biolid}/documents/{type}/upload', [BioLidController::class,
     ->whereNumber('biolid')
     ->where('type', '[A-Za-z0-9_]+')
     ->name('biolid.upload-document');
+Route::delete('biolid/{biolid}/documents/{document}', [BioLidController::class, 'destroyDocument'])
+    ->whereNumber('biolid')
+    ->whereNumber('document')
+    ->name('biolid.destroy-document');
 Route::delete('biolid/{biolid}', [BioLidController::class, 'destroy'])
     ->whereNumber('biolid')
     ->name('biolid.destroy');

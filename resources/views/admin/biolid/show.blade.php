@@ -464,6 +464,25 @@
                                                 <i class="fas fa-pencil-alt"></i>
                                             </button>
                                         @endif
+                                        @if($document && in_array($panel, ['admin', 'cc'], true))
+                                            <form
+                                                method="post"
+                                                action="{{ route($panel . '.biolid.destroy-document', [$bioLid, $document]) }}"
+                                                class="d-inline-flex ml-2 mb-0"
+                                                onsubmit="return confirm('Удалить документ и сбросить статус на «Не отправлено»?');"
+                                            >
+                                                @csrf
+                                                @method('DELETE')
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-outline-danger rounded-circle"
+                                                    title="Удалить документ"
+                                                    style="width: 2rem; height: 2rem; padding: 0; line-height: 2rem;"
+                                                >
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                     @if($document && $document->file)
                                         <div class="review-rejection-info">

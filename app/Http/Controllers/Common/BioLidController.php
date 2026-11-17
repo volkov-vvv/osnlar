@@ -448,6 +448,54 @@ class BioLidController extends Controller
             ->with('success', $activityComment);
     }
 
+    public function destroyDocument(BioLid $biolid, UserDocument $document): RedirectResponse
+    {
+        if (! in_array($this->panel(), ['admin', 'cc'], true)) {
+            abort(403);
+        }
+
+        $this->authorizeAgentBioLid($biolid);
+
+        if ((int) $document->bio_lid_id !== (int) $biolid->id) {
+            abort(404);
+        }
+
+        if (! isset(UserDocument::allBioDocs()[$document->type])) {
+            return $this->panelRedirect('biolid.show', $biolid)
+                ->with('error', 'Неизвестный тип документа');
+        }
+
+        $docTitle = UserDocument::allBioDocs()[$document->type]['title'];
+        $oldStatus = $document->review_status;
+
+        if ($document->file && Storage::disk('public')->exists($document->file)) {
+            Storage::disk('public')->delete($document->file);
+        }
+
+        $document->delete();
+
+        $activityComment = sprintf(
+            'Удалён документ «%s» (было: %s)',
+            $docTitle,
+            UserDocument::REVIEW_STATUSES[$oldStatus] ?? 'Не отправлено'
+        );
+
+        activity()
+            ->causedBy(auth()->user())
+            ->performedOn($biolid)
+            ->withProperties([
+                'status_id_old' => $biolid->status_id,
+                'status_id' => $biolid->status_id,
+                'comment' => $activityComment,
+                'document_id' => $document->id,
+                'document_type' => $document->type,
+            ])
+            ->log('Удаление документа');
+
+        return $this->panelRedirect('biolid.show', $biolid)
+            ->with('success', $activityComment);
+    }
+
     /**
      * @param  array{status?: string, label?: string, badge?: string, comment?: ?string, reviewed_at?: ?string, reviewer_name?: ?string}|null  $review
      * @param  array{updated_at?: string, user?: string, description?: string, status_old?: string, status_new?: string, comment?: string}|null  $activity
