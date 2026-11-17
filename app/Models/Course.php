@@ -214,7 +214,7 @@ class Course extends Model
     }
 
     /**
-     * Подпись курса для select в админке/КЦ: название + часы/год при наличии.
+     * Подпись курса для select в админке/КЦ: ID, название + часы/год при наличии.
      */
     public function optionLabel(): string
     {
@@ -224,11 +224,13 @@ class Course extends Model
             !(int) $this->is_published ? 'архив' : null,
         ]));
 
+        $label = $this->id.' — '.$this->title;
+
         if ($meta === []) {
-            return (string) $this->title;
+            return $label;
         }
 
-        return $this->title.' — '.implode(', ', $meta);
+        return $label.' — '.implode(', ', $meta);
     }
 
     public function studyHoursFullLabel(): ?string

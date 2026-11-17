@@ -72,7 +72,7 @@
                                             <option></option>
                                             @foreach($courses as $course)
                                                 <option
-                                                    value="{{$course->title}}">{{mb_substr($course->title, 0, 70)}}</option>
+                                                    value="{{$course->title}}">{{ $course->optionLabel() }}</option>
                                             @endforeach
                                         </select>
                                     </div>
