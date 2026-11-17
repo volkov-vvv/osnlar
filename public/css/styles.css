@@ -248,6 +248,32 @@ body.sidebar-mini div.dt-button-collection {
     height: auto;
 }
 
+/* Sidebar search — AdminLTE 4 quiet pill */
+.main-sidebar .sidebar-search .form-control-sidebar {
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    box-shadow: none;
+}
+
+.main-sidebar .sidebar-search .form-control-sidebar::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.main-sidebar .sidebar-search .form-control-sidebar:focus {
+    background-color: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    box-shadow: none;
+}
+
+.sidebar-collapse .main-sidebar .sidebar-search {
+    display: none;
+}
+
 /* Sidebar: top-level active — gray fill */
 .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
     background-color: #495057;

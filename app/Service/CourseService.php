@@ -9,6 +9,10 @@ use Throwable;
 
 class CourseService
 {
+    public function __construct(private ImageOptimizer $images)
+    {
+    }
+
     public function store($data)
     {
         try {
@@ -18,8 +22,8 @@ class CourseService
                 unset($data['author_ids']);
             }
 
-            $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
-            $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+            $data['prev_img'] = $this->images->storeCoursePreview($data['prev_img']);
+            $data['image'] = $this->images->storeCourseDetail($data['image']);
             if (isset($data['utp'])) {
                 $data['utp'] = Storage::disk('public')->put('/utps', $data['utp']);
             }
@@ -40,6 +44,9 @@ class CourseService
 
     public function update($data, $course)
     {
+        $oldPrevImg = null;
+        $oldImage = null;
+
         try {
             DB::beginTransaction();
             if (isset($data['author_ids'])) {
@@ -48,10 +55,12 @@ class CourseService
             }
 
             if (isset($data['prev_img'])) {
-                $data['prev_img'] = Storage::disk('public')->put('/images', $data['prev_img']);
+                $oldPrevImg = $course->prev_img;
+                $data['prev_img'] = $this->images->storeCoursePreview($data['prev_img']);
             }
             if (isset($data['image'])) {
-                $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+                $oldImage = $course->image;
+                $data['image'] = $this->images->storeCourseDetail($data['image']);
             }
             if (isset($data['utp'])) {
                 $data['utp'] = Storage::disk('public')->put('/utps', $data['utp']);
@@ -68,6 +77,9 @@ class CourseService
 
             throw $exception;
         }
+
+        $this->images->deleteIfExists($oldPrevImg);
+        $this->images->deleteIfExists($oldImage);
 
         return $course;
     }

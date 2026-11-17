@@ -44,7 +44,7 @@
                             <div class="col-md-4 fetured-post blog-post">
                                 <div class="blog-post-thumbnail-wrapper">
                                     <a href="{{ route('course.show', $course->id) }}">
-                                        <img src="{{ url('storage/' . $course->prev_img) }}" alt="{{ $course->title }}">
+                                        <img src="{{ url('storage/' . $course->prev_img) }}" alt="{{ $course->title }}" loading="lazy">
                                     </a>
                                 </div>
                                 <a href="{{ route('course.show', $course->id) }}" class="blog-post-permalink">

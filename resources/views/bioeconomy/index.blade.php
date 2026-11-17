@@ -250,7 +250,7 @@
                             <div class="col-md-4 fetured-post blog-post">
                                 <div class="blog-post-thumbnail-wrapper">
                                     <a href="{{route('course.show', $course->id)}}">
-                                        <img src="{{'storage/' . $course->prev_img}}" alt="blog post">
+                                        <img src="{{'storage/' . $course->prev_img}}" alt="blog post" loading="lazy">
                                     </a>
                                 </div>
                                 @if($course->studyFormLabel() || $course->studyHoursLabel())

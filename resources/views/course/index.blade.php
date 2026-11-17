@@ -338,7 +338,7 @@
                         >
                             <div class="blog-post-thumbnail-wrapper">
                                 <a href="{{ route('course.show', $course->id) }}">
-                                    <img src="{{ 'storage/' . $course->prev_img }}" alt="{{ $course->title }}">
+                                    <img src="{{ 'storage/' . $course->prev_img }}" alt="{{ $course->title }}" loading="lazy">
                                 </a>
                             </div>
                             @if($course->studyFormLabel() || $course->studyHoursLabel())

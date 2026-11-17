@@ -3,7 +3,7 @@
     $displayName = trim(($user->name ?? '') . ' ' . ($user->lastname ?? ''));
     $roleLabel = $user->getRoles()[$user->role] ?? '';
 @endphp
-<li class="nav-item dropdown">
+<li class="nav-item dropdown mr-3">
     <a href="#" class="navbar-user d-flex align-items-center text-dark" data-toggle="dropdown" aria-expanded="false">
         <img
             src="{{ $user->avatar ? url('storage/' . $user->avatar) : asset('dist/img/user2-160x160.jpg') }}"

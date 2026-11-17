@@ -6,6 +6,22 @@
     </a>
 
     <div class="sidebar">
+        <div
+            class="sidebar-search px-2 mt-3"
+            role="search"
+            data-widget="sidebar-search"
+            data-min-length="2"
+            data-not-found-text="Ничего не найдено"
+        >
+            <input
+                class="form-control form-control-sidebar form-control-sm"
+                type="search"
+                placeholder="Поиск по меню"
+                aria-label="Поиск по меню"
+                autocomplete="off"
+            >
+        </div>
+
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
