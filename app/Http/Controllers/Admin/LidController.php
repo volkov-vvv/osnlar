@@ -165,7 +165,10 @@ class lidController extends Controller
     {
         $statuses = Status::all();
         $regions = Region::all();
-        $courses = Course::where('is_published', 1)->get();
+        $courses = Course::query()
+            ->orderByDesc('years')
+            ->orderBy('title')
+            ->get();
         $categories = Category::all();
         $levels_edu = Leveledu::all();
         $users = User::where('role', 3)->get();

@@ -86,7 +86,7 @@
                             @foreach($courses as $course)
                                 <option value="{{$course->id}}"
                                     {{ $course->id == $lid->course_id ? ' selected' : '' }}
-                                >{{$course->title}}</option>
+                                >{{ $course->optionLabel() }}</option>
                             @endforeach
                         </select>
                         @error('course_id')

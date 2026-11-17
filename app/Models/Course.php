@@ -213,6 +213,24 @@ class Course extends Model
         return ((int) $this->study_hours).' ак.ч.';
     }
 
+    /**
+     * Подпись курса для select в админке/КЦ: название + часы/год при наличии.
+     */
+    public function optionLabel(): string
+    {
+        $meta = array_values(array_filter([
+            $this->studyHoursLabel(),
+            ($this->years !== null && $this->years !== '') ? (string) $this->years : null,
+            !(int) $this->is_published ? 'архив' : null,
+        ]));
+
+        if ($meta === []) {
+            return (string) $this->title;
+        }
+
+        return $this->title.' — '.implode(', ', $meta);
+    }
+
     public function studyHoursFullLabel(): ?string
     {
         if ($this->study_hours === null || $this->study_hours === '') {

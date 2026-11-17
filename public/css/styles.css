@@ -317,6 +317,9 @@ body.sidebar-mini div.dt-button-collection {
     opacity: 0.75;
     font-size: 0;
     line-height: 0;
+    /* AdminLTE uses top:.7rem for FA icons; center our smaller chevron with the label */
+    top: 50%;
+    margin-top: -0.275rem;
 }
 
 .nav-sidebar .nav-link > .right.nav-tree-arrow::before,
