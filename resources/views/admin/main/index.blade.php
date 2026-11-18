@@ -26,7 +26,7 @@
                             <p>Заявок</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-bag"></i>
+                            <i class="fas fa-shopping-bag"></i>
                         </div>
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -42,7 +42,7 @@
                             <p>Пользователей</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-person-add"></i>
+                            <i class="fas fa-user-plus"></i>
                         </div>
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -57,7 +57,7 @@
                             <p>Курсов</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
+                            <i class="fas fa-chart-pie"></i>
                         </div>
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -131,7 +131,7 @@
 
 @section('javascript')
     @if($courseRanking->isNotEmpty())
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+        <script src="{{ asset('plugins/chart.js/chart.min.js') }}"></script>
         <script>
             (function () {
                 var labels = @json($courseRanking->map(fn ($course) => $course->short_title ?: \Illuminate\Support\Str::limit($course->title, 28))->values());

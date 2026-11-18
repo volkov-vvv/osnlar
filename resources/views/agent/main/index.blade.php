@@ -20,7 +20,7 @@
                             <p>Заявки</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-bag"></i>
+                            <i class="fas fa-shopping-bag"></i>
                         </div>
                         <a href="{{ route('agent.biolid.index') }}" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -62,7 +62,7 @@
 @endsection
 
 @section('javascript')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="{{ asset('plugins/chart.js/chart.min.js') }}"></script>
     <script>
         (function () {
             var labels = @json(collect($data['docsStats'])->pluck('label')->values());

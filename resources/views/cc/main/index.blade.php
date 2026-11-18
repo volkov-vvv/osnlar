@@ -26,7 +26,7 @@
                             <p>Заявок</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-bag"></i>
+                            <i class="fas fa-shopping-bag"></i>
                         </div>
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -43,7 +43,7 @@
                             <p>Процент трудоустроенных</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
+                            <i class="fas fa-chart-bar"></i>
                         </div>
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
