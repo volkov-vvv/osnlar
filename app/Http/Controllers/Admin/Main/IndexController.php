@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lid;
 use App\Models\User;
+use App\Models\Year;
+use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
-    public function __invoke()
+    public const COURSE_RANKING_DEFAULT_YEAR = 2027;
+
+    public function __invoke(Request $request)
     {
         $data = [];
         $data['usersCount'] = User::query()->count();
@@ -20,6 +24,14 @@ class IndexController extends Controller
             ->where('is_blocked', false)
             ->count();
 
-        return view('admin.main.index', compact('data'));
+        $years = Year::options();
+        $selectedYear = (int) $request->get('year', self::COURSE_RANKING_DEFAULT_YEAR);
+        if (!$years->contains($selectedYear)) {
+            $selectedYear = self::COURSE_RANKING_DEFAULT_YEAR;
+        }
+
+        $courseRanking = Course::rankingByLidsForYear($selectedYear);
+
+        return view('admin.main.index', compact('data', 'years', 'selectedYear', 'courseRanking'));
     }
 }

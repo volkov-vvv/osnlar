@@ -124,8 +124,28 @@ class Course extends Model
     public function authors(){
         return $this->belongsToMany(Author::class, 'course_authors', 'course_id', 'author_id');
     }
+
+    public function lids()
+    {
+        return $this->hasMany(Lid::class);
+    }
+
     public function links(){
         return $this->hasMany(Link::class );
+    }
+
+    /**
+     * Рейтинг курсов выбранного года по числу поданных заявок (убывание).
+     */
+    public static function rankingByLidsForYear($year)
+    {
+        return static::query()
+            ->select(['id', 'title', 'short_title', 'years'])
+            ->where('years', (string) $year)
+            ->withCount('lids')
+            ->orderByDesc('lids_count')
+            ->orderBy('title')
+            ->get();
     }
 
     public function studyGroups()
