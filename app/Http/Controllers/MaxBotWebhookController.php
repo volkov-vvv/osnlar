@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 use App\Models\Lid;
+use App\Models\BioLid;
 use App\Jobs\SyncMaxLidMessages;
+use App\Jobs\SyncMaxBioLidMessages;
 
 
 class MaxBotWebhookController extends Controller
@@ -197,17 +199,45 @@ class MaxBotWebhookController extends Controller
         $maxUserId = data_get($update, 'callback.user.user_id');
         $messageId = data_get($update, 'message.body.mid');
 
-        if (!is_string($payload) ||
-            !preg_match('/^accept_lid:([1-9][0-9]*)$/D', $payload, $matches)) {
+        if (!is_string($payload)) {
             return;
         }
 
+        if (preg_match('/^accept_biolid:([1-9][0-9]*)$/D', $payload, $matches)) {
+            $this->acceptBioLid(
+                (int) $matches[1],
+                $callbackId,
+                $maxUserId,
+                $messageId,
+                $maxBot
+            );
+            return;
+        }
+
+        if (!preg_match('/^accept_lid:([1-9][0-9]*)$/D', $payload, $matches)) {
+            return;
+        }
+
+        $this->acceptLid(
+            (int) $matches[1],
+            $callbackId,
+            $maxUserId,
+            $messageId,
+            $maxBot
+        );
+    }
+
+    private function acceptLid(
+        int $lidId,
+        mixed $callbackId,
+        mixed $maxUserId,
+        mixed $messageId,
+        MaxBotService $maxBot
+    ): void {
         if (!$callbackId || !$maxUserId || !$messageId) {
             Log::warning('MAX: некорректный callback заявки');
             return;
         }
-
-        $lidId = (int) $matches[1];
 
         $subscription = MaxSubscription::query()
             ->where('max_user_id', $maxUserId)
@@ -215,7 +245,7 @@ class MaxBotWebhookController extends Controller
             ->first();
 
         $allowed = $subscription !== null &&
-            \App\Models\MaxSentMessage::query()
+            MaxSentMessage::query()
                 ->where('message_id', $messageId)
                 ->where('lid_id', $lidId)
                 ->where('user_id', $subscription->user_id)
@@ -237,7 +267,6 @@ class MaxBotWebhookController extends Controller
             return;
         }
 
-// Получаем пользователя сайта
         $user = User::find($subscription->user_id);
 
         Log::warning('MAX: определение пользователя при принятии заявки', [
@@ -250,8 +279,6 @@ class MaxBotWebhookController extends Controller
                 ->whereKey($lidId)
                 ->value('responsible_id'),
         ]);
-
-// Проверяем роль пользователя
 
         Log::warning('MAX: проверка доступа к заявке', [
             'lid_id' => $lidId,
@@ -269,7 +296,6 @@ class MaxBotWebhookController extends Controller
             return;
         }
 
-// Назначаем ответственного
         $result = DB::transaction(function () use ($lidId, $user) {
 
             $lid = Lid::query()
@@ -291,8 +317,6 @@ class MaxBotWebhookController extends Controller
                 return 'already_assigned';
             }
 
-            // Ответственным становится именно пользователь,
-            // чей MAX ID получен из callback и проверен по подписке.
             $lid->responsible_id = $user->getKey();
             $lid->save();
 
@@ -305,20 +329,11 @@ class MaxBotWebhookController extends Controller
             return 'accepted';
         });
 
-// Записываем результат в лог
-        $notification = match ($result) {
-            'accepted' => 'Вы назначены ответственным за эту заявку.',
-            'already_assigned' => 'У этой заявки уже есть ответственный.',
-            default => 'Заявка не найдена.',
-        };
-
-
         if ($result === 'not_found') {
             $maxBot->sendToUser($maxUserId, 'Заявка не найдена.');
             return;
         }
 
-// Получаем заявку и фактически назначенного ответственного.
         $lid = Lid::find($lidId);
 
         $responsible = $lid?->responsible_id
@@ -332,8 +347,6 @@ class MaxBotWebhookController extends Controller
             return;
         }
 
-// Находим исходное сообщение пользователя,
-// который нажал кнопку.
         $sentMessage = MaxSentMessage::query()
             ->where('message_id', $messageId)
             ->where('lid_id', $lidId)
@@ -348,11 +361,9 @@ class MaxBotWebhookController extends Controller
             return;
         }
 
-// Проверяем, является ли нажавший ответственным.
         $isResponsible =
             (string) $user->id === (string) $responsible->id;
 
-// Формируем полный текст заявки с персональным статусом.
         $newText = SyncMaxLidMessages::formatMessage(
             (string) $sentMessage->text,
             $isResponsible,
@@ -367,7 +378,6 @@ class MaxBotWebhookController extends Controller
             return;
         }
 
-
         Log::warning('MAX: начинаем обновление уведомления', [
             'lid_id' => $lidId,
             'message_id' => $messageId,
@@ -375,52 +385,15 @@ class MaxBotWebhookController extends Controller
             'text_length' => mb_strlen($newText),
         ]);
 
-        try {
-            // Основной способ: ответ на callback с редактированием
-            $response = $maxBot->answerCallback($callbackId, $newText);
+        $this->updateMaxCallbackMessage(
+            $maxBot,
+            $callbackId,
+            $messageId,
+            $sentMessage,
+            $newText,
+            ['lid_id' => $lidId]
+        );
 
-            Log::info('MAX: callback успешно обработан', [
-                'lid_id' => $lidId,
-                'message_id' => $messageId,
-                'response' => $response,
-            ]);
-
-            $sentMessage->update(['text' => $newText]);
-
-        } catch (Throwable $e) {
-
-            Log::error('MAX: ошибка answerCallback', [
-                'lid_id' => $lidId,
-                'message_id' => $messageId,
-                'error' => $e->getMessage(),
-            ]);
-
-            // Резервный способ: редактируем сообщение по message_id
-            try {
-                $response = $maxBot->editMessage(
-                    (string) $messageId,
-                    $newText
-                );
-
-                $sentMessage->update(['text' => $newText]);
-
-                Log::info('MAX: сообщение обновлено резервным способом', [
-                    'lid_id' => $lidId,
-                    'message_id' => $messageId,
-                    'response' => $response,
-                ]);
-
-            } catch (Throwable $editException) {
-                Log::error('MAX: оба способа редактирования завершились ошибкой', [
-                    'lid_id' => $lidId,
-                    'message_id' => $messageId,
-                    'error' => $editException->getMessage(),
-                ]);
-            }
-        }
-
-
-// Обновляем сообщения у всех получателей.
         SyncMaxLidMessages::dispatch(
             $lidId,
             (int) $responsible->id
@@ -431,7 +404,202 @@ class MaxBotWebhookController extends Controller
             'responsible_id' => $responsible->id,
             'result' => $result,
         ]);
+    }
 
+    private function acceptBioLid(
+        int $bioLidId,
+        mixed $callbackId,
+        mixed $maxUserId,
+        mixed $messageId,
+        MaxBotService $maxBot
+    ): void {
+        if (!$callbackId || !$maxUserId || !$messageId) {
+            Log::warning('MAX: некорректный callback заявки БИО');
+            return;
+        }
+
+        $subscription = MaxSubscription::query()
+            ->where('max_user_id', $maxUserId)
+            ->active()
+            ->first();
+
+        $allowed = $subscription !== null &&
+            MaxSentMessage::query()
+                ->where('message_id', $messageId)
+                ->where('bio_lid_id', $bioLidId)
+                ->where('user_id', $subscription->user_id)
+                ->where('max_user_id', $maxUserId)
+                ->exists();
+
+        if (!$allowed) {
+            Log::warning('MAX: отказ в принятии заявки БИО', [
+                'bio_lid_id' => $bioLidId,
+                'max_user_id' => $maxUserId,
+                'message_id' => $messageId,
+                'subscription_found' => $subscription !== null,
+            ]);
+
+            $maxBot->answerCallback(
+                $callbackId,
+                'Нет доступа к этой заявке.'
+            );
+            return;
+        }
+
+        $user = User::find($subscription->user_id);
+
+        if (!$user || !in_array((int) $user->role, [1, 3], true)) {
+            $maxBot->answerCallback(
+                $callbackId,
+                'Недостаточно прав для принятия заявки.'
+            );
+            return;
+        }
+
+        $result = DB::transaction(function () use ($bioLidId, $user) {
+            $bioLid = BioLid::query()
+                ->whereKey($bioLidId)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$bioLid) {
+                return 'not_found';
+            }
+
+            if ($bioLid->responsible_id !== null) {
+                Log::info('MAX: заявка БИО уже принята', [
+                    'bio_lid_id' => $bioLidId,
+                    'clicked_user_id' => $user->id,
+                    'existing_responsible_id' => $bioLid->responsible_id,
+                ]);
+
+                return 'already_assigned';
+            }
+
+            $bioLid->responsible_id = $user->getKey();
+            $bioLid->save();
+
+            Log::info('MAX: назначен ответственный за заявку БИО', [
+                'bio_lid_id' => $bioLid->getKey(),
+                'responsible_id' => $bioLid->responsible_id,
+                'clicked_user_id' => $user->getKey(),
+            ]);
+
+            return 'accepted';
+        });
+
+        if ($result === 'not_found') {
+            $maxBot->sendToUser($maxUserId, 'Заявка не найдена.');
+            return;
+        }
+
+        $bioLid = BioLid::find($bioLidId);
+
+        $responsible = $bioLid?->responsible_id
+            ? User::find($bioLid->responsible_id)
+            : null;
+
+        if (!$responsible) {
+            Log::error('MAX: ответственный за заявку БИО не найден', [
+                'bio_lid_id' => $bioLidId,
+            ]);
+            return;
+        }
+
+        $sentMessage = MaxSentMessage::query()
+            ->where('message_id', $messageId)
+            ->where('bio_lid_id', $bioLidId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$sentMessage) {
+            Log::warning('MAX: исходное сообщение БИО не найдено', [
+                'bio_lid_id' => $bioLidId,
+                'message_id' => $messageId,
+            ]);
+            return;
+        }
+
+        $isResponsible =
+            (string) $user->id === (string) $responsible->id;
+
+        $newText = SyncMaxLidMessages::formatMessage(
+            (string) $sentMessage->text,
+            $isResponsible,
+            (string) $responsible->name
+        );
+
+        if (mb_strlen($newText) > 4000) {
+            Log::error('MAX: сообщение БИО слишком длинное', [
+                'bio_lid_id' => $bioLidId,
+                'message_id' => $messageId,
+            ]);
+            return;
+        }
+
+        $this->updateMaxCallbackMessage(
+            $maxBot,
+            $callbackId,
+            $messageId,
+            $sentMessage,
+            $newText,
+            ['bio_lid_id' => $bioLidId]
+        );
+
+        SyncMaxBioLidMessages::dispatch(
+            $bioLidId,
+            (int) $responsible->id
+        );
+
+        Log::info('MAX: запущено обновление уведомлений БИО', [
+            'bio_lid_id' => $bioLidId,
+            'responsible_id' => $responsible->id,
+            'result' => $result,
+        ]);
+    }
+
+    private function updateMaxCallbackMessage(
+        MaxBotService $maxBot,
+        mixed $callbackId,
+        mixed $messageId,
+        MaxSentMessage $sentMessage,
+        string $newText,
+        array $context
+    ): void {
+        try {
+            $response = $maxBot->answerCallback($callbackId, $newText);
+
+            Log::info('MAX: callback успешно обработан', $context + [
+                'message_id' => $messageId,
+                'response' => $response,
+            ]);
+
+            $sentMessage->update(['text' => $newText]);
+        } catch (Throwable $e) {
+            Log::error('MAX: ошибка answerCallback', $context + [
+                'message_id' => $messageId,
+                'error' => $e->getMessage(),
+            ]);
+
+            try {
+                $response = $maxBot->editMessage(
+                    (string) $messageId,
+                    $newText
+                );
+
+                $sentMessage->update(['text' => $newText]);
+
+                Log::info('MAX: сообщение обновлено резервным способом', $context + [
+                    'message_id' => $messageId,
+                    'response' => $response,
+                ]);
+            } catch (Throwable $editException) {
+                Log::error('MAX: оба способа редактирования завершились ошибкой', $context + [
+                    'message_id' => $messageId,
+                    'error' => $editException->getMessage(),
+                ]);
+            }
+        }
     }
 
     private function requestPhoneIfNeeded(

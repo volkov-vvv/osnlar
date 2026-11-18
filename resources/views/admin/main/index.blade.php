@@ -99,7 +99,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header px-4 py-3">
-                            <h3 class="card-title mb-0">Рейтинг курсов по заявкам</h3>
+                            <h3 class="card-title mb-0">Рейтинг курсов АМСЗ по заявкам</h3>
                             <div class="card-tools">
                                 <form method="get" action="{{ route('admin.main.index') }}" class="form-inline">
                                     <label for="course-ranking-year" class="mr-2 mb-0">Год:</label>

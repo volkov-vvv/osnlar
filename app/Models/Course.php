@@ -135,13 +135,19 @@ class Course extends Model
     }
 
     /**
-     * Рейтинг курсов выбранного года по числу поданных заявок (убывание).
+     * Рейтинг бесплатных курсов АМСЗ выбранного года по числу заявок (убывание).
+     * Без платных и без курсов биоэкономики.
      */
     public static function rankingByLidsForYear($year)
     {
         return static::query()
             ->select(['id', 'title', 'short_title', 'years'])
             ->where('years', (string) $year)
+            ->whereNull('price')
+            ->where(function ($query) {
+                $query->where('bioeconomy', '!=', 1)
+                    ->orWhereNull('bioeconomy');
+            })
             ->withCount('lids')
             ->orderByDesc('lids_count')
             ->orderBy('title')

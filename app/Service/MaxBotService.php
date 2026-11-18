@@ -41,7 +41,7 @@ class MaxBotService
 
     /**
      * Отправка через MAX API. Все успешные ответы записываются в max_sent_messages.
-     * $options может содержать lid_id, local_user_id, notify, format, disable_link_preview.
+     * $options может содержать lid_id, bio_lid_id, local_user_id, notify, format, disable_link_preview.
      */
     public function sendMessage(
         string $targetType,
@@ -146,6 +146,7 @@ class MaxBotService
             'message_id' => $mid,
             'user_id' => $localUserId,
             'lid_id' => $options['lid_id'] ?? null,
+            'bio_lid_id' => $options['bio_lid_id'] ?? null,
             'text' => $text,
             'max_user_id' => $maxUserId,
         ]);
@@ -173,14 +174,15 @@ class MaxBotService
 
     /**
      * Для уведомления локальному пользователю, который активно подписан.
-     * lid_id — необязательный идентификатор из вашей предметной модели.
+     * lid_id / bio_lid_id — необязательные идентификаторы заявок.
      */
     public function sendNotificationToUser(
         int $localUserId,
         string $text,
         ?int $lidId = null,
         array $options = [],
-        array $buttons = []
+        array $buttons = [],
+        ?int $bioLidId = null
     ): array
     {
         $subscription = MaxSubscription::query()
@@ -195,6 +197,7 @@ class MaxBotService
         return $this->sendToUser($subscription->max_user_id, $text, $buttons, array_merge($options, [
             'local_user_id' => $localUserId,
             'lid_id' => $lidId,
+            'bio_lid_id' => $bioLidId,
         ]));
     }
 

@@ -12,7 +12,7 @@ class MaxSentMessage extends Model
     protected $table = 'max_sent_messages';
 
     protected $fillable = [
-        'chat_id', 'message_id', 'user_id', 'lid_id', 'text', 'max_user_id',
+        'chat_id', 'message_id', 'user_id', 'lid_id', 'bio_lid_id', 'text', 'max_user_id',
     ];
 
     public function user(): BelongsTo
