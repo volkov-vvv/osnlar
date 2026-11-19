@@ -1,5 +1,13 @@
 @extends('admin.layouts.main')
 @section('content')
+    <style>
+        #region-ranking-card {
+            min-height: 0;
+        }
+        #region-ranking-card .card-body {
+            min-height: 0;
+        }
+    </style>
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -95,22 +103,25 @@
             </div>
             <!-- /.row -->
 
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-12">
-                    <div class="card">
+                    <form method="get" action="{{ route('admin.main.index') }}" class="form-inline">
+                        <label for="dashboard-year" class="mr-2 mb-0">Год:</label>
+                        <select id="dashboard-year" name="year" class="form-control form-control-sm" onchange="this.form.submit()">
+                            @include('partials.year-options', [
+                                'yearOptions' => $years,
+                                'selectedYear' => $selectedYear,
+                            ])
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row align-items-stretch">
+                <div class="col-lg-8 d-flex">
+                    <div class="card w-100 mb-3" id="course-ranking-card">
                         <div class="card-header px-4 py-3">
                             <h3 class="card-title mb-0">Рейтинг курсов АМСЗ по заявкам</h3>
-                            <div class="card-tools">
-                                <form method="get" action="{{ route('admin.main.index') }}" class="form-inline">
-                                    <label for="course-ranking-year" class="mr-2 mb-0">Год:</label>
-                                    <select id="course-ranking-year" name="year" class="form-control form-control-sm" onchange="this.form.submit()">
-                                        @include('partials.year-options', [
-                                            'yearOptions' => $years,
-                                            'selectedYear' => $selectedYear,
-                                        ])
-                                    </select>
-                                </form>
-                            </div>
                         </div>
                         <div class="card-body">
                             @if($courseRanking->isEmpty())
@@ -123,6 +134,39 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-4 d-flex">
+                    <div class="card w-100 mb-3 d-flex flex-column" id="region-ranking-card">
+                        <div class="card-header px-4 py-3">
+                            <h3 class="card-title mb-0">Топ‑10 регионов АМСЗ</h3>
+                        </div>
+                        <div class="card-body p-0 flex-grow-1" style="overflow: hidden;">
+                            @if($regionRanking->isEmpty())
+                                <p class="text-center text-muted p-3 mb-0">Нет заявок за {{ $selectedYear }} год</p>
+                            @else
+                                <div class="table-responsive h-100" style="overflow-y: auto;">
+                                    <table class="table table-striped table-hover mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 3rem;">#</th>
+                                            <th>Регион</th>
+                                            <th class="text-right" style="width: 5rem;">Заявок</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($regionRanking as $index => $region)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $region->title }}</td>
+                                                <td class="text-right">{{ $region->lids_count }}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div><!-- /.container-fluid -->
@@ -130,6 +174,24 @@
 @endsection
 
 @section('javascript')
+    <script>
+        (function () {
+            function syncRegionCardHeight() {
+                var courseCard = document.getElementById('course-ranking-card');
+                var regionCard = document.getElementById('region-ranking-card');
+                if (!courseCard || !regionCard || window.innerWidth < 992) {
+                    if (regionCard) {
+                        regionCard.style.maxHeight = '';
+                    }
+                    return;
+                }
+                regionCard.style.maxHeight = courseCard.offsetHeight + 'px';
+            }
+
+            window.addEventListener('load', syncRegionCardHeight);
+            window.addEventListener('resize', syncRegionCardHeight);
+        })();
+    </script>
     @if($courseRanking->isNotEmpty())
         <script src="{{ asset('plugins/chart.js/chart.min.js') }}"></script>
         <script>
@@ -197,6 +259,8 @@
                         }
                     }
                 });
+
+                window.dispatchEvent(new Event('resize'));
             })();
         </script>
     @endif
