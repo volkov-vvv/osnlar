@@ -79,8 +79,8 @@
                     </ul>
                 </li>
 
-                <li class="nav-item {{ request()->routeIs('admin.course.*', 'admin.studygroup.*', 'admin.author.*', 'admin.contract.*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->routeIs('admin.course.*', 'admin.studygroup.*', 'admin.author.*', 'admin.contract.*') ? 'active' : '' }}">
+                <li class="nav-item {{ (request()->routeIs('admin.course.*') && !request()->routeIs('admin.course.ranking*')) || request()->routeIs('admin.studygroup.*', 'admin.author.*', 'admin.contract.*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ (request()->routeIs('admin.course.*') && !request()->routeIs('admin.course.ranking*')) || request()->routeIs('admin.studygroup.*', 'admin.author.*', 'admin.contract.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-book-open"></i>
                         <p>
                             Обучение
@@ -89,7 +89,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.course.index') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.course.index') }}" class="nav-link {{ request()->routeIs('admin.course.*') && !request()->routeIs('admin.course.ranking*') ? 'active' : '' }}">
                                 <i class="fas fa-graduation-cap nav-icon"></i>
                                 <p>Курсы</p>
                             </a>
@@ -193,8 +193,8 @@
                     </ul>
                 </li>
 
-                <li class="nav-item {{ request()->routeIs('admin.year.*', 'admin.project.*', 'admin.settings.*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->routeIs('admin.year.*', 'admin.project.*', 'admin.settings.*') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->routeIs('admin.year.*', 'admin.project.*', 'admin.settings.*', 'admin.course.ranking*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->routeIs('admin.year.*', 'admin.project.*', 'admin.settings.*', 'admin.course.ranking*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cog"></i>
                         <p>
                             Настройки
@@ -212,6 +212,12 @@
                             <a href="{{ route('admin.project.index') }}" class="nav-link {{ request()->routeIs('admin.project.*') ? 'active' : '' }}">
                                 <i class="fas fa-project-diagram nav-icon"></i>
                                 <p>Проекты</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.course.ranking') }}" class="nav-link {{ request()->routeIs('admin.course.ranking*') ? 'active' : '' }}">
+                                <i class="fas fa-sort-amount-down nav-icon"></i>
+                                <p>Порядок в каталоге</p>
                             </a>
                         </li>
                         <li class="nav-item">

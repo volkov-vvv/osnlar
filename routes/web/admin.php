@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ContactCenterController;
 use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\CourseRankingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\LeveleduController;
@@ -50,6 +51,10 @@ Route::resource('user', UserController::class)->whereNumber('user');
 Route::resource('studygroup', StudyGroupController::class)->whereNumber('studygroup');
 Route::resource('about', AboutController::class)->whereNumber('about');
 Route::resource('document', DocumentController::class)->whereNumber('document');
+Route::get('course/ranking', [CourseRankingController::class, 'index'])
+    ->name('course.ranking');
+Route::post('course/ranking', [CourseRankingController::class, 'update'])
+    ->name('course.ranking.update');
 Route::resource('course', CourseController::class)->whereNumber('course');
 Route::resource('category', CategoryController::class)->whereNumber('category');
 Route::patch('author/{author}/publish', [AuthorController::class, 'publish'])
