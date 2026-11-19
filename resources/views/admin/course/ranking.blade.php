@@ -62,6 +62,7 @@
                     <form method="get" action="{{ route('admin.course.ranking') }}" class="form-inline flex-wrap align-items-center">
                         <label class="mr-2 mb-0" for="year">Год</label>
                         <select id="year" name="year" class="form-control form-control-sm mr-3 mb-0" onchange="this.form.submit()">
+                            <option value="all" @selected($selectedYear === null)>Все годы</option>
                             @include('partials.year-options', [
                                 'yearOptions' => $years,
                                 'selectedYear' => $selectedYear,
@@ -80,16 +81,19 @@
                 <div class="card-body">
                     <p class="text-muted mb-3">
                         Перетащите курсы в нужном порядке и нажмите «Сохранить». Выше в списке — выше в каталоге на сайте.
+                        @if($selectedYear === null)
+                            Режим «Все годы» совпадает с публичным каталогом: в одном списке курсы разных лет.
+                        @endif
                     </p>
 
                     @if($courses->isEmpty())
                         <div class="alert alert-info mb-0">
-                            Нет курсов для выбранного года и каталога.
+                            Нет курсов для выбранного фильтра.
                         </div>
                     @else
                         <form method="post" action="{{ route('admin.course.ranking.update') }}" id="course-ranking-form">
                             @csrf
-                            <input type="hidden" name="year" value="{{ $selectedYear }}">
+                            <input type="hidden" name="year" value="{{ $selectedYear ?? 'all' }}">
                             <input type="hidden" name="catalog" value="{{ $catalog }}">
 
                             <ul id="course-ranking-list" class="list-group mb-3">
@@ -105,6 +109,9 @@
                                                 <div class="small text-muted">{{ $course->title }}</div>
                                             @endif
                                         </div>
+                                        @if($selectedYear === null && $course->years)
+                                            <span class="badge badge-info ml-2">{{ $course->years }}</span>
+                                        @endif
                                         <span class="badge badge-{{ $course->is_published ? 'success' : 'secondary' }} ml-2">
                                             {{ $course->is_published ? 'Опубликован' : 'Скрыт' }}
                                         </span>
