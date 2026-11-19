@@ -23,7 +23,7 @@ class Region extends Model
     /**
      * Top AMSZ regions by lid count for a course year.
      */
-    public static function topByAmszLidsForYear($year, int $limit = 10): Collection
+    public static function topByAmszLidsForYear($year, int $limit = 7): Collection
     {
         return static::query()
             ->select(['regions.id', 'regions.title'])

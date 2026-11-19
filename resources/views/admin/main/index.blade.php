@@ -137,7 +137,7 @@
                 <div class="col-lg-4 d-flex">
                     <div class="card w-100 mb-3 d-flex flex-column" id="region-ranking-card">
                         <div class="card-header px-4 py-3">
-                            <h3 class="card-title mb-0">Топ‑10 регионов АМСЗ</h3>
+                            <h3 class="card-title mb-0">Топ‑7 регионов АМСЗ</h3>
                         </div>
                         <div class="card-body p-0 flex-grow-1" style="overflow: hidden;">
                             @if($regionRanking->isEmpty())
