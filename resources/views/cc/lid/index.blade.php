@@ -223,6 +223,7 @@
                     $.ajax({
                         url: "{{route('cc.lid.getLidsExcel')}}",
                         method: 'get',
+                        timeout: 300000,
                         data: {
                             search: search,
                             columnSortName: columnSortName,
@@ -243,6 +244,10 @@
                             link.download = `Lids_report.xlsx`;
                             link.click();
                             $('#download').alert('close');
+                        },
+                        error: function () {
+                            $('#download').removeClass('alert-info').addClass('alert-danger')
+                                .html('Не удалось сформировать Excel. Попробуйте сузить фильтр или повторить позже.<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
                         },
                     });
                 }

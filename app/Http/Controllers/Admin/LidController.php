@@ -226,6 +226,8 @@ class lidController extends Controller
      */
     public function getLidsExcel(Request $request)
     {
+        set_time_limit(300);
+        ini_set('memory_limit', '512M');
 
         $columnSortName = $request->get('columnSortName');
         $columnSortOrder = $request->get('columnSortOrder');
