@@ -23,7 +23,7 @@
                         <div class="inner">
                             <h3>{{$data['lidsCount']}}</h3>
 
-                            <p>Заявок</p>
+                            <p>Всего заявок АМСЗ</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-shopping-bag"></i>
@@ -33,21 +33,6 @@
                 </div>
                 <!-- ./col -->
 
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>93<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Процент трудоустроенных</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
                 <!-- ./col -->
             </div>
 
@@ -64,7 +49,7 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <p>Сколько сотрудников КЦ = {{$data['usersKcCount']}}</p>
+                    
 
                     <div class="row">
                         <div class="col">

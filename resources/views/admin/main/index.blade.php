@@ -31,7 +31,7 @@
                         <div class="inner">
                             <h3>{{$data['lidsCount']}}</h3>
 
-                            <p>Заявок</p>
+                            <p>Всего заявок АМСЗ</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-shopping-bag"></i>

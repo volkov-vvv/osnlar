@@ -464,10 +464,10 @@
                                                 <i class="fas fa-pencil-alt"></i>
                                             </button>
                                         @endif
-                                        @if($document && in_array($panel, ['admin', 'cc'], true))
+                                        @if($document && $panel === 'admin')
                                             <form
                                                 method="post"
-                                                action="{{ route($panel . '.biolid.destroy-document', [$bioLid, $document]) }}"
+                                                action="{{ route('admin.biolid.destroy-document', [$bioLid, $document]) }}"
                                                 class="d-inline-flex ml-2 mb-0"
                                                 onsubmit="return confirm('Удалить документ и сбросить статус на «Не отправлено»?');"
                                             >

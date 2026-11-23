@@ -450,7 +450,7 @@ class BioLidController extends Controller
 
     public function destroyDocument(BioLid $biolid, UserDocument $document): RedirectResponse
     {
-        if (! in_array($this->panel(), ['admin', 'cc'], true)) {
+        if ($this->panel() !== 'admin') {
             abort(403);
         }
 

@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use morphos\Russian\Cases;
+
+use function morphos\Russian\inflectName;
 
 class Author extends Model
 {
@@ -39,6 +42,27 @@ class Author extends Model
     public function getDisplayNameAttribute(): string
     {
         return $this->full_name !== '' ? $this->full_name : (string) $this->name;
+    }
+
+    /**
+     * ФИО в родительном падеже (для форм «от …»).
+     */
+    public function genitiveName(): string
+    {
+        $fullName = $this->full_name !== '' ? $this->full_name : (string) $this->name;
+        if ($fullName === '') {
+            return '—';
+        }
+
+        try {
+            $inflected = inflectName($fullName, Cases::RODIT);
+        } catch (\Throwable) {
+            return $fullName;
+        }
+
+        $inflected = trim((string) $inflected);
+
+        return $inflected !== '' ? $inflected : $fullName;
     }
 
     public function getSortNameAttribute(): string

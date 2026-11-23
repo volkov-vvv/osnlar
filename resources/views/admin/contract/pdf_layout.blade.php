@@ -55,12 +55,98 @@
             font-weight: bold;
         }
         .signatures tr:last-child td {
-            border: none;
+            text-align: left;
+            
         }
         .placeholder {
             display: inline-block;
             min-width: 180px;
             border-bottom: 1px solid #222;
+        }
+        .appendix {
+            page-break-before: always;
+        }
+        .appendix-header {
+            text-align: right;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+        .appendix-form-label {
+            text-align: left;
+            margin: 0 0 4px;
+        }
+        .appendix-title {
+            margin-top: 0;
+        }
+        .appendix-subtitle {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .appendix-inner {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 12px 0 18px;
+        }
+        .appendix-inner td {
+            border: 1px solid #555;
+            padding: 6px 8px;
+            vertical-align: top;
+        }
+        .appendix-signatures {
+            margin-top: 24px;
+        }
+        .appendix-signatures-draft {
+            margin-top: 12px;
+        }
+        .appendix-signatures-draft td {
+            border: none !important;
+            padding: 4px 8px;
+            line-height: 1.15;
+        }
+        .appendix-signatures-final {
+            margin-top: 12px;
+        }
+        table.signatures.appendix-signatures-final td,
+        table.signatures.appendix-signatures-final tr:last-child td {
+            border: 1px solid #555;
+        }
+        .appendix-agreed {
+            margin: 16px 0 0;
+            font-weight: bold;
+            text-align: left;
+        }
+        .consent {
+            page-break-before: always;
+            line-height: 1.15;
+        }
+        .consent p {
+            margin: 0 0 4px;
+            line-height: 1.15;
+        }
+        .consent-addressee {
+            text-align: right;
+            margin: 0 0 8px;
+            line-height: 1.15;
+        }
+        .consent-title {
+            margin: 6px 0 0;
+        }
+        .consent-subtitle {
+            text-align: center;
+            margin: 0 0 6px;
+            font-weight: bold;
+        }
+        .consent-list {
+            margin: 0;
+        }
+        .consent-sign {
+            margin-top: 12px;
+            border-collapse: collapse;
+        }
+        .consent-sign td {
+            border: none;
+            padding: 0;
+            vertical-align: top;
         }
     </style>
 </head>

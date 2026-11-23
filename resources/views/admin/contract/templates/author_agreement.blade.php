@@ -139,4 +139,7 @@
                 ___________________ / {{ $author->name ?: '—'}}</td>
         </tr>
     </table>
+
+    @include('admin.contract.templates.partials.appendices')
+    @include('admin.contract.templates.partials.consent')
 @endsection

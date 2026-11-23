@@ -60,10 +60,6 @@ Route::post('biolid/{biolid}/documents/{document}/review', [BioLidController::cl
     ->whereNumber('biolid')
     ->whereNumber('document')
     ->name('biolid.review-document');
-Route::delete('biolid/{biolid}/documents/{document}', [BioLidController::class, 'destroyDocument'])
-    ->whereNumber('biolid')
-    ->whereNumber('document')
-    ->name('biolid.destroy-document');
 Route::delete('biolid/{biolid}', [BioLidController::class, 'destroy'])
     ->whereNumber('biolid')
     ->name('biolid.destroy');
