@@ -52,7 +52,7 @@ class ContractController extends Controller
 
     public function show(Contract $contract)
     {
-        $contract->load(['author', 'course', 'project']);
+        $contract->load(['author', 'course', 'project', 'assignments.studyGroup']);
 
         return view('admin.contract.show', compact('contract'));
     }

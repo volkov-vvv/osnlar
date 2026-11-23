@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommercialLidController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ContactCenterController;
+use App\Http\Controllers\Admin\ContractAssignmentController;
 use App\Http\Controllers\Admin\ContractController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\CourseRankingController;
@@ -82,6 +83,29 @@ Route::patch('contract/{contract}', [ContractController::class, 'update'])
 Route::delete('contract/{contract}', [ContractController::class, 'destroy'])
     ->whereNumber('contract')
     ->name('contract.destroy');
+
+Route::get('contract/{contract}/assignment/create', [ContractAssignmentController::class, 'create'])
+    ->whereNumber('contract')
+    ->name('contract.assignment.create');
+Route::post('contract/{contract}/assignment', [ContractAssignmentController::class, 'store'])
+    ->whereNumber('contract')
+    ->name('contract.assignment.store');
+Route::get('assignment/{assignment}/generate', [ContractAssignmentController::class, 'generate'])
+    ->whereNumber('assignment')
+    ->name('assignment.generate');
+Route::get('assignment/{assignment}', [ContractAssignmentController::class, 'show'])
+    ->whereNumber('assignment')
+    ->name('assignment.show');
+Route::get('assignment/{assignment}/edit', [ContractAssignmentController::class, 'edit'])
+    ->whereNumber('assignment')
+    ->name('assignment.edit');
+Route::patch('assignment/{assignment}', [ContractAssignmentController::class, 'update'])
+    ->whereNumber('assignment')
+    ->name('assignment.update');
+Route::delete('assignment/{assignment}', [ContractAssignmentController::class, 'destroy'])
+    ->whereNumber('assignment')
+    ->name('assignment.destroy');
+
 Route::resource('agent', AgentController::class)->whereNumber('agent');
 Route::resource('leveledu', LeveleduController::class)->whereNumber('leveledu');
 Route::resource('region', RegionController::class)->whereNumber('region');
