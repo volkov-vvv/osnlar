@@ -181,7 +181,7 @@ class ContractAssignment extends Model
             return '«___» __________ 20___ г.';
         }
 
-        $formatted = $date->locale('ru')->isoFormat('D MMMM YYYY');
+        $formatted = $date->locale('ru')->isoFormat('DD MMMM YYYY');
         if (preg_match('/^(\d+)\s+(.+)$/u', $formatted, $matches)) {
             return '«'.$matches[1].'» '.$matches[2].' г.';
         }
@@ -195,7 +195,7 @@ class ContractAssignment extends Model
             return '«__» __________ 20__';
         }
 
-        $formatted = $date->locale('ru')->isoFormat('D MMMM YYYY');
+        $formatted = $date->locale('ru')->isoFormat('DD MMMM YYYY');
         if (preg_match('/^(\d+)\s+(.+)$/u', $formatted, $matches)) {
             return '«'.$matches[1].'» '.$matches[2];
         }

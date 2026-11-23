@@ -49,7 +49,7 @@ class Contract extends Model
         }
 
         // isoFormat with day uses genitive month names in ru (октября, не октябрь)
-        $formatted = $this->signed_at->locale('ru')->isoFormat('D MMMM YYYY');
+        $formatted = $this->signed_at->locale('ru')->isoFormat('DD MMMM YYYY');
         if (preg_match('/^(\d+)\s+(.+)$/u', $formatted, $matches)) {
             return '«'.$matches[1].'» '.$matches[2].' г.';
         }
@@ -72,7 +72,7 @@ class Contract extends Model
             return '«___» __________ 20___ г.';
         }
 
-        $formatted = $this->ends_at->locale('ru')->isoFormat('D MMMM YYYY');
+        $formatted = $this->ends_at->locale('ru')->isoFormat('DD MMMM YYYY');
         if (preg_match('/^(\d+)\s+(.+)$/u', $formatted, $matches)) {
             return '«'.$matches[1].'» '.$matches[2].' г.';
         }
