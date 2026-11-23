@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\ContractAssignment;
+use App\Models\ContractWorkflowStatus;
 use App\Models\StudyGroup;
 use Barryvdh\DomPDF\PDF as DomPdfWrapper;
 use Illuminate\Http\Request;
@@ -25,7 +26,14 @@ class ContractAssignmentController extends Controller
     {
         $data = $this->validatedAssignmentData($request, $contract);
 
-        $nextNumber = (int) $contract->assignments()->withTrashed()->max('number') + 1;
+        if (! $contract->assignments()->exists()) {
+            // Нумерация с 1: удаляем soft-deleted, иначе unique (contract_id, number) конфликтует.
+            $contract->assignments()->onlyTrashed()->forceDelete();
+            $nextNumber = 1;
+        } else {
+            $nextNumber = (int) $contract->assignments()->max('number') + 1;
+            $contract->assignments()->onlyTrashed()->where('number', $nextNumber)->forceDelete();
+        }
 
         $assignment = $contract->assignments()->create([
             ...$data,
@@ -39,9 +47,19 @@ class ContractAssignmentController extends Controller
 
     public function show(ContractAssignment $assignment)
     {
-        $assignment->load(['contract.author', 'contract.course', 'studyGroup']);
+        $assignment->load(['contract.author', 'contract.course', 'studyGroup', 'report', 'acts']);
 
-        return view('admin.contract.assignment.show', compact('assignment'));
+        $breadcrumbs = [
+            ['title' => 'Обучение', 'url' => null],
+            ['title' => 'Договоры', 'url' => 'admin.contract.index'],
+            [
+                'title' => 'Договор №'.$assignment->contract->number,
+                'url' => route('admin.contract.show', $assignment->contract),
+            ],
+            ['title' => 'Задание №'.$assignment->number, 'url' => null],
+        ];
+
+        return view('admin.contract.assignment.show', compact('assignment', 'breadcrumbs'));
     }
 
     public function edit(ContractAssignment $assignment)
@@ -125,6 +143,7 @@ class ContractAssignmentController extends Controller
             'schedule_url' => ['nullable', 'string', 'max:2000'],
             'notebook_url' => ['nullable', 'string', 'max:2000'],
             'custom_work_type' => ['nullable', 'string'],
+            'status' => ['required', 'string', Rule::in(ContractWorkflowStatus::keys())],
             'hourly_rate' => ['required', 'numeric', 'min:0'],
             'issued_at' => ['nullable', 'date'],
             'starts_at' => ['required', 'date'],
@@ -136,6 +155,8 @@ class ContractAssignmentController extends Controller
             'work_type_codes.min' => 'Выберите хотя бы один вид работ',
             'work_type_codes.*.in' => 'Выбран недопустимый вид работ',
             'custom_work_type.required' => 'Заполните произвольный вид работ',
+            'status.required' => 'Выберите статус',
+            'status.in' => 'Выбран недопустимый статус',
             'hourly_rate.required' => 'Укажите стоимость часа',
             'hourly_rate.numeric' => 'Стоимость часа должна быть числом',
             'hourly_rate.min' => 'Стоимость часа не может быть отрицательной',

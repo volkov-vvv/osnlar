@@ -79,6 +79,8 @@
                         @enderror
                     </div>
 
+                    @include('admin.contract._status_field')
+
                     <div class="mb-3">
                         <label for="signed_at">Дата подписания договора</label>
                         <input name="signed_at" id="signed_at" type="date" class="form-control" value="{{ old('signed_at') }}" style="max-width: 16rem;">

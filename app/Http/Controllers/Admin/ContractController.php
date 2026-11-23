@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Contract;
+use App\Models\ContractWorkflowStatus;
 use App\Models\Course;
 use App\Models\Project;
 use Barryvdh\DomPDF\PDF as DomPdfWrapper;
@@ -17,7 +18,7 @@ class ContractController extends Controller
     public function index()
     {
         $contracts = Contract::query()
-            ->with(['author', 'course', 'project'])
+            ->with(['author', 'course', 'project', 'assignments', 'reports', 'acts'])
             ->latest()
             ->get();
 
@@ -52,7 +53,16 @@ class ContractController extends Controller
 
     public function show(Contract $contract)
     {
-        $contract->load(['author', 'course', 'project', 'assignments.studyGroup']);
+        $contract->load([
+            'author',
+            'course',
+            'project',
+            'assignments.studyGroup',
+            'assignments.report',
+            'assignments.acts',
+            'reports.assignment',
+            'acts.assignment',
+        ]);
 
         return view('admin.contract.show', compact('contract'));
     }
@@ -69,7 +79,7 @@ class ContractController extends Controller
 
     public function update(Request $request, Contract $contract)
     {
-        $data = $this->validatedContractData($request);
+        $data = $this->validatedContractData($request, $contract);
 
         $contract->update($data);
 
@@ -168,19 +178,22 @@ class ContractController extends Controller
             ->with('success', 'Договор удалён');
     }
 
-    private function validatedContractData(Request $request): array
+    private function validatedContractData(Request $request, ?Contract $contract = null): array
     {
         $templateSlugs = array_keys(config('contracts.templates', []));
 
-        $data = $request->validate([
+        $rules = [
             'template' => ['required', 'string', Rule::in($templateSlugs)],
             'project_id' => ['required', 'integer', 'exists:projects,id'],
             'author_id' => ['required', 'integer', 'exists:authors,id'],
             'course_id' => ['required', 'integer', 'exists:courses,id'],
+            'status' => ['required', 'string', Rule::in(ContractWorkflowStatus::keys())],
             'signed_at' => ['nullable', 'date'],
             'nap_registered_at' => ['nullable', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:signed_at'],
-        ], [
+        ];
+
+        $messages = [
             'template.required' => 'Выберите шаблон договора',
             'template.in' => 'Выбранный шаблон не найден',
             'project_id.required' => 'Выберите проект',
@@ -189,16 +202,37 @@ class ContractController extends Controller
             'author_id.exists' => 'Выбранный автор не найден',
             'course_id.required' => 'Выберите курс',
             'course_id.exists' => 'Выбранный курс не найден',
+            'status.required' => 'Выберите статус',
+            'status.in' => 'Выбран недопустимый статус',
             'signed_at.date' => 'Укажите корректную дату подписания',
             'nap_registered_at.date' => 'Укажите корректную дату регистрации плательщика НПД',
             'ends_at.date' => 'Укажите корректную дату окончания договора',
             'ends_at.after_or_equal' => 'Дата окончания не может быть раньше даты подписания',
-        ]);
+            'number.required' => 'Укажите номер договора',
+            'number.unique' => 'Договор с таким номером уже существует',
+        ];
+
+        if ($contract) {
+            $rules['number'] = [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('contracts', 'number')
+                    ->ignore($contract->id)
+                    ->whereNull('deleted_at'),
+            ];
+        }
+
+        $data = $request->validate($rules, $messages);
 
         foreach (['signed_at', 'nap_registered_at', 'ends_at'] as $dateField) {
             if (($data[$dateField] ?? null) === '') {
                 $data[$dateField] = null;
             }
+        }
+
+        if (array_key_exists('number', $data)) {
+            $data['number'] = trim($data['number']);
         }
 
         return $data;

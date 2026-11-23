@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use morphos\Russian\CardinalNumeralGenerator;
 use morphos\Russian\Cases;
@@ -112,6 +114,16 @@ class ContractAssignment extends Model
         return $this->belongsTo(StudyGroup::class);
     }
 
+    public function report(): HasOne
+    {
+        return $this->hasOne(ContractReport::class, 'assignment_id');
+    }
+
+    public function acts(): HasMany
+    {
+        return $this->hasMany(ContractAct::class, 'assignment_id')->orderBy('number');
+    }
+
     public function issuedAtLabel(): string
     {
         return $this->dateLabel($this->issued_at);
@@ -211,5 +223,15 @@ class ContractAssignment extends Model
     public function endsAtShortLabel(): string
     {
         return $this->dateShortLabel($this->ends_at);
+    }
+
+    public function statusLabel(): string
+    {
+        return ContractWorkflowStatus::label($this->status);
+    }
+
+    public function statusBadgeClass(): string
+    {
+        return ContractWorkflowStatus::badgeClass($this->status);
     }
 }

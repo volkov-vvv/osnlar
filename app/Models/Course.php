@@ -17,6 +17,13 @@ class Course extends Model
         'online' => 'Онлайн',
     ];
 
+    /** Родительный падеж для фразы «в формате … обучения» (строчными). */
+    public const STUDY_FORMS_GENITIVE = [
+        'full_time' => 'очного',
+        'blended' => 'очно-заочного',
+        'online' => 'онлайн',
+    ];
+
     public const TYPES = [
         'advanced_training' => 'Повышение квалификации',
         'professional_retraining' => 'Профессиональная переподготовка',
@@ -186,6 +193,15 @@ class Course extends Model
         }
 
         return self::STUDY_FORMS[$this->study_form] ?? null;
+    }
+
+    public function studyFormGenitiveLabel(): ?string
+    {
+        if (! is_string($this->study_form)) {
+            return null;
+        }
+
+        return self::STUDY_FORMS_GENITIVE[$this->study_form] ?? null;
     }
 
     public function typeLabel(): ?string

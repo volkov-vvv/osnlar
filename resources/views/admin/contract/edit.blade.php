@@ -18,8 +18,18 @@
                     @method('PATCH')
 
                     <div class="mb-3">
-                        <label>Номер договора</label>
-                        <input type="text" class="form-control" value="{{ $contract->number }}" readonly>
+                        <label for="number">Номер договора</label>
+                        <input
+                            type="text"
+                            name="number"
+                            id="number"
+                            class="form-control"
+                            value="{{ old('number', $contract->number) }}"
+                            required
+                        >
+                        @error('number')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-3">
@@ -84,6 +94,8 @@
                         <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    @include('admin.contract._status_field', ['selectedStatus' => $contract->status])
 
                     <div class="mb-3">
                         <label for="signed_at">Дата подписания договора</label>

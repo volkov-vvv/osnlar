@@ -48,7 +48,7 @@
             width: 50%;
             vertical-align: top;
             padding: 12px 16px;
-            border: 1px solid #555;
+            border: 1px solid #ccc;
         }
         .signatures tr:first-child td {
             text-align: center;
@@ -107,13 +107,21 @@
             margin-top: 12px;
         }
         table.signatures.appendix-signatures-final td,
-        table.signatures.appendix-signatures-final tr:last-child td {
-            border: 1px solid #555;
+        table.signatures.appendix-signatures-final tr:last-child td,
+        table.signatures.assignment-signatures td,
+        table.signatures.assignment-signatures tr:last-child td {
+            border: 1px solid #ccc;
         }
         .appendix-agreed {
             margin: 16px 0 0;
             font-weight: bold;
             text-align: left;
+        }
+        .assignment-title {
+            margin: 0 0 4px;
+        }
+        .assignment-subtitle {
+            margin-bottom: 8px;
         }
         .consent {
             page-break-before: always;

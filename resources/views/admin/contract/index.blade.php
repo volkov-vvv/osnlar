@@ -31,6 +31,15 @@
                         <div class="card-body">
                             <div class="row pb-3">
                                 <div class="col col-md-2">
+                                    Статус:
+                                    <select id="status" name="status" class="form-control form-control-sm custom-filters">
+                                        <option></option>
+                                        @foreach(\App\Models\ContractWorkflowStatus::LABELS as $statusLabel)
+                                            <option value="{{ $statusLabel }}">{{ $statusLabel }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col col-md-2">
                                     Проект:
                                     <select id="project" name="project" class="form-control form-control-sm custom-filters">
                                         <option></option>
@@ -39,7 +48,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col col-md-3">
+                                <div class="col col-md-2">
                                     Автор:
                                     <select id="author" name="author" class="form-control form-control-sm custom-filters">
                                         <option></option>
@@ -53,11 +62,11 @@
                                     <select id="course" name="course" class="form-control form-control-sm custom-filters">
                                         <option></option>
                                         @foreach($courses as $course)
-                                            <option value="{{ $course->title }}">{{ $course->title }}</option>
+                                            <option value="{{ $course->short_title ?: $course->title }}">{{ $course->short_title ?: $course->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col col-md-4 d-flex justify-content-end align-items-end">
+                                <div class="col col-md-3 d-flex justify-content-end align-items-end">
                                     <button id="resetTable" class="btn btn-secondary"><i class="fas fa-eraser mr-1"></i>Очистить фильтры</button>
                                 </div>
                             </div>
@@ -67,38 +76,79 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Номер договора</th>
+                                    <th>Дата подписания</th>
                                     <th>Проект</th>
                                     <th>Автор</th>
                                     <th>Курс</th>
-                                    <th>Дата подписания</th>
+                                    <th>Статус</th>
+                                    <th>Статус заданий</th>
+                                    <th>Статус отчёта</th>
+                                    <th>Статус акта</th>
                                     <th>Дата окончания</th>
                                     <th>Дата создания</th>
-                                    <th>Действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($contracts as $contract)
                                     <tr>
                                         <td>{{ $contract->id }}</td>
-                                        <td>{{ $contract->number }}</td>
+                                        <td>
+                                            <a href="{{ route('admin.contract.show', $contract->id) }}">{{ $contract->number }}</a>
+                                        </td>
+                                        <td>{{ $contract->signed_at ? $contract->signed_at->format('d.m.Y') : '—' }}</td>
                                         <td>{{ $contract->project->short_title ?? '—' }}</td>
                                         <td>{{ $contract->author->name }}</td>
-                                        <td>{{ $contract->course->title ?? '—' }}</td>
-                                        <td>{{ $contract->signed_at ? $contract->signed_at->format('d.m.Y') : '—' }}</td>
+                                        <td>
+                                            @if($contract->course?->short_title)
+                                                <span class="d-inline-flex align-items-center">
+                                                    {{ $contract->course->short_title }}
+                                                    <span
+                                                        class="course-short-title-hint ml-1"
+                                                        data-full-title="{{ $contract->course->title }}"
+                                                        aria-label="{{ $contract->course->title }}"
+                                                    >
+                                                        <i class="fas fa-question-circle text-muted" aria-hidden="true"></i>
+                                                    </span>
+                                                </span>
+                                            @else
+                                                {{ $contract->course->title ?? '—' }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @include('admin.contract._status_badge', ['status' => $contract->status])
+                                        </td>
+                                        <td>
+                                            @forelse($contract->assignments as $assignment)
+                                                <div class="mb-1">
+                                                    <span class="text-muted">№{{ $assignment->number }}:</span>
+                                                    @include('admin.contract._status_badge', ['status' => $assignment->status])
+                                                </div>
+                                            @empty
+                                                —
+                                            @endforelse
+                                        </td>
+                                        <td>
+                                            @forelse($contract->reports as $report)
+                                                <div class="mb-1">
+                                                    <span class="text-muted">№{{ $report->number }}:</span>
+                                                    @include('admin.contract._status_badge', ['status' => $report->status])
+                                                </div>
+                                            @empty
+                                                —
+                                            @endforelse
+                                        </td>
+                                        <td>
+                                            @forelse($contract->acts as $act)
+                                                <div class="mb-1">
+                                                    <span class="text-muted">№{{ $act->number }}:</span>
+                                                    @include('admin.contract._status_badge', ['status' => $act->status])
+                                                </div>
+                                            @empty
+                                                —
+                                            @endforelse
+                                        </td>
                                         <td>{{ $contract->ends_at ? $contract->ends_at->format('d.m.Y') : '—' }}</td>
                                         <td>{{ $contract->created_at }}</td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="{{ route('admin.contract.show', $contract->id) }}" title="Просмотр"><i class="far fa-eye"></i></a>&nbsp;&nbsp;
-                                                <a href="{{ route('admin.contract.edit', $contract->id) }}" class="text-success" title="Редактировать"><i class="fas fa-pen"></i></a>&nbsp;&nbsp;
-                                                <a href="{{ route('admin.contract.generate', $contract->id) }}" class="text-danger" title="Скачать PDF"><i class="fas fa-file-pdf"></i></a>&nbsp;&nbsp;
-                                                <form method="post" action="{{ route('admin.contract.destroy', $contract->id) }}" class="mb-0">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="bg-transparent border-0" type="submit" title="Удалить"><i class="fas fa-trash text-danger" role="button"></i></button>
-                                                </form>
-                                            </div>
-                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -123,6 +173,31 @@
         #contracts_table td {
             vertical-align: middle;
         }
+        #contracts_table td:nth-child(8),
+        #contracts_table td:nth-child(9),
+        #contracts_table td:nth-child(10) {
+            white-space: normal !important;
+            min-width: 10rem;
+        }
+        .course-short-title-hint {
+            display: inline-flex;
+            align-items: center;
+            cursor: help;
+        }
+        .course-short-title-popup {
+            position: fixed;
+            z-index: 2000;
+            max-width: 360px;
+            padding: 0.45rem 0.65rem;
+            border-radius: 0.35rem;
+            background: #343a40;
+            color: #fff;
+            font-size: 0.8rem;
+            line-height: 1.35;
+            white-space: normal;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
     </style>
     <script>
         let stateSaveTimer;
@@ -133,6 +208,7 @@
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
+                    status: $('#status').val(),
                     project: $('#project').val(),
                     author: $('#author').val(),
                     course: $('#course').val(),
@@ -144,18 +220,22 @@
                     return;
                 }
 
+                $('#status').val(data.custom_filters.status || '');
                 $('#project').val(data.custom_filters.project || '');
                 $('#author').val(data.custom_filters.author || '');
                 $('#course').val(data.custom_filters.course || '');
 
-                if (data.columns && data.columns[2] && data.columns[2].search) {
-                    data.columns[2].search.search = data.custom_filters.project || '';
-                }
                 if (data.columns && data.columns[3] && data.columns[3].search) {
-                    data.columns[3].search.search = data.custom_filters.author || '';
+                    data.columns[3].search.search = data.custom_filters.project || '';
                 }
                 if (data.columns && data.columns[4] && data.columns[4].search) {
-                    data.columns[4].search.search = data.custom_filters.course || '';
+                    data.columns[4].search.search = data.custom_filters.author || '';
+                }
+                if (data.columns && data.columns[5] && data.columns[5].search) {
+                    data.columns[5].search.search = data.custom_filters.course || '';
+                }
+                if (data.columns && data.columns[6] && data.columns[6].search) {
+                    data.columns[6].search.search = data.custom_filters.status || '';
                 }
             },
 
@@ -168,7 +248,7 @@
                         method: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",
-                            page_url: "admin.contract.index",
+                            page_url: "admin.contract.index.v8",
                             state: JSON.stringify(data)
                         },
                         success: function() {
@@ -181,7 +261,7 @@
             stateLoadCallback: function(settings, callback) {
                 $.ajax({
                     url: "{{ route('filters.get') }}",
-                    data: { page_url: "admin.contract.index" },
+                    data: { page_url: "admin.contract.index.v8" },
                     dataType: "json",
                     success: function(json) {
                         callback(json);
@@ -192,7 +272,7 @@
             order: [[0, 'desc']],
 
             columnDefs: [
-                { orderable: false, searchable: false, targets: 8 }
+                { visible: false, targets: [3, 10, 11] }
             ],
 
             "responsive": true,
@@ -230,21 +310,28 @@
 
         $('#project').on('change', function () {
             table
-                .column(2)
+                .column(3)
                 .search(this.value, {exact: true})
                 .draw();
         });
 
         $('#author').on('change', function () {
             table
-                .column(3)
+                .column(4)
                 .search(this.value, {exact: true})
                 .draw();
         });
 
         $('#course').on('change', function () {
             table
-                .column(4)
+                .column(5)
+                .search(this.value, {exact: true})
+                .draw();
+        });
+
+        $('#status').on('change', function () {
+            table
+                .column(6)
                 .search(this.value, {exact: true})
                 .draw();
         });
@@ -253,6 +340,7 @@
             table.state.clear();
 
             table.columns().visible(true);
+            table.columns([3, 10, 11]).visible(false);
 
             table
                 .search('')
@@ -263,9 +351,52 @@
                 .page(0)
                 .draw();
 
+            $('#status').val(null).trigger('change');
             $('#project').val(null).trigger('change');
             $('#author').val(null).trigger('change');
             $('#course').val(null).trigger('change');
         });
+
+        (function () {
+            var $popup = null;
+
+            function hidePopup() {
+                if ($popup) {
+                    $popup.remove();
+                    $popup = null;
+                }
+            }
+
+            $(document).on('mouseenter', '.course-short-title-hint', function () {
+                hidePopup();
+                var title = $(this).attr('data-full-title');
+                if (!title) {
+                    return;
+                }
+
+                var rect = this.getBoundingClientRect();
+                $popup = $('<div class="course-short-title-popup"></div>').text(title).appendTo('body');
+
+                var popupWidth = $popup.outerWidth();
+                var popupHeight = $popup.outerHeight();
+                var left = rect.left + (rect.width / 2) - (popupWidth / 2);
+                var top = rect.top - popupHeight - 8;
+
+                if (left < 8) {
+                    left = 8;
+                }
+                if (left + popupWidth > window.innerWidth - 8) {
+                    left = window.innerWidth - popupWidth - 8;
+                }
+                if (top < 8) {
+                    top = rect.bottom + 8;
+                }
+
+                $popup.css({ left: left + 'px', top: top + 'px' });
+            });
+
+            $(document).on('mouseleave', '.course-short-title-hint', hidePopup);
+            $(window).on('scroll.courseShortTitleHint resize.courseShortTitleHint', hidePopup);
+        })();
     </script>
 @endsection

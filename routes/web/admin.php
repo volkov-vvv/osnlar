@@ -8,8 +8,10 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommercialLidController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\ContactCenterController;
+use App\Http\Controllers\Admin\ContractActController;
 use App\Http\Controllers\Admin\ContractAssignmentController;
 use App\Http\Controllers\Admin\ContractController;
+use App\Http\Controllers\Admin\ContractReportController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\CourseRankingController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -105,6 +107,68 @@ Route::patch('assignment/{assignment}', [ContractAssignmentController::class, 'u
 Route::delete('assignment/{assignment}', [ContractAssignmentController::class, 'destroy'])
     ->whereNumber('assignment')
     ->name('assignment.destroy');
+
+Route::get('contract/{contract}/report/create', [ContractReportController::class, 'createForContract'])
+    ->whereNumber('contract')
+    ->name('contract.report.create');
+Route::post('contract/{contract}/report', [ContractReportController::class, 'storeForContract'])
+    ->whereNumber('contract')
+    ->name('contract.report.store');
+Route::get('assignment/{assignment}/report/create', [ContractReportController::class, 'createForAssignment'])
+    ->whereNumber('assignment')
+    ->name('assignment.report.create');
+Route::post('assignment/{assignment}/report', [ContractReportController::class, 'storeForAssignment'])
+    ->whereNumber('assignment')
+    ->name('assignment.report.store');
+Route::get('contract-report/{report}/generate', [ContractReportController::class, 'generate'])
+    ->whereNumber('report')
+    ->name('contract_report.generate');
+Route::get('contract-report/{report}/generate-docx', [ContractReportController::class, 'generateDocx'])
+    ->whereNumber('report')
+    ->name('contract_report.generateDocx');
+Route::get('contract-report/{report}', [ContractReportController::class, 'show'])
+    ->whereNumber('report')
+    ->name('contract_report.show');
+Route::get('contract-report/{report}/edit', [ContractReportController::class, 'edit'])
+    ->whereNumber('report')
+    ->name('contract_report.edit');
+Route::patch('contract-report/{report}', [ContractReportController::class, 'update'])
+    ->whereNumber('report')
+    ->name('contract_report.update');
+Route::delete('contract-report/{report}', [ContractReportController::class, 'destroy'])
+    ->whereNumber('report')
+    ->name('contract_report.destroy');
+
+Route::get('contract/{contract}/act/create', [ContractActController::class, 'createForContract'])
+    ->whereNumber('contract')
+    ->name('contract.act.create');
+Route::post('contract/{contract}/act', [ContractActController::class, 'storeForContract'])
+    ->whereNumber('contract')
+    ->name('contract.act.store');
+Route::get('assignment/{assignment}/act/create', [ContractActController::class, 'createForAssignment'])
+    ->whereNumber('assignment')
+    ->name('assignment.act.create');
+Route::post('assignment/{assignment}/act', [ContractActController::class, 'storeForAssignment'])
+    ->whereNumber('assignment')
+    ->name('assignment.act.store');
+Route::get('contract-act/{act}/generate', [ContractActController::class, 'generate'])
+    ->whereNumber('act')
+    ->name('contract_act.generate');
+Route::get('contract-act/{act}/generate-docx', [ContractActController::class, 'generateDocx'])
+    ->whereNumber('act')
+    ->name('contract_act.generateDocx');
+Route::get('contract-act/{act}', [ContractActController::class, 'show'])
+    ->whereNumber('act')
+    ->name('contract_act.show');
+Route::get('contract-act/{act}/edit', [ContractActController::class, 'edit'])
+    ->whereNumber('act')
+    ->name('contract_act.edit');
+Route::patch('contract-act/{act}', [ContractActController::class, 'update'])
+    ->whereNumber('act')
+    ->name('contract_act.update');
+Route::delete('contract-act/{act}', [ContractActController::class, 'destroy'])
+    ->whereNumber('act')
+    ->name('contract_act.destroy');
 
 Route::resource('agent', AgentController::class)->whereNumber('agent');
 Route::resource('leveledu', LeveleduController::class)->whereNumber('leveledu');

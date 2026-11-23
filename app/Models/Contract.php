@@ -42,6 +42,16 @@ class Contract extends Model
         return $this->hasMany(ContractAssignment::class)->orderBy('number');
     }
 
+    public function reports(): HasMany
+    {
+        return $this->hasMany(ContractReport::class)->orderBy('number');
+    }
+
+    public function acts(): HasMany
+    {
+        return $this->hasMany(ContractAct::class)->orderBy('number');
+    }
+
     public function signedAtLabel(): string
     {
         if (! $this->signed_at) {
@@ -97,5 +107,33 @@ class Contract extends Model
     public function getTemplateViewAttribute(): ?string
     {
         return config('contracts.templates.'.$this->template.'.view');
+    }
+
+    public function statusLabel(): string
+    {
+        return ContractWorkflowStatus::label($this->status);
+    }
+
+    public function statusBadgeClass(): string
+    {
+        return ContractWorkflowStatus::badgeClass($this->status);
+    }
+
+    /**
+     * Статусы заданий для списка: «№1 Проект; №2 Подписан».
+     */
+    public function assignmentStatusesLabel(): string
+    {
+        $assignments = $this->relationLoaded('assignments')
+            ? $this->assignments
+            : $this->assignments()->get();
+
+        if ($assignments->isEmpty()) {
+            return '—';
+        }
+
+        return $assignments
+            ->map(fn (ContractAssignment $assignment) => '№'.$assignment->number.' '.$assignment->statusLabel())
+            ->implode('; ');
     }
 }

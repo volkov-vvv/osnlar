@@ -115,6 +115,8 @@
     @enderror
 </div>
 
+@include('admin.contract._status_field', ['selectedStatus' => $assignment?->status])
+
 <div class="mb-3">
     <label for="hourly_rate">Стоимость академического часа, руб.</label>
     <input

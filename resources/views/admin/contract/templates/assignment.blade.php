@@ -8,7 +8,7 @@
         $authorPseudonym = $author->name ?: $authorName;
         $courseTitle = $course->title ?? '—';
         $courseHours = $course?->studyHoursFullLabel() ?? '—';
-        $studyForm = $course?->studyFormLabel() ?? '____________';
+        $studyForm = $course?->studyFormGenitiveLabel() ?? '____________';
         $programDative = match ($course->type ?? null) {
             'professional_retraining' => 'дополнительной профессиональной программе профессиональной переподготовки',
             'advanced_training' => 'дополнительной профессиональной программе повышения квалификации',
@@ -19,8 +19,8 @@
         $rateWords = $assignment->hourlyRateInWords();
     @endphp
 
-    <h1>ЗАДАНИЕ №{{ $assignment->number }}</h1>
-    <p class="appendix-subtitle">
+    <h1 class="assignment-title">ЗАДАНИЕ №{{ $assignment->number }}</h1>
+    <p class="appendix-subtitle assignment-subtitle">
         к Договору № {{ $contract->number ?: '________' }}
         от {{ $contract->signedAtLabel() }}
     </p>
@@ -34,7 +34,7 @@
 
     <p>
         Общество с ограниченной ответственностью «Центр повышения квалификации и профессиональной подготовки «Основание»,
-        именуемое в дальнейшем «Заказчик», в лице Генерального директора Скуратова Александра Ивановича, действующего
+        именуемое в дальнейшем «Заказчик», в лице Генерального директора <strong>Скуратова Александра Ивановича</strong>, действующего
         на основании Устава, с одной стороны и гражданин(ка) РФ <strong>{{ $authorName }}</strong>, зарегистрирован(а)
         плательщиком налога на профессиональный доход {{ $contract->napRegisteredAtLabel() }}, именуемая(ый) в дальнейшем
         «Исполнитель», с другой стороны, совместно именуемые «Стороны», составили настоящее Задание к Договору
@@ -59,9 +59,7 @@
          <strong>Срок оказания услуг:</strong> с {{ $assignment->startsAtShortLabel() }} по {{ $assignment->endsAtShortLabel() }}.
     </p>
 
-    <p><br></p>
-
-    <table class="signatures appendix-signatures appendix-signatures-final">
+    <table class="signatures appendix-signatures appendix-signatures-final assignment-signatures">
         <tr>
             <td>
                 <strong>Заказчик</strong><br>

@@ -5,7 +5,7 @@
     $contractDate = $contract->signedAtLabel();
     $courseTitle = $course->title ?? '—';
     $courseHours = $course?->studyHoursFullLabel() ?? '—';
-    $studyForm = $course?->studyFormLabel() ?? '____________';
+    $studyForm = $course?->studyFormGenitiveLabel() ?? '____________';
     $programDative = match ($course->type ?? null) {
         'professional_retraining' => 'дополнительной профессиональной программе профессиональной переподготовки',
         'advanced_training' => 'дополнительной профессиональной программе повышения квалификации',
