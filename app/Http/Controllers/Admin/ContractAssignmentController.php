@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesScannedPdf;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\ContractAssignment;
 use App\Models\ContractWorkflowStatus;
 use App\Models\StudyGroup;
+use App\Service\ContractActivityLogger;
 use Barryvdh\DomPDF\PDF as DomPdfWrapper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,6 +16,8 @@ use Illuminate\Validation\Rule;
 
 class ContractAssignmentController extends Controller
 {
+    use ManagesScannedPdf;
+
     public function create(Contract $contract)
     {
         $contract->loadMissing(['course', 'author']);
@@ -22,7 +26,7 @@ class ContractAssignmentController extends Controller
         return view('admin.contract.assignment.create', compact('contract', 'studyGroups'));
     }
 
-    public function store(Request $request, Contract $contract)
+    public function store(Request $request, Contract $contract, ContractActivityLogger $activityLogger)
     {
         $data = $this->validatedAssignmentData($request, $contract);
 
@@ -39,6 +43,7 @@ class ContractAssignmentController extends Controller
             ...$data,
             'number' => $nextNumber,
         ]);
+        $activityLogger->created($assignment, $contract);
 
         return redirect()
             ->route('admin.assignment.show', $assignment)
@@ -47,7 +52,15 @@ class ContractAssignmentController extends Controller
 
     public function show(ContractAssignment $assignment)
     {
-        $assignment->load(['contract.author', 'contract.course', 'studyGroup', 'report', 'acts']);
+        $assignment->load([
+            'contract.author',
+            'contract.course',
+            'studyGroup',
+            'report',
+            'perStudentReport',
+            'acts',
+            'perStudentAct',
+        ]);
 
         $breadcrumbs = [
             ['title' => 'Обучение', 'url' => null],
@@ -70,24 +83,56 @@ class ContractAssignmentController extends Controller
         return view('admin.contract.assignment.edit', compact('assignment', 'studyGroups'));
     }
 
-    public function update(Request $request, ContractAssignment $assignment)
+    public function update(Request $request, ContractAssignment $assignment, ContractActivityLogger $activityLogger)
     {
         $data = $this->validatedAssignmentData($request, $assignment->contract);
+        $before = $activityLogger->snapshot($assignment);
         $assignment->update($data);
+        $activityLogger->updated(
+            $assignment,
+            $before,
+            $activityLogger->snapshot($assignment->fresh()),
+            $assignment->contract
+        );
 
         return redirect()
             ->route('admin.assignment.show', $assignment)
             ->with('success', 'Задание обновлено');
     }
 
-    public function destroy(ContractAssignment $assignment)
+    public function destroy(ContractAssignment $assignment, ContractActivityLogger $activityLogger)
     {
         $contract = $assignment->contract;
+        $activityLogger->deleted($assignment, $contract);
         $assignment->delete();
 
         return redirect()
             ->route('admin.contract.show', $contract)
             ->with('success', 'Задание удалено');
+    }
+
+    public function uploadScan(Request $request, ContractAssignment $assignment)
+    {
+        return $this->uploadScannedPdf(
+            $request,
+            $assignment,
+            'contracts/scanned/assignments',
+            'admin.assignment.show',
+            $assignment
+        );
+    }
+
+    public function downloadScan(ContractAssignment $assignment)
+    {
+        return $this->downloadScannedPdf(
+            $assignment,
+            $assignment->scannedPdfDownloadName('skan-zadanie-'.$assignment->number)
+        );
+    }
+
+    public function destroyScan(ContractAssignment $assignment)
+    {
+        return $this->destroyScannedPdf($assignment, 'admin.assignment.show', $assignment);
     }
 
     public function generate(ContractAssignment $assignment)
@@ -144,7 +189,10 @@ class ContractAssignmentController extends Controller
             'notebook_url' => ['nullable', 'string', 'max:2000'],
             'custom_work_type' => ['nullable', 'string'],
             'status' => ['required', 'string', Rule::in(ContractWorkflowStatus::keys())],
-            'hourly_rate' => ['required', 'numeric', 'min:0'],
+            'payment_type' => ['required', 'string', Rule::in(ContractAssignment::basePaymentTypeKeys())],
+            'hourly_rate' => ['nullable', 'numeric', 'min:0'],
+            'per_student_enabled' => ['sometimes', 'boolean'],
+            'per_student_amount' => ['nullable', 'numeric', 'min:0'],
             'issued_at' => ['nullable', 'date'],
             'starts_at' => ['required', 'date'],
             'ends_at' => ['required', 'date', 'after_or_equal:starts_at'],
@@ -157,9 +205,14 @@ class ContractAssignmentController extends Controller
             'custom_work_type.required' => 'Заполните произвольный вид работ',
             'status.required' => 'Выберите статус',
             'status.in' => 'Выбран недопустимый статус',
-            'hourly_rate.required' => 'Укажите стоимость часа',
-            'hourly_rate.numeric' => 'Стоимость часа должна быть числом',
-            'hourly_rate.min' => 'Стоимость часа не может быть отрицательной',
+            'payment_type.required' => 'Выберите основную оплату',
+            'payment_type.in' => 'Выбран недопустимый вид основной оплаты',
+            'hourly_rate.required' => 'Укажите сумму основной оплаты',
+            'hourly_rate.numeric' => 'Сумма основной оплаты должна быть числом',
+            'hourly_rate.min' => 'Сумма основной оплаты не может быть отрицательной',
+            'per_student_amount.required' => 'Укажите вознаграждение за слушателя',
+            'per_student_amount.numeric' => 'Вознаграждение за слушателя должно быть числом',
+            'per_student_amount.min' => 'Вознаграждение за слушателя не может быть отрицательным',
             'issued_at.date' => 'Укажите корректную дату задания',
             'starts_at.required' => 'Укажите дату начала оказания услуг',
             'starts_at.date' => 'Укажите корректную дату начала оказания услуг',
@@ -167,6 +220,38 @@ class ContractAssignmentController extends Controller
             'ends_at.date' => 'Укажите корректную дату окончания оказания услуг',
             'ends_at.after_or_equal' => 'Дата окончания не может быть раньше даты начала',
         ]);
+
+        $data['per_student_enabled'] = $request->boolean('per_student_enabled');
+        $hasBasePayment = in_array($data['payment_type'], [
+            ContractAssignment::PAYMENT_HOURLY,
+            ContractAssignment::PAYMENT_FIXED,
+        ], true);
+
+        if (! $hasBasePayment && ! $data['per_student_enabled']) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'payment_type' => 'Выберите основную оплату или отметьте «За успешно обученного»',
+            ]);
+        }
+
+        if ($hasBasePayment && ($data['hourly_rate'] === null || $data['hourly_rate'] === '')) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'hourly_rate' => 'Укажите сумму основной оплаты',
+            ]);
+        }
+
+        if ($data['per_student_enabled'] && ($data['per_student_amount'] === null || $data['per_student_amount'] === '')) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'per_student_amount' => 'Укажите вознаграждение за слушателя',
+            ]);
+        }
+
+        if (! $hasBasePayment) {
+            $data['hourly_rate'] = 0;
+        }
+
+        if (! $data['per_student_enabled']) {
+            $data['per_student_amount'] = null;
+        }
 
         $codes = array_values(array_unique(array_map('intval', $data['work_type_codes'])));
         sort($codes);

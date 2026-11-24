@@ -27,8 +27,12 @@
                         <dd>{{ $assignment->studyGroupLabel() }}</dd>
                     </div>
                     <div class="contract-meta-grid__item">
-                        <dt>Ставка</dt>
-                        <dd>{{ $assignment->hourlyRateFormatted() }} руб./час</dd>
+                        <dt>Вид оплаты</dt>
+                        <dd>{{ $assignment->paymentTypeLabel() }}</dd>
+                    </div>
+                    <div class="contract-meta-grid__item">
+                        <dt>Сумма</dt>
+                        <dd>{{ $assignment->paymentAmountShortLabel() }}</dd>
                     </div>
                     <div class="contract-meta-grid__item">
                         <dt>Дата задания</dt>
@@ -54,6 +58,12 @@
                 <div class="contract-actions">
                     <div class="contract-actions__group">
                         <a class="btn btn-primary" href="{{ route('admin.assignment.edit', $assignment) }}">Редактировать</a>
+                        @include('admin.contract._scanned_pdf', [
+                            'model' => $assignment,
+                            'uploadUrl' => route('admin.assignment.uploadScan', $assignment),
+                            'downloadUrl' => route('admin.assignment.downloadScan', $assignment),
+                            'destroyUrl' => route('admin.assignment.destroyScan', $assignment),
+                        ])
                         <a class="btn btn-outline-danger" href="{{ route('admin.assignment.generate', $assignment) }}">
                             <i class="fas fa-file-pdf mr-1"></i> PDF
                         </a>
@@ -81,73 +91,153 @@
                     </div>
                 </div>
                 <div class="contract-assignment-block__body">
-                    <div class="contract-nested-row">
-                        <span class="contract-nested-row__label">Отчёт</span>
-                        <div class="contract-nested-row__main">
+                    @if($assignment->hasBasePayment())
+                        <div class="contract-nested-row">
+                            <span class="contract-nested-row__label">Отчёт</span>
+                            <div class="contract-nested-row__main">
+                                @if($assignment->report)
+                                    <a href="{{ route('admin.contract_report.show', $assignment->report) }}">
+                                        №{{ $assignment->report->displayNumber() }}
+                                    </a>
+                                    @include('admin.contract._status_badge', ['status' => $assignment->report->status])
+                                    <span class="contract-nested-row__meta">
+                                        {{ $assignment->report->lessonHoursFormatted() }} акад. ч.
+                                    </span>
+                                @else
+                                    <span class="text-muted">Нет отчёта</span>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.report.create', $assignment) }}">
+                                        Создать отчёт
+                                    </a>
+                                @endif
+                            </div>
                             @if($assignment->report)
-                                <a href="{{ route('admin.contract_report.show', $assignment->report) }}">
-                                    №{{ $assignment->report->number }}
-                                </a>
-                                @include('admin.contract._status_badge', ['status' => $assignment->report->status])
-                                <span class="contract-nested-row__meta">
-                                    {{ $assignment->report->lessonHoursFormatted() }} акад. ч.
-                                </span>
-                            @else
-                                <span class="text-muted">Нет отчёта</span>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.report.create', $assignment) }}">
-                                    Создать отчёт
-                                </a>
+                                <div class="contract-nested-row__actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.contract_report.show', $assignment->report) }}" title="Просмотр" aria-label="Просмотр">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_report.edit', $assignment->report) }}" title="Редактировать" aria-label="Редактировать">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger" href="{{ route('admin.contract_report.generate', $assignment->report) }}">PDF</a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_report.generateDocx', $assignment->report) }}">DOCX</a>
+                                </div>
                             @endif
                         </div>
-                        @if($assignment->report)
-                            <div class="contract-nested-row__actions">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.contract_report.show', $assignment->report) }}">Просмотр</a>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_report.edit', $assignment->report) }}">Редактировать</a>
-                                <a class="btn btn-sm btn-outline-danger" href="{{ route('admin.contract_report.generate', $assignment->report) }}">PDF</a>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_report.generateDocx', $assignment->report) }}">DOCX</a>
+
+                        @forelse($assignment->acts as $act)
+                            <div class="contract-nested-row">
+                                <span class="contract-nested-row__label">Акт</span>
+                                <div class="contract-nested-row__main">
+                                    <a href="{{ route('admin.contract_act.show', $act) }}">№{{ $act->displayNumber() }}</a>
+                                    @include('admin.contract._status_badge', ['status' => $act->status])
+                                    <span class="contract-nested-row__meta">
+                                        {{ $act->issued_at ? $act->issued_at->format('d.m.Y') : '—' }}
+                                        ·
+                                        {{ $act->amountFormatted() }} руб.
+                                    </span>
+                                </div>
+                                <div class="contract-nested-row__actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.contract_act.show', $act) }}" title="Просмотр" aria-label="Просмотр">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_act.edit', $act) }}" title="Редактировать" aria-label="Редактировать">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger" href="{{ route('admin.contract_act.generate', $act) }}">PDF</a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_act.generateDocx', $act) }}">DOCX</a>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="contract-nested-row">
+                                <span class="contract-nested-row__label">Акт</span>
+                                <div class="contract-nested-row__main">
+                                    <span class="text-muted">Нет актов</span>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.act.create', $assignment) }}">
+                                        Создать акт
+                                    </a>
+                                </div>
+                            </div>
+                        @endforelse
+
+                        @if($assignment->acts->isNotEmpty())
+                            <div class="contract-nested-row">
+                                <span class="contract-nested-row__label"></span>
+                                <div class="contract-nested-row__main">
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.act.create', $assignment) }}">
+                                        Создать акт
+                                    </a>
+                                </div>
                             </div>
                         @endif
-                    </div>
+                    @endif
 
-                    @forelse($assignment->acts as $act)
+                    @if($assignment->isPaymentPerStudent())
                         <div class="contract-nested-row">
-                            <span class="contract-nested-row__label">Акт</span>
+                            <span class="contract-nested-row__label">Отчёт {{ $assignment->number }}.2</span>
                             <div class="contract-nested-row__main">
-                                <a href="{{ route('admin.contract_act.show', $act) }}">№{{ $act->number }}</a>
-                                @include('admin.contract._status_badge', ['status' => $act->status])
-                                <span class="contract-nested-row__meta">
-                                    {{ $act->issued_at ? $act->issued_at->format('d.m.Y') : '—' }}
-                                    ·
-                                    {{ $act->amountFormatted() }} руб.
-                                </span>
+                                @if($assignment->perStudentReport)
+                                    <a href="{{ route('admin.contract_report.show', $assignment->perStudentReport) }}">
+                                        №{{ $assignment->perStudentReport->displayNumber() }}
+                                    </a>
+                                    @include('admin.contract._status_badge', ['status' => $assignment->perStudentReport->status])
+                                    <span class="contract-nested-row__meta">
+                                        {{ $assignment->perStudentReport->successfulStudentsCount() }} слушат.
+                                    </span>
+                                @else
+                                    <span class="text-muted">Нет отчёта N.2</span>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.report.create', ['assignment' => $assignment, 'kind' => 'per_student']) }}">
+                                        Создать отчёт {{ $assignment->number }}.2
+                                    </a>
+                                @endif
                             </div>
-                            <div class="contract-nested-row__actions">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.contract_act.show', $act) }}">Просмотр</a>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_act.edit', $act) }}">Редактировать</a>
-                                <a class="btn btn-sm btn-outline-danger" href="{{ route('admin.contract_act.generate', $act) }}">PDF</a>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_act.generateDocx', $act) }}">DOCX</a>
-                            </div>
+                            @if($assignment->perStudentReport)
+                                <div class="contract-nested-row__actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.contract_report.show', $assignment->perStudentReport) }}" title="Просмотр" aria-label="Просмотр">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_report.edit', $assignment->perStudentReport) }}" title="Редактировать" aria-label="Редактировать">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger" href="{{ route('admin.contract_report.generate', $assignment->perStudentReport) }}">PDF</a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_report.generateDocx', $assignment->perStudentReport) }}">DOCX</a>
+                                </div>
+                            @endif
                         </div>
-                    @empty
-                        <div class="contract-nested-row">
-                            <span class="contract-nested-row__label">Акт</span>
-                            <div class="contract-nested-row__main">
-                                <span class="text-muted">Нет актов</span>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.act.create', $assignment) }}">
-                                    Создать акт
-                                </a>
-                            </div>
-                        </div>
-                    @endforelse
 
-                    @if($assignment->acts->isNotEmpty())
                         <div class="contract-nested-row">
-                            <span class="contract-nested-row__label"></span>
+                            <span class="contract-nested-row__label">Акт {{ $assignment->number }}.2</span>
                             <div class="contract-nested-row__main">
-                                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.act.create', $assignment) }}">
-                                    Создать акт
-                                </a>
+                                @if($assignment->perStudentAct)
+                                    <a href="{{ route('admin.contract_act.show', $assignment->perStudentAct) }}">
+                                        №{{ $assignment->perStudentAct->displayNumber() }}
+                                    </a>
+                                    @include('admin.contract._status_badge', ['status' => $assignment->perStudentAct->status])
+                                    <span class="contract-nested-row__meta">
+                                        {{ $assignment->perStudentAct->issued_at ? $assignment->perStudentAct->issued_at->format('d.m.Y') : '—' }}
+                                        ·
+                                        {{ $assignment->perStudentAct->amountFormatted() }} руб.
+                                    </span>
+                                @elseif($assignment->perStudentReport)
+                                    <span class="text-muted">Нет акта N.2</span>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.assignment.act.create', ['assignment' => $assignment, 'kind' => 'per_student']) }}">
+                                        Создать акт {{ $assignment->number }}.2
+                                    </a>
+                                @else
+                                    <span class="text-muted">Сначала создайте отчёт N.2</span>
+                                @endif
                             </div>
+                            @if($assignment->perStudentAct)
+                                <div class="contract-nested-row__actions">
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.contract_act.show', $assignment->perStudentAct) }}" title="Просмотр" aria-label="Просмотр">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_act.edit', $assignment->perStudentAct) }}" title="Редактировать" aria-label="Редактировать">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger" href="{{ route('admin.contract_act.generate', $assignment->perStudentAct) }}">PDF</a>
+                                    <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.contract_act.generateDocx', $assignment->perStudentAct) }}">DOCX</a>
+                                </div>
+                            @endif
                         </div>
                     @endif
                 </div>

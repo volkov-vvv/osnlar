@@ -5,8 +5,8 @@
         ->map(fn ($code) => (int) $code)
         ->all();
     $presetLabels = [
-        \App\Models\ContractAssignment::WORK_TYPE_LECTURES => 'Проведение лекционных и практических занятий по программе обучения (ссылка на программу) в соответствии с утвержденным расписанием (ссылка на расписание).',
-        \App\Models\ContractAssignment::WORK_TYPE_NOTEBOOK => 'Проверка работ слушателей в рабочей тетради, оформленной по установленному шаблону (ссылка на шаблон тетради).',
+        \App\Models\ContractAssignment::WORK_TYPE_LECTURES => 'Проведение лекционных и практических занятий по программе обучения в соответствии с утвержденным расписанием.',
+        \App\Models\ContractAssignment::WORK_TYPE_NOTEBOOK => 'Проверка работ слушателей в рабочей тетради, оформленной по установленному шаблону.',
         \App\Models\ContractAssignment::WORK_TYPE_CONSULTING => 'Консультативная поддержка слушателей в процессе обучения (ответы на вопросы, возникающие при освоении материала, и разъяснение тем).',
         \App\Models\ContractAssignment::WORK_TYPE_ATTESTATION => 'Проведение итоговой аттестации слушателей по завершении программы обучения.',
         \App\Models\ContractAssignment::WORK_TYPE_CUSTOM => 'Произвольный вид работ (свой текст)',
@@ -117,8 +117,37 @@
 
 @include('admin.contract._status_field', ['selectedStatus' => $assignment?->status])
 
+@php
+    $selectedPaymentType = old(
+        'payment_type',
+        $assignment?->payment_type ?? \App\Models\ContractAssignment::PAYMENT_HOURLY
+    );
+    $perStudentEnabled = (bool) old(
+        'per_student_enabled',
+        $assignment?->per_student_enabled ?? false
+    );
+    $baseAmountLabels = [
+        \App\Models\ContractAssignment::PAYMENT_HOURLY => 'Стоимость академического часа, руб.',
+        \App\Models\ContractAssignment::PAYMENT_FIXED => 'Стоимость услуг, руб.',
+    ];
+@endphp
+
 <div class="mb-3">
-    <label for="hourly_rate">Стоимость академического часа, руб.</label>
+    <label for="payment_type">Основная оплата</label>
+    <select name="payment_type" id="payment_type" class="form-control" required>
+        @foreach(\App\Models\ContractAssignment::basePaymentTypeLabels() as $value => $label)
+            <option value="{{ $value }}" {{ (string) $selectedPaymentType === (string) $value ? 'selected' : '' }}>
+                {{ $label }}
+            </option>
+        @endforeach
+    </select>
+    @error('payment_type')
+        <div class="text-danger mt-1">{{ $message }}</div>
+    @enderror
+</div>
+
+<div class="mb-3" id="base_payment_amount_block" style="{{ $selectedPaymentType === \App\Models\ContractAssignment::PAYMENT_NONE ? 'display:none;' : '' }}">
+    <label for="hourly_rate" id="hourly_rate_label">{{ $baseAmountLabels[$selectedPaymentType] ?? $baseAmountLabels[\App\Models\ContractAssignment::PAYMENT_HOURLY] }}</label>
     <input
         type="number"
         step="0.01"
@@ -127,9 +156,41 @@
         id="hourly_rate"
         class="form-control"
         value="{{ old('hourly_rate', $assignment?->hourly_rate) }}"
-        required
     >
     @error('hourly_rate')
+        <div class="text-danger mt-1">{{ $message }}</div>
+    @enderror
+</div>
+
+<div class="mb-3">
+    <div class="custom-control custom-checkbox">
+        <input
+            type="checkbox"
+            class="custom-control-input"
+            id="per_student_enabled"
+            name="per_student_enabled"
+            value="1"
+            {{ $perStudentEnabled ? 'checked' : '' }}
+        >
+        <label class="custom-control-label" for="per_student_enabled">За успешно обученного</label>
+    </div>
+    @error('per_student_enabled')
+        <div class="text-danger mt-1">{{ $message }}</div>
+    @enderror
+</div>
+
+<div class="mb-3" id="per_student_amount_block" style="{{ $perStudentEnabled ? '' : 'display:none;' }}">
+    <label for="per_student_amount">Вознаграждение за слушателя, руб.</label>
+    <input
+        type="number"
+        step="0.01"
+        min="0"
+        name="per_student_amount"
+        id="per_student_amount"
+        class="form-control"
+        value="{{ old('per_student_amount', $assignment?->per_student_amount) }}"
+    >
+    @error('per_student_amount')
         <div class="text-danger mt-1">{{ $message }}</div>
     @enderror
 </div>
@@ -193,5 +254,35 @@
         });
 
         syncWorkTypeExtras();
+
+        var baseAmountLabels = @json($baseAmountLabels);
+        var paymentTypeSelect = document.getElementById('payment_type');
+        var hourlyRateLabel = document.getElementById('hourly_rate_label');
+        var baseAmountBlock = document.getElementById('base_payment_amount_block');
+        var perStudentCheckbox = document.getElementById('per_student_enabled');
+        var perStudentAmountBlock = document.getElementById('per_student_amount_block');
+
+        function syncPaymentFields() {
+            var type = paymentTypeSelect ? paymentTypeSelect.value : 'hourly';
+            var hasBase = type !== 'none';
+
+            if (baseAmountBlock) {
+                baseAmountBlock.style.display = hasBase ? '' : 'none';
+            }
+            if (hourlyRateLabel && hasBase) {
+                hourlyRateLabel.textContent = baseAmountLabels[type] || baseAmountLabels.hourly;
+            }
+            if (perStudentAmountBlock && perStudentCheckbox) {
+                perStudentAmountBlock.style.display = perStudentCheckbox.checked ? '' : 'none';
+            }
+        }
+
+        if (paymentTypeSelect) {
+            paymentTypeSelect.addEventListener('change', syncPaymentFields);
+        }
+        if (perStudentCheckbox) {
+            perStudentCheckbox.addEventListener('change', syncPaymentFields);
+        }
+        syncPaymentFields();
     })();
 </script>

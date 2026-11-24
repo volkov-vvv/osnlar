@@ -8,7 +8,7 @@
 
             <div class="contract-show-header">
                 <div class="contract-show-header__title-row">
-                    <h1 class="contract-show-header__title">Отчёт №{{ $report->number }}</h1>
+                    <h1 class="contract-show-header__title">Отчёт №{{ $report->displayNumber() }}</h1>
                     @include('admin.contract._status_badge', ['status' => $report->status])
                 </div>
 
@@ -20,6 +20,9 @@
                     <a href="{{ route('admin.contract.show', $report->contract) }}">№{{ $report->contract->number }}</a>
                     ·
                     {{ $report->contract->author->full_name ?: $report->contract->author->name }}
+                    @if($report->isPerStudent())
+                        · за успешно обученных
+                    @endif
                 </div>
 
                 <dl class="contract-meta-grid">
@@ -39,15 +42,35 @@
                             {{ $report->ends_at ? $report->ends_at->format('d.m.Y') : '—' }}
                         </dd>
                     </div>
-                    <div class="contract-meta-grid__item">
-                        <dt>Акад. часы</dt>
-                        <dd>{{ $report->lessonHoursFormatted() }}</dd>
-                    </div>
+                    @if($report->isPerStudent())
+                        <div class="contract-meta-grid__item">
+                            <dt>Слушатели</dt>
+                            <dd>
+                                {{ $report->successfulStudentsCount() }} чел.
+                                @if($report->successfulStudentsList())
+                                    <div class="mt-1 text-muted" style="font-weight: normal;">
+                                        {{ implode(', ', $report->successfulStudentsList()) }}
+                                    </div>
+                                @endif
+                            </dd>
+                        </div>
+                    @else
+                        <div class="contract-meta-grid__item">
+                            <dt>Акад. часы</dt>
+                            <dd>{{ $report->lessonHoursFormatted() }}</dd>
+                        </div>
+                    @endif
                 </dl>
 
                 <div class="contract-actions">
                     <div class="contract-actions__group">
                         <a class="btn btn-primary" href="{{ route('admin.contract_report.edit', $report) }}">Редактировать</a>
+                        @include('admin.contract._scanned_pdf', [
+                            'model' => $report,
+                            'uploadUrl' => route('admin.contract_report.uploadScan', $report),
+                            'downloadUrl' => route('admin.contract_report.downloadScan', $report),
+                            'destroyUrl' => route('admin.contract_report.destroyScan', $report),
+                        ])
                         <a class="btn btn-outline-danger" href="{{ route('admin.contract_report.generate', $report) }}">
                             <i class="fas fa-file-pdf mr-1"></i> PDF
                         </a>

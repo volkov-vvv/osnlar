@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Редактирование отчёта №{{ $report->number }}</h1>
+                    <h1>Редактирование отчёта №{{ $report->displayNumber() }}</h1>
                 </div>
             </div>
         </div>
@@ -25,6 +25,7 @@
                         'report' => $report,
                         'assignment' => $report->assignment,
                         'fixedAssignment' => true,
+                        'kind' => $report->kind,
                     ])
 
                     <button type="submit" class="btn btn-primary">Сохранить</button>

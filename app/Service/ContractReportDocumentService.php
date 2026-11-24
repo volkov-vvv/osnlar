@@ -39,15 +39,27 @@ class ContractReportDocumentService
             default => 'программе',
         };
 
-        $lessonUrl = $report->lesson_url ?: '____';
-        $lessonHours = $report->lesson_hours !== null ? $report->lessonHoursFormatted() : '____';
         $workTypes = trim((string) $assignment->work_types);
         if ($workTypes === '') {
             $workTypes = '—';
         }
 
+        $isPerStudent = $report->isPerStudent();
+        if ($isPerStudent) {
+            $students = $report->successfulStudentsList();
+            $lines = [];
+            foreach ($students as $index => $name) {
+                $lines[] = ($index + 1).'. '.$name;
+            }
+            $lessonUrl = $lines !== [] ? implode("\n", $lines) : '—';
+            $lessonHours = (string) $report->successfulStudentsCount();
+        } else {
+            $lessonUrl = $report->lesson_url ?: '____';
+            $lessonHours = $report->lesson_hours !== null ? $report->lessonHoursFormatted() : '____';
+        }
+
         $replacements = [
-            '{{REPORT_NUMBER}}' => $this->escapeXml((string) $report->number),
+            '{{REPORT_NUMBER}}' => $this->escapeXml($report->displayNumber()),
             '{{ASSIGNMENT_NUMBER}}' => $this->escapeXml((string) $assignment->number),
             '{{ASSIGNMENT_DATE}}' => $this->escapeXml($assignment->issuedAtLabel()),
             '{{CONTRACT_NUMBER}}' => $this->escapeXml((string) ($contract->number ?: '________')),
@@ -64,18 +76,18 @@ class ContractReportDocumentService
             '{{STUDY_GROUP}}' => $this->escapeXml($assignment->studyGroupLabel()),
             '{{STUDY_FORM}}' => $this->escapeXml($studyForm),
             '{{WORK_TYPES}}' => $this->escapeXmlMultiline($workTypes),
-            '{{LESSON_URL}}' => $this->escapeXml($lessonUrl),
+            '{{LESSON_URL}}' => $this->escapeXmlMultiline($lessonUrl),
             '{{LESSON_HOURS}}' => $this->escapeXml($lessonHours),
         ];
 
-        $filename = 'otchet-'.$report->number.'-dogovor-'.Str::slug((string) $contract->number);
+        $filename = 'otchet-'.Str::slug($report->displayNumber()).'-dogovor-'.Str::slug((string) $contract->number);
         $nameSlug = Str::slug($authorName);
         if ($nameSlug !== '') {
             $filename .= '-'.$nameSlug;
         }
 
         return [
-            'binary' => $this->fillTemplate($replacements),
+            'binary' => $this->fillTemplate($replacements, $isPerStudent),
             'filename' => $filename.'.docx',
         ];
     }
@@ -83,7 +95,7 @@ class ContractReportDocumentService
     /**
      * @param  array<string, string>  $replacements
      */
-    protected function fillTemplate(array $replacements): string
+    protected function fillTemplate(array $replacements, bool $isPerStudent = false): string
     {
         $templatePath = resource_path(self::TEMPLATE_RELATIVE_PATH);
         if (! is_file($templatePath)) {
@@ -113,6 +125,20 @@ class ContractReportDocumentService
             $zip->close();
             @unlink($workingPath);
             throw new RuntimeException('Повреждён шаблон отчёта');
+        }
+
+        if ($isPerStudent) {
+            $documentXml = str_replace(
+                [
+                    'Ссылка на проведенное занятие',
+                    'Количество проведенных акад. часов',
+                ],
+                [
+                    'Успешно завершившие обучение (Фамилия И.О.)',
+                    'Количество слушателей',
+                ],
+                $documentXml
+            );
         }
 
         $filledXml = strtr($documentXml, $replacements);

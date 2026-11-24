@@ -2,54 +2,117 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesScannedPdf;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\ContractAct;
 use App\Models\ContractAssignment;
 use App\Models\ContractWorkflowStatus;
 use App\Service\ContractActDocumentService;
+use App\Service\ContractActivityLogger;
 use Barryvdh\DomPDF\PDF as DomPdfWrapper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ContractActController extends Controller
 {
+    use ManagesScannedPdf;
+
     public function createForContract(Contract $contract, Request $request)
     {
-        $contract->loadMissing(['author', 'course', 'assignments.report', 'assignments.studyGroup']);
+        $kind = $this->resolveKind($request);
+        $contract->loadMissing([
+            'author',
+            'course',
+            'assignments.report',
+            'assignments.perStudentReport',
+            'assignments.perStudentAct',
+            'assignments.studyGroup',
+        ]);
 
-        if ($contract->assignments->isEmpty()) {
+        $assignments = $contract->assignments->filter(function (ContractAssignment $a) use ($kind) {
+            if ($kind === ContractAct::KIND_PER_STUDENT) {
+                return $a->isPaymentPerStudent() && $a->perStudentReport && ! $a->perStudentAct;
+            }
+
+            return $a->hasBasePayment();
+        });
+
+        if ($assignments->isEmpty()) {
             return redirect()
                 ->route('admin.contract.show', $contract)
-                ->with('error', 'Сначала создайте задание');
+                ->with('error', $kind === ContractAct::KIND_PER_STUDENT
+                    ? 'Нет заданий для акта N.2 (нужен отчёт N.2 без акта)'
+                    : 'Сначала создайте задание');
         }
 
         $assignmentId = (int) $request->query('assignment_id');
-        $assignment = $contract->assignments->firstWhere('id', $assignmentId)
-            ?: $contract->assignments->first();
+        $assignment = $assignments->firstWhere('id', $assignmentId)
+            ?: $assignments->first();
 
         return view('admin.contract.act.create', [
             'contract' => $contract,
             'assignment' => $assignment,
-            'assignments' => $contract->assignments->values(),
+            'assignments' => $assignments->values(),
             'fixedAssignment' => false,
-            'nextNumber' => $this->nextActNumber($contract),
-            'suggestedAmount' => ContractAct::suggestedAmountForAssignment($assignment),
+            'nextNumber' => $kind === ContractAct::KIND_PER_STUDENT
+                ? (int) $assignment->number
+                : $this->nextActNumber($contract),
+            'suggestedAmount' => $kind === ContractAct::KIND_PER_STUDENT
+                ? ContractAct::suggestedPerStudentAmountForAssignment($assignment)
+                : ContractAct::suggestedAmountForAssignment($assignment),
+            'kind' => $kind,
         ]);
     }
 
-    public function createForAssignment(ContractAssignment $assignment)
+    public function createForAssignment(ContractAssignment $assignment, Request $request)
     {
-        $assignment->loadMissing(['contract.author', 'contract.course', 'report', 'studyGroup']);
+        $kind = $this->resolveKind($request);
+        $assignment->loadMissing([
+            'contract.author',
+            'contract.course',
+            'report',
+            'perStudentReport',
+            'perStudentAct',
+            'studyGroup',
+        ]);
+
+        if ($kind === ContractAct::KIND_PER_STUDENT) {
+            if (! $assignment->isPaymentPerStudent()) {
+                return redirect()
+                    ->route('admin.assignment.show', $assignment)
+                    ->with('error', 'В задании не включена оплата за успешно обученного');
+            }
+            if (! $assignment->perStudentReport) {
+                return redirect()
+                    ->route('admin.assignment.show', $assignment)
+                    ->with('error', 'Сначала создайте отчёт N.2');
+            }
+            if ($assignment->perStudentAct) {
+                return redirect()
+                    ->route('admin.contract_act.show', $assignment->perStudentAct)
+                    ->with('success', 'Акт N.2 по этому заданию уже создан');
+            }
+        } elseif (! $assignment->hasBasePayment()) {
+            return redirect()
+                ->route('admin.assignment.show', $assignment)
+                ->with('error', 'Для этого задания доступен только акт N.2');
+        }
 
         return view('admin.contract.act.create', [
             'contract' => $assignment->contract,
             'assignment' => $assignment,
             'assignments' => collect([$assignment]),
             'fixedAssignment' => true,
-            'nextNumber' => $this->nextActNumber($assignment->contract),
-            'suggestedAmount' => ContractAct::suggestedAmountForAssignment($assignment),
+            'nextNumber' => $kind === ContractAct::KIND_PER_STUDENT
+                ? (int) $assignment->number
+                : $this->nextActNumber($assignment->contract),
+            'suggestedAmount' => $kind === ContractAct::KIND_PER_STUDENT
+                ? ContractAct::suggestedPerStudentAmountForAssignment($assignment)
+                : ContractAct::suggestedAmountForAssignment($assignment),
+            'kind' => $kind,
         ]);
     }
 
@@ -60,6 +123,7 @@ class ContractActController extends Controller
             ->where('contract_id', $contract->id)
             ->findOrFail($data['assignment_id']);
 
+        $this->ensureAssignmentAllowsAct($assignment, $data['kind']);
         $act = $this->createAct($contract, $assignment, $data);
 
         return redirect()
@@ -71,6 +135,7 @@ class ContractActController extends Controller
     {
         $assignment->loadMissing('contract');
         $data = $this->validatedActData($request, $assignment->contract, $assignment);
+        $this->ensureAssignmentAllowsAct($assignment, $data['kind']);
         $act = $this->createAct($assignment->contract, $assignment, $data);
 
         return redirect()
@@ -92,30 +157,62 @@ class ContractActController extends Controller
 
     public function edit(ContractAct $act)
     {
-        $act->load(['contract.author', 'contract.course', 'assignment.report']);
+        $act->load(['contract.author', 'contract.course', 'assignment.report', 'assignment.perStudentReport']);
 
         return view('admin.contract.act.edit', compact('act'));
     }
 
-    public function update(Request $request, ContractAct $act)
+    public function update(Request $request, ContractAct $act, ContractActivityLogger $activityLogger)
     {
         $data = $this->validatedActData($request, $act->contract, $act->assignment, $act);
         unset($data['assignment_id']);
+        $before = $activityLogger->snapshot($act);
         $act->update($data);
+        $activityLogger->updated(
+            $act,
+            $before,
+            $activityLogger->snapshot($act->fresh()),
+            $act->contract
+        );
 
         return redirect()
             ->route('admin.contract_act.show', $act)
             ->with('success', 'Акт обновлён');
     }
 
-    public function destroy(ContractAct $act)
+    public function destroy(ContractAct $act, ContractActivityLogger $activityLogger)
     {
         $contract = $act->contract;
+        $activityLogger->deleted($act, $contract);
         $act->delete();
 
         return redirect()
             ->route('admin.contract.show', $contract)
             ->with('success', 'Акт удалён');
+    }
+
+    public function uploadScan(Request $request, ContractAct $act)
+    {
+        return $this->uploadScannedPdf(
+            $request,
+            $act,
+            'contracts/scanned/acts',
+            'admin.contract_act.show',
+            $act
+        );
+    }
+
+    public function downloadScan(ContractAct $act)
+    {
+        return $this->downloadScannedPdf(
+            $act,
+            $act->scannedPdfDownloadName('skan-akt-'.$act->number)
+        );
+    }
+
+    public function destroyScan(ContractAct $act)
+    {
+        return $this->destroyScannedPdf($act, 'admin.contract_act.show', $act);
     }
 
     public function generate(ContractAct $act)
@@ -128,7 +225,7 @@ class ContractActController extends Controller
 
         $contract = $act->contract;
         $author = $contract->author;
-        $filename = 'akt-'.$act->number.'-dogovor-'.Str::slug((string) $contract->number);
+        $filename = 'akt-'.Str::slug($act->displayNumber()).'-dogovor-'.Str::slug((string) $contract->number);
         $nameSlug = Str::slug($author->full_name ?: $author->name);
         if ($nameSlug !== '') {
             $filename .= '-'.$nameSlug;
@@ -163,15 +260,64 @@ class ContractActController extends Controller
 
     private function createAct(Contract $contract, ContractAssignment $assignment, array $data): ContractAct
     {
-        return $contract->acts()->create([
+        if (($data['kind'] ?? ContractAct::KIND_MAIN) === ContractAct::KIND_PER_STUDENT) {
+            ContractAct::onlyTrashed()
+                ->where('assignment_id', $assignment->id)
+                ->where('kind', ContractAct::KIND_PER_STUDENT)
+                ->forceDelete();
+        }
+
+        $act = $contract->acts()->create([
             ...$data,
             'assignment_id' => $assignment->id,
         ]);
+
+        app(ContractActivityLogger::class)->created($act, $contract);
+
+        return $act;
     }
 
     private function nextActNumber(Contract $contract): int
     {
-        return max(1, (int) $contract->acts()->max('number') + 1);
+        return max(1, (int) $contract->acts()->where('kind', ContractAct::KIND_MAIN)->max('number') + 1);
+    }
+
+    private function resolveKind(Request $request): string
+    {
+        $kind = (string) $request->input('kind', $request->query('kind', ContractAct::KIND_MAIN));
+
+        return in_array($kind, [ContractAct::KIND_MAIN, ContractAct::KIND_PER_STUDENT], true)
+            ? $kind
+            : ContractAct::KIND_MAIN;
+    }
+
+    private function ensureAssignmentAllowsAct(ContractAssignment $assignment, string $kind): void
+    {
+        if ($kind === ContractAct::KIND_PER_STUDENT) {
+            if (! $assignment->isPaymentPerStudent()) {
+                throw ValidationException::withMessages([
+                    'kind' => 'В задании не включена оплата за успешно обученного',
+                ]);
+            }
+            if (! $assignment->perStudentReport) {
+                throw ValidationException::withMessages([
+                    'assignment_id' => 'Сначала создайте отчёт N.2',
+                ]);
+            }
+            if ($assignment->perStudentAct()->exists()) {
+                throw ValidationException::withMessages([
+                    'assignment_id' => 'Акт N.2 по этому заданию уже создан',
+                ]);
+            }
+
+            return;
+        }
+
+        if (! $assignment->hasBasePayment()) {
+            throw ValidationException::withMessages([
+                'kind' => 'Для этого задания доступен только акт N.2',
+            ]);
+        }
     }
 
     private function validatedActData(
@@ -194,8 +340,11 @@ class ContractActController extends Controller
             $assignmentRule[] = Rule::in([$fixedAssignment->id]);
         }
 
+        $kind = $act?->kind ?: $this->resolveKind($request);
+
         $data = $request->validate([
             'assignment_id' => $assignmentRule,
+            'kind' => ['nullable', 'string', Rule::in([ContractAct::KIND_MAIN, ContractAct::KIND_PER_STUDENT])],
             'number' => ['required', 'integer', 'min:1'],
             'status' => ['required', 'string', Rule::in(ContractWorkflowStatus::keys())],
             'issued_at' => ['nullable', 'date'],
@@ -212,8 +361,19 @@ class ContractActController extends Controller
             'amount.numeric' => 'Сумма должна быть числом',
         ]);
 
+        $data['kind'] = $act?->kind ?: $kind;
+
         if ($fixedAssignment) {
             $data['assignment_id'] = $fixedAssignment->id;
+        }
+
+        if ($data['kind'] === ContractAct::KIND_PER_STUDENT) {
+            $numberSource = $fixedAssignment
+                ?: ($act?->assignment)
+                ?: ContractAssignment::query()->find($data['assignment_id'] ?? null);
+            if ($numberSource) {
+                $data['number'] = (int) $numberSource->number;
+            }
         }
 
         if (($data['issued_at'] ?? null) === '') {

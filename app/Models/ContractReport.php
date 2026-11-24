@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasScannedPdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ContractReport extends Model
 {
     use HasFactory;
+    use HasScannedPdf;
     use SoftDeletes;
+
+    public const KIND_MAIN = 'main';
+    public const KIND_PER_STUDENT = 'per_student';
 
     protected $table = 'contract_reports';
     protected $guarded = false;
@@ -20,6 +25,7 @@ class ContractReport extends Model
         'starts_at' => 'date',
         'ends_at' => 'date',
         'lesson_hours' => 'decimal:2',
+        'successful_students' => 'array',
     ];
 
     public function contract(): BelongsTo
@@ -30,6 +36,40 @@ class ContractReport extends Model
     public function assignment(): BelongsTo
     {
         return $this->belongsTo(ContractAssignment::class, 'assignment_id');
+    }
+
+    public function isPerStudent(): bool
+    {
+        return ($this->kind ?: self::KIND_MAIN) === self::KIND_PER_STUDENT;
+    }
+
+    public function displayNumber(): string
+    {
+        $this->loadMissing('assignment');
+        $base = (string) ($this->assignment?->number ?? $this->number);
+
+        return $this->isPerStudent() ? $base.'.2' : (string) $this->number;
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function successfulStudentsList(): array
+    {
+        $students = $this->successful_students ?? [];
+        if (! is_array($students)) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map(
+            static fn ($name) => trim((string) $name),
+            $students
+        ), static fn (string $name) => $name !== ''));
+    }
+
+    public function successfulStudentsCount(): int
+    {
+        return count($this->successfulStudentsList());
     }
 
     public function statusLabel(): string

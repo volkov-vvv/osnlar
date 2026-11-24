@@ -46,9 +46,16 @@ class ContractActDocumentService
 
         $amount = $act->amount !== null ? $act->amountFormatted() : '________';
         $amountWords = $act->amount !== null ? $act->amountInWords() : '________';
+        $isPerStudent = $act->isPerStudent();
+        $assignment->loadMissing('perStudentReport');
+        $studentsCount = $assignment->perStudentReport?->successfulStudentsCount() ?? 0;
+        $rewardLabel = $assignment->hasBasePayment() ? 'дополнительное вознаграждение' : 'вознаграждение';
+        $costPhrase = $isPerStudent
+            ? 'Стоимость '.$rewardLabel.' за '.$studentsCount.' успешно завершивших слушателей'
+            : 'Стоимость оказанных услуг';
 
         $replacements = [
-            '{{ACT_NUMBER}}' => $this->escapeXml((string) $act->number),
+            '{{ACT_NUMBER}}' => $this->escapeXml($act->displayNumber()),
             '{{ASSIGNMENT_NUMBER}}' => $this->escapeXml((string) $assignment->number),
             '{{ASSIGNMENT_DATE}}' => $this->escapeXml($assignment->issuedAtLabel()),
             '{{CONTRACT_NUMBER}}' => $this->escapeXml((string) ($contract->number ?: '________')),
@@ -67,14 +74,14 @@ class ContractActDocumentService
             '{{AMOUNT_WORDS}}' => $this->escapeXml($amountWords),
         ];
 
-        $filename = 'akt-'.$act->number.'-dogovor-'.Str::slug((string) $contract->number);
+        $filename = 'akt-'.Str::slug($act->displayNumber()).'-dogovor-'.Str::slug((string) $contract->number);
         $nameSlug = Str::slug($authorName);
         if ($nameSlug !== '') {
             $filename .= '-'.$nameSlug;
         }
 
         return [
-            'binary' => $this->fillTemplate($replacements),
+            'binary' => $this->fillTemplate($replacements, $costPhrase),
             'filename' => $filename.'.docx',
         ];
     }
@@ -82,7 +89,7 @@ class ContractActDocumentService
     /**
      * @param  array<string, string>  $replacements
      */
-    protected function fillTemplate(array $replacements): string
+    protected function fillTemplate(array $replacements, string $costPhrase = 'Стоимость оказанных услуг'): string
     {
         $templatePath = resource_path(self::TEMPLATE_RELATIVE_PATH);
         if (! is_file($templatePath)) {
@@ -112,6 +119,10 @@ class ContractActDocumentService
             $zip->close();
             @unlink($workingPath);
             throw new RuntimeException('Повреждён шаблон акта');
+        }
+
+        if ($costPhrase !== 'Стоимость оказанных услуг') {
+            $documentXml = str_replace('Стоимость оказанных услуг', $this->escapeXml($costPhrase), $documentXml);
         }
 
         $filledXml = strtr($documentXml, $replacements);

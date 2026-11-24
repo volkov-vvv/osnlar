@@ -54,16 +54,13 @@ class AdminBreadcrumbs
             ['title' => 'Дашборд', 'url' => null],
         ],
         'admin.contactcenter.index' => [
-            ['title' => 'Дашборд', 'url' => 'admin.main.index'],
             ['title' => 'Контакт-центр', 'url' => null],
         ],
         'admin.settings.forms.edit' => [
-            ['title' => 'Дашборд', 'url' => 'admin.main.index'],
             ['title' => 'Настройки', 'url' => null],
             ['title' => 'Формы', 'url' => null],
         ],
         'admin.settings.bioeconomy.edit' => [
-            ['title' => 'Дашборд', 'url' => 'admin.main.index'],
             ['title' => 'Настройки', 'url' => null],
             ['title' => 'Биоэкономика', 'url' => null],
         ],
@@ -90,23 +87,17 @@ class AdminBreadcrumbs
         $parts = explode('.', $routeName);
         // admin.{resource}.{action} or admin.report.index
         if (count($parts) < 3) {
-            return self::resolveUrls([
-                ['title' => 'Дашборд', 'url' => 'admin.main.index'],
-            ]);
+            return [];
         }
 
         $resource = $parts[1];
         $action = $parts[array_key_last($parts)];
 
         if (! isset(self::RESOURCES[$resource])) {
-            return self::resolveUrls([
-                ['title' => 'Дашборд', 'url' => 'admin.main.index'],
-            ]);
+            return [];
         }
 
-        $items = [
-            ['title' => 'Дашборд', 'url' => 'admin.main.index'],
-        ];
+        $items = [];
 
         if (isset(self::GROUPS[$resource])) {
             $items[] = ['title' => self::GROUPS[$resource], 'url' => null];

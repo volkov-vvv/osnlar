@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasScannedPdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +13,11 @@ use morphos\Russian\Cases;
 class ContractAct extends Model
 {
     use HasFactory;
+    use HasScannedPdf;
     use SoftDeletes;
+
+    public const KIND_MAIN = 'main';
+    public const KIND_PER_STUDENT = 'per_student';
 
     protected $table = 'contract_acts';
     protected $guarded = false;
@@ -30,6 +35,19 @@ class ContractAct extends Model
     public function assignment(): BelongsTo
     {
         return $this->belongsTo(ContractAssignment::class, 'assignment_id');
+    }
+
+    public function isPerStudent(): bool
+    {
+        return ($this->kind ?: self::KIND_MAIN) === self::KIND_PER_STUDENT;
+    }
+
+    public function displayNumber(): string
+    {
+        $this->loadMissing('assignment');
+        $base = (string) ($this->assignment?->number ?? $this->number);
+
+        return $this->isPerStudent() ? $base.'.2' : (string) $this->number;
     }
 
     public function statusLabel(): string
@@ -90,10 +108,20 @@ class ContractAct extends Model
     }
 
     /**
-     * Сумма по умолчанию: ставка задания × часы отчёта.
+     * Сумма по умолчанию:
+     * — фиксированная оплата: сумма задания;
+     * — почасовая: ставка × часы из отчёта.
      */
     public static function suggestedAmountForAssignment(ContractAssignment $assignment): ?float
     {
+        if ($assignment->isPaymentFixed()) {
+            if ($assignment->hourly_rate === null || $assignment->hourly_rate === '') {
+                return null;
+            }
+
+            return round((float) $assignment->hourly_rate, 2);
+        }
+
         $assignment->loadMissing('report');
         $hours = $assignment->report?->lesson_hours;
         if ($hours === null || $hours === '') {
@@ -101,5 +129,24 @@ class ContractAct extends Model
         }
 
         return round((float) $assignment->hourly_rate * (float) $hours, 2);
+    }
+
+    /**
+     * Сумма для акта N.2: ставка за слушателя × число успешно обученных.
+     */
+    public static function suggestedPerStudentAmountForAssignment(ContractAssignment $assignment): ?float
+    {
+        $assignment->loadMissing('perStudentReport');
+        $report = $assignment->perStudentReport;
+        if (! $report) {
+            return null;
+        }
+
+        $count = $report->successfulStudentsCount();
+        if ($count < 1) {
+            return null;
+        }
+
+        return round((float) $assignment->per_student_amount * $count, 2);
     }
 }

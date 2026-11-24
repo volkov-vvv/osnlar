@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesScannedPdf;
 use App\Http\Controllers\Controller;
 use App\Models\Author;
 use App\Models\Contract;
 use App\Models\ContractWorkflowStatus;
 use App\Models\Course;
 use App\Models\Project;
+use App\Service\ContractActivityLogger;
+use App\Service\ContractDocumentService;
 use Barryvdh\DomPDF\PDF as DomPdfWrapper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,6 +18,8 @@ use Illuminate\Validation\Rule;
 
 class ContractController extends Controller
 {
+    use ManagesScannedPdf;
+
     public function index()
     {
         $contracts = Contract::query()
@@ -39,19 +44,20 @@ class ContractController extends Controller
         return view('admin.contract.create', compact('templates', 'projects', 'authors', 'courses'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, ContractActivityLogger $activityLogger)
     {
         $data = $this->validatedContractData($request);
 
         $contract = Contract::create($data);
         $contract->assignNumber();
+        $activityLogger->created($contract);
 
         return redirect()
             ->route('admin.contract.index')
             ->with('success', 'Договор сохранён');
     }
 
-    public function show(Contract $contract)
+    public function show(Contract $contract, ContractActivityLogger $activityLogger)
     {
         $contract->load([
             'author',
@@ -59,12 +65,16 @@ class ContractController extends Controller
             'project',
             'assignments.studyGroup',
             'assignments.report',
+            'assignments.perStudentReport',
             'assignments.acts',
+            'assignments.perStudentAct',
             'reports.assignment',
             'acts.assignment',
         ]);
 
-        return view('admin.contract.show', compact('contract'));
+        $activities = $activityLogger->historyForContract($contract);
+
+        return view('admin.contract.show', compact('contract', 'activities'));
     }
 
     public function edit(Contract $contract)
@@ -77,11 +87,13 @@ class ContractController extends Controller
         return view('admin.contract.edit', compact('contract', 'templates', 'projects', 'authors', 'courses'));
     }
 
-    public function update(Request $request, Contract $contract)
+    public function update(Request $request, Contract $contract, ContractActivityLogger $activityLogger)
     {
         $data = $this->validatedContractData($request, $contract);
+        $before = $activityLogger->snapshot($contract);
 
         $contract->update($data);
+        $activityLogger->updated($contract, $before, $activityLogger->snapshot($contract->fresh()));
 
         return redirect()
             ->route('admin.contract.show', $contract)
@@ -119,6 +131,22 @@ class ContractController extends Controller
         $this->addCenteredPageNumbers($pdf);
 
         return $pdf->download($filename.'.pdf');
+    }
+
+    public function generateDocx(Contract $contract, ContractDocumentService $documentService)
+    {
+        if (! $contract->template_view) {
+            return redirect()
+                ->route('admin.contract.show', $contract)
+                ->withErrors(['template' => 'Шаблон договора не найден']);
+        }
+
+        $document = $documentService->generate($contract);
+
+        return response($document['binary'], 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'Content-Disposition' => 'attachment; filename="'.$document['filename'].'"',
+        ]);
     }
 
     private function addCenteredPageNumbers(DomPdfWrapper $pdf): void
@@ -169,13 +197,38 @@ class ContractController extends Controller
         $pdf->getDomPDF()->getOptions()->setDefaultFont('Times New Roman');
     }
 
-    public function destroy(Contract $contract)
+    public function destroy(Contract $contract, ContractActivityLogger $activityLogger)
     {
+        $activityLogger->deleted($contract);
         $contract->delete();
 
         return redirect()
             ->route('admin.contract.index')
             ->with('success', 'Договор удалён');
+    }
+
+    public function uploadScan(Request $request, Contract $contract)
+    {
+        return $this->uploadScannedPdf(
+            $request,
+            $contract,
+            'contracts/scanned/contracts',
+            'admin.contract.show',
+            $contract
+        );
+    }
+
+    public function downloadScan(Contract $contract)
+    {
+        return $this->downloadScannedPdf(
+            $contract,
+            $contract->scannedPdfDownloadName('skan-dogovor-'.Str::slug((string) $contract->number))
+        );
+    }
+
+    public function destroyScan(Contract $contract)
+    {
+        return $this->destroyScannedPdf($contract, 'admin.contract.show', $contract);
     }
 
     private function validatedContractData(Request $request, ?Contract $contract = null): array

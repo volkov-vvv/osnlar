@@ -17,6 +17,8 @@
         };
         $rate = $assignment->hourlyRateFormatted();
         $rateWords = $assignment->hourlyRateInWords();
+        $perStudentRate = $assignment->perStudentAmountFormatted();
+        $perStudentRateWords = $assignment->perStudentAmountInWords();
     @endphp
 
     <h1 class="assignment-title">ЗАДАНИЕ №{{ $assignment->number }}</h1>
@@ -47,13 +49,30 @@
 
     <p style="text-align: left;">{!! nl2br(e($assignment->work_types)) !!}</p>
 
-    <p>
-        Стоимость услуг Исполнителя по настоящему Заданию определяется исходя из ставки  <strong>{{ $rate }}</strong> ({{ $rateWords }})
-        рублей 00 коп. за 1 (один) академический час оказания услуг. Сумма рассчитывается по формуле:
-        количество отработанных часов x {{ $rate }} ({{ $rateWords }}) рублей 00 коп.<br>
-        Итоговая сумма по настоящему Заданию рассчитывается на основании представленных Исполнителем отчетов
-        и указывается в Акте об оказании услуг.
-    </p>
+    @if($assignment->isPaymentHourly())
+        <p>
+            Стоимость услуг Исполнителя по настоящему Заданию определяется исходя из ставки  <strong>{{ $rate }}</strong> ({{ $rateWords }})
+            рублей 00 коп. за 1 (один) академический час оказания услуг. Сумма рассчитывается по формуле:
+            количество отработанных часов x {{ $rate }} ({{ $rateWords }}) рублей 00 коп.<br>
+            Итоговая сумма по настоящему Заданию рассчитывается на основании представленных Исполнителем отчетов
+            и указывается в Акте об оказании услуг.
+        </p>
+    @endif
+
+    @if($assignment->isPaymentFixed())
+        <p>
+            Стоимость услуг Исполнителя по настоящему Заданию составляет <strong>{{ $rate }}</strong> ({{ $rateWords }})
+            рублей 00 коп.
+        </p>
+    @endif
+
+    @if($assignment->isPaymentPerStudent())
+        <p>
+            Заказчик обязуется выплатить {{ $assignment->hasBasePayment() ? 'дополнительное вознаграждение' : 'вознаграждение' }}
+            в размере <strong>{{ $perStudentRate }}</strong> ({{ $perStudentRateWords }})
+            рубля 00 коп. за каждого Слушателя, успешно завершившего обучение в группе.
+        </p>
+    @endif
 
     <p>
          <strong>Срок оказания услуг:</strong> с {{ $assignment->startsAtShortLabel() }} по {{ $assignment->endsAtShortLabel() }}.

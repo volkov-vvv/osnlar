@@ -1,6 +1,6 @@
 @extends('admin.contract.pdf_layout')
 
-@section('title', 'Акт №'.$act->number.' — '.($author->full_name ?: $author->name))
+@section('title', 'Акт №'.$act->displayNumber().' — '.($author->full_name ?: $author->name))
 
 @section('content')
     @php
@@ -17,9 +17,21 @@
         };
         $amount = $act->amount !== null ? $act->amountFormatted() : '________';
         $amountWords = $act->amount !== null ? $act->amountInWords() : '________';
+        $isPerStudent = $act->isPerStudent();
+        $assignment->loadMissing('perStudentReport');
+        $studentsCount = $assignment->perStudentReport?->successfulStudentsCount() ?? 0;
+        $rewardLabel = $assignment->hasBasePayment() ? 'дополнительное вознаграждение' : 'вознаграждение';
+        $studentsWord = match (true) {
+            $studentsCount % 10 === 1 && $studentsCount % 100 !== 11 => 'слушателя',
+            in_array($studentsCount % 10, [2, 3, 4], true) && ! in_array($studentsCount % 100, [12, 13, 14], true) => 'слушателей',
+            default => 'слушателей',
+        };
+        // «успешно завершивших» + genitive: 1 слушателя / 2–4 слушателей / 5+ слушателей
+        // Prefer wording from plan: «за XX успешно завершивших слушателей»
+        $studentsPhrase = $studentsCount.' успешно завершивших '.$studentsWord;
     @endphp
 
-    <h1 class="assignment-title">АКТ №{{ $act->number }}</h1>
+    <h1 class="assignment-title">АКТ №{{ $act->displayNumber() }}</h1>
     <p class="appendix-subtitle assignment-subtitle">
         об оказании услуг к Заданию № {{ $assignment->number }} от {{ $assignment->issuedAtLabel() }}<br>
         по Договору № {{ $contract->number ?: '________' }} от {{ $contract->signedAtLabel() }}
@@ -50,14 +62,25 @@
 
     <p style="text-align: left;">{!! nl2br(e($assignment->work_types)) !!}</p>
 
-    <p>
-        Стоимость оказанных услуг по Заданию № {{ $assignment->number }} составляет
-        <strong>{{ $amount }}</strong> ({{ $amountWords }}) рублей 00 коп.
-        Услуги оказаны Исполнителем в объеме и сроки, установленные Заданием №{{ $assignment->number }}
-        к Договору {{ $contract->number ?: '________' }} от {{ $contract->signedAtLabel() }} надлежащего качества.
-        Заказчик претензий к оказанным услугам не имеет. Исполнитель обязуется исполнить свои обязательства,
-        предусмотренные п. 3.3. Договора № {{ $contract->number ?: '________' }} от {{ $contract->signedAtLabel() }}.
-    </p>
+    @if($isPerStudent)
+        <p>
+            Стоимость {{ $rewardLabel }} за {{ $studentsPhrase }} по Заданию № {{ $assignment->number }} составляет
+            <strong>{{ $amount }}</strong> ({{ $amountWords }}) рублей 00 коп.
+            Услуги оказаны Исполнителем в объеме и сроки, установленные Заданием №{{ $assignment->number }}
+            к Договору {{ $contract->number ?: '________' }} от {{ $contract->signedAtLabel() }} надлежащего качества.
+            Заказчик претензий к оказанным услугам не имеет. Исполнитель обязуется исполнить свои обязательства,
+            предусмотренные п. 3.3. Договора № {{ $contract->number ?: '________' }} от {{ $contract->signedAtLabel() }}.
+        </p>
+    @else
+        <p>
+            Стоимость оказанных услуг по Заданию № {{ $assignment->number }} составляет
+            <strong>{{ $amount }}</strong> ({{ $amountWords }}) рублей 00 коп.
+            Услуги оказаны Исполнителем в объеме и сроки, установленные Заданием №{{ $assignment->number }}
+            к Договору {{ $contract->number ?: '________' }} от {{ $contract->signedAtLabel() }} надлежащего качества.
+            Заказчик претензий к оказанным услугам не имеет. Исполнитель обязуется исполнить свои обязательства,
+            предусмотренные п. 3.3. Договора № {{ $contract->number ?: '________' }} от {{ $contract->signedAtLabel() }}.
+        </p>
+    @endif
 
     <table class="signatures appendix-signatures appendix-signatures-final assignment-signatures">
         <tr>

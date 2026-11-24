@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesScannedPdf;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\ContractAssignment;
 use App\Models\ContractReport;
 use App\Models\ContractWorkflowStatus;
+use App\Service\ContractActivityLogger;
 use App\Service\ContractReportDocumentService;
 use Barryvdh\DomPDF\PDF as DomPdfWrapper;
 use Illuminate\Http\Request;
@@ -16,15 +18,27 @@ use Illuminate\Validation\ValidationException;
 
 class ContractReportController extends Controller
 {
+    use ManagesScannedPdf;
+
     public function createForContract(Contract $contract, Request $request)
     {
-        $contract->loadMissing(['author', 'course', 'assignments.report', 'assignments.studyGroup']);
+        $kind = $this->resolveKind($request);
+        $contract->loadMissing(['author', 'course', 'assignments.report', 'assignments.perStudentReport', 'assignments.studyGroup']);
 
-        $availableAssignments = $contract->assignments->filter(fn (ContractAssignment $a) => ! $a->report);
+        $availableAssignments = $contract->assignments->filter(function (ContractAssignment $a) use ($kind) {
+            if ($kind === ContractReport::KIND_PER_STUDENT) {
+                return $a->isPaymentPerStudent() && ! $a->perStudentReport;
+            }
+
+            return $a->hasBasePayment() && ! $a->report;
+        });
+
         if ($availableAssignments->isEmpty()) {
             return redirect()
                 ->route('admin.contract.show', $contract)
-                ->with('error', 'Нет заданий без отчёта');
+                ->with('error', $kind === ContractReport::KIND_PER_STUDENT
+                    ? 'Нет заданий для отчёта N.2'
+                    : 'Нет заданий без отчёта');
         }
 
         $assignmentId = (int) $request->query('assignment_id');
@@ -36,17 +50,37 @@ class ContractReportController extends Controller
             'assignment' => $assignment,
             'assignments' => $availableAssignments->values(),
             'fixedAssignment' => false,
+            'kind' => $kind,
         ]);
     }
 
-    public function createForAssignment(ContractAssignment $assignment)
+    public function createForAssignment(ContractAssignment $assignment, Request $request)
     {
-        $assignment->loadMissing(['contract.author', 'contract.course', 'report']);
+        $kind = $this->resolveKind($request);
+        $assignment->loadMissing(['contract.author', 'contract.course', 'report', 'perStudentReport']);
 
-        if ($assignment->report) {
-            return redirect()
-                ->route('admin.contract_report.show', $assignment->report)
-                ->with('success', 'Отчёт по этому заданию уже создан');
+        if ($kind === ContractReport::KIND_PER_STUDENT) {
+            if (! $assignment->isPaymentPerStudent()) {
+                return redirect()
+                    ->route('admin.assignment.show', $assignment)
+                    ->with('error', 'В задании не включена оплата за успешно обученного');
+            }
+            if ($assignment->perStudentReport) {
+                return redirect()
+                    ->route('admin.contract_report.show', $assignment->perStudentReport)
+                    ->with('success', 'Отчёт N.2 по этому заданию уже создан');
+            }
+        } else {
+            if (! $assignment->hasBasePayment()) {
+                return redirect()
+                    ->route('admin.assignment.show', $assignment)
+                    ->with('error', 'Для этого задания доступен только отчёт N.2');
+            }
+            if ($assignment->report) {
+                return redirect()
+                    ->route('admin.contract_report.show', $assignment->report)
+                    ->with('success', 'Отчёт по этому заданию уже создан');
+            }
         }
 
         return view('admin.contract.report.create', [
@@ -54,6 +88,7 @@ class ContractReportController extends Controller
             'assignment' => $assignment,
             'assignments' => collect([$assignment]),
             'fixedAssignment' => true,
+            'kind' => $kind,
         ]);
     }
 
@@ -64,7 +99,7 @@ class ContractReportController extends Controller
             ->where('contract_id', $contract->id)
             ->findOrFail($data['assignment_id']);
 
-        $this->ensureAssignmentHasNoReport($assignment);
+        $this->ensureAssignmentAllowsReport($assignment, $data['kind']);
 
         $report = $this->createReport($contract, $assignment, $data);
 
@@ -76,9 +111,9 @@ class ContractReportController extends Controller
     public function storeForAssignment(Request $request, ContractAssignment $assignment)
     {
         $assignment->loadMissing('contract');
-        $this->ensureAssignmentHasNoReport($assignment);
-
         $data = $this->validatedReportData($request, $assignment->contract, $assignment);
+        $this->ensureAssignmentAllowsReport($assignment, $data['kind']);
+
         $report = $this->createReport($assignment->contract, $assignment, $data);
 
         return redirect()
@@ -104,25 +139,57 @@ class ContractReportController extends Controller
         return view('admin.contract.report.edit', compact('report'));
     }
 
-    public function update(Request $request, ContractReport $report)
+    public function update(Request $request, ContractReport $report, ContractActivityLogger $activityLogger)
     {
         $data = $this->validatedReportData($request, $report->contract, $report->assignment, $report);
         unset($data['assignment_id']);
+        $before = $activityLogger->snapshot($report);
         $report->update($data);
+        $activityLogger->updated(
+            $report,
+            $before,
+            $activityLogger->snapshot($report->fresh()),
+            $report->contract
+        );
 
         return redirect()
             ->route('admin.contract_report.show', $report)
             ->with('success', 'Отчёт обновлён');
     }
 
-    public function destroy(ContractReport $report)
+    public function destroy(ContractReport $report, ContractActivityLogger $activityLogger)
     {
         $contract = $report->contract;
+        $activityLogger->deleted($report, $contract);
         $report->delete();
 
         return redirect()
             ->route('admin.contract.show', $contract)
             ->with('success', 'Отчёт удалён');
+    }
+
+    public function uploadScan(Request $request, ContractReport $report)
+    {
+        return $this->uploadScannedPdf(
+            $request,
+            $report,
+            'contracts/scanned/reports',
+            'admin.contract_report.show',
+            $report
+        );
+    }
+
+    public function downloadScan(ContractReport $report)
+    {
+        return $this->downloadScannedPdf(
+            $report,
+            $report->scannedPdfDownloadName('skan-otchet-'.$report->number)
+        );
+    }
+
+    public function destroyScan(ContractReport $report)
+    {
+        return $this->destroyScannedPdf($report, 'admin.contract_report.show', $report);
     }
 
     public function generate(ContractReport $report)
@@ -135,7 +202,7 @@ class ContractReportController extends Controller
 
         $contract = $report->contract;
         $author = $contract->author;
-        $filename = 'otchet-'.$report->number.'-dogovor-'.Str::slug((string) $contract->number);
+        $filename = 'otchet-'.Str::slug($report->displayNumber()).'-dogovor-'.Str::slug((string) $contract->number);
         $nameSlug = Str::slug($author->full_name ?: $author->name);
         if ($nameSlug !== '') {
             $filename .= '-'.$nameSlug;
@@ -170,24 +237,60 @@ class ContractReportController extends Controller
 
     private function createReport(Contract $contract, ContractAssignment $assignment, array $data): ContractReport
     {
-        // Soft-deleted отчёт по этому заданию мешает unique assignment_id.
+        $kind = $data['kind'] ?? ContractReport::KIND_MAIN;
+
+        // Soft-deleted отчёт того же kind мешает unique (assignment_id, kind).
         ContractReport::onlyTrashed()
             ->where('assignment_id', $assignment->id)
+            ->where('kind', $kind)
             ->forceDelete();
 
-        return $contract->reports()->create([
+        $report = $contract->reports()->create([
             ...$data,
             'assignment_id' => $assignment->id,
         ]);
+
+        app(ContractActivityLogger::class)->created($report, $contract);
+
+        return $report;
     }
 
-    private function ensureAssignmentHasNoReport(ContractAssignment $assignment): void
+    private function ensureAssignmentAllowsReport(ContractAssignment $assignment, string $kind): void
     {
+        if ($kind === ContractReport::KIND_PER_STUDENT) {
+            if (! $assignment->isPaymentPerStudent()) {
+                throw ValidationException::withMessages([
+                    'kind' => 'В задании не включена оплата за успешно обученного',
+                ]);
+            }
+            if ($assignment->perStudentReport()->exists()) {
+                throw ValidationException::withMessages([
+                    'assignment_id' => 'Отчёт N.2 по этому заданию уже создан',
+                ]);
+            }
+
+            return;
+        }
+
+        if (! $assignment->hasBasePayment()) {
+            throw ValidationException::withMessages([
+                'kind' => 'Для этого задания доступен только отчёт N.2',
+            ]);
+        }
         if ($assignment->report()->exists()) {
             throw ValidationException::withMessages([
                 'assignment_id' => 'По этому заданию отчёт уже создан',
             ]);
         }
+    }
+
+    private function resolveKind(Request $request): string
+    {
+        $kind = (string) $request->input('kind', $request->query('kind', ContractReport::KIND_MAIN));
+
+        return in_array($kind, [ContractReport::KIND_MAIN, ContractReport::KIND_PER_STUDENT], true)
+            ? $kind
+            : ContractReport::KIND_MAIN;
     }
 
     private function validatedReportData(
@@ -211,8 +314,12 @@ class ContractReportController extends Controller
             $assignmentRule[] = Rule::in([$fixedAssignment->id]);
         }
 
-        $data = $request->validate([
+        $kind = $report?->kind ?: $this->resolveKind($request);
+        $isPerStudent = $kind === ContractReport::KIND_PER_STUDENT;
+
+        $rules = [
             'assignment_id' => $assignmentRule,
+            'kind' => ['nullable', 'string', Rule::in([ContractReport::KIND_MAIN, ContractReport::KIND_PER_STUDENT])],
             'number' => ['required', 'integer', 'min:1'],
             'status' => ['required', 'string', Rule::in(ContractWorkflowStatus::keys())],
             'issued_at' => ['nullable', 'date'],
@@ -220,7 +327,11 @@ class ContractReportController extends Controller
             'ends_at' => ['required', 'date', 'after_or_equal:starts_at'],
             'lesson_url' => ['nullable', 'string', 'max:2000'],
             'lesson_hours' => ['nullable', 'numeric', 'min:0'],
-        ], [
+            'successful_students' => [$isPerStudent ? 'required' : 'nullable', 'array', $isPerStudent ? 'min:1' : 'nullable'],
+            'successful_students.*' => ['nullable', 'string', 'max:255'],
+        ];
+
+        $data = $request->validate($rules, [
             'assignment_id.required' => 'Выберите задание',
             'assignment_id.exists' => 'Выбранное задание не найдено',
             'assignment_id.in' => 'Недопустимое задание',
@@ -233,7 +344,11 @@ class ContractReportController extends Controller
             'ends_at.required' => 'Укажите дату окончания оказания услуг',
             'ends_at.after_or_equal' => 'Дата окончания не может быть раньше даты начала',
             'lesson_hours.numeric' => 'Количество часов должно быть числом',
+            'successful_students.required' => 'Добавьте хотя бы одного слушателя',
+            'successful_students.min' => 'Добавьте хотя бы одного слушателя',
         ]);
+
+        $data['kind'] = $report?->kind ?: $kind;
 
         if ($fixedAssignment) {
             $data['assignment_id'] = $fixedAssignment->id;
@@ -243,11 +358,37 @@ class ContractReportController extends Controller
             $data['issued_at'] = null;
         }
 
-        $lessonUrl = trim((string) ($data['lesson_url'] ?? ''));
-        $data['lesson_url'] = $lessonUrl !== '' ? $lessonUrl : null;
+        if ($data['kind'] === ContractReport::KIND_PER_STUDENT) {
+            $students = collect($data['successful_students'] ?? [])
+                ->map(fn ($name) => trim((string) $name))
+                ->filter()
+                ->values()
+                ->all();
 
-        if (($data['lesson_hours'] ?? null) === '') {
+            if ($students === []) {
+                throw ValidationException::withMessages([
+                    'successful_students' => 'Добавьте хотя бы одного слушателя',
+                ]);
+            }
+
+            $data['successful_students'] = $students;
+            $data['lesson_url'] = null;
             $data['lesson_hours'] = null;
+            // Номер храним как номер задания; отображение — N.2
+            $numberSource = $fixedAssignment
+                ?: ($report?->assignment)
+                ?: ContractAssignment::query()->find($data['assignment_id'] ?? null);
+            if ($numberSource) {
+                $data['number'] = (int) $numberSource->number;
+            }
+        } else {
+            $data['successful_students'] = null;
+            $lessonUrl = trim((string) ($data['lesson_url'] ?? ''));
+            $data['lesson_url'] = $lessonUrl !== '' ? $lessonUrl : null;
+
+            if (($data['lesson_hours'] ?? null) === '') {
+                $data['lesson_hours'] = null;
+            }
         }
 
         return $data;

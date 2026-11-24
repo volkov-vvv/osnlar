@@ -73,6 +73,18 @@ Route::post('contract', [ContractController::class, 'store'])->name('contract.st
 Route::get('contract/{contract}/generate', [ContractController::class, 'generate'])
     ->whereNumber('contract')
     ->name('contract.generate');
+Route::get('contract/{contract}/generate-docx', [ContractController::class, 'generateDocx'])
+    ->whereNumber('contract')
+    ->name('contract.generateDocx');
+Route::post('contract/{contract}/scanned-pdf', [ContractController::class, 'uploadScan'])
+    ->whereNumber('contract')
+    ->name('contract.uploadScan');
+Route::get('contract/{contract}/scanned-pdf', [ContractController::class, 'downloadScan'])
+    ->whereNumber('contract')
+    ->name('contract.downloadScan');
+Route::delete('contract/{contract}/scanned-pdf', [ContractController::class, 'destroyScan'])
+    ->whereNumber('contract')
+    ->name('contract.destroyScan');
 Route::get('contract/{contract}', [ContractController::class, 'show'])
     ->whereNumber('contract')
     ->name('contract.show');
@@ -95,6 +107,15 @@ Route::post('contract/{contract}/assignment', [ContractAssignmentController::cla
 Route::get('assignment/{assignment}/generate', [ContractAssignmentController::class, 'generate'])
     ->whereNumber('assignment')
     ->name('assignment.generate');
+Route::post('assignment/{assignment}/scanned-pdf', [ContractAssignmentController::class, 'uploadScan'])
+    ->whereNumber('assignment')
+    ->name('assignment.uploadScan');
+Route::get('assignment/{assignment}/scanned-pdf', [ContractAssignmentController::class, 'downloadScan'])
+    ->whereNumber('assignment')
+    ->name('assignment.downloadScan');
+Route::delete('assignment/{assignment}/scanned-pdf', [ContractAssignmentController::class, 'destroyScan'])
+    ->whereNumber('assignment')
+    ->name('assignment.destroyScan');
 Route::get('assignment/{assignment}', [ContractAssignmentController::class, 'show'])
     ->whereNumber('assignment')
     ->name('assignment.show');
@@ -126,6 +147,15 @@ Route::get('contract-report/{report}/generate', [ContractReportController::class
 Route::get('contract-report/{report}/generate-docx', [ContractReportController::class, 'generateDocx'])
     ->whereNumber('report')
     ->name('contract_report.generateDocx');
+Route::post('contract-report/{report}/scanned-pdf', [ContractReportController::class, 'uploadScan'])
+    ->whereNumber('report')
+    ->name('contract_report.uploadScan');
+Route::get('contract-report/{report}/scanned-pdf', [ContractReportController::class, 'downloadScan'])
+    ->whereNumber('report')
+    ->name('contract_report.downloadScan');
+Route::delete('contract-report/{report}/scanned-pdf', [ContractReportController::class, 'destroyScan'])
+    ->whereNumber('report')
+    ->name('contract_report.destroyScan');
 Route::get('contract-report/{report}', [ContractReportController::class, 'show'])
     ->whereNumber('report')
     ->name('contract_report.show');
@@ -157,6 +187,15 @@ Route::get('contract-act/{act}/generate', [ContractActController::class, 'genera
 Route::get('contract-act/{act}/generate-docx', [ContractActController::class, 'generateDocx'])
     ->whereNumber('act')
     ->name('contract_act.generateDocx');
+Route::post('contract-act/{act}/scanned-pdf', [ContractActController::class, 'uploadScan'])
+    ->whereNumber('act')
+    ->name('contract_act.uploadScan');
+Route::get('contract-act/{act}/scanned-pdf', [ContractActController::class, 'downloadScan'])
+    ->whereNumber('act')
+    ->name('contract_act.downloadScan');
+Route::delete('contract-act/{act}/scanned-pdf', [ContractActController::class, 'destroyScan'])
+    ->whereNumber('act')
+    ->name('contract_act.destroyScan');
 Route::get('contract-act/{act}', [ContractActController::class, 'show'])
     ->whereNumber('act')
     ->name('contract_act.show');

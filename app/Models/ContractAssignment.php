@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasScannedPdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +15,7 @@ use morphos\Russian\Cases;
 class ContractAssignment extends Model
 {
     use HasFactory;
+    use HasScannedPdf;
     use SoftDeletes;
 
     public const WORK_TYPE_LECTURES = 1;
@@ -22,11 +24,17 @@ class ContractAssignment extends Model
     public const WORK_TYPE_ATTESTATION = 4;
     public const WORK_TYPE_CUSTOM = 5;
 
+    public const PAYMENT_HOURLY = 'hourly';
+    public const PAYMENT_FIXED = 'fixed';
+    public const PAYMENT_NONE = 'none';
+
     protected $table = 'contract_assignments';
     protected $guarded = false;
 
     protected $casts = [
         'hourly_rate' => 'decimal:2',
+        'per_student_amount' => 'decimal:2',
+        'per_student_enabled' => 'boolean',
         'starts_at' => 'date',
         'ends_at' => 'date',
         'issued_at' => 'date',
@@ -34,13 +42,106 @@ class ContractAssignment extends Model
     ];
 
     /**
+     * Основная оплата (без «за слушателя»).
+     *
+     * @return array<string, string>
+     */
+    public static function basePaymentTypeLabels(): array
+    {
+        return [
+            self::PAYMENT_HOURLY => 'Оплата по часам',
+            self::PAYMENT_FIXED => 'Фиксированная оплата',
+            self::PAYMENT_NONE => 'Нет основной оплаты',
+        ];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function basePaymentTypeKeys(): array
+    {
+        return array_keys(self::basePaymentTypeLabels());
+    }
+
+    public function basePaymentType(): string
+    {
+        $type = $this->payment_type ?: self::PAYMENT_HOURLY;
+
+        return in_array($type, self::basePaymentTypeKeys(), true) ? $type : self::PAYMENT_HOURLY;
+    }
+
+    public function isPaymentHourly(): bool
+    {
+        return $this->basePaymentType() === self::PAYMENT_HOURLY;
+    }
+
+    public function isPaymentFixed(): bool
+    {
+        return $this->basePaymentType() === self::PAYMENT_FIXED;
+    }
+
+    public function hasBasePayment(): bool
+    {
+        return $this->basePaymentType() !== self::PAYMENT_NONE;
+    }
+
+    public function isPaymentPerStudent(): bool
+    {
+        return (bool) $this->per_student_enabled;
+    }
+
+    public function paymentTypeLabel(): string
+    {
+        $parts = [];
+
+        if ($this->isPaymentHourly()) {
+            $parts[] = 'Оплата по часам';
+        } elseif ($this->isPaymentFixed()) {
+            $parts[] = 'Фиксированная оплата';
+        }
+
+        if ($this->isPaymentPerStudent()) {
+            $parts[] = 'за успешно обученного';
+        }
+
+        return $parts !== [] ? implode(' + ', $parts) : '—';
+    }
+
+    public function paymentAmountShortLabel(): string
+    {
+        $parts = [];
+
+        if ($this->isPaymentHourly()) {
+            $parts[] = $this->hourlyRateFormatted().' руб./час';
+        } elseif ($this->isPaymentFixed()) {
+            $parts[] = $this->hourlyRateFormatted().' руб.';
+        }
+
+        if ($this->isPaymentPerStudent()) {
+            $parts[] = $this->perStudentAmountFormatted().' руб./слушатель';
+        }
+
+        return $parts !== [] ? implode(' + ', $parts) : '—';
+    }
+
+    public function perStudentAmountFormatted(): string
+    {
+        return $this->formatMoney((float) $this->per_student_amount);
+    }
+
+    public function perStudentAmountInWords(): string
+    {
+        return $this->amountInWords((float) $this->per_student_amount);
+    }
+
+    /**
      * @return array<int, string>
      */
     public static function workTypePresetLabels(): array
     {
         return [
-            self::WORK_TYPE_LECTURES => 'Проведение лекционных и практических занятий по программе обучения (ссылка на программу: {program_url}) в соответствии с утвержденным расписанием (ссылка на расписание: {schedule_url}).',
-            self::WORK_TYPE_NOTEBOOK => 'Проверка работ слушателей в рабочей тетради, оформленной по установленному шаблону (ссылка на шаблон тетради: {notebook_url}).',
+            self::WORK_TYPE_LECTURES => 'Проведение лекционных и практических занятий по программе обучения{program_url_clause} в соответствии с утвержденным расписанием{schedule_url_clause}.',
+            self::WORK_TYPE_NOTEBOOK => 'Проверка работ слушателей в рабочей тетради, оформленной по установленному шаблону{notebook_url_clause}.',
             self::WORK_TYPE_CONSULTING => 'Консультативная поддержка слушателей в процессе обучения (ответы на вопросы, возникающие при освоении материала, и разъяснение тем).',
             self::WORK_TYPE_ATTESTATION => 'Проведение итоговой аттестации слушателей по завершении программы обучения.',
             self::WORK_TYPE_CUSTOM => '{custom_text}',
@@ -75,11 +176,11 @@ class ContractAssignment extends Model
                 $line = $customText;
             } else {
                 $line = str_replace(
-                    ['{program_url}', '{schedule_url}', '{notebook_url}'],
+                    ['{program_url_clause}', '{schedule_url_clause}', '{notebook_url_clause}'],
                     [
-                        self::urlOrBlank($programUrl),
-                        self::urlOrBlank($scheduleUrl),
-                        self::urlOrBlank($notebookUrl),
+                        self::urlClause('ссылка на программу', $programUrl),
+                        self::urlClause('ссылка на расписание', $scheduleUrl),
+                        self::urlClause('ссылка на шаблон тетради', $notebookUrl),
                     ],
                     $presets[$code]
                 );
@@ -92,11 +193,14 @@ class ContractAssignment extends Model
         return implode("\n", $lines);
     }
 
-    protected static function urlOrBlank(?string $url): string
+    protected static function urlClause(string $label, ?string $url): string
     {
         $url = trim((string) $url);
+        if ($url === '') {
+            return '';
+        }
 
-        return $url !== '' ? $url : '____';
+        return ' ('.$label.': '.$url.')';
     }
 
     public function hasWorkType(int $code): bool
@@ -114,14 +218,34 @@ class ContractAssignment extends Model
         return $this->belongsTo(StudyGroup::class);
     }
 
+    public function reports(): HasMany
+    {
+        return $this->hasMany(ContractReport::class, 'assignment_id')->orderBy('number');
+    }
+
     public function report(): HasOne
     {
-        return $this->hasOne(ContractReport::class, 'assignment_id');
+        return $this->hasOne(ContractReport::class, 'assignment_id')
+            ->where('kind', ContractReport::KIND_MAIN);
+    }
+
+    public function perStudentReport(): HasOne
+    {
+        return $this->hasOne(ContractReport::class, 'assignment_id')
+            ->where('kind', ContractReport::KIND_PER_STUDENT);
     }
 
     public function acts(): HasMany
     {
-        return $this->hasMany(ContractAct::class, 'assignment_id')->orderBy('number');
+        return $this->hasMany(ContractAct::class, 'assignment_id')
+            ->where('kind', ContractAct::KIND_MAIN)
+            ->orderBy('number');
+    }
+
+    public function perStudentAct(): HasOne
+    {
+        return $this->hasOne(ContractAct::class, 'assignment_id')
+            ->where('kind', ContractAct::KIND_PER_STUDENT);
     }
 
     public function issuedAtLabel(): string
@@ -141,20 +265,29 @@ class ContractAssignment extends Model
 
     public function hourlyRateFormatted(): string
     {
-        $rate = (float) $this->hourly_rate;
-        if (floor($rate) == $rate) {
-            return (string) (int) $rate;
-        }
-
-        return number_format($rate, 2, ',', ' ');
+        return $this->formatMoney((float) $this->hourly_rate);
     }
 
     public function hourlyRateInWords(): string
     {
-        $amount = (int) round((float) $this->hourly_rate);
+        return $this->amountInWords((float) $this->hourly_rate);
+    }
+
+    protected function formatMoney(float $amount): string
+    {
+        if (floor($amount) == $amount) {
+            return (string) (int) $amount;
+        }
+
+        return number_format($amount, 2, ',', ' ');
+    }
+
+    protected function amountInWords(float $amount): string
+    {
+        $value = (int) round($amount);
 
         try {
-            $words = CardinalNumeralGenerator::getCase($amount, Cases::IMENIT);
+            $words = CardinalNumeralGenerator::getCase($value, Cases::IMENIT);
         } catch (\Throwable) {
             return '—';
         }

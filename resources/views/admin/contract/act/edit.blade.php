@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Редактирование акта №{{ $act->number }}</h1>
+                    <h1>Редактирование акта №{{ $act->displayNumber() }}</h1>
                 </div>
             </div>
         </div>
@@ -25,7 +25,10 @@
                         'act' => $act,
                         'assignment' => $act->assignment,
                         'fixedAssignment' => true,
-                        'suggestedAmount' => \App\Models\ContractAct::suggestedAmountForAssignment($act->assignment),
+                        'kind' => $act->kind,
+                        'suggestedAmount' => $act->isPerStudent()
+                            ? \App\Models\ContractAct::suggestedPerStudentAmountForAssignment($act->assignment)
+                            : \App\Models\ContractAct::suggestedAmountForAssignment($act->assignment),
                     ])
 
                     <button type="submit" class="btn btn-primary">Сохранить</button>

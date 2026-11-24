@@ -4,7 +4,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Создание акта к договору №{{ $contract->number }}</h1>
+                    <h1>
+                        @if(($kind ?? \App\Models\ContractAct::KIND_MAIN) === \App\Models\ContractAct::KIND_PER_STUDENT)
+                            Создание акта N.2 к договору №{{ $contract->number }}
+                        @else
+                            Создание акта к договору №{{ $contract->number }}
+                        @endif
+                    </h1>
                 </div>
             </div>
         </div>
@@ -32,6 +38,7 @@
                         'fixedAssignment' => $fixedAssignment,
                         'nextNumber' => $nextNumber,
                         'suggestedAmount' => $suggestedAmount,
+                        'kind' => $kind ?? \App\Models\ContractAct::KIND_MAIN,
                     ])
 
                     <button type="submit" class="btn btn-primary">Сохранить</button>

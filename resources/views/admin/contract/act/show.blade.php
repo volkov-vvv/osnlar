@@ -8,7 +8,7 @@
 
             <div class="contract-show-header">
                 <div class="contract-show-header__title-row">
-                    <h1 class="contract-show-header__title">Акт №{{ $act->number }}</h1>
+                    <h1 class="contract-show-header__title">Акт №{{ $act->displayNumber() }}</h1>
                     @include('admin.contract._status_badge', ['status' => $act->status])
                 </div>
 
@@ -20,6 +20,9 @@
                     <a href="{{ route('admin.contract.show', $act->contract) }}">№{{ $act->contract->number }}</a>
                     ·
                     {{ $act->contract->author->full_name ?: $act->contract->author->name }}
+                    @if($act->isPerStudent())
+                        · за успешно обученных
+                    @endif
                 </div>
 
                 <dl class="contract-meta-grid">
@@ -36,14 +39,20 @@
                         <dd>{{ $act->amountFormatted() }} руб.</dd>
                     </div>
                     <div class="contract-meta-grid__item">
-                        <dt>Ставка задания</dt>
-                        <dd>{{ $act->assignment->hourlyRateFormatted() }} руб./час</dd>
+                        <dt>Оплата по заданию</dt>
+                        <dd>{{ $act->assignment->paymentAmountShortLabel() }}</dd>
                     </div>
                 </dl>
 
                 <div class="contract-actions">
                     <div class="contract-actions__group">
                         <a class="btn btn-primary" href="{{ route('admin.contract_act.edit', $act) }}">Редактировать</a>
+                        @include('admin.contract._scanned_pdf', [
+                            'model' => $act,
+                            'uploadUrl' => route('admin.contract_act.uploadScan', $act),
+                            'downloadUrl' => route('admin.contract_act.downloadScan', $act),
+                            'destroyUrl' => route('admin.contract_act.destroyScan', $act),
+                        ])
                         <a class="btn btn-outline-danger" href="{{ route('admin.contract_act.generate', $act) }}">
                             <i class="fas fa-file-pdf mr-1"></i> PDF
                         </a>
