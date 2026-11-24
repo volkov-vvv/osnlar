@@ -22,6 +22,7 @@ use App\Http\Controllers\Common\LinkController;
 use App\Http\Controllers\Common\OrderController;
 use App\Http\Controllers\Common\OrgController;
 use App\Http\Controllers\Common\StatusController;
+use App\Http\Controllers\Admin\BioLidStatsController;
 use App\Http\Controllers\Admin\Main\IndexController as MainIndexController;
 use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\Report\IndexController as ReportIndexController;
@@ -225,6 +226,7 @@ Route::get('/lid/getLidsExcel', [LidController::class, 'getLidsExcel'])->name('l
 Route::resource('lid', LidController::class)->whereNumber('lid');
 
 Route::get('biolid', [BioLidController::class, 'index'])->name('biolid.index');
+Route::get('biolid/stats', BioLidStatsController::class)->name('biolid.stats');
 Route::get('biolid/create', [BioLidController::class, 'create'])->name('biolid.create');
 Route::post('biolid', [BioLidController::class, 'store'])->name('biolid.store');
 Route::get('biolid/questionnaire', [BioLidController::class, 'questionnaire'])

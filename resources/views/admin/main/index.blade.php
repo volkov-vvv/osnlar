@@ -25,12 +25,10 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
+                <div class="col">
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>{{$data['lidsCount']}}</h3>
-
                             <p>Всего заявок АМСЗ</p>
                         </div>
                         <div class="icon">
@@ -39,14 +37,24 @@
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
 
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
+                <div class="col">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ $data['bioLidsCount'] }}</h3>
+                            <p>Всего заявок по БИО</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <a href="{{ route('admin.biolid.stats') }}" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col">
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{$data['usersCount']}}</h3>
-
                             <p>Пользователей</p>
                         </div>
                         <div class="icon">
@@ -55,13 +63,11 @@
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
+
+                <div class="col">
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>{{$data['coursesCount']}}</h3>
-
                             <p>Курсов</p>
                         </div>
                         <div class="icon">
@@ -70,10 +76,9 @@
                         <a href="#" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
+
+                <div class="col">
+                    <div class="small-box bg-primary">
                         <div class="inner">
                             @php
                                 $kcCount = (int) $data['usersKcCount'];
@@ -90,7 +95,6 @@
                                 }
                             @endphp
                             <h3>{{ $kcCount }} <small style="font-size: 40%; font-weight: 400;">{{ $kcWord }}</small></h3>
-
                             <p>Контакт-центр</p>
                         </div>
                         <div class="icon">
@@ -99,7 +103,6 @@
                         <a href="{{ route('admin.contactcenter.index') }}" class="small-box-footer">Подробнее <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
             </div>
             <!-- /.row -->
 

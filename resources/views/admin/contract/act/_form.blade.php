@@ -98,7 +98,10 @@
     @enderror
 </div>
 
-@include('admin.contract._status_field', ['selectedStatus' => $act?->status])
+@include('admin.contract._status_field', [
+    'selectedStatus' => $act?->status,
+    'statusOptions' => \App\Models\ContractWorkflowStatus::actLabels(),
+])
 
 <div class="mb-3">
     <label for="issued_at">Дата акта</label>

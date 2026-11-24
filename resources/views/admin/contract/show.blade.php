@@ -62,6 +62,11 @@
                     </div>
                     <span class="contract-actions__sep" aria-hidden="true"></span>
                     <div class="contract-actions__group">
+                        <form method="post" action="{{ route('admin.contract.destroy', $contract) }}" class="d-inline" onsubmit="return confirm('Удалить договор?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-secondary">Удалить</button>
+                        </form>
                         <a class="btn btn-outline-secondary" href="{{ route('admin.contract.index') }}">Назад</a>
                     </div>
                 </div>

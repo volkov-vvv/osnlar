@@ -346,7 +346,7 @@ class ContractActController extends Controller
             'assignment_id' => $assignmentRule,
             'kind' => ['nullable', 'string', Rule::in([ContractAct::KIND_MAIN, ContractAct::KIND_PER_STUDENT])],
             'number' => ['required', 'integer', 'min:1'],
-            'status' => ['required', 'string', Rule::in(ContractWorkflowStatus::keys())],
+            'status' => ['required', 'string', Rule::in(ContractWorkflowStatus::actKeys())],
             'issued_at' => ['nullable', 'date'],
             'amount' => ['nullable', 'numeric', 'min:0'],
         ], [

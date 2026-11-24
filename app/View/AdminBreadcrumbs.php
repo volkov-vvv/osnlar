@@ -56,6 +56,9 @@ class AdminBreadcrumbs
         'admin.contactcenter.index' => [
             ['title' => 'Контакт-центр', 'url' => null],
         ],
+        'admin.biolid.stats' => [
+            ['title' => 'Заявки по БИО', 'url' => null],
+        ],
         'admin.settings.forms.edit' => [
             ['title' => 'Настройки', 'url' => null],
             ['title' => 'Формы', 'url' => null],
