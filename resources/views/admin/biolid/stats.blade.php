@@ -12,6 +12,31 @@
 
     <section class="content">
         <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <form method="get" action="{{ route('admin.biolid.stats') }}" class="form-inline">
+                        <label for="stats-study-group" class="mr-2 mb-0">Учебная группа:</label>
+                        <select
+                            id="stats-study-group"
+                            name="study_group_id"
+                            class="form-control form-control-sm"
+                            style="min-width: 16rem;"
+                            onchange="this.form.submit()"
+                        >
+                            <option value="">Все группы</option>
+                            @foreach($studyGroups as $studyGroup)
+                                <option
+                                    value="{{ $studyGroup->id }}"
+                                    {{ (string) $studyGroupId === (string) $studyGroup->id ? 'selected' : '' }}
+                                >
+                                    {{ $studyGroup->short_title ? $studyGroup->short_title.' — '.$studyGroup->title : $studyGroup->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">

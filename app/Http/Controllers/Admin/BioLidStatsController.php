@@ -4,13 +4,29 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BioLid;
+use App\Models\StudyGroup;
 use App\Models\UserDocument;
+use Illuminate\Http\Request;
 
 class BioLidStatsController extends Controller
 {
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        $bioLids = BioLid::query()->with(['documents', 'status'])->get();
+        $studyGroups = StudyGroup::query()->orderBy('title')->get();
+        $studyGroupId = $request->integer('study_group_id') ?: null;
+        if ($studyGroupId !== null && ! $studyGroups->contains('id', $studyGroupId)) {
+            $studyGroupId = null;
+        }
+
+        $query = BioLid::query()->with(['documents', 'status']);
+        if ($studyGroupId !== null) {
+            $query->whereHas(
+                'user.studyGroups',
+                static fn ($q) => $q->where('study_groups.id', $studyGroupId)
+            );
+        }
+
+        $bioLids = $query->get();
 
         $docsStats = [
             'empty' => [
@@ -100,6 +116,6 @@ class BioLidStatsController extends Controller
             ],
         ];
 
-        return view('admin.biolid.stats', compact('data'));
+        return view('admin.biolid.stats', compact('data', 'studyGroups', 'studyGroupId'));
     }
 }
