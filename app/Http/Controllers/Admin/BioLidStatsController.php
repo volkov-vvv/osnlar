@@ -28,49 +28,29 @@ class BioLidStatsController extends Controller
 
         $bioLids = $query->get();
 
-        $docsStats = [
-            'empty' => [
-                'label' => 'Не отправлено',
-                'count' => 0,
-                'color' => '#6c757d',
-            ],
-            'awaiting_stage2' => [
-                'label' => 'Ожидает этап 2',
-                'count' => 0,
-                'color' => '#17a2b8',
-            ],
-            UserDocument::REVIEW_PENDING => [
-                'label' => UserDocument::REVIEW_STATUSES[UserDocument::REVIEW_PENDING],
-                'count' => 0,
-                'color' => '#ffc107',
-            ],
-            UserDocument::REVIEW_REJECTED => [
-                'label' => UserDocument::REVIEW_STATUSES[UserDocument::REVIEW_REJECTED],
-                'count' => 0,
-                'color' => '#dc3545',
-            ],
-            UserDocument::REVIEW_APPROVED => [
-                'label' => UserDocument::REVIEW_STATUSES[UserDocument::REVIEW_APPROVED],
-                'count' => 0,
-                'color' => '#28a745',
-            ],
-        ];
-
         $highParts = [
             UserDocument::REVIEW_APPROVED => [
                 'label' => 'Проверено (без АРПМ «Замечания»)',
+                'badge' => 'Проверено',
+                'badgeClass' => 'badge badge-success',
                 'count' => 0,
             ],
             UserDocument::REVIEW_REJECTED => [
                 'label' => 'Отклонено',
+                'badge' => 'Отклонено',
+                'badgeClass' => 'badge badge-danger',
                 'count' => 0,
             ],
             'awaiting_stage2' => [
                 'label' => 'Ожидает этап 2',
+                'badge' => 'Ожидает этап 2',
+                'badgeClass' => 'badge badge-info',
                 'count' => 0,
             ],
             UserDocument::REVIEW_PENDING => [
                 'label' => 'На проверке',
+                'badge' => 'На проверке',
+                'badgeClass' => 'badge badge-warning',
                 'count' => 0,
             ],
         ];
@@ -78,10 +58,9 @@ class BioLidStatsController extends Controller
 
         foreach ($bioLids as $bioLid) {
             $summaryStatus = $bioLid->documentsReviewSummary()['status'];
-            if (! isset($docsStats[$summaryStatus])) {
+            if (! isset($highParts[$summaryStatus]) && $summaryStatus !== 'empty') {
                 $summaryStatus = 'empty';
             }
-            $docsStats[$summaryStatus]['count']++;
 
             if (optional($bioLid->status)->title === 'Отказ') {
                 continue;
@@ -108,7 +87,6 @@ class BioLidStatsController extends Controller
 
         $data = [
             'bioLidsCount' => $bioLids->count(),
-            'docsStats' => $docsStats,
             'funnel' => [
                 'high' => $high,
                 'highParts' => $highParts,
