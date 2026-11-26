@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Helpers\Telegram;
+use App\Models\Setting;
 use App\Service\PaymentService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -38,5 +40,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        View::composer(['layouts.main2', 'layouts.main-lid'], function ($view) {
+            $view->with('newYearThemeEnabled', Setting::isNewYearThemeEnabled());
+        });
     }
 }

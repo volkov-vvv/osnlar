@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\YearController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BioeconomySettingController;
 use App\Http\Controllers\Admin\FormSettingController;
+use App\Http\Controllers\Admin\ThemeSettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', MainIndexController::class)->name('main.index');
@@ -217,6 +218,8 @@ Route::resource('year', YearController::class)->whereNumber('year');
 Route::resource('project', ProjectController::class)->whereNumber('project');
 Route::get('settings/forms', [FormSettingController::class, 'edit'])->name('settings.forms.edit');
 Route::put('settings/forms', [FormSettingController::class, 'update'])->name('settings.forms.update');
+Route::get('settings/themes', [ThemeSettingController::class, 'edit'])->name('settings.themes.edit');
+Route::put('settings/themes', [ThemeSettingController::class, 'update'])->name('settings.themes.update');
 Route::get('settings/bioeconomy', [BioeconomySettingController::class, 'edit'])->name('settings.bioeconomy.edit');
 Route::put('settings/bioeconomy', [BioeconomySettingController::class, 'update'])->name('settings.bioeconomy.update');
 Route::resource('status', StatusController::class)->whereNumber('status');

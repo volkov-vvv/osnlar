@@ -372,13 +372,13 @@
 
             stateSaveParams: function (settings, data) {
                 data.custom_filters = {
-                    organization: $('#organization').val(),
-                    course: $('#course').val(),
-                    studygroup: $('#studygroup').val(),
-                    responsible: $('#responsible').val(),
-                    status: $('#status').val(),
-                    docs_status: $('#docs_status').val(),
-                    arpm_status: $('#arpm_status').val(),
+                    organization: $('#organization').val() || '',
+                    course: $('#course').val() || '',
+                    studygroup: $('#studygroup').val() || '',
+                    responsible: $('#responsible').val() || '',
+                    status: $('#status').val() || '',
+                    docs_status: $('#docs_status').val() || '',
+                    arpm_status: $('#arpm_status').val() || '',
                 };
             },
 
@@ -387,36 +387,82 @@
                     return;
                 }
 
-                var filters = data.custom_filters;
+                function asSingleFilter(value) {
+                    if (Array.isArray(value)) {
+                        return value.length ? String(value[0]) : '';
+                    }
+                    if (value === null || value === undefined) {
+                        return '';
+                    }
+                    // Strip legacy multi-select regex like ^Foo$|^Bar$
+                    value = String(value);
+                    var exactMatch = value.match(/^\^(.+)\$$/);
+                    if (exactMatch) {
+                        try {
+                            return exactMatch[1].replace(/\\([.*+?^${}()|[\]\\])/g, '$1');
+                        } catch (e) {
+                            return exactMatch[1];
+                        }
+                    }
+                    if (value.indexOf('^') === 0 && value.indexOf('|') !== -1) {
+                        var first = value.split('|')[0].replace(/^\^/, '').replace(/\$$/, '');
+                        try {
+                            return first.replace(/\\([.*+?^${}()|[\]\\])/g, '$1');
+                        } catch (e) {
+                            return first;
+                        }
+                    }
+                    return value;
+                }
 
-                $('#organization').val(filters.organization || '');
-                $('#course').val(filters.course || '');
-                $('#studygroup').val(filters.studygroup || '');
-                $('#responsible').val(filters.responsible || '');
-                $('#status').val(filters.status || '');
-                $('#docs_status').val(filters.docs_status || '');
-                $('#arpm_status').val(filters.arpm_status || '');
+                function exactColumnSearch(value) {
+                    value = asSingleFilter(value);
+                    if (!value) {
+                        return '';
+                    }
+                    return '^' + $.fn.dataTable.util.escapeRegex(value) + '$';
+                }
+
+                var filters = data.custom_filters;
+                var organization = asSingleFilter(filters.organization);
+                var course = asSingleFilter(filters.course);
+                var studygroup = asSingleFilter(filters.studygroup);
+                var responsible = asSingleFilter(filters.responsible);
+                var status = asSingleFilter(filters.status);
+                var docsStatus = asSingleFilter(filters.docs_status);
+                var arpmStatus = asSingleFilter(filters.arpm_status);
+
+                $('#organization').val(organization);
+                $('#course').val(course);
+                $('#studygroup').val(studygroup);
+                $('#responsible').val(responsible);
+                $('#status').val(status);
+                $('#docs_status').val(docsStatus);
+                $('#arpm_status').val(arpmStatus);
 
                 var columnFilters = {
-                    1: filters.responsible,
-                    2: filters.organization,
-                    8: filters.course,
-                    9: filters.studygroup,
-                    10: filters.status,
-                    11: filters.docs_status,
-                    12: filters.arpm_status
+                    1: { value: exactColumnSearch(responsible), regex: !!responsible },
+                    2: { value: exactColumnSearch(organization), regex: !!organization },
+                    8: { value: exactColumnSearch(course), regex: !!course },
+                    9: { value: studygroup, regex: false },
+                    10: { value: exactColumnSearch(status), regex: !!status },
+                    11: { value: exactColumnSearch(docsStatus), regex: !!docsStatus },
+                    12: { value: exactColumnSearch(arpmStatus), regex: !!arpmStatus }
                 };
 
                 if (!data.columns) {
                     return;
                 }
 
-                $.each(columnFilters, function (index, value) {
+                $.each(columnFilters, function (index, conf) {
                     if (!data.columns[index] || !data.columns[index].search) {
                         return;
                     }
 
-                    data.columns[index].search.search = value || '';
+                    data.columns[index].search.search = conf.value || '';
+                    data.columns[index].search.regex = !!conf.regex;
+                    data.columns[index].search.smart = !conf.regex;
+                    data.columns[index].search.caseInsensitive = true;
                 });
             },
 
@@ -605,32 +651,43 @@
             window.location.href = @json(route($panel . '.biolid.documents-archive')) + '?' + params;
         });
 
+        function applyExactColumnFilter(columnIndex, value) {
+            value = value || '';
+            if (!value) {
+                table.column(columnIndex).search('').draw();
+                return;
+            }
+
+            var pattern = '^' + $.fn.dataTable.util.escapeRegex(String(value)) + '$';
+            table.column(columnIndex).search(pattern, true, false).draw();
+        }
+
         $('#organization').on('change', function () {
-            table.column(2).search(this.value, {exact: true}).draw();
+            applyExactColumnFilter(2, this.value);
         });
 
         $('#course').on('change', function () {
-            table.column(8).search(this.value, {exact: true}).draw();
+            applyExactColumnFilter(8, this.value);
         });
 
         $('#responsible').on('change', function () {
-            table.column(1).search(this.value, {exact: true}).draw();
+            applyExactColumnFilter(1, this.value);
         });
 
         $('#status').on('change', function () {
-            table.column(10).search(this.value, {exact: true}).draw();
+            applyExactColumnFilter(10, this.value);
         });
 
         $('#docs_status').on('change', function () {
-            table.column(11).search(this.value, {exact: true}).draw();
+            applyExactColumnFilter(11, this.value);
         });
 
         $('#arpm_status').on('change', function () {
-            table.column(12).search(this.value, {exact: true}).draw();
+            applyExactColumnFilter(12, this.value);
         });
 
         $('#studygroup').on('change', function () {
-            table.column(9).search(this.value).draw();
+            table.column(9).search(this.value || '').draw();
         });
 
         $('#resetTable').on('click', function () {
@@ -640,13 +697,13 @@
             table.columns([1, 6, 7, 10, 13]).visible(false);
             @endif
             table.search('').columns().search('').order([[0, 'desc']]).draw();
-            $('#course').val(null).trigger('change');
-            $('#organization').val(null).trigger('change');
-            $('#responsible').val(null).trigger('change');
-            $('#status').val(null).trigger('change');
-            $('#docs_status').val(null).trigger('change');
-            $('#arpm_status').val(null).trigger('change');
-            $('#studygroup').val(null).trigger('change');
+            $('#course').val('');
+            $('#organization').val('');
+            $('#responsible').val('');
+            $('#status').val('');
+            $('#docs_status').val('');
+            $('#arpm_status').val('');
+            $('#studygroup').val('');
         });
 
         (function () {

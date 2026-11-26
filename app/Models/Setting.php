@@ -42,6 +42,11 @@ class Setting extends Model
         return self::getBool('lid_captcha_enabled', true);
     }
 
+    public static function isNewYearThemeEnabled(): bool
+    {
+        return self::getBool('new_year_theme_enabled', false);
+    }
+
     public static function bioeconomyDocuments(): array
     {
         return [

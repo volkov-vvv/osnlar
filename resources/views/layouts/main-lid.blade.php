@@ -78,13 +78,15 @@
 
 
 </head>
-<body>
+<body class="{{ !empty($newYearThemeEnabled) ? 'theme-new-year' : '' }}">
+@include('includes.new-year')
 
-<header>
+<header class="ny-lid-header">
     <div class="container ">
         <header class="d-flex justify-content-center pt-3">
             <a class="navbar-brand" href="{{route('main.index')}}"><img src="{{asset('assets/images/logo-main.png')}}" width="260"  alt="Основание"></a>
         </header>
+        @include('includes.new-year-garland')
     </div>
 </header>
 

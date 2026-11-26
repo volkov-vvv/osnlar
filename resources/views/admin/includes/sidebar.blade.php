@@ -227,6 +227,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.settings.themes.edit') }}" class="nav-link {{ request()->routeIs('admin.settings.themes.*') ? 'active' : '' }}">
+                                <i class="fas fa-palette nav-icon"></i>
+                                <p>Темы</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('admin.settings.bioeconomy.edit') }}" class="nav-link {{ request()->routeIs('admin.settings.bioeconomy.*') ? 'active' : '' }}">
                                 <i class="fas fa-seedling nav-icon"></i>
                                 <p>Биоэкономика</p>

@@ -63,6 +63,10 @@ class AdminBreadcrumbs
             ['title' => 'Настройки', 'url' => null],
             ['title' => 'Формы', 'url' => null],
         ],
+        'admin.settings.themes.edit' => [
+            ['title' => 'Настройки', 'url' => null],
+            ['title' => 'Темы', 'url' => null],
+        ],
         'admin.settings.bioeconomy.edit' => [
             ['title' => 'Настройки', 'url' => null],
             ['title' => 'Биоэкономика', 'url' => null],

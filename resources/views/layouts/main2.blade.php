@@ -568,7 +568,8 @@
 
 
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100{{ !empty($newYearThemeEnabled) ? ' theme-new-year' : '' }}">
+@include('includes.new-year')
 <div class="edica-loader"></div>
 {{--box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 sticky-top  bg-white bg-opacity-75
@@ -790,6 +791,7 @@ sticky-top  bg-white bg-opacity-75
         </nav>
 
     </div>
+    @include('includes.new-year-garland')
 </header>
 
 <div class="flex-grow-1 w-100">
